@@ -1,0 +1,32 @@
+{
+  "archive_path": null,
+  "sha256": "pre_extracted_from_local_storage",
+  "size_bytes": 5503439673,
+  "size_matches_expected": true,
+  "expected_size_bytes": 5503439673,
+  "top_level_tree": [
+    {
+      "path": ".",
+      "n_subdirs": 3,
+      "n_files": 2
+    },
+    {
+      "path": "Wind Farm A",
+      "n_subdirs": 1,
+      "n_files": 2
+    },
+    {
+      "path": "Wind Farm B",
+      "n_subdirs": 1,
+      "n_files": 2
+    },
+    {
+      "path": "Wind Farm C",
+      "n_subdirs": 1,
+      "n_files": 2
+    }
+  ],
+  "extracted_file_count": 103,
+  "extracted_total_bytes": 19987485991,
+  "generated_at_utc": "2026-08-14T13:15:09.406196Z"
+}

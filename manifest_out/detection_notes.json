@@ -1,0 +1,667 @@
+[
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\0.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\10.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\13.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\14.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\17.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\22.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\24.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\25.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\26.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\3.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\38.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\40.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\42.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\45.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\51.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\68.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\69.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\71.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\72.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\73.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\84.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\92.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_3_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\19.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\2.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\21.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\23.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\27.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\34.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\52.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\53.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\7.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\74.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\77.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\82.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\83.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\86.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\87.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_59_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\1.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\11.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\12.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\15.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\16.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\18.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\20.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\28.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\29.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\30.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\31.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\32.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\33.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\35.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\36.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\37.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\39.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\4.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\41.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\43.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\44.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\46.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\47.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\48.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\49.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\5.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\50.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\54.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\55.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\56.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\57.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\58.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\59.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\6.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\60.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\61.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\62.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\63.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\64.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\65.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\66.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\67.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\70.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\75.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\76.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\78.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\79.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\8.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\80.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\81.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\85.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\88.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\89.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\9.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\90.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\91.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\93.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  },
+  {
+    "file": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\datasets\\94.csv",
+    "status": "detected",
+    "timestamp_col": "time_stamp",
+    "wind_speed_col": "wind_speed_236_avg",
+    "label_col": "from_event_info"
+  }
+]

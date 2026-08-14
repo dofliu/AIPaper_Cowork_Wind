@@ -1,0 +1,12 @@
+{
+  "n_case_files_found": 95,
+  "n_detected": 95,
+  "n_undetected": 0,
+  "anomaly_count": 45,
+  "normal_count": 50,
+  "matches_paper_counts_44_51": false,
+  "matches_v6_metadata_counts_45_50": true,
+  "matches_expected_total_95": true,
+  "note": "If neither prior count matches, list case_ids with label='unknown' below for manual adjudication per spec G2.",
+  "unknown_label_case_ids": []
+}
