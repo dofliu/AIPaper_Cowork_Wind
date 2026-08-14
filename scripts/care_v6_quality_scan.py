@@ -33,21 +33,20 @@ Across cases:          the distribution of non-evaluable fractions, with the
 
 SENTINEL DETECTION
 ------------------
-Two rules, because the two cases differ:
+Two SEPARATE outputs, because the real archive showed one rule is not enough:
 
-  Conventional sentinels (-999, 9999, -32768, ...) are flagged on an
-  ABSOLUTE count (default 20 occurrences). Values are aggregated across
-  cases, so a burst confined to one case is diluted below any sensible
-  fraction — and exactly -999.0 recurring even a few dozen times is never
-  a legitimate physical reading.
+  sentinel_candidates    conventional codes only (-999, 9999, -32768, ...),
+                         judged on an absolute count of 20+. Safe to treat as
+                         missing. -1.0 is deliberately excluded: it is an
+                         ordinary pitch angle or sub-zero temperature.
+  repeated_value_notes   ADVISORY. Values that repeat and sit outside the IQR.
+                         On the 2026-08-14 run this rule alone flagged 83
+                         columns in Farm C on values like 0.1, 180.0, 850.0 and
+                         -3.99 -- a quantisation floor, a nacelle direction, a
+                         rated power and a temperature rail. Physics, not
+                         corruption. Never auto-drop these.
 
-  Everything else must clear BOTH a repeat test (default 0.2% of a
-  column's values exactly equal) AND an outlier test (beyond 5 IQR from
-  the quartiles), since a repeated value inside the normal range is
-  usually just quantisation.
-
-Exact zero is reported separately: it is common and usually legitimate
-(a curtailed turbine really does produce 0 kW), so it is never auto-flagged.
+Exact zero is never flagged: a curtailed turbine really does produce 0 kW.
 
 Flagging is advisory. The script does not rewrite any data.
 
@@ -77,7 +76,7 @@ import os
 import statistics
 import sys
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 TIMESTAMP_FORMATS = [
     "%Y-%m-%d %H:%M:%S",
@@ -85,8 +84,11 @@ TIMESTAMP_FORMATS = [
     "%Y-%m-%d %H:%M",
 ]
 
+# -1.0 is deliberately NOT here. It is a perfectly ordinary reading for a
+# pitch angle or a sub-zero temperature, and on the real archive it was the
+# single biggest source of false flags.
 CONVENTIONAL_SENTINELS = {
-    -9999.0, -999.0, -99.0, -1.0,
+    -9999.0, -999.0, -99.0,
     9999.0, 999.0, 99999.0, -99999.0,
     -32768.0, 32767.0, 65535.0,
 }
@@ -99,6 +101,44 @@ LONG_GAP = timedelta(hours=3)
 REPEAT_FRACTION_THRESHOLD = 0.002   # 0.2% of values identical (non-conventional)
 CONVENTIONAL_SENTINEL_MIN_COUNT = 20  # absolute count; fractions dilute across cases
 IQR_OUTLIER_MULTIPLE = 5.0
+
+# --- CSV dialect handling -------------------------------------------------
+# CARE v6 case files are not guaranteed to be comma-separated. A semicolon
+# file read with the default dialect yields a single mega-column, which is
+# how three separate tools failed at once on 2026-08-14: the quality scan
+# saw "1 column", the split audit could not find train_test, and the sensor
+# profiler could not find any power/wind anchor. Detect it instead of
+# assuming, and let the operator override.
+CANDIDATE_DELIMITERS = [",", ";", "\t", "|"]
+
+
+def sniff_delimiter(path, override=None):
+    """Pick the delimiter that splits the HEADER line into the most fields."""
+    if override:
+        return {"tab": "\t", "\\t": "\t"}.get(override, override)
+    try:
+        with open(path, newline="", encoding="utf-8", errors="replace") as f:
+            header = f.readline()
+    except OSError:
+        return ","
+    best, best_count = ",", -1
+    for d in CANDIDATE_DELIMITERS:
+        count = header.count(d)
+        if count > best_count:
+            best, best_count = d, count
+    return best
+
+
+def farm_from_path(path, workdir):
+    """Farm name is the directory that CONTAINS `datasets`, not the first
+    component under --workdir: pointing --workdir one level too high
+    otherwise collapses every farm into a single group."""
+    rel = os.path.normpath(os.path.relpath(path, workdir))
+    parts = rel.split(os.sep)
+    for i, part in enumerate(parts):
+        if part.lower() == "datasets" and i > 0:
+            return parts[i - 1]
+    return parts[0] if len(parts) > 1 else "(root)"
 
 
 def parse_ts(raw):
@@ -125,7 +165,14 @@ def to_float(raw):
     try:
         f = float(v)
     except (TypeError, ValueError):
-        return None
+        # Semicolon-delimited exports often carry comma decimal separators.
+        if isinstance(v, str) and "," in v:
+            try:
+                f = float(v.replace(",", ".", 1))
+            except ValueError:
+                return None
+        else:
+            return None
     if math.isnan(f) or math.isinf(f):
         return None
     return f
@@ -139,10 +186,24 @@ def quantile(sorted_vals, q):
 
 
 def detect_sentinels(values):
-    """values: list of floats (no Nones). Returns list of sentinel candidates."""
+    """Return (sentinels, repeated_notes).
+
+    Two OUTPUTS, not one, because the 2026-08-14 real run showed the
+    statistical rule alone has poor precision: it flagged 83 columns in Farm C
+    on values like 0.1, 180.0, 850.0 and -3.99 -- a quantisation floor, a
+    nacelle direction, a rated power and a temperature rail. Those are
+    physics, not corruption. Calling them sentinels would have had the sensor
+    profiler discard real data.
+
+    sentinels      conventional codes only (-999, 9999, -32768, ...), judged
+                   on an absolute count. Safe to treat as missing.
+    repeated_notes everything else that repeats and sits outside the bulk of
+                   the distribution. ADVISORY ONLY -- most entries here are
+                   physical rails. Never auto-drop these; show them to a human.
+    """
     n = len(values)
     if n < 200:
-        return []
+        return [], []
     counts = Counter(values)
     sv = sorted(values)
     q1, q3 = quantile(sv, 0.25), quantile(sv, 0.75)
@@ -150,35 +211,23 @@ def detect_sentinels(values):
     lo = q1 - IQR_OUTLIER_MULTIPLE * iqr if iqr > 0 else None
     hi = q3 + IQR_OUTLIER_MULTIPLE * iqr if iqr > 0 else None
 
-    out = []
+    sentinels, notes = [], []
     for value, count in counts.most_common(25):
         frac = count / n
         if value == 0.0:
-            continue  # reported separately; a curtailed turbine really makes 0 kW
-        conventional = value in CONVENTIONAL_SENTINELS
-        outlying = (lo is not None and (value < lo or value > hi))
-        if conventional:
-            # A conventional sentinel is judged on an ABSOLUTE count, not a
-            # fraction. Values are aggregated across cases here, so a burst
-            # confined to one case gets diluted below any sensible fraction —
-            # and exactly -999.0 recurring even a few dozen times is never a
-            # legitimate physical reading.
-            if count < CONVENTIONAL_SENTINEL_MIN_COUNT:
-                continue
-            reason = "conventional sentinel value"
-        elif outlying:
-            if frac < REPEAT_FRACTION_THRESHOLD:
-                continue
-            reason = "repeated value far outside the IQR"
-        else:
+            continue  # a curtailed turbine really does produce 0 kW
+        if value in CONVENTIONAL_SENTINELS:
+            if count >= CONVENTIONAL_SENTINEL_MIN_COUNT:
+                sentinels.append({"value": value, "count": count,
+                                  "fraction": round(frac, 6),
+                                  "reason": "conventional sentinel code"})
             continue
-        out.append({
-            "value": value,
-            "count": count,
-            "fraction": round(frac, 6),
-            "reason": reason,
-        })
-    return out
+        if lo is not None and (value < lo or value > hi) and frac >= REPEAT_FRACTION_THRESHOLD:
+            notes.append({"value": value, "count": count,
+                          "fraction": round(frac, 6),
+                          "reason": "repeated value outside the IQR",
+                          "likely_physical": True})
+    return sentinels, notes[:5]
 
 
 def gap_profile(timestamps):
@@ -226,9 +275,10 @@ def gap_profile(timestamps):
     }
 
 
-def scan_case(path, timestamp_col, max_rows):
+def scan_case(path, timestamp_col, max_rows, delimiter_override=None):
+    delimiter = sniff_delimiter(path, delimiter_override)
     with open(path, newline="", encoding="utf-8", errors="replace") as f:
-        header = next(csv.reader(f), None)
+        header = next(csv.reader(f, delimiter=delimiter), None)
     if not header:
         return None
 
@@ -243,7 +293,7 @@ def scan_case(path, timestamp_col, max_rows):
     n_rows_by_col = Counter()
     timestamps = []
     with open(path, newline="", encoding="utf-8", errors="replace") as f:
-        reader = csv.DictReader(f)
+        reader = csv.DictReader(f, delimiter=delimiter)
         for i, row in enumerate(reader):
             if stride > 1 and i % stride:
                 continue
@@ -257,7 +307,7 @@ def scan_case(path, timestamp_col, max_rows):
                     present[col].append(v)
     return {"header": header, "present": present,
             "n_rows_by_col": n_rows_by_col, "timestamps": timestamps,
-            "stride": stride}
+            "stride": stride, "delimiter": delimiter}
 
 
 def run(args):
@@ -269,9 +319,7 @@ def run(args):
 
     by_farm = defaultdict(list)
     for path in files:
-        rel = os.path.relpath(path, args.workdir)
-        parts = rel.split(os.sep)
-        by_farm[parts[0] if len(parts) > 1 else "(root)"].append(path)
+        by_farm[farm_from_path(path, args.workdir)].append(path)
 
     per_case_gaps = {}
     farm_reports = {}
@@ -283,10 +331,13 @@ def run(args):
 
         agg_present = defaultdict(list)
         agg_rows = Counter()
+        delimiter_seen = None
         for k, path in enumerate(selected, 1):
-            res = scan_case(path, args.timestamp_col, args.max_rows_per_case)
+            res = scan_case(path, args.timestamp_col, args.max_rows_per_case,
+                            args.delimiter)
             if not res:
                 continue
+            delimiter_seen = res.get("delimiter")
             case_id = os.path.splitext(os.path.basename(path))[0]
             per_case_gaps[case_id] = gap_profile(res["timestamps"])
             per_case_gaps[case_id]["farm"] = farm
@@ -314,22 +365,32 @@ def run(args):
                     "p99": quantile(sv, 0.99), "max": sv[-1],
                     "std": round(statistics.pstdev(vals), 6) if n_present > 1 else 0.0,
                     "frac_exactly_zero": round(zeros / n_present, 6),
-                    "sentinel_candidates": detect_sentinels(vals),
                 })
+                sent, notes = detect_sentinels(vals)
+                entry["sentinel_candidates"] = sent
+                entry["repeated_value_notes"] = notes
             columns[col] = entry
 
         flagged = {c: e["sentinel_candidates"] for c, e in columns.items()
                    if e.get("sentinel_candidates")}
+        repeated = {c: e["repeated_value_notes"] for c, e in columns.items()
+                    if e.get("repeated_value_notes")}
         high_missing = {c: e["missing_fraction"] for c, e in columns.items()
                         if (e.get("missing_fraction") or 0) > 0.30}
         all_missing = [c for c, e in columns.items() if e["n_present"] == 0]
 
         farm_reports[farm] = {
+            "delimiter_used": delimiter_seen,
             "n_cases_scanned": len(selected),
             "n_cases_total": len(farm_files),
             "n_columns": len(columns),
             "n_columns_with_sentinel_candidates": len(flagged),
             "columns_with_sentinel_candidates": flagged,
+            "n_columns_with_repeated_value_notes": len(repeated),
+            "repeated_value_notes_advisory_only": (
+                "These are NOT sentinels. Most are physical rails, quantisation "
+                "floors or rated limits. Review by eye; never auto-drop."),
+            "columns_with_repeated_value_notes": repeated,
             "n_columns_missing_over_30pct": len(high_missing),
             "columns_missing_over_30pct": high_missing,
             "n_columns_entirely_empty": len(all_missing),
@@ -367,7 +428,7 @@ def run(args):
 
     with open(os.path.join(args.output_dir, "c1_gap_profile.json"), "w", encoding="utf-8") as f:
         json.dump({
-            "generated_at_utc": datetime.utcnow().isoformat() + "Z",
+            "generated_at_utc": datetime.now(timezone.utc).isoformat(),
             "policy": {"interpolate_max_hours": 1, "forward_fill_max_hours": 3,
                        "non_evaluable_above_hours": 3},
             "threshold_evidence": threshold_evidence,
@@ -377,8 +438,14 @@ def run(args):
     total_sentinels = sum(r["n_columns_with_sentinel_candidates"] for r in farm_reports.values())
     print("\n--- quality scan ---")
     for farm, r in sorted(farm_reports.items()):
-        print("%-14s %4d columns | sentinels in %3d | >30%% missing %3d | empty %3d"
+        if r["n_columns"] <= 2:
+            print("%-14s only %d column(s) parsed -- that is almost certainly a "
+                  "delimiter mismatch. Re-run with --delimiter ';' (or 'tab')."
+                  % (farm, r["n_columns"]))
+        print("%-14s %4d columns | sentinels %3d | repeated-value notes %3d | "
+              ">30%% missing %3d | empty %3d"
               % (farm, r["n_columns"], r["n_columns_with_sentinel_candidates"],
+                 r["n_columns_with_repeated_value_notes"],
                  r["n_columns_missing_over_30pct"], r["n_columns_entirely_empty"]))
     print("\nC1 non-evaluable fraction across %d cases:" % threshold_evidence["n_cases"])
     for k in ("min", "p50", "p75", "p90", "p95", "p99", "max"):
@@ -387,7 +454,7 @@ def run(args):
           % threshold_evidence["n_cases_over_current_30pct_threshold"])
     print("\n%s" % threshold_evidence["reading"])
     if total_sentinels:
-        print("\n%d column(s) carry sentinel candidates — inspect before fitting either "
+        print("\n%d column(s) carry conventional sentinel codes — inspect before fitting either "
               "scorer; they parse as valid floats and will poison a covariance." % total_sentinels)
     print("\nWrote %s" % args.output_dir, file=sys.stderr)
     return 0
@@ -425,6 +492,9 @@ def main():
     ap.add_argument("--max-rows-per-case", type=int, default=0,
                     help="0 = every row; a positive value strides the read")
     ap.add_argument("--timestamp-col", default="time_stamp")
+    ap.add_argument("--delimiter", default=None,
+                    help="CSV delimiter; auto-detected from the header when omitted "
+                         "(use 'tab' for tab-separated)")
     args = ap.parse_args()
     return run(args)
 
