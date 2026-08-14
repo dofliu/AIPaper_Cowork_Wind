@@ -81,7 +81,7 @@ import re
 import statistics
 import sys
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 
 TIMESTAMP_FORMATS = [
     "%Y-%m-%d %H:%M:%S",
@@ -96,12 +96,62 @@ NAMED_WIND_RE = re.compile(r"^wind_speed_\d+_avg$", re.I)
 # Columns that are structurally not sensor channels.
 NON_SIGNAL = {"asset_id", "id", "time_stamp", "train_test", "status_type_id"}
 
+# Sentinel codes are dropped BEFORE profiling. They parse as valid floats, so
+# leaving them in drags a column's p01/p99 and its correlations far off and
+# can hand a signal to the wrong column entirely -- in testing, a 200-sample
+# -999 burst in the bearing channel was enough to make the pitch column win
+# the main-bearing template. Run care_v6_quality_scan.py first to see which
+# columns carry them.
+CONVENTIONAL_SENTINELS = {
+    -9999.0, -999.0, -99.0,
+    9999.0, 999.0, 99999.0, -99999.0,
+    -32768.0, 32767.0, 65535.0,
+}
+
 NAMED_FAMILY_RE = re.compile(r"^(power|wind_speed|reactive_power)_\d+(_(avg|max|min|std))?$", re.I)
 
 
 def _is_named_family(col):
     """True when the column's identity is already given by its name."""
     return bool(NAMED_FAMILY_RE.match(col)) or col in NON_SIGNAL
+
+# --- CSV dialect handling -------------------------------------------------
+# CARE v6 case files are not guaranteed to be comma-separated. A semicolon
+# file read with the default dialect yields a single mega-column, which is
+# how three separate tools failed at once on 2026-08-14: the quality scan
+# saw "1 column", the split audit could not find train_test, and the sensor
+# profiler could not find any power/wind anchor. Detect it instead of
+# assuming, and let the operator override.
+CANDIDATE_DELIMITERS = [",", ";", "\t", "|"]
+
+
+def sniff_delimiter(path, override=None):
+    """Pick the delimiter that splits the HEADER line into the most fields."""
+    if override:
+        return {"tab": "\t", "\\t": "\t"}.get(override, override)
+    try:
+        with open(path, newline="", encoding="utf-8", errors="replace") as f:
+            header = f.readline()
+    except OSError:
+        return ","
+    best, best_count = ",", -1
+    for d in CANDIDATE_DELIMITERS:
+        count = header.count(d)
+        if count > best_count:
+            best, best_count = d, count
+    return best
+
+
+def farm_from_path(path, workdir):
+    """Farm name is the directory that CONTAINS `datasets`, not the first
+    component under --workdir: pointing --workdir one level too high
+    otherwise collapses every farm into a single group."""
+    rel = os.path.normpath(os.path.relpath(path, workdir))
+    parts = rel.split(os.sep)
+    for i, part in enumerate(parts):
+        if part.lower() == "datasets" and i > 0:
+            return parts[i - 1]
+    return parts[0] if len(parts) > 1 else "(root)"
 
 
 
@@ -130,8 +180,16 @@ def to_float(raw):
     try:
         v = float(raw)
     except (TypeError, ValueError):
-        return None
+        if isinstance(raw, str) and "," in raw:
+            try:
+                v = float(raw.replace(",", ".", 1))
+            except ValueError:
+                return None
+        else:
+            return None
     if math.isnan(v) or math.isinf(v):
+        return None
+    if v in CONVENTIONAL_SENTINELS:
         return None
     return v
 
@@ -159,23 +217,22 @@ def quantile(sorted_vals, q):
 
 
 def discover_farms(workdir, case_glob):
-    """Return {farm_name: [case_file, ...]} using the directory component that
-    sits directly under workdir."""
+    """Return {farm_name: [case_file, ...]}, keyed by the directory containing
+    `datasets` so that --workdir pointing one level too high does not collapse
+    every farm into one group."""
     pattern = os.path.join(workdir, case_glob)
     files = sorted(glob.glob(pattern, recursive=True))
     by_farm = defaultdict(list)
     for path in files:
-        rel = os.path.relpath(path, workdir)
-        parts = rel.split(os.sep)
-        farm = parts[0] if len(parts) > 1 else "(root)"
-        by_farm[farm].append(path)
+        by_farm[farm_from_path(path, workdir)].append(path)
     return by_farm
 
 
-def read_case_sample(path, max_rows, timestamp_col):
+def read_case_sample(path, max_rows, timestamp_col, delimiter_override=None):
     """Strided read so the sample spans the whole case, not just its head."""
+    delimiter = sniff_delimiter(path, delimiter_override)
     with open(path, newline="", encoding="utf-8", errors="replace") as f:
-        header = next(csv.reader(f), None)
+        header = next(csv.reader(f, delimiter=delimiter), None)
     if not header:
         return None, None, None
     with open(path, newline="", encoding="utf-8", errors="replace") as f:
@@ -185,7 +242,7 @@ def read_case_sample(path, max_rows, timestamp_col):
     columns = defaultdict(list)
     timestamps = []
     with open(path, newline="", encoding="utf-8", errors="replace") as f:
-        reader = csv.DictReader(f)
+        reader = csv.DictReader(f, delimiter=delimiter)
         for i, row in enumerate(reader):
             if i % stride:
                 continue
@@ -488,7 +545,7 @@ def run(args):
         header_union = []
         for path in sample_files:
             header, columns, timestamps = read_case_sample(
-                path, args.max_rows_per_case, args.timestamp_col)
+                path, args.max_rows_per_case, args.timestamp_col, args.delimiter)
             if not header:
                 print("  skipped unreadable %s" % path, file=sys.stderr)
                 continue
@@ -506,8 +563,15 @@ def run(args):
         power_col, power_cands = pick_named(header_union, NAMED_POWER_RE, merged)
         wind_col, wind_cands = pick_named(header_union, NAMED_WIND_RE, merged)
         if not power_col or not wind_col:
+            # Self-diagnosing failure: the usual cause is a delimiter mismatch,
+            # which yields a single mega-column instead of a real header.
             print("  cannot anchor: power=%r wind=%r" % (power_col, wind_col),
                   file=sys.stderr)
+            print("  saw %d columns; first few: %s"
+                  % (len(header_union), header_union[:6]), file=sys.stderr)
+            if len(header_union) <= 2:
+                print("  -> that looks like a delimiter mismatch. Re-run with "
+                      "--delimiter ';' (or 'tab').", file=sys.stderr)
             continue
 
         profiles, ctx = profile_columns(merged, merged_ts, wind_col, power_col)
@@ -581,7 +645,7 @@ def run(args):
     with open(os.path.join(args.output_dir, "identification_summary.json"),
               "w", encoding="utf-8") as f:
         json.dump({
-            "generated_at_utc": datetime.utcnow().isoformat() + "Z",
+            "generated_at_utc": datetime.now(timezone.utc).isoformat(),
             "status": "CANDIDATE_UNRATIFIED",
             "farms": overall,
             "cli_invocation": " ".join(sys.argv),
@@ -604,6 +668,8 @@ def main():
     ap.add_argument("--max-rows-per-case", type=int, default=20000)
     ap.add_argument("--top-n", type=int, default=5, help="Candidates to report per signal")
     ap.add_argument("--timestamp-col", default="time_stamp")
+    ap.add_argument("--delimiter", default=None,
+                    help="CSV delimiter; auto-detected from the header when omitted")
     args = ap.parse_args()
     return run(args)
 

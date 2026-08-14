@@ -63,7 +63,7 @@ import json
 import os
 import sys
 from collections import Counter, defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 
 TIMESTAMP_FORMATS = [
     "%Y-%m-%d %H:%M:%S",
@@ -78,6 +78,44 @@ TRAIN_TOKENS = {"train", "training", "fit", "0", "false"}
 EVAL_TOKENS = {"test", "prediction", "predict", "eval", "evaluation", "1", "true"}
 
 EVENT_FILE_HINTS = ("event", "info", "description", "meta", "label", "readme")
+
+# --- CSV dialect handling -------------------------------------------------
+# CARE v6 case files are not guaranteed to be comma-separated. A semicolon
+# file read with the default dialect yields a single mega-column, which is
+# how three separate tools failed at once on 2026-08-14: the quality scan
+# saw "1 column", the split audit could not find train_test, and the sensor
+# profiler could not find any power/wind anchor. Detect it instead of
+# assuming, and let the operator override.
+CANDIDATE_DELIMITERS = [",", ";", "\t", "|"]
+
+
+def sniff_delimiter(path, override=None):
+    """Pick the delimiter that splits the HEADER line into the most fields."""
+    if override:
+        return {"tab": "\t", "\\t": "\t"}.get(override, override)
+    try:
+        with open(path, newline="", encoding="utf-8", errors="replace") as f:
+            header = f.readline()
+    except OSError:
+        return ","
+    best, best_count = ",", -1
+    for d in CANDIDATE_DELIMITERS:
+        count = header.count(d)
+        if count > best_count:
+            best, best_count = d, count
+    return best
+
+
+def farm_from_path(path, workdir):
+    """Farm name is the directory that CONTAINS `datasets`, not the first
+    component under --workdir: pointing --workdir one level too high
+    otherwise collapses every farm into a single group."""
+    rel = os.path.normpath(os.path.relpath(path, workdir))
+    parts = rel.split(os.sep)
+    for i, part in enumerate(parts):
+        if part.lower() == "datasets" and i > 0:
+            return parts[i - 1]
+    return parts[0] if len(parts) > 1 else "(root)"
 
 
 def parse_ts(raw):
@@ -106,17 +144,20 @@ def classify_split(value):
     return "unrecognised:" + v
 
 
-def scan_case(path, split_col, timestamp_col):
+def scan_case(path, split_col, timestamp_col, delimiter_override=None):
     """One pass reading only the two columns we need."""
+    delimiter = sniff_delimiter(path, delimiter_override)
     spans = defaultdict(lambda: {"n": 0, "first": None, "last": None})
     counts = Counter()
     header = []
     try:
         with open(path, newline="", encoding="utf-8", errors="replace") as f:
-            reader = csv.DictReader(f)
+            reader = csv.DictReader(f, delimiter=delimiter)
             header = reader.fieldnames or []
             if split_col not in header:
                 return {"error": "split column %r not in header" % split_col,
+                        "delimiter_used": delimiter,
+                        "n_columns_seen": len(header),
                         "header_sample": header[:20]}
             for row in reader:
                 bucket = classify_split(row.get(split_col))
@@ -134,6 +175,7 @@ def scan_case(path, split_col, timestamp_col):
 
     return {
         "n_rows": sum(counts.values()),
+        "delimiter_used": delimiter,
         "split_value_counts": dict(counts),
         "partitions": {
             k: {
@@ -209,7 +251,7 @@ def run(args):
     inventory = {}
     for i, path in enumerate(case_files, 1):
         case_id = os.path.splitext(os.path.basename(path))[0]
-        result = scan_case(path, args.split_col, args.timestamp_col)
+        result = scan_case(path, args.split_col, args.timestamp_col, args.delimiter)
         meta = meta_by_case.get(case_id, {})
         result["case_id"] = case_id
         result["farm_id"] = meta.get("farm_id")
@@ -287,7 +329,7 @@ def run(args):
     })
 
     verdict = {
-        "generated_at_utc": datetime.utcnow().isoformat() + "Z",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "split_column": args.split_col,
         "n_cases_scanned": len(inventory),
         "n_cases_with_eval_partition": sum(
@@ -357,6 +399,8 @@ def main():
     ap.add_argument("--case-glob", default="**/datasets/*.csv")
     ap.add_argument("--split-col", default="train_test")
     ap.add_argument("--timestamp-col", default="time_stamp")
+    ap.add_argument("--delimiter", default=None,
+                    help="CSV delimiter; auto-detected from the header when omitted")
     args = ap.parse_args()
     return run(args)
 

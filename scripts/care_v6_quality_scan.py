@@ -77,7 +77,7 @@ import os
 import statistics
 import sys
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 TIMESTAMP_FORMATS = [
     "%Y-%m-%d %H:%M:%S",
@@ -99,6 +99,44 @@ LONG_GAP = timedelta(hours=3)
 REPEAT_FRACTION_THRESHOLD = 0.002   # 0.2% of values identical (non-conventional)
 CONVENTIONAL_SENTINEL_MIN_COUNT = 20  # absolute count; fractions dilute across cases
 IQR_OUTLIER_MULTIPLE = 5.0
+
+# --- CSV dialect handling -------------------------------------------------
+# CARE v6 case files are not guaranteed to be comma-separated. A semicolon
+# file read with the default dialect yields a single mega-column, which is
+# how three separate tools failed at once on 2026-08-14: the quality scan
+# saw "1 column", the split audit could not find train_test, and the sensor
+# profiler could not find any power/wind anchor. Detect it instead of
+# assuming, and let the operator override.
+CANDIDATE_DELIMITERS = [",", ";", "\t", "|"]
+
+
+def sniff_delimiter(path, override=None):
+    """Pick the delimiter that splits the HEADER line into the most fields."""
+    if override:
+        return {"tab": "\t", "\\t": "\t"}.get(override, override)
+    try:
+        with open(path, newline="", encoding="utf-8", errors="replace") as f:
+            header = f.readline()
+    except OSError:
+        return ","
+    best, best_count = ",", -1
+    for d in CANDIDATE_DELIMITERS:
+        count = header.count(d)
+        if count > best_count:
+            best, best_count = d, count
+    return best
+
+
+def farm_from_path(path, workdir):
+    """Farm name is the directory that CONTAINS `datasets`, not the first
+    component under --workdir: pointing --workdir one level too high
+    otherwise collapses every farm into a single group."""
+    rel = os.path.normpath(os.path.relpath(path, workdir))
+    parts = rel.split(os.sep)
+    for i, part in enumerate(parts):
+        if part.lower() == "datasets" and i > 0:
+            return parts[i - 1]
+    return parts[0] if len(parts) > 1 else "(root)"
 
 
 def parse_ts(raw):
@@ -125,7 +163,14 @@ def to_float(raw):
     try:
         f = float(v)
     except (TypeError, ValueError):
-        return None
+        # Semicolon-delimited exports often carry comma decimal separators.
+        if isinstance(v, str) and "," in v:
+            try:
+                f = float(v.replace(",", ".", 1))
+            except ValueError:
+                return None
+        else:
+            return None
     if math.isnan(f) or math.isinf(f):
         return None
     return f
@@ -226,9 +271,10 @@ def gap_profile(timestamps):
     }
 
 
-def scan_case(path, timestamp_col, max_rows):
+def scan_case(path, timestamp_col, max_rows, delimiter_override=None):
+    delimiter = sniff_delimiter(path, delimiter_override)
     with open(path, newline="", encoding="utf-8", errors="replace") as f:
-        header = next(csv.reader(f), None)
+        header = next(csv.reader(f, delimiter=delimiter), None)
     if not header:
         return None
 
@@ -243,7 +289,7 @@ def scan_case(path, timestamp_col, max_rows):
     n_rows_by_col = Counter()
     timestamps = []
     with open(path, newline="", encoding="utf-8", errors="replace") as f:
-        reader = csv.DictReader(f)
+        reader = csv.DictReader(f, delimiter=delimiter)
         for i, row in enumerate(reader):
             if stride > 1 and i % stride:
                 continue
@@ -257,7 +303,7 @@ def scan_case(path, timestamp_col, max_rows):
                     present[col].append(v)
     return {"header": header, "present": present,
             "n_rows_by_col": n_rows_by_col, "timestamps": timestamps,
-            "stride": stride}
+            "stride": stride, "delimiter": delimiter}
 
 
 def run(args):
@@ -269,9 +315,7 @@ def run(args):
 
     by_farm = defaultdict(list)
     for path in files:
-        rel = os.path.relpath(path, args.workdir)
-        parts = rel.split(os.sep)
-        by_farm[parts[0] if len(parts) > 1 else "(root)"].append(path)
+        by_farm[farm_from_path(path, args.workdir)].append(path)
 
     per_case_gaps = {}
     farm_reports = {}
@@ -283,10 +327,13 @@ def run(args):
 
         agg_present = defaultdict(list)
         agg_rows = Counter()
+        delimiter_seen = None
         for k, path in enumerate(selected, 1):
-            res = scan_case(path, args.timestamp_col, args.max_rows_per_case)
+            res = scan_case(path, args.timestamp_col, args.max_rows_per_case,
+                            args.delimiter)
             if not res:
                 continue
+            delimiter_seen = res.get("delimiter")
             case_id = os.path.splitext(os.path.basename(path))[0]
             per_case_gaps[case_id] = gap_profile(res["timestamps"])
             per_case_gaps[case_id]["farm"] = farm
@@ -325,6 +372,7 @@ def run(args):
         all_missing = [c for c, e in columns.items() if e["n_present"] == 0]
 
         farm_reports[farm] = {
+            "delimiter_used": delimiter_seen,
             "n_cases_scanned": len(selected),
             "n_cases_total": len(farm_files),
             "n_columns": len(columns),
@@ -367,7 +415,7 @@ def run(args):
 
     with open(os.path.join(args.output_dir, "c1_gap_profile.json"), "w", encoding="utf-8") as f:
         json.dump({
-            "generated_at_utc": datetime.utcnow().isoformat() + "Z",
+            "generated_at_utc": datetime.now(timezone.utc).isoformat(),
             "policy": {"interpolate_max_hours": 1, "forward_fill_max_hours": 3,
                        "non_evaluable_above_hours": 3},
             "threshold_evidence": threshold_evidence,
@@ -377,6 +425,10 @@ def run(args):
     total_sentinels = sum(r["n_columns_with_sentinel_candidates"] for r in farm_reports.values())
     print("\n--- quality scan ---")
     for farm, r in sorted(farm_reports.items()):
+        if r["n_columns"] <= 2:
+            print("%-14s only %d column(s) parsed -- that is almost certainly a "
+                  "delimiter mismatch. Re-run with --delimiter ';' (or 'tab')."
+                  % (farm, r["n_columns"]))
         print("%-14s %4d columns | sentinels in %3d | >30%% missing %3d | empty %3d"
               % (farm, r["n_columns"], r["n_columns_with_sentinel_candidates"],
                  r["n_columns_missing_over_30pct"], r["n_columns_entirely_empty"]))
@@ -425,6 +477,9 @@ def main():
     ap.add_argument("--max-rows-per-case", type=int, default=0,
                     help="0 = every row; a positive value strides the read")
     ap.add_argument("--timestamp-col", default="time_stamp")
+    ap.add_argument("--delimiter", default=None,
+                    help="CSV delimiter; auto-detected from the header when omitted "
+                         "(use 'tab' for tab-separated)")
     args = ap.parse_args()
     return run(args)
 
