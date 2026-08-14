@@ -170,6 +170,53 @@ def main():
         check("winning candidates carry evidence",
               all(v["candidates"][0]["evidence"] for v in cands.values() if v["candidates"]))
 
+        # --- hostile dialect scenario -------------------------------------
+        # Reproduces the 2026-08-14 local run, where four problems stacked:
+        # semicolon delimiter, comma decimal separators, a -999 sentinel burst
+        # in the bearing channel, and --workdir pointed one level too high so
+        # every farm collapsed into a single group.
+        print("\n  [hostile dialect: ';' + comma decimals + sentinels + deep path]")
+        hostile_root = os.path.join(root, "hostile")
+        hostile_farm = os.path.join(hostile_root, "CARE_To_Compare",
+                                    "Wind Farm A", "datasets")
+        os.makedirs(hostile_farm)
+        for case in range(3):
+            src = os.path.join(farm_dir, "%d.csv" % case)
+            with open(src, newline="", encoding="utf-8") as f:
+                rows = list(csv.DictReader(f))
+            cols = list(rows[0])
+            with open(os.path.join(hostile_farm, "%d.csv" % case),
+                      "w", newline="", encoding="utf-8") as f:
+                f.write(";".join(cols) + "\n")
+                for i, r in enumerate(rows):
+                    vals = []
+                    for c in cols:
+                        v = r[c]
+                        if c == "sensor_31_avg" and 5000 <= i < 5200:
+                            v = "-999"          # sentinel burst in the bearing channel
+                        elif c not in ("time_stamp", "train_test") and v:
+                            v = str(v).replace(".", ",")   # comma decimals
+                        vals.append(v)
+                    f.write(";".join(vals) + "\n")
+
+        hostile_out = os.path.join(root, "hostile_out")
+        proc2 = subprocess.run(
+            [sys.executable, PROFILER,
+             "--workdir", hostile_root, "--output-dir", hostile_out,
+             "--cases-per-farm", "3", "--max-rows-per-case", "8000"],
+            capture_output=True, text=True)
+        check("hostile run exits 0", proc2.returncode == 0, proc2.stderr[-400:])
+
+        h = json.load(open(os.path.join(hostile_out, "identification_summary.json"),
+                           encoding="utf-8"))["farms"]
+        check("farm keyed by the dir containing datasets, not the top level",
+              "Wind Farm A" in h, "got %s" % list(h))
+        if "Wind Farm A" in h:
+            for signal, expected_col in EXPECTED.items():
+                got = h["Wind Farm A"]["top_pick"][signal]
+                check("hostile %s -> %s" % (signal, expected_col), got == expected_col,
+                      "got %s" % got)
+
         draft = json.load(open(os.path.join(out_dir, "signal_map_draft_Wind_Farm_A.json"),
                                encoding="utf-8"))
         check("draft is marked unratified", draft["_status"] == "CANDIDATE_UNRATIFIED")

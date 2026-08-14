@@ -79,6 +79,10 @@ from collections import defaultdict
 from datetime import datetime
 
 EXPECTED_ARCHIVE_SIZE_BYTES = 5_503_439_673
+# Established 2026-08-14 by the local operator on the archive of record.
+# This is the anchor D0 had been missing: size alone cannot distinguish two
+# builds of the same archive, a hash can.
+EXPECTED_ARCHIVE_SHA256 = "ca61379e98956d891041ad45c885109bd8a14199fde0688d0184a11c2d4194f1"
 EXPECTED_CASE_COUNT = 95
 # Two conflicting prior counts this manifest must adjudicate (spec G2):
 PAPER_COUNTS = {"anomaly": 44, "normal": 51}          # Data 9(12):138
@@ -142,6 +146,9 @@ def run_g1(archive_path, output_dir, workdir, skip_extract):
     result = {
         "archive_path": archive_path,
         "sha256": digest,
+        "sha256_matches_expected": (digest == EXPECTED_ARCHIVE_SHA256
+                                    if digest else None),
+        "expected_sha256": EXPECTED_ARCHIVE_SHA256,
         "size_bytes": size_bytes,
         "size_matches_expected": size_bytes == EXPECTED_ARCHIVE_SIZE_BYTES,
         "expected_size_bytes": EXPECTED_ARCHIVE_SIZE_BYTES,
@@ -475,7 +482,7 @@ def write_summary(output_dir, g1, g2, g5_summary, g6):
     lines.append(f"Generated: {datetime.utcnow().isoformat()}Z")
     lines.append("")
     lines.append("## G1 — Archive Integrity")
-    lines.append(f"- SHA-256: `{g1['sha256']}`")
+    lines.append(f"- SHA-256: `{g1['sha256']}` (matches expected: {g1.get('sha256_matches_expected')})")
     lines.append(f"- Size: {g1['size_bytes']} bytes (expected {g1['expected_size_bytes']}, match={g1['size_matches_expected']})")
     lines.append(f"- Extracted files: {g1['extracted_file_count']}, total bytes: {g1['extracted_total_bytes']}")
     lines.append("")
