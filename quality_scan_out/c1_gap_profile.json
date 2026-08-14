@@ -1,0 +1,55 @@
+{
+  "generated_at_utc": "2026-08-14T15:45:46.218419Z",
+  "policy": {
+    "interpolate_max_hours": 1,
+    "forward_fill_max_hours": 3,
+    "non_evaluable_above_hours": 3
+  },
+  "threshold_evidence": {
+    "note": "non_evaluable_fraction is computed from wall-clock gaps between consecutive rows using C1's own policy (>3h = non-evaluable). It is directly comparable to C1's threshold, which is currently 0.30 by convention rather than by evidence.",
+    "n_cases": 0,
+    "min": null,
+    "p50": null,
+    "p75": null,
+    "p90": null,
+    "p95": null,
+    "p99": null,
+    "max": null,
+    "n_cases_over_current_30pct_threshold": 0,
+    "n_cases_over_10pct": 0,
+    "n_cases_over_50pct": 0,
+    "reading": "No case produced a usable gap profile; nothing can be said about C1's threshold."
+  },
+  "per_case": {
+    "0": {
+      "error": "fewer than 2 parseable timestamps",
+      "n_unparseable_timestamps": 54986,
+      "farm": "CARE_To_Compare",
+      "row_stride_used": 1
+    },
+    "10": {
+      "error": "fewer than 2 parseable timestamps",
+      "n_unparseable_timestamps": 53592,
+      "farm": "CARE_To_Compare",
+      "row_stride_used": 1
+    },
+    "13": {
+      "error": "fewer than 2 parseable timestamps",
+      "n_unparseable_timestamps": 54010,
+      "farm": "CARE_To_Compare",
+      "row_stride_used": 1
+    },
+    "14": {
+      "error": "fewer than 2 parseable timestamps",
+      "n_unparseable_timestamps": 54197,
+      "farm": "CARE_To_Compare",
+      "row_stride_used": 1
+    },
+    "17": {
+      "error": "fewer than 2 parseable timestamps",
+      "n_unparseable_timestamps": 55090,
+      "farm": "CARE_To_Compare",
+      "row_stride_used": 1
+    }
+  }
+}

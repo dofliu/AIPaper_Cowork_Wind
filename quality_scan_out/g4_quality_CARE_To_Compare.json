@@ -1,0 +1,23 @@
+{
+  "farm": "CARE_To_Compare",
+  "n_cases_scanned": 5,
+  "n_cases_total": 95,
+  "n_columns": 1,
+  "n_columns_with_sentinel_candidates": 0,
+  "columns_with_sentinel_candidates": {},
+  "n_columns_missing_over_30pct": 1,
+  "columns_missing_over_30pct": {
+    "time_stamp;asset_id;id;train_test;status_type_id;sensor_0_avg;sensor_1_avg;sensor_2_avg;wind_speed_3_avg;wind_speed_4_avg;wind_speed_3_max;wind_speed_3_min;wind_speed_3_std;sensor_5_avg;sensor_5_max;sensor_5_min;sensor_5_std;sensor_6_avg;sensor_7_avg;sensor_8_avg;sensor_9_avg;sensor_10_avg;sensor_11_avg;sensor_12_avg;sensor_13_avg;sensor_14_avg;sensor_15_avg;sensor_16_avg;sensor_17_avg;sensor_18_avg;sensor_18_max;sensor_18_min;sensor_18_std;sensor_19_avg;sensor_20_avg;sensor_21_avg;sensor_22_avg;sensor_23_avg;sensor_24_avg;sensor_25_avg;sensor_26_avg;reactive_power_27_avg;reactive_power_27_max;reactive_power_27_min;reactive_power_27_std;reactive_power_28_avg;reactive_power_28_max;reactive_power_28_min;reactive_power_28_std;power_29_avg;power_29_max;power_29_min;power_29_std;power_30_avg;power_30_max;power_30_min;power_30_std;sensor_31_avg;sensor_31_max;sensor_31_min;sensor_31_std;sensor_32_avg;sensor_33_avg;sensor_34_avg;sensor_35_avg;sensor_36_avg;sensor_37_avg;sensor_38_avg;sensor_39_avg;sensor_40_avg;sensor_41_avg;sensor_42_avg;sensor_43_avg;sensor_44;sensor_45;sensor_46;sensor_47;sensor_48;sensor_49;sensor_50;sensor_51;sensor_52_avg;sensor_52_max;sensor_52_min;sensor_52_std;sensor_53_avg": 1.0
+  },
+  "n_columns_entirely_empty": 1,
+  "columns_entirely_empty": [
+    "time_stamp;asset_id;id;train_test;status_type_id;sensor_0_avg;sensor_1_avg;sensor_2_avg;wind_speed_3_avg;wind_speed_4_avg;wind_speed_3_max;wind_speed_3_min;wind_speed_3_std;sensor_5_avg;sensor_5_max;sensor_5_min;sensor_5_std;sensor_6_avg;sensor_7_avg;sensor_8_avg;sensor_9_avg;sensor_10_avg;sensor_11_avg;sensor_12_avg;sensor_13_avg;sensor_14_avg;sensor_15_avg;sensor_16_avg;sensor_17_avg;sensor_18_avg;sensor_18_max;sensor_18_min;sensor_18_std;sensor_19_avg;sensor_20_avg;sensor_21_avg;sensor_22_avg;sensor_23_avg;sensor_24_avg;sensor_25_avg;sensor_26_avg;reactive_power_27_avg;reactive_power_27_max;reactive_power_27_min;reactive_power_27_std;reactive_power_28_avg;reactive_power_28_max;reactive_power_28_min;reactive_power_28_std;power_29_avg;power_29_max;power_29_min;power_29_std;power_30_avg;power_30_max;power_30_min;power_30_std;sensor_31_avg;sensor_31_max;sensor_31_min;sensor_31_std;sensor_32_avg;sensor_33_avg;sensor_34_avg;sensor_35_avg;sensor_36_avg;sensor_37_avg;sensor_38_avg;sensor_39_avg;sensor_40_avg;sensor_41_avg;sensor_42_avg;sensor_43_avg;sensor_44;sensor_45;sensor_46;sensor_47;sensor_48;sensor_49;sensor_50;sensor_51;sensor_52_avg;sensor_52_max;sensor_52_min;sensor_52_std;sensor_53_avg"
+  ],
+  "columns": {
+    "time_stamp;asset_id;id;train_test;status_type_id;sensor_0_avg;sensor_1_avg;sensor_2_avg;wind_speed_3_avg;wind_speed_4_avg;wind_speed_3_max;wind_speed_3_min;wind_speed_3_std;sensor_5_avg;sensor_5_max;sensor_5_min;sensor_5_std;sensor_6_avg;sensor_7_avg;sensor_8_avg;sensor_9_avg;sensor_10_avg;sensor_11_avg;sensor_12_avg;sensor_13_avg;sensor_14_avg;sensor_15_avg;sensor_16_avg;sensor_17_avg;sensor_18_avg;sensor_18_max;sensor_18_min;sensor_18_std;sensor_19_avg;sensor_20_avg;sensor_21_avg;sensor_22_avg;sensor_23_avg;sensor_24_avg;sensor_25_avg;sensor_26_avg;reactive_power_27_avg;reactive_power_27_max;reactive_power_27_min;reactive_power_27_std;reactive_power_28_avg;reactive_power_28_max;reactive_power_28_min;reactive_power_28_std;power_29_avg;power_29_max;power_29_min;power_29_std;power_30_avg;power_30_max;power_30_min;power_30_std;sensor_31_avg;sensor_31_max;sensor_31_min;sensor_31_std;sensor_32_avg;sensor_33_avg;sensor_34_avg;sensor_35_avg;sensor_36_avg;sensor_37_avg;sensor_38_avg;sensor_39_avg;sensor_40_avg;sensor_41_avg;sensor_42_avg;sensor_43_avg;sensor_44;sensor_45;sensor_46;sensor_47;sensor_48;sensor_49;sensor_50;sensor_51;sensor_52_avg;sensor_52_max;sensor_52_min;sensor_52_std;sensor_53_avg": {
+      "n_rows": 271875,
+      "n_present": 0,
+      "missing_fraction": 1.0
+    }
+  }
+}
