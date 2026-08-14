@@ -229,6 +229,9 @@ def overlap_days(a_start, a_end, b_start, b_end):
 
 
 def run(args):
+    print("care_v6_split_audit starting", flush=True)
+    print("  workdir  : %s" % args.workdir, flush=True)
+    print("  case-glob: %s" % args.case_glob, flush=True)
     if not os.path.isdir(args.workdir):
         print("workdir not found: %s" % args.workdir, file=sys.stderr)
         return 3

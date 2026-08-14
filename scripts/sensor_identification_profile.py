@@ -526,6 +526,9 @@ def pick_named(header, regex, columns):
 
 
 def run(args):
+    print("sensor_identification_profile starting", flush=True)
+    print("  workdir  : %s" % args.workdir, flush=True)
+    print("  case-glob: %s" % args.case_glob, flush=True)
     by_farm = discover_farms(args.workdir, args.case_glob)
     if not by_farm:
         print("No case files matched %r under %s" % (args.case_glob, args.workdir),
