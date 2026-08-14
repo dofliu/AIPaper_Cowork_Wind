@@ -1,11 +1,20 @@
 # CARE v6 Manifest & C0–C6 Gate Tooling
 
-Two independent tools, run in this order:
+Run in this order:
 
 1. `care_v6_manifest.py` — G1–G6 archive integrity + case manifest (closes **D0**).
-2. `base_scorer_compatibility_check.py` — the **C0–C6** frozen-base-scorer gate,
-   which consumes the manifest from step 1.
-3. `selftest_c0_c6_gate.py` — runs step 2 against synthetic fixtures, no CARE v6 needed.
+2. `sensor_identification_profile.py` — proposes candidates for the four CARE v6
+   signals that are anonymised and therefore unnameable, so a C0 signal map can
+   be built at all.
+3. `base_scorer_compatibility_check.py` — the **C0–C6** frozen-base-scorer gate,
+   which consumes the outputs of steps 1 and 2.
+
+Both self-tests run anywhere, with no CARE v6 data:
+
+```bash
+python3 scripts/selftest_c0_c6_gate.py            # 47 checks
+python3 scripts/selftest_sensor_identification.py # 15 checks
+```
 
 ---
 
@@ -59,6 +68,59 @@ per spec section 7 (`[數據] YYYY-MM-DD R13 — CARE v6 G1–G6 Manifest 執行
 A synthetic 2-case fixture (not the real archive) to confirm the script runs end-to-end
 without crashing and produces sane JSON/CSV. This is **not** a substitute for running it
 against the actual archive — it only proves the tool is functional.
+
+### Fixes applied after the 2026-08-14 real run
+
+The first run against the real archive surfaced three defects, all fixed here:
+
+- **G6 was saturated and uninformative.** It grouped by farm only and compared
+  just *adjacent* pairs after sorting by start time, so it reported exactly
+  `n_cases − 1` overlaps per farm — every adjacent pair overlapped, because
+  cases within a farm are different turbines monitored over the same calendar
+  period. Calendar overlap is expected and is not leakage. G6 now groups by
+  `(farm_id, turbine_id)`, compares all pairs, and measures real overlap
+  duration, separating cross-label (anomaly × normal on the same asset) pairs.
+- **The official train/test split was reported as "not determinable".** It is a
+  per-row `train_test` column, not a root manifest file. G6 now detects it.
+- **`manifest_summary.md` was mojibake on Windows.** Every text file is now
+  opened with an explicit `encoding="utf-8"`.
+
+---
+
+## `sensor_identification_profile.py` — anonymised-channel profiler
+
+CARE v6 ships almost every channel anonymised: Farm A has 86 columns of which
+60 are `sensor_<n>_*`, Farm B 257/228, Farm C 957/908. Only `power_<n>_*`,
+`wind_speed_<n>_*` and `reactive_power_<n>_*` carry meaning, and the numbering
+differs per farm. Of C0's six core signals, only active power and wind speed
+can be named; **rotor speed, main bearing temperature, pitch angle and ambient
+temperature cannot**. That blocks C0, and it blocks Base Scorer 2 outright —
+the main-bearing framework needs main bearing temperature.
+
+This profiler ranks candidates using physical signatures:
+
+| Signal | Signature |
+|---|---|
+| rotor speed | non-negative; rises with wind then saturates; high corr with wind *and* power |
+| ambient temperature | strong annual cycle; near-independent of power; outdoor-air range |
+| main bearing temperature | warmer than ambient; rises with power *and* with ambient |
+| pitch angle | large mass at 0 below rated; corr with wind jumps in the top wind quintile; right-skewed |
+
+```bash
+python3 scripts/sensor_identification_profile.py \
+  --workdir ./extract_dir --output-dir ./sensor_profile_out
+```
+
+**It proposes, it does not decide.** Output carries
+`"status": "CANDIDATE_UNRATIFIED"` and units are written as `<CONFIRM: …>`
+placeholders, so the draft is deliberately *not* accepted by C0 until a human
+confirms each column and fills in the real unit. A statistical signature is
+circumstantial; a data dictionary from the CARE authors beats it every time.
+
+`selftest_sensor_identification.py` plants known identities in a synthetic farm
+plus two decoys — a power-derived channel that correlates with power at r=1.0,
+and pure noise — and asserts the profiler recovers all four signals, keeps the
+anchors out of the candidate pool, and lets neither decoy win.
 
 ---
 
