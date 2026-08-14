@@ -150,7 +150,7 @@ def run_g1(archive_path, output_dir, workdir, skip_extract):
         "extracted_total_bytes": total_bytes,
         "generated_at_utc": datetime.utcnow().isoformat() + "Z",
     }
-    with open(os.path.join(output_dir, "g1_archive_integrity.json"), "w") as f:
+    with open(os.path.join(output_dir, "g1_archive_integrity.json"), "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2, ensure_ascii=False)
     return result
 
@@ -171,7 +171,7 @@ def discover_case_files(workdir, case_glob):
 
 
 def read_header(path):
-    with open(path, newline="", errors="replace") as f:
+    with open(path, newline="", encoding="utf-8", errors="replace") as f:
         reader = csv.reader(f)
         try:
             return next(reader)
@@ -226,7 +226,7 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
         wind_speeds = []
         label_value = None
         n_rows = 0
-        with open(path, newline="", errors="replace") as f:
+        with open(path, newline="", encoding="utf-8", errors="replace") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 n_rows += 1
@@ -295,12 +295,12 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
         "note": "If neither prior count matches, list case_ids with label='unknown' below for manual adjudication per spec G2.",
         "unknown_label_case_ids": [r["case_id"] for r in case_rows if r["label"] == "unknown"],
     }
-    with open(os.path.join(output_dir, "g2_case_inventory.json"), "w") as f:
+    with open(os.path.join(output_dir, "g2_case_inventory.json"), "w", encoding="utf-8") as f:
         json.dump(g2, f, indent=2, ensure_ascii=False)
 
     # G3: case-level metadata CSV
     g3_path = os.path.join(output_dir, "g3_case_metadata.csv")
-    with open(g3_path, "w", newline="") as f:
+    with open(g3_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=[
             "case_id", "farm_id", "turbine_id", "label", "start_timestamp",
             "end_timestamp", "n_records", "sampling_interval_check", "source_file"])
@@ -323,14 +323,14 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
                   "column-by-column pass; run care_v6_schema_quality.py-style deep scan "
                   "separately if G4 needs full quantitative missing-rate numbers — this "
                   "manifest pass only confirms column inventory per farm for a first D0 look.")
-    with open(os.path.join(output_dir, "g4_schema_quality.json"), "w") as f:
+    with open(os.path.join(output_dir, "g4_schema_quality.json"), "w", encoding="utf-8") as f:
         json.dump(g4, f, indent=2, ensure_ascii=False)
 
     # G5: regime bin matrix (case x bin) + exclusion stats vs frozen 500-sample rule
     g5_path = os.path.join(output_dir, "g5_regime_bin_matrix.csv")
     excluded_cells = 0
     total_cells = 0
-    with open(g5_path, "w", newline="") as f:
+    with open(g5_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["case_id"] + [b for b, _ in REGIME_BINS] + ["n_excluded_cells_lt_500"])
         for case_id, counts in regime_matrix.items():
@@ -348,30 +348,121 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
         "flag_if_over_30pct": (excluded_cells / total_cells > 0.30) if total_cells else None,
     }
 
-    # G6: leakage gate — cross-case time-range overlap within same (farm, turbine)
-    overlaps = []
-    by_key = defaultdict(list)
-    for case_id, farm, start, end in leakage_time_ranges:
-        by_key[farm].append((case_id, start, end))
-    for farm, ranges in by_key.items():
-        ranges_sorted = sorted([r for r in ranges if r[1] and r[2]], key=lambda r: r[1])
-        for i in range(len(ranges_sorted) - 1):
-            a = ranges_sorted[i]
-            b = ranges_sorted[i + 1]
-            if a[2] and b[1] and a[2] > b[1]:  # naive string/ISO comparison
-                overlaps.append({"farm": farm, "case_a": a[0], "case_b": b[0]})
+    # G6: leakage gate — ASSET-LEVEL cross-case time overlap.
+    #
+    # v1 of this check grouped by farm only and compared just ADJACENT pairs
+    # after sorting by start time. On the real archive that saturated at
+    # (n_cases - 1) overlaps per farm — every adjacent pair overlapped — which
+    # is uninformative: cases within a farm are different turbines monitored
+    # over the same calendar period, so calendar overlap is expected and is
+    # not leakage. The question that actually matters for D1/D6 is whether the
+    # SAME physical asset appears in more than one case over overlapping time,
+    # because then a "held-out" case is not held out at the asset-period level.
+    #
+    # v2 groups by (farm_id, turbine_id), compares all pairs, and measures the
+    # real overlap duration. Cross-label pairs (anomaly x normal on the same
+    # asset over the same period) are reported separately as the highest-risk
+    # class of contamination.
+    def _parse_ts(value):
+        if not value:
+            return None
+        for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M"):
+            try:
+                return datetime.strptime(value, fmt)
+            except ValueError:
+                continue
+        return None
+
+    by_asset = defaultdict(list)
+    for r in case_rows:
+        by_asset[(r["farm_id"], r["turbine_id"])].append(r)
+
+    asset_overlaps = []
+    n_unparseable_span = 0
+    for (farm, turbine), rows_for_asset in by_asset.items():
+        for i in range(len(rows_for_asset)):
+            for j in range(i + 1, len(rows_for_asset)):
+                a, b = rows_for_asset[i], rows_for_asset[j]
+                s1, e1 = _parse_ts(a["start_timestamp"]), _parse_ts(a["end_timestamp"])
+                s2, e2 = _parse_ts(b["start_timestamp"]), _parse_ts(b["end_timestamp"])
+                if None in (s1, e1, s2, e2):
+                    n_unparseable_span += 1
+                    continue
+                delta = min(e1, e2) - max(s1, s2)
+                if delta.total_seconds() > 0:
+                    asset_overlaps.append({
+                        "farm": farm,
+                        "turbine_id": turbine,
+                        "case_a": a["case_id"],
+                        "label_a": a["label"],
+                        "case_b": b["case_id"],
+                        "label_b": b["label"],
+                        "overlap_days": round(delta.total_seconds() / 86400.0, 2),
+                        "cross_label": a["label"] != b["label"],
+                    })
+
+    multi_case_assets = {k: [r["case_id"] for r in v] for k, v in by_asset.items() if len(v) > 1}
+    cross_label_overlaps = [o for o in asset_overlaps if o["cross_label"]]
+
+    # The official split lives in a per-row column (train_test), not in a root
+    # manifest file — v1 looked only for a root file and wrongly reported "not
+    # determinable".
+    split_columns_by_farm = {}
+    for farm, schema in schema_by_farm.items():
+        found = [c for c in schema.get("columns", []) if c.strip().lower() in
+                 ("train_test", "train/test", "traintest", "split", "subset")]
+        if found:
+            split_columns_by_farm[farm] = found
+    all_farms_have_split = (
+        bool(split_columns_by_farm)
+        and len(split_columns_by_farm) == len(schema_by_farm)
+    )
+
     g6 = {
-        "official_train_test_split_found": None,
-        "note_official_split": "Not determinable from this script; check archive root for a manifest/split file and record manually.",
-        "cross_case_time_overlaps_detected": overlaps,
-        "n_overlaps": len(overlaps),
+        "official_train_test_split_found": (
+            "column:" + ",".join(sorted({c for v in split_columns_by_farm.values() for c in v}))
+            if all_farms_have_split else None
+        ),
+        "split_columns_by_farm": split_columns_by_farm,
+        "note_official_split": (
+            "Split column detected per farm. This records only that the column EXISTS; "
+            "its value distribution per case has not been read. Tabulate train/test row "
+            "counts per case before treating the split as D0 evidence."
+            if all_farms_have_split else
+            "No train_test-style column found in any farm schema; check archive root files "
+            "for a manifest/split file and record manually."
+        ),
+        "asset_level_overlap_method": (
+            "grouped by (farm_id, turbine_id); all pairs compared; overlap measured as "
+            "min(end) - max(start) on case span timestamps"
+        ),
+        "n_distinct_assets": len(by_asset),
+        "n_assets_in_multiple_cases": len(multi_case_assets),
+        "assets_in_multiple_cases": {"%s|%s" % k: v for k, v in sorted(multi_case_assets.items())},
+        "n_asset_level_overlapping_pairs": len(asset_overlaps),
+        "n_cross_label_overlapping_pairs": len(cross_label_overlaps),
+        "max_overlap_days": max((o["overlap_days"] for o in asset_overlaps), default=None),
+        "median_overlap_days": (
+            sorted(o["overlap_days"] for o in asset_overlaps)[len(asset_overlaps) // 2]
+            if asset_overlaps else None
+        ),
+        "asset_level_overlaps": sorted(asset_overlaps, key=lambda o: -o["overlap_days"]),
+        "n_pairs_skipped_unparseable_span": n_unparseable_span,
+        "leakage_interpretation": (
+            "Case-span overlap on the same asset does NOT by itself prove contamination: "
+            "the spans come from G3 and ignore both the train_test column and the actual "
+            "event windows. It DOES mean asset-period isolation cannot be assumed, so any "
+            "calibration/evaluation split must be constructed at the asset level, not the "
+            "case level. Verify against event_info and the train_test column before "
+            "recording a D1/D6 verdict."
+        ),
         "normal_cases_with_fault_pointing_columns": [
             r["case_id"] for r in case_rows
             if r["label"] == "normal" and any(h in c.lower() for c in schema_by_farm.get(r["farm_id"], {}).get("columns", []) for h in ("fault", "anomaly", "event"))
         ],
         "event_label_storage_note": "Populate manually from source_file inspection; not auto-derivable without knowing v6's event-window schema.",
     }
-    with open(os.path.join(output_dir, "g6_leakage_gate.json"), "w") as f:
+    with open(os.path.join(output_dir, "g6_leakage_gate.json"), "w", encoding="utf-8") as f:
         json.dump(g6, f, indent=2, ensure_ascii=False)
 
     return g2, g4, g5_summary, g6, detection_notes
@@ -404,10 +495,21 @@ def write_summary(output_dir, g1, g2, g5_summary, g6):
         lines.append("- ⚠️ Exclusion fraction exceeds 30% — per spec, this must be reported to PI before proceeding (may require a [勘誤] doc, but NOT a post-hoc bin change after seeing results).")
     lines.append("")
     lines.append("## G6 — Leakage Gate")
-    lines.append(f"- Cross-case time overlaps detected: {g6['n_overlaps']}")
+    lines.append(f"- Distinct assets: {g6['n_distinct_assets']}; "
+                 f"assets appearing in >1 case: {g6['n_assets_in_multiple_cases']}")
+    lines.append(f"- Asset-level overlapping case pairs: {g6['n_asset_level_overlapping_pairs']} "
+                 f"(cross-label anomaly x normal: {g6['n_cross_label_overlapping_pairs']})")
+    if g6["n_asset_level_overlapping_pairs"]:
+        lines.append(f"- Overlap duration: median {g6['median_overlap_days']} d, max {g6['max_overlap_days']} d")
+        lines.append("- ⚠️ Asset-period isolation cannot be assumed. Calibration/evaluation splits "
+                     "must be built at the asset level, not the case level.")
     if g6["normal_cases_with_fault_pointing_columns"]:
         lines.append(f"- ⚠️ Normal cases with fault-pointing columns present: {g6['normal_cases_with_fault_pointing_columns']}")
-    lines.append("- Official train/test split: NOT auto-determined — verify manually against archive root files.")
+    if g6["official_train_test_split_found"]:
+        lines.append(f"- Official train/test split: found as {g6['official_train_test_split_found']} "
+                     "(existence only; value distribution not yet tabulated)")
+    else:
+        lines.append("- Official train/test split: NOT auto-determined — verify manually against archive root files.")
     lines.append("")
     lines.append("## Caveat (read before trusting G2-G6)")
     lines.append("G2-G6 rely on best-effort auto-detection of timestamp/wind-speed/label columns "
@@ -415,7 +517,7 @@ def write_summary(output_dir, g1, g2, g5_summary, g6):
                   "Spot-check a handful of `status=detected` cases against the raw files before "
                   "using these numbers as D0 gate evidence, and inspect any `status=undetected` "
                   "entries — they are excluded from all counts above, not silently assumed normal.")
-    with open(os.path.join(output_dir, "manifest_summary.md"), "w") as f:
+    with open(os.path.join(output_dir, "manifest_summary.md"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
 
 
@@ -438,7 +540,7 @@ def main():
         args.workdir, args.output_dir, args.case_glob,
         args.timestamp_col, args.wind_speed_col, args.label_col,
     )
-    with open(os.path.join(args.output_dir, "detection_notes.json"), "w") as f:
+    with open(os.path.join(args.output_dir, "detection_notes.json"), "w", encoding="utf-8") as f:
         json.dump(notes, f, indent=2, ensure_ascii=False)
     write_summary(args.output_dir, g1, g2, g5_summary, g6)
 
