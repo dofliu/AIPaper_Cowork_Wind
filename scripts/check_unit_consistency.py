@@ -40,17 +40,32 @@ import json
 import os
 import sys
 
-# A signal passes if the farms' medians sit within this relative band of one
-# another, and their p01-p99 spans overlap. Deliberately loose: three farms
-# in different climates and turbine classes will not match tightly, and the
-# failure this guards against (Fahrenheit, rad/s, per-unit) is off by a
-# factor, not by a few per cent.
-MEDIAN_TOLERANCE = 0.35
+# Relative comparison is only meaningful on a RATIO scale -- one with a true
+# zero, where "twice as much" means something. Wind speed and rotor speed
+# qualify. Temperature in Celsius does NOT: its zero is arbitrary, so 12.6 vs
+# 28.1 is a 15.5 K difference between a cool site and a hot one, not a "55%
+# disagreement". Nor does pitch angle, whose median sits near zero and whose
+# sign flips, making any ratio explode. An earlier version of this checker
+# compared everything by ratio and reported three unit mismatches that were
+# nothing of the kind, on real data, which is worse than useless: it teaches
+# the reader to ignore the checker.
+MEDIAN_TOLERANCE = 0.35          # ratio-scale signals, relative
+
+# Interval-scale signals, compared by ABSOLUTE difference in native units.
+# Sized to admit real cross-site variation and still catch a unit error,
+# which is off by a factor: degC->degF at 20 C is a 48-degree gap, rad/s->rpm
+# is 10x.
+INTERVAL_TOLERANCE = {
+    "ambient_temperature": 25.0,        # K; Nordic vs desert sites
+    "main_bearing_temperature": 30.0,   # K; duty and cooling differ
+    "pitch_angle": 15.0,                # deg; median pitch is near zero
+}
 
 # Signals whose absolute level legitimately differs between farms: rated
 # power is a property of the turbine model, not of the unit. Comparing
 # medians across farms would flag a 2 MW farm against a 4 MW farm as a unit
-# mismatch. Report their ranges, but do not judge them.
+# mismatch. Report their ranges, but do not judge them BY MEDIAN -- they are
+# still checked for normalisation below.
 SCALE_DEPENDENT = {"active_power"}
 
 # Physically plausible envelopes, to catch the case where all three farms
@@ -120,8 +135,24 @@ def main(argv):
         medians = {f: r.get("p50") for f, r in present.items()
                    if r.get("p50") is not None}
         if signal in SCALE_DEPENDENT:
-            print("  => not compared: rated power differs by turbine model, so a "
-                  "cross-farm median gap here is not evidence of a unit mismatch")
+            print("  => median not compared: rated power differs by turbine model")
+        elif len(medians) >= 2 and signal in INTERVAL_TOLERANCE:
+            lo, hi = min(medians.values()), max(medians.values())
+            gap = hi - lo
+            allowed = INTERVAL_TOLERANCE[signal]
+            if gap > allowed:
+                worst = [f for f, v in medians.items() if v in (lo, hi)]
+                problems.append(
+                    "%s: medians differ by %.1f across farms (%s), more than the %.0f "
+                    "allowed -- check the units are really the same quantity"
+                    % (signal, gap,
+                       ", ".join("%s=%s" % (f, fmt(medians[f])) for f in sorted(worst)),
+                       allowed))
+                print("  => DISAGREE: medians span %.1f (interval scale, allowed %.0f)"
+                      % (gap, allowed))
+            else:
+                print("  => consistent (medians span %.1f, within the %.0f allowed for "
+                      "an interval scale)" % (gap, allowed))
         elif len(medians) >= 2:
             lo, hi = min(medians.values()), max(medians.values())
             scale = max(abs(lo), abs(hi)) or 1.0
@@ -136,6 +167,26 @@ def main(argv):
                 print("  => DISAGREE: medians span %.0f%%" % (100.0 * spread))
             else:
                 print("  => consistent (medians within %.0f%%)" % (100.0 * spread))
+
+        # A channel declared in kW whose values live in [0, 1] is not in kW:
+        # it is per-unit, normalised to rated power. CARE v6 does this, and
+        # excluding active_power from the median test hid it completely. The
+        # method is unaffected -- normalised power is still a valid feature --
+        # but the declared C0 unit is wrong and the manuscript must describe
+        # the data as normalised rather than as kW.
+        if signal in SCALE_DEPENDENT:
+            for farm, r in sorted(present.items()):
+                p99, unit = r.get("p99"), (r.get("unit_declared") or "")
+                if p99 is None:
+                    continue
+                if abs(p99) <= 1.5 and unit.strip().lower() in ("kw", "mw", "w"):
+                    problems.append(
+                        "%s on %s is declared %s but spans up to %s -- that is "
+                        "PER-UNIT (normalised to rated power), not %s. Fix the "
+                        "declared unit; the values themselves are usable."
+                        % (signal, farm, unit, fmt(p99), unit))
+                    print("  => %s declared %s but p99=%s: values are NORMALISED"
+                          % (farm, unit, fmt(p99)))
 
         envelope = PLAUSIBLE.get(signal)
         if envelope:
