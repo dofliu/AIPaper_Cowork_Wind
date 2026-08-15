@@ -1,7 +1,7 @@
 {
   "active_power": {
     "column": "power_30_avg",
-    "unit": "kW",
+    "unit": "p.u.",
     "_source": "feature_description.csv",
     "_sensor_name": "power_30",
     "_description": "Grid power",
@@ -11,7 +11,8 @@
       "power_30_std",
       "power_30_min",
       "power_30_avg"
-    ]
+    ],
+    "_unit_source": "operator --unit-override (was 'kW')"
   },
   "rotor_speed": {
     "column": "sensor_52_avg",

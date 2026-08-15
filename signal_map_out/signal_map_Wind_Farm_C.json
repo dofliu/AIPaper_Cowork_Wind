@@ -1,7 +1,7 @@
 {
   "active_power": {
     "column": "power_6_avg",
-    "unit": "kW",
+    "unit": "p.u.",
     "_source": "feature_description.csv",
     "_sensor_name": "power_6",
     "_description": "Active power HV grid",
@@ -11,7 +11,8 @@
       "power_6_max",
       "power_6_min",
       "power_6_std"
-    ]
+    ],
+    "_unit_source": "operator --unit-override (was 'kW')"
   },
   "wind_speed": {
     "column": "wind_speed_236_avg",

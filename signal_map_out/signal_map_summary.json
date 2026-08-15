@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-15T12:33:53.113858+00:00",
+  "generated_at_utc": "2026-08-15T14:03:10.165410+00:00",
   "source": "CARE v6 feature_description.csv (archive ground truth)",
   "farms": {
     "Wind Farm A": {
@@ -42,5 +42,5 @@
       "cross_validation": {}
     }
   },
-  "cli_invocation": "scripts\\care_v6_signal_map_builder.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare --output-dir .\\signal_map_out --average-ties --pick C:active_power=power_6 --pick C:wind_speed=wind_speed_236 --header-override A:wind_speed=wind_speed_3_avg --override-unit m/s --unit-override A:ambient_temperature=degC --unit-override A:pitch_angle=deg --unit-override B:pitch_angle=deg --unit-override B:ambient_temperature=degC --unit-override B:main_bearing_temperature=degC --exclude-sensor C:rotor_speed=sensor_146,sensor_147 --not-available A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components. --ratified-by 劉老師 --ratified-on 2026-08-15"
+  "cli_invocation": "scripts\\care_v6_signal_map_builder.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare --output-dir .\\signal_map_out --average-ties --pick C:active_power=power_6 --pick C:wind_speed=wind_speed_236 --header-override A:wind_speed=wind_speed_3_avg --override-unit m/s --unit-override A:ambient_temperature=degC --unit-override A:pitch_angle=deg --unit-override B:pitch_angle=deg --unit-override B:ambient_temperature=degC --unit-override B:main_bearing_temperature=degC --unit-override active_power=p.u. --exclude-sensor C:rotor_speed=sensor_146,sensor_147 --not-available A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components. --ratified-by 劉老師 --ratified-on 2026-08-15"
 }
