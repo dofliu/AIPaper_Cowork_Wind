@@ -398,6 +398,8 @@ def main():
     ap.add_argument("--score-col", default="anomaly_score")
     ap.add_argument("--timestamp-col", default="timestamp")
     ap.add_argument("--score-glob", default="*.csv")
+    ap.add_argument("--methods", default="static_split_conformal,aci,dtaci",
+                    help="Comma-separated subset of: static_split_conformal, aci, dtaci")
     ap.add_argument("--alpha", type=float, default=0.01,
                     help="Target alarm rate. Signed-off: 0.01 primary, 0.05 and "
                          "0.001 secondary. Run once per value.")
