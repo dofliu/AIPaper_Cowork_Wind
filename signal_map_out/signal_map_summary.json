@@ -1,0 +1,97 @@
+{
+  "generated_at_utc": "2026-08-15T02:20:01.583458+00:00",
+  "source": "CARE v6 feature_description.csv (archive ground truth)",
+  "farms": {
+    "Wind Farm A": {
+      "n_dictionary_entries": 54,
+      "resolved": {
+        "ambient_temperature": "sensor_0_avg",
+        "main_bearing_temperature": "sensor_11_avg",
+        "pitch_angle": "sensor_5_avg",
+        "rotor_speed": "sensor_52_avg"
+      },
+      "unresolved": [
+        "active_power",
+        "wind_speed"
+      ],
+      "cross_validation": {
+        "rotor_speed": {
+          "dictionary": "sensor_52_avg",
+          "profiler_guess": "sensor_15_avg",
+          "agree": false
+        },
+        "ambient_temperature": {
+          "dictionary": "sensor_0_avg",
+          "profiler_guess": "sensor_0_avg",
+          "agree": true
+        },
+        "main_bearing_temperature": {
+          "dictionary": "sensor_11_avg",
+          "profiler_guess": "sensor_7_avg",
+          "agree": false
+        },
+        "pitch_angle": {
+          "dictionary": "sensor_5_avg",
+          "profiler_guess": "sensor_5_std",
+          "agree": true
+        }
+      }
+    },
+    "Wind Farm B": {
+      "n_dictionary_entries": 63,
+      "resolved": {
+        "active_power": "power_62_avg",
+        "ambient_temperature": "sensor_8_avg",
+        "pitch_angle": "sensor_10_avg",
+        "rotor_speed": "sensor_25_avg",
+        "wind_speed": "wind_speed_61_avg"
+      },
+      "unresolved": [
+        "main_bearing_temperature"
+      ],
+      "cross_validation": {
+        "rotor_speed": {
+          "dictionary": "sensor_25_avg",
+          "profiler_guess": "sensor_6_avg",
+          "agree": false
+        },
+        "ambient_temperature": {
+          "dictionary": "sensor_8_avg",
+          "profiler_guess": "sensor_22_avg",
+          "agree": false
+        },
+        "pitch_angle": {
+          "dictionary": "sensor_10_avg",
+          "profiler_guess": "sensor_54_min",
+          "agree": false
+        }
+      }
+    },
+    "Wind Farm C": {
+      "n_dictionary_entries": 238,
+      "resolved": {
+        "ambient_temperature": "sensor_7_avg",
+        "pitch_angle": "sensor_76_avg"
+      },
+      "unresolved": [
+        "active_power",
+        "wind_speed",
+        "rotor_speed",
+        "main_bearing_temperature"
+      ],
+      "cross_validation": {
+        "ambient_temperature": {
+          "dictionary": "sensor_7_avg",
+          "profiler_guess": "sensor_39_avg",
+          "agree": false
+        },
+        "pitch_angle": {
+          "dictionary": "sensor_76_avg",
+          "profiler_guess": "sensor_1_std",
+          "agree": false
+        }
+      }
+    }
+  },
+  "cli_invocation": "scripts\\care_v6_signal_map_builder.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6 --output-dir .\\signal_map_out --profiles-dir .\\sensor_profile_out"
+}
