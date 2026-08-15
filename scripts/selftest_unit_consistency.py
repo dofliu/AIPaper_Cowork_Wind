@@ -36,15 +36,19 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CHECKER = os.path.join(HERE, "check_unit_consistency.py")
 
 
-def write(root, farm, signals):
+def write(root, farm, signals, filtered=True):
     """signals: name -> (p01, p50, p99, unit)"""
     path = os.path.join(root, "scorer_summary_%s.json" % farm.replace(" ", "_"))
+    payload = {"farm": farm}
+    if filtered:
+        payload["range_filter"] = {"enabled": True, "ranges_applied": {},
+                                   "readings_rejected_per_column": {}}
     with open(path, "w", encoding="utf-8") as f:
-        json.dump({"farm": farm, "signal_ranges": {
+        json.dump(dict(payload, **{"signal_ranges": {
             k: {"unit_declared": v[3], "n_samples": 50000,
                 "p01": v[0], "p50": v[1], "p99": v[2],
                 "min": v[0], "max": v[2]}
-            for k, v in signals.items()}}, f)
+            for k, v in signals.items()}}), f)
 
 
 def run(root):
@@ -147,12 +151,51 @@ def main():
         check("T5 and the message names a sentinel as a cause",
               "sentinel" in out)
 
+    print("\nT7  a summary from a scorer with no range filter is called stale")
+    # A pre-filter summary is byte-identical to a filtered one apart from
+    # this key. The operator re-ran without pulling, saw Farm C's bearing
+    # p99 unchanged at 362.976, and had no way to tell that the filter had
+    # simply not been in the binary. Silence there costs a full six-farm
+    # scoring pass.
+    with tempfile.TemporaryDirectory() as root:
+        write(root, "Wind Farm A", {"wind_speed": (1.0, 7.0, 18.0, "m/s")})
+        write(root, "Wind Farm C",
+              {"main_bearing_temperature": (18.7, 48.5, 362.976, "Celsius")},
+              filtered=False)
+        code, out = run(root)
+        check("T7 the stale artifact is named", "STALE ARTIFACTS" in out
+              and "Wind Farm C" in out, out[-400:])
+        check("T7 it says what is still wrong with the numbers",
+              "850" in out or "Fault codes" in out)
+        check("T7 it tells the operator to pull and re-run",
+              "git pull" in out and "re-run" in out)
+        check("T7 and the exit code refuses to pass", code == 1, "exit %d" % code)
+
     print("\nT6  exit codes")
     with tempfile.TemporaryDirectory() as root:
         write(root, "Wind Farm A", {"wind_speed": (1.0, 7.0, 18.0, "m/s")})
         code, out = run(root)
         check("T6 one farm alone cannot be compared -> 2", code == 2,
               "exit %d" % code)
+
+    print("\nT8  the two tools share one definition of possible")
+    sys.path.insert(0, HERE)
+    import physical_ranges as PR  # noqa: E402
+    import importlib
+    checker = importlib.import_module("check_unit_consistency")
+    check("T8 the checker's envelopes ARE the shared table",
+          checker.PLAUSIBLE is PR.PHYSICAL_RANGE)
+    scorer_src = open(os.path.join(HERE, "base_scorer_md2022.py"),
+                      encoding="utf-8").read()
+    check("T8 the scorer imports them rather than keeping a copy",
+          "from physical_ranges import" in scorer_src)
+    # The drift that actually happened: scorer allowed -1.0, checker demanded
+    # >= 0.0, so a value the scorer kept was flagged by the next tool.
+    lo, hi = PR.bounds("rotor_speed")
+    check("T8 rotor speed admits the stopped-rotor offset CARE v6 carries",
+          lo <= -5.5, "low bound %s but Farm C reads to -5.5" % lo)
+    check("T8 while still rejecting a gearbox-shaft channel at 80",
+          hi < 80.0, "high bound %s" % hi)
 
     print("\n%d checks, %d failed" % (checks, len(failures)))
     if failures:

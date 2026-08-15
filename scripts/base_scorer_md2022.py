@@ -77,6 +77,11 @@ import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from physical_ranges import PHYSICAL_RANGE as _PHYSICAL_RANGE  # noqa: E402
+
+PHYSICAL_RANGE = {k: (v[0], v[1]) for k, v in _PHYSICAL_RANGE.items()}
+
 SCORER_NAME = "MD_2022"
 IMPLEMENTATION_VERSION = "md2022-v1.2"
 
@@ -91,34 +96,21 @@ SIGNAL_COL_PREFIX = "signal_"
 SIGNAL_RANGE_STRIDE = 20
 
 # A reading outside physical possibility is not a measurement, it is a fault
-# code. Farm C's rotor bearing channels sensor_194/195 sit at 850.0 for over
-# 1% of rows; averaged with three genuine channels near 46 C that produced a
-# main_bearing_temperature of 363 C, which would have entered the covariance
-# and generated enormous Mahalanobis distances -- false alarms, silently.
+# code. Farm C's rotor bearing channels sensor_194/195 sit at exactly 850.0
+# for over 1% of rows; averaged with three genuine channels near 46 C that
+# produced a main_bearing_temperature of 363 C, which would have entered the
+# covariance and generated enormous Mahalanobis distances -- false alarms,
+# silently.
 #
 # Filtering is PER CHANNEL and happens before redundant channels are
 # averaged, so one channel's fault code does not discard the other four's
 # good readings. A signal is only missing when EVERY channel behind it is
 # out of range, and then the row is skipped exactly as a missing row is.
 #
-# Bounds are deliberately generous: they exclude the impossible, not the
-# unusual. Override with --range SIGNAL=LO:HI, or disable with
-# --no-range-filter, and either way the counts are recorded in the summary.
-# active_power is deliberately ABSENT. Its scale is a property of the turbine
-# and of how the publisher chose to express it -- CARE v6 ships it per-unit,
-# another archive would ship kW -- so there is no physical bound to test
-# against. A first version of this table assumed per-unit and bounded it to
-# [-0.5, 1.5]; against a fixture carrying real kW values that rejected EVERY
-# row, leaving nothing scored. Filtering here is for the physically
-# impossible, not the unfamiliar. check_unit_consistency.py detects the
-# normalisation separately, which is where that question belongs.
-PHYSICAL_RANGE = {
-    "wind_speed": (0.0, 60.0),              # m/s
-    "rotor_speed": (-1.0, 60.0),            # rpm; small negatives are jitter
-    "main_bearing_temperature": (-40.0, 150.0),   # degC
-    "pitch_angle": (-20.0, 120.0),          # deg
-    "ambient_temperature": (-50.0, 60.0),   # degC
-}
+# The bounds live in physical_ranges.py, shared with check_unit_consistency,
+# because two tools disagreeing about what is possible makes the gate
+# unreadable. Override with --range SIGNAL=LO:HI or disable with
+# --no-range-filter; either way the counts are recorded in the summary.
 PAPER = ("Liu, Corbita, Lee, Wang, Applied Sciences 2022, 12(17):8661, "
          "DOI 10.3390/app12178661")
 

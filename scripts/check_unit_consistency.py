@@ -40,6 +40,8 @@ import json
 import os
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 # Relative comparison is only meaningful on a RATIO scale -- one with a true
 # zero, where "twice as much" means something. Wind speed and rotor speed
 # qualify. Temperature in Celsius does NOT: its zero is arbitrary, so 12.6 vs
@@ -69,14 +71,11 @@ INTERVAL_TOLERANCE = {
 SCALE_DEPENDENT = {"active_power"}
 
 # Physically plausible envelopes, to catch the case where all three farms
-# agree with each other and are all in the wrong unit.
-PLAUSIBLE = {
-    "ambient_temperature": (-40.0, 55.0, "degC"),
-    "main_bearing_temperature": (-20.0, 120.0, "degC"),
-    "rotor_speed": (0.0, 60.0, "rpm"),
-    "wind_speed": (0.0, 40.0, "m/s"),
-    "pitch_angle": (-15.0, 100.0, "deg"),
-}
+# agree with each other and are all in the wrong unit. Shared with the
+# scorer's filter via physical_ranges.py: separate copies drifted apart once
+# already, so a value the scorer deliberately kept was reported as
+# implausible by the very next tool.
+from physical_ranges import PHYSICAL_RANGE as PLAUSIBLE  # noqa: E402
 
 
 def load_summaries(paths):
@@ -96,7 +95,8 @@ def load_summaries(paths):
             print("  skipping %s: %s" % (f, exc))
             continue
         if "signal_ranges" not in data:
-            print("  skipping %s: no signal_ranges (scorer older than md2022-v1.2?)" % f)
+            print("  skipping %s: no signal_ranges -- rebuild it with a current "
+                  "scorer" % f)
             continue
         out[data.get("farm") or os.path.basename(f)] = data
     return out
@@ -114,11 +114,34 @@ def main(argv):
     farms = sorted(summaries)
     print("comparing %d farms: %s\n" % (len(farms), ", ".join(farms)))
 
+    # A summary written before the physical range filter existed looks
+    # identical to a filtered one apart from this key, so an operator who
+    # re-runs without pulling sees byte-identical numbers and concludes the
+    # fix did not work. Say it plainly instead of letting them infer it.
+    stale = [f for f in farms if "range_filter" not in summaries[f]]
+    if stale:
+        print("STALE ARTIFACTS: %s produced by a scorer with NO physical range "
+              "filter." % ", ".join(stale))
+        print("  Fault codes such as Farm C's 850.0 bearing reading are still in "
+              "these numbers.")
+        print("  git pull, then re-run base_scorer_md2022.py before reading "
+              "anything below.\n")
+    else:
+        off = [f for f in farms
+               if not summaries[f]["range_filter"].get("enabled")]
+        if off:
+            print("NOTE: range filtering was disabled for %s (--no-range-filter).\n"
+                  % ", ".join(off))
+
     signals = set()
     for data in summaries.values():
         signals.update(data["signal_ranges"])
 
     problems = []
+    for farm in stale:
+        problems.append(
+            "%s was scored WITHOUT the physical range filter -- re-run the scorer "
+            "before trusting any range below" % farm)
     for signal in sorted(signals):
         present = {f: summaries[f]["signal_ranges"][signal]
                    for f in farms if signal in summaries[f]["signal_ranges"]}
