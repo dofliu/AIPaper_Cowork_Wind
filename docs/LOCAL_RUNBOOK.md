@@ -56,11 +56,11 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：十支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 277 checks。
+**預期**：十支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 285 checks。
 
 | 測試 | checks |
 |---|---|
-| `selftest_c0_c6_gate.py` | 51 |
+| `selftest_c0_c6_gate.py` | 59 |
 | `selftest_sensor_identification.py` | 21 |
 | `selftest_end_to_end.py` | 20 |
 | `selftest_w1_acas.py` | 17 |
@@ -437,8 +437,16 @@ python3 scripts/base_scorer_compatibility_check.py \
   --determinism-mode  bit_identical
 ```
 
-**gate 分三次跑,每個風場一份。** 三個風場的 signal map 不同（Farm A 沒有
-主軸承通道，以 `not_available` 宣告），單一次 gate 無法同時比對三份。
+**gate 分三次跑，每個風場一份，而且一定要加 `--farm`。**
+
+三個風場的 signal map 不同（Farm A 沒有主軸承通道，以 `not_available` 宣告），
+一次 gate 只檢查一份 map，所以它必須只看該風場的案子。
+
+`--farm` 依 `g3_case_metadata.csv` 的 `farm_id` 限縮案子集合，run1 與 run2
+兩側都套用。**少了它，score 目錄裡三個風場的案子會全部拿去比對同一份 map，
+結果一定失敗**——而且失敗方向會隨你指哪一份 map 而反轉：用 Farm A 的 map，
+B/C 的案子多出一欄；用 B 或 C 的 map，Farm A 的 22 案少一欄。
+2026-08-15 兩個方向都實測過。
 
 ```powershell
 foreach ($FARM in "A","B","C") {
@@ -447,6 +455,7 @@ python scripts/base_scorer_compatibility_check.py `
   --workdir           $WD `
   --g2-inventory      .\manifest_out\g2_case_inventory.json `
   --g3-case-metadata  .\manifest_out\g3_case_metadata.csv `
+  --farm              "Wind Farm $FARM" `
   --score-dir         .\scores_MD_2022_run1 `
   --score-dir-run2    .\scores_MD_2022_run2 `
   --scorer-name       "MD_2022_Wind_Farm_$FARM" `

@@ -724,7 +724,19 @@ def check_c3(fit_provenance, receipt, headers_by_case):
 # C4 — case coverage by IDENTITY (P0-2)
 # --------------------------------------------------------------------------
 
-def read_expected_case_ids(g3_path, errors):
+def read_expected_case_ids(g3_path, errors, farm=None):
+    """Expected case ids, optionally restricted to one farm.
+
+    The farm filter exists because the three farms carry DIFFERENT signal
+    maps -- Farm A has no main-bearing channel and declares it
+    not_available, B and C do have one. One gate invocation checks one
+    signal map, so it must see one farm's cases. Run without it against a
+    score directory holding all three and the run fails whichever way you
+    point it: under Farm A's map the B and C cases carry a column the map
+    calls unavailable, and under B's or C's map the 22 Farm A cases are
+    missing a column the map calls available. Measured both ways here on
+    2026-08-15; Farm A's map passed only because its 22 failures happened
+    to be the mirror image."""
     if not g3_path:
         return None, None
     if not os.path.isfile(g3_path):
@@ -736,11 +748,25 @@ def read_expected_case_ids(g3_path, errors):
             if not reader.fieldnames or "case_id" not in reader.fieldnames:
                 errors.append("g3_case_metadata.csv has no 'case_id' column: %s" % g3_path)
                 return None, None
-            ids = [row["case_id"].strip() for row in reader if row.get("case_id")]
+            if farm and "farm_id" not in (reader.fieldnames or []):
+                errors.append(
+                    "--farm given but g3_case_metadata.csv has no 'farm_id' "
+                    "column, so the case set cannot be restricted: %s" % g3_path)
+                return None, None
+            ids = [row["case_id"].strip() for row in reader
+                   if row.get("case_id")
+                   and (not farm or (row.get("farm_id") or "").strip() == farm)]
     except OSError as exc:
         errors.append("g3_case_metadata.csv unreadable (%s): %s" % (exc, g3_path))
         return None, None
-    return ids, {"path": os.path.abspath(g3_path), "sha256": sha256_of_file(g3_path)}
+    if farm and not ids:
+        errors.append("--farm %r matched no row in g3_case_metadata.csv" % farm)
+        return None, None
+    receipt = {"path": os.path.abspath(g3_path), "sha256": sha256_of_file(g3_path)}
+    if farm:
+        receipt["restricted_to_farm"] = farm
+        receipt["n_cases_after_farm_filter"] = len(ids)
+    return ids, receipt
 
 
 def check_c4(expected_ids, observed_ids, g2_inventory, g3_receipt):
@@ -804,7 +830,7 @@ FREEZE_RECEIPT_REQUIRED = [
 
 def check_c5(run1_scores, run2_dir, score_glob, case_id_from, case_id_col,
              score_col, timestamp_col, mode, tolerance, freeze_receipt, freeze_receipt_meta,
-             errors):
+             errors, allowed_case_ids=None):
     if not run2_dir:
         return {
             "status": UNVERIFIED,
@@ -834,6 +860,11 @@ def check_c5(run1_scores, run2_dir, score_glob, case_id_from, case_id_col,
     for path in run2_files:
         case_id, rows, header = read_score_file(path, case_id_from, case_id_col, errors)
         if case_id is None:
+            continue
+        # Same farm restriction as run1, or the two case sets differ by
+        # construction and C5 reports a determinism failure that is really
+        # just the filter applied to one side.
+        if allowed_case_ids is not None and case_id not in allowed_case_ids:
             continue
         run2_scores[case_id] = {
             "path": path,
@@ -1074,7 +1105,8 @@ def run_for_scorer(args):
     fit_provenance, fit_receipt = load_json_or_none(args.fit_provenance, "--fit-provenance", errors)
     freeze_receipt, freeze_receipt_meta = load_json_or_none(
         args.freeze_receipt, "--freeze-receipt", errors)
-    expected_ids, g3_receipt = read_expected_case_ids(args.g3_case_metadata, errors)
+    expected_ids, g3_receipt = read_expected_case_ids(
+        args.g3_case_metadata, errors, farm=args.farm)
 
     workdir_status = NOT_APPLICABLE
     workdir_note = None
@@ -1097,6 +1129,11 @@ def run_for_scorer(args):
     for path in score_files:
         case_id, rows, header = read_score_file(path, args.case_id_from, args.case_id_col, errors)
         if case_id is None:
+            continue
+        # With --farm, the score directory still holds every farm's cases;
+        # auditing them here would defeat the filter, since the whole point
+        # is that this invocation checks one farm's signal map.
+        if args.farm and expected_ids is not None and case_id not in expected_ids:
             continue
         observed_ids.append(case_id)
         headers_by_case[case_id] = header
@@ -1168,7 +1205,10 @@ def run_for_scorer(args):
                                      suggest_column(next(iter(headers_by_case.values()), []),
                                                     SCORE_HINTS)),
                   args.timestamp_col, args.determinism_mode, args.tolerance,
-                  freeze_receipt, freeze_receipt_meta, errors)
+                  freeze_receipt, freeze_receipt_meta, errors,
+                  allowed_case_ids=(set(expected_ids)
+                                    if (args.farm and expected_ids is not None)
+                                    else None))
 
     gates = {
         "C0_signal_availability_and_mapping": {
@@ -1290,6 +1330,11 @@ def main():
     ap.add_argument("--score-dir", help="Directory of per-case score CSVs (run 1)")
     ap.add_argument("--score-dir-run2", help="Directory of per-case score CSVs from an independent run 2 (C5)")
     ap.add_argument("--score-glob", default="*.csv", help="Filename glob for score CSVs (default *.csv)")
+    ap.add_argument("--farm", help="Restrict the audited case set to this "
+                    "farm_id from g3_case_metadata.csv. Required when the "
+                    "score directory holds more than one farm, because one "
+                    "invocation checks one signal map and the farms' maps "
+                    "differ. Score files for other farms are skipped.")
     ap.add_argument("--case-id-from", choices=["filename", "column"], default="filename",
                     help="Where each file's case_id comes from (default filename)")
     ap.add_argument("--case-id-col", default="case_id",
