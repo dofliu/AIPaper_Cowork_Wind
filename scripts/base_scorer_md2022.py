@@ -548,6 +548,16 @@ def run(args):
     print("C0-C6 evidence written to %s" % args.evidence_dir)
     if unavailable:
         print("signals declared unavailable and excluded: %s" % unavailable)
+    # Print it rather than burying it in JSON: this feeds C1's non-evaluable
+    # threshold, and an operator should not have to open a file to learn that
+    # 1% of a farm's bearing readings were fault codes.
+    if rejected:
+        total = sum(rejected.values())
+        print("out-of-range readings rejected (fault codes), %d in total:" % total)
+        for column, n in sorted(rejected.items(), key=lambda kv: -kv[1]):
+            print("    %-24s %8d" % (column, n))
+    elif ranges:
+        print("out-of-range readings rejected: none")
     failed = {k: v for k, v in per_case.items() if "error" in v}
     if failed:
         print("\n%d case(s) not scored:" % len(failed))

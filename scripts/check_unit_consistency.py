@@ -202,6 +202,8 @@ def main(argv):
                 p99, unit = r.get("p99"), (r.get("unit_declared") or "")
                 if p99 is None:
                     continue
+                normalised_unit = unit.strip().lower() in (
+                    "p.u.", "pu", "per-unit", "per unit", "-", "1", "fraction")
                 if abs(p99) <= 1.5 and unit.strip().lower() in ("kw", "mw", "w"):
                     problems.append(
                         "%s on %s is declared %s but spans up to %s -- that is "
@@ -210,6 +212,18 @@ def main(argv):
                         % (signal, farm, unit, fmt(p99), unit))
                     print("  => %s declared %s but p99=%s: values are NORMALISED"
                           % (farm, unit, fmt(p99)))
+                # And the other direction. A label is only evidence if it can be
+                # wrong both ways; a check that only fires on kW would let
+                # someone relabel a genuine 2000 kW channel as p.u. and pass.
+                elif normalised_unit and abs(p99) > 1.5:
+                    problems.append(
+                        "%s on %s is declared %s (per-unit) but spans up to %s -- "
+                        "those are physical units, not a fraction of rated power."
+                        % (signal, farm, unit, fmt(p99)))
+                    print("  => %s declared %s but p99=%s: values are NOT normalised"
+                          % (farm, unit, fmt(p99)))
+                elif normalised_unit:
+                    print("  => %s per-unit, confirmed by p99=%s" % (farm, fmt(p99)))
 
         envelope = PLAUSIBLE.get(signal)
         if envelope:

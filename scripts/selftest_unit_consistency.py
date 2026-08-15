@@ -137,6 +137,25 @@ def main():
             check("T4 and differing rated power is not called a mismatch",
                   code2 == 0, out2[-300:])
 
+    print("\nT4b  a per-unit label must also be falsifiable")
+    # A check that only fires one way is not evidence. If it only catches
+    # "declared kW, actually per-unit", someone can relabel a genuine 2000 kW
+    # channel as p.u. and sail through -- the same mistake, mirrored.
+    with tempfile.TemporaryDirectory() as root:
+        write(root, "Wind Farm A", {"active_power": (0.0, 0.113, 0.976, "p.u.")})
+        write(root, "Wind Farm B", {"active_power": (0.0, 0.276, 1.029, "p.u.")})
+        code, out = run(root)
+        check("T4b a correct per-unit label passes", code == 0, out[-400:])
+        check("T4b and is confirmed against the values, not just accepted",
+              "confirmed by p99" in out, out[-300:])
+    with tempfile.TemporaryDirectory() as root:
+        write(root, "Wind Farm A", {"active_power": (0.0, 850.0, 2000.0, "p.u.")})
+        write(root, "Wind Farm B", {"active_power": (0.0, 0.276, 1.029, "p.u.")})
+        code, out = run(root)
+        check("T4b a kW channel mislabelled per-unit is caught",
+              "NOT normalised" in out, out[-400:])
+        check("T4b exit code reports it", code == 1, "exit %d" % code)
+
     print("\nT5  the plausibility envelope catches agreeing-but-impossible values")
     with tempfile.TemporaryDirectory() as root:
         write(root, "Wind Farm B", {
