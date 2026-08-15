@@ -69,6 +69,7 @@ assumed to be installed on the local execution machine.
 
 import argparse
 import csv
+import glob
 import hashlib
 import json
 import os
@@ -115,9 +116,22 @@ def sha256_of_file(path, chunk_size=1 << 20):
 
 
 def run_g1(archive_path, output_dir, workdir, skip_extract):
-    print("[G1] hashing archive (this can take a while for a 5.5GB file)...", file=sys.stderr)
-    size_bytes = os.path.getsize(archive_path)
-    digest = sha256_of_file(archive_path)
+    # The archive may legitimately be unavailable when only the extracted tree
+    # was kept. Record that as an explicit null with a reason -- the earlier
+    # local run wrote the string "pre_extracted_from_local_storage" into the
+    # sha256 field, which reads like a hash to anything consuming the JSON.
+    if archive_path and os.path.isfile(archive_path):
+        print("[G1] hashing archive (this can take a while for a 5.5GB file)...",
+              file=sys.stderr)
+        size_bytes = os.path.getsize(archive_path)
+        digest = sha256_of_file(archive_path)
+        hash_note = None
+    else:
+        size_bytes = None
+        digest = None
+        hash_note = ("archive not supplied; identity NOT established from bytes. "
+                     "Run with --archive pointing at the .zip to anchor G1.")
+        print("[G1] no archive supplied -- sha256 recorded as null", file=sys.stderr)
 
     if not skip_extract:
         os.makedirs(workdir, exist_ok=True)
@@ -146,11 +160,13 @@ def run_g1(archive_path, output_dir, workdir, skip_extract):
     result = {
         "archive_path": archive_path,
         "sha256": digest,
+        "sha256_note": hash_note,
         "sha256_matches_expected": (digest == EXPECTED_ARCHIVE_SHA256
                                     if digest else None),
         "expected_sha256": EXPECTED_ARCHIVE_SHA256,
         "size_bytes": size_bytes,
-        "size_matches_expected": size_bytes == EXPECTED_ARCHIVE_SIZE_BYTES,
+        "size_matches_expected": (size_bytes == EXPECTED_ARCHIVE_SIZE_BYTES
+                                  if size_bytes is not None else None),
         "expected_size_bytes": EXPECTED_ARCHIVE_SIZE_BYTES,
         "top_level_tree": tree,
         "extracted_file_count": file_count,
@@ -160,6 +176,116 @@ def run_g1(archive_path, output_dir, workdir, skip_extract):
     with open(os.path.join(output_dir, "g1_archive_integrity.json"), "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2, ensure_ascii=False)
     return result
+
+
+
+# --- reconstructed from the 2026-08-14 local run -------------------------
+# The manifest that produced manifest_out/ was made by a locally modified
+# copy of this script that was never committed. Three fingerprints in its
+# output show what it did differently, and all three are folded in below so
+# the committed script reproduces the committed manifest:
+#   detection_notes  label_col = "from_event_info"  -> labels came from
+#                    event_info.csv, not from a per-row column
+#   g3               farm_id = "Wind Farm A"        -> farm came from the
+#                    directory name, not from matching a path part to A/B/C
+#   the run parsed ';' files, which the default csv dialect cannot
+CANDIDATE_DELIMITERS = [",", ";", "\t", "|"]
+
+
+def sniff_delimiter(path, override=None):
+    """Pick the delimiter that splits the HEADER line into the most fields."""
+    if override:
+        return {"tab": "\t", "\\t": "\t"}.get(override, override)
+    try:
+        with open(path, newline="", encoding="utf-8", errors="replace") as f:
+            first = f.readline()
+    except OSError:
+        return ","
+    best, best_count = ",", -1
+    for d in CANDIDATE_DELIMITERS:
+        n = first.count(d)
+        if n > best_count:
+            best, best_count = d, n
+    return best
+
+
+def farm_from_path(path, workdir):
+    """The farm is the directory containing `datasets`. Matching a path part
+    against "A"/"B"/"C" never fires on a real archive, whose directories are
+    named "Wind Farm A"."""
+    try:
+        rel = os.path.normpath(os.path.relpath(path, workdir))
+    except ValueError:
+        rel = os.path.normpath(path)
+    parts = rel.split(os.sep)
+    for i, part in enumerate(parts):
+        if part.lower() == "datasets" and i > 0:
+            return parts[i - 1]
+    return parts[0] if len(parts) > 1 else "unknown"
+
+
+def load_event_info(workdir):
+    """Read each farm's event_info.csv. Returns {farm: {event_id: row}}.
+
+    CARE v6 carries the case label here, not in a data column: every farm's
+    event_info has exactly one row per case (22/15/58 against 22/15/58 cases
+    on the real archive). status_type_id, which the name-hint matcher used to
+    pick, is a per-row operating status code and not a case label at all."""
+    by_farm = {}
+    for path in sorted(glob.glob(os.path.join(workdir, "**", "event_info.csv"),
+                                 recursive=True)):
+        farm = os.path.basename(os.path.dirname(path))
+        delimiter = sniff_delimiter(path)
+        rows = None
+        for encoding in ("utf-8-sig", "utf-8", "cp1252", "latin-1"):
+            try:
+                with open(path, newline="", encoding=encoding) as f:
+                    rows = list(csv.DictReader(f, delimiter=delimiter))
+                break
+            except (UnicodeDecodeError, OSError):
+                continue
+        if rows is None:
+            continue
+        index = {}
+        for r in rows:
+            key = (r.get("event_id") or "").strip()
+            if key:
+                index[key] = r
+        by_farm[farm] = {"path": os.path.abspath(path), "n_rows": len(rows),
+                         "by_event_id": index, "rows": rows}
+    return by_farm
+
+
+def label_from_event_info(farm_events, farm, case_id, asset_id, start_ts, end_ts):
+    """Return (label, how). Prefer the direct event_id == case_id join; fall
+    back to asset + time overlap. Which route was used is recorded, never
+    assumed."""
+    info = farm_events.get(farm)
+    if not info:
+        return "unknown", "no event_info.csv for this farm"
+
+    row = info["by_event_id"].get(str(case_id))
+    if row is not None:
+        return _norm_label(row.get("event_label")), "event_id == case_id"
+
+    if asset_id and start_ts and end_ts:
+        for r in info["rows"]:
+            r_asset = (r.get("asset") or r.get("asset_id") or "").strip()
+            if r_asset != str(asset_id).strip():
+                continue
+            es, ee = (r.get("event_start") or "").strip(), (r.get("event_end") or "").strip()
+            if es and ee and not (ee < str(start_ts) or es > str(end_ts)):
+                return _norm_label(r.get("event_label")), "asset + time overlap"
+    return "unknown", "no event_info row matched"
+
+
+def _norm_label(value):
+    v = (value or "").strip().lower()
+    if v in ("anomaly", "fault", "failure", "1", "true"):
+        return "anomaly"
+    if v in ("normal", "healthy", "0", "false"):
+        return "normal"
+    return "unknown"
 
 
 def _find_col(fieldnames, hints):
@@ -177,9 +303,9 @@ def discover_case_files(workdir, case_glob):
     return sorted(glob.glob(pattern, recursive=True))
 
 
-def read_header(path):
+def read_header(path, delimiter=","):
     with open(path, newline="", encoding="utf-8", errors="replace") as f:
-        reader = csv.reader(f)
+        reader = csv.reader(f, delimiter=delimiter)
         try:
             return next(reader)
         except StopIteration:
@@ -199,8 +325,11 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
     normal_count = 0
     undetected = 0
 
+    farm_events = load_event_info(workdir)
+
     for path in case_files:
-        header = read_header(path)
+        delimiter = sniff_delimiter(path)
+        header = read_header(path, delimiter)
         if not header:
             undetected += 1
             detection_notes.append({"file": path, "status": "undetected", "reason": "empty/unreadable header"})
@@ -213,14 +342,12 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
         turbine_col = _find_col(header, TURBINE_ID_HINTS)
 
         case_id = os.path.splitext(os.path.basename(path))[0]
-        # Infer farm from path components (A/B/C style directories) as a fallback.
-        farm_guess = None
-        for part in os.path.normpath(path).split(os.sep):
-            if part.upper() in ("A", "B", "C"):
-                farm_guess = part.upper()
-                break
+        farm_guess = farm_from_path(path, workdir)
+        has_event_info = farm_guess in farm_events
 
-        if ts_col is None or (ws_col is None and label_col is None):
+        # With event_info present the label no longer depends on finding a
+        # label-like column, so a case must not be discarded for lacking one.
+        if ts_col is None or (ws_col is None and label_col is None and not has_event_info):
             undetected += 1
             detection_notes.append({
                 "file": path, "status": "undetected",
@@ -233,10 +360,13 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
         wind_speeds = []
         label_value = None
         n_rows = 0
+        asset_value = None
         with open(path, newline="", encoding="utf-8", errors="replace") as f:
-            reader = csv.DictReader(f)
+            reader = csv.DictReader(f, delimiter=delimiter)
             for row in reader:
                 n_rows += 1
+                if turbine_col and asset_value is None and row.get(turbine_col) not in (None, ""):
+                    asset_value = row[turbine_col]
                 if ts_col and row.get(ts_col):
                     timestamps.append(row[ts_col])
                 if ws_col and row.get(ws_col) not in (None, ""):
@@ -247,9 +377,17 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
                 if label_col and label_value is None and row.get(label_col) not in (None, ""):
                     label_value = row[label_col]
 
-        label_norm = "anomaly" if label_value and str(label_value).strip().lower() in (
+        label_source = "column:%s" % label_col if label_col else "none"
+        if has_event_info:
+            label_norm, how = label_from_event_info(
+                farm_events, farm_guess, case_id, asset_value,
+                timestamps[0] if timestamps else None,
+                timestamps[-1] if timestamps else None)
+            label_source = "from_event_info (%s)" % how
+        else:
+            label_norm = "anomaly" if label_value and str(label_value).strip().lower() in (
             "1", "true", "anomaly", "fault", "abnormal") else (
-            "normal" if label_value is not None else "unknown")
+                "normal" if label_value is not None else "unknown")
         if label_norm == "anomaly":
             anomaly_count += 1
         elif label_norm == "normal":
@@ -286,7 +424,8 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
 
         detection_notes.append({
             "file": path, "status": "detected",
-            "timestamp_col": ts_col, "wind_speed_col": ws_col, "label_col": label_col,
+            "timestamp_col": ts_col, "wind_speed_col": ws_col,
+            "label_col": label_source, "delimiter_used": delimiter, "farm": farm_guess,
         })
 
     # G2: case inventory + version-drift adjudication
@@ -530,7 +669,9 @@ def write_summary(output_dir, g1, g2, g5_summary, g6):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--archive", required=True, help="Path to local CARE_To_Compare_v6.zip")
+    ap.add_argument("--archive", help="Path to local CARE_To_Compare_v6.zip. Optional "
+                                      "when --skip-extract and only the extracted tree "
+                                      "is available; G1 then records sha256 as null.")
     ap.add_argument("--workdir", required=True, help="Extraction / scratch directory")
     ap.add_argument("--output-dir", required=True, help="Where to write manifest files")
     ap.add_argument("--case-glob", default="**/*.csv", help="Glob (relative to workdir) for per-case data files")
