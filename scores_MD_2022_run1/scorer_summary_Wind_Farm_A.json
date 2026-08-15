@@ -1,6 +1,6 @@
 {
   "scorer": "MD_2022",
-  "implementation_version": "md2022-v1.1",
+  "implementation_version": "md2022-v1.2",
   "farm": "Wind Farm A",
   "signals_used": [
     "active_power",
@@ -12,6 +12,33 @@
   "signals_declared_unavailable": [
     "main_bearing_temperature"
   ],
+  "range_filter": {
+    "enabled": true,
+    "ranges_applied": {
+      "wind_speed": [
+        0.0,
+        60.0
+      ],
+      "rotor_speed": [
+        -6.0,
+        60.0
+      ],
+      "main_bearing_temperature": [
+        -40.0,
+        150.0
+      ],
+      "pitch_angle": [
+        -20.0,
+        120.0
+      ],
+      "ambient_temperature": [
+        -50.0,
+        60.0
+      ]
+    },
+    "readings_rejected_per_column": {},
+    "note": "A reading outside physical possibility is a fault code, not a measurement. Rejected per channel BEFORE redundant channels are averaged, so one bad channel does not discard the rest."
+  },
   "signal_ranges": {
     "active_power": {
       "unit_declared": "kW",
@@ -205,6 +232,6 @@
   "evidence_still_needed": [
     "signal_map.json (already supplied via --signal-map)"
   ],
-  "generated_at_utc": "2026-08-15T12:47:32.485239+00:00",
+  "generated_at_utc": "2026-08-15T13:34:18.782993+00:00",
   "cli_invocation": "scripts\\base_scorer_md2022.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare --farm Wind Farm A --signal-map .\\signal_map_out\\signal_map_Wind_Farm_A.json --output-dir .\\scores_MD_2022_run1 --evidence-dir .\\evidence_MD_2022_run1"
 }

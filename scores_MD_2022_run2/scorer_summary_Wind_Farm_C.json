@@ -1,6 +1,6 @@
 {
   "scorer": "MD_2022",
-  "implementation_version": "md2022-v1.1",
+  "implementation_version": "md2022-v1.2",
   "farm": "Wind Farm C",
   "signals_used": [
     "active_power",
@@ -11,59 +11,94 @@
     "ambient_temperature"
   ],
   "signals_declared_unavailable": [],
+  "range_filter": {
+    "enabled": true,
+    "ranges_applied": {
+      "wind_speed": [
+        0.0,
+        60.0
+      ],
+      "rotor_speed": [
+        -6.0,
+        60.0
+      ],
+      "main_bearing_temperature": [
+        -40.0,
+        150.0
+      ],
+      "pitch_angle": [
+        -20.0,
+        120.0
+      ],
+      "ambient_temperature": [
+        -50.0,
+        60.0
+      ]
+    },
+    "readings_rejected_per_column": {
+      "sensor_103_avg": 255,
+      "sensor_104_avg": 296,
+      "sensor_105_avg": 4473,
+      "sensor_194_avg": 67896,
+      "sensor_195_avg": 67871,
+      "sensor_7_avg": 14,
+      "wind_speed_236_avg": 2895
+    },
+    "note": "A reading outside physical possibility is a fault code, not a measurement. Rejected per channel BEFORE redundant channels are averaged, so one bad channel does not discard the rest."
+  },
   "signal_ranges": {
     "active_power": {
       "unit_declared": "kW",
-      "n_samples": 159315,
+      "n_samples": 159244,
       "p01": -0.0036,
-      "p50": 0.23035999999999998,
+      "p50": 0.23044,
       "p99": 1.0121,
       "min": -0.043345999999999996,
       "max": 1.05392
     },
     "ambient_temperature": {
       "unit_declared": "Celsius",
-      "n_samples": 159315,
-      "p01": 15.09514,
+      "n_samples": 159244,
+      "p01": 15.10086,
       "p50": 28.1,
-      "p99": 40.059439999999945,
+      "p99": 40.073,
       "min": -44.0,
-      "max": 47.877
+      "max": 47.953
     },
     "main_bearing_temperature": {
       "unit_declared": "Celsius",
-      "n_samples": 159315,
-      "p01": 18.724864,
-      "p50": 48.564,
-      "p99": 362.9755599999998,
+      "n_samples": 159244,
+      "p01": 18.727068000000003,
+      "p50": 48.4472,
+      "p99": 53.957314,
       "min": 0.0,
-      "max": 371.21979999999996
+      "max": 56.7598
     },
     "pitch_angle": {
       "unit_declared": "deg",
-      "n_samples": 159315,
+      "n_samples": 159244,
       "p01": -1.9989999999999999,
-      "p50": -1.0383333333333333,
-      "p99": 90.09333333333332,
+      "p50": -1.0303499999999999,
+      "p99": 90.06618999999999,
       "min": -2.384,
-      "max": 135.32000000000002
+      "max": 100.72766666666666
     },
     "rotor_speed": {
       "unit_declared": "1/min",
-      "n_samples": 159315,
-      "p01": -2.692809,
-      "p50": 8.693999999999999,
-      "p99": 14.847000000000001,
+      "n_samples": 159244,
+      "p01": -2.6913355,
+      "p50": 8.698,
+      "p99": 14.847,
       "min": -5.5,
       "max": 14.8985
     },
     "wind_speed": {
       "unit_declared": "m/s",
-      "n_samples": 159315,
-      "p01": 0.7918540000000001,
-      "p50": 6.939,
-      "p99": 20.255,
-      "min": -5.057,
+      "n_samples": 159244,
+      "p01": 0.811886,
+      "p50": 6.943,
+      "p99": 20.273140000000012,
+      "min": 0.0,
       "max": 33.581
     }
   },
@@ -74,33 +109,33 @@
   "per_case": {
     "1": {
       "n_rows": 53569,
-      "n_scored": 53569,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51408
+      "n_scored": 53566,
+      "n_skipped_incomplete": 3,
+      "n_fit_rows": 51405
     },
     "11": {
       "n_rows": 56437,
-      "n_scored": 56437,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52416
+      "n_scored": 56435,
+      "n_skipped_incomplete": 2,
+      "n_fit_rows": 52414
     },
     "12": {
       "n_rows": 56107,
-      "n_scored": 56107,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 56097,
+      "n_skipped_incomplete": 10,
+      "n_fit_rows": 52550
     },
     "15": {
       "n_rows": 54433,
-      "n_scored": 54433,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51696
+      "n_scored": 54006,
+      "n_skipped_incomplete": 427,
+      "n_fit_rows": 51269
     },
     "16": {
       "n_rows": 53568,
-      "n_scored": 53568,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51264
+      "n_scored": 53565,
+      "n_skipped_incomplete": 3,
+      "n_fit_rows": 51261
     },
     "18": {
       "n_rows": 52848,
@@ -110,21 +145,21 @@
     },
     "20": {
       "n_rows": 54001,
-      "n_scored": 54001,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51408
+      "n_scored": 53998,
+      "n_skipped_incomplete": 3,
+      "n_fit_rows": 51405
     },
     "28": {
       "n_rows": 55918,
-      "n_scored": 55918,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 55915,
+      "n_skipped_incomplete": 3,
+      "n_fit_rows": 52557
     },
     "29": {
       "n_rows": 54865,
-      "n_scored": 54865,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 54863,
+      "n_skipped_incomplete": 2,
+      "n_fit_rows": 52558
     },
     "30": {
       "n_rows": 56111,
@@ -146,26 +181,26 @@
     },
     "33": {
       "n_rows": 55873,
-      "n_scored": 55873,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 55871,
+      "n_skipped_incomplete": 2,
+      "n_fit_rows": 52558
     },
     "35": {
       "n_rows": 52615,
-      "n_scored": 52615,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51408
+      "n_scored": 52612,
+      "n_skipped_incomplete": 3,
+      "n_fit_rows": 51405
     },
     "36": {
       "n_rows": 55448,
-      "n_scored": 55160,
-      "n_skipped_incomplete": 288,
-      "n_fit_rows": 52416
+      "n_scored": 55150,
+      "n_skipped_incomplete": 298,
+      "n_fit_rows": 52406
     },
     "37": {
       "n_rows": 53713,
-      "n_scored": 53713,
-      "n_skipped_incomplete": 0,
+      "n_scored": 53712,
+      "n_skipped_incomplete": 1,
       "n_fit_rows": 51264
     },
     "39": {
@@ -182,15 +217,15 @@
     },
     "41": {
       "n_rows": 55666,
-      "n_scored": 55666,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51408
+      "n_scored": 55664,
+      "n_skipped_incomplete": 2,
+      "n_fit_rows": 51406
     },
     "43": {
       "n_rows": 55153,
-      "n_scored": 55153,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 55150,
+      "n_skipped_incomplete": 3,
+      "n_fit_rows": 52557
     },
     "44": {
       "n_rows": 63003,
@@ -206,9 +241,9 @@
     },
     "47": {
       "n_rows": 53993,
-      "n_scored": 53993,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52416
+      "n_scored": 53992,
+      "n_skipped_incomplete": 1,
+      "n_fit_rows": 52415
     },
     "48": {
       "n_rows": 55297,
@@ -218,27 +253,27 @@
     },
     "49": {
       "n_rows": 53014,
-      "n_scored": 53014,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51408
+      "n_scored": 53012,
+      "n_skipped_incomplete": 2,
+      "n_fit_rows": 51406
     },
     "5": {
       "n_rows": 52795,
-      "n_scored": 52795,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52128
+      "n_scored": 52792,
+      "n_skipped_incomplete": 3,
+      "n_fit_rows": 52125
     },
     "50": {
       "n_rows": 55153,
-      "n_scored": 55153,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51696
+      "n_scored": 54646,
+      "n_skipped_incomplete": 507,
+      "n_fit_rows": 51189
     },
     "54": {
       "n_rows": 55585,
-      "n_scored": 55585,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 55582,
+      "n_skipped_incomplete": 3,
+      "n_fit_rows": 52557
     },
     "55": {
       "n_rows": 55753,
@@ -266,9 +301,9 @@
     },
     "59": {
       "n_rows": 54865,
-      "n_scored": 54865,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52128
+      "n_scored": 54862,
+      "n_skipped_incomplete": 3,
+      "n_fit_rows": 52125
     },
     "6": {
       "n_rows": 54865,
@@ -278,21 +313,21 @@
     },
     "60": {
       "n_rows": 54433,
-      "n_scored": 54433,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51984
+      "n_scored": 54432,
+      "n_skipped_incomplete": 1,
+      "n_fit_rows": 51983
     },
     "61": {
       "n_rows": 55585,
-      "n_scored": 55585,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 55583,
+      "n_skipped_incomplete": 2,
+      "n_fit_rows": 52558
     },
     "62": {
       "n_rows": 53448,
-      "n_scored": 53448,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52416
+      "n_scored": 53447,
+      "n_skipped_incomplete": 1,
+      "n_fit_rows": 52415
     },
     "63": {
       "n_rows": 54865,
@@ -302,21 +337,21 @@
     },
     "64": {
       "n_rows": 54433,
-      "n_scored": 54433,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 54432,
+      "n_skipped_incomplete": 1,
+      "n_fit_rows": 52559
     },
     "65": {
       "n_rows": 55918,
-      "n_scored": 55918,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 55917,
+      "n_skipped_incomplete": 1,
+      "n_fit_rows": 52559
     },
     "66": {
       "n_rows": 53503,
-      "n_scored": 53503,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51696
+      "n_scored": 53068,
+      "n_skipped_incomplete": 435,
+      "n_fit_rows": 51261
     },
     "67": {
       "n_rows": 61489,
@@ -338,15 +373,15 @@
     },
     "76": {
       "n_rows": 52086,
-      "n_scored": 52086,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51264
+      "n_scored": 52083,
+      "n_skipped_incomplete": 3,
+      "n_fit_rows": 51261
     },
     "78": {
       "n_rows": 53146,
-      "n_scored": 53146,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 53144,
+      "n_skipped_incomplete": 2,
+      "n_fit_rows": 52558
     },
     "79": {
       "n_rows": 53281,
@@ -374,9 +409,9 @@
     },
     "85": {
       "n_rows": 52417,
-      "n_scored": 52417,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 50832
+      "n_scored": 52410,
+      "n_skipped_incomplete": 7,
+      "n_fit_rows": 50825
     },
     "88": {
       "n_rows": 55441,
@@ -386,9 +421,9 @@
     },
     "89": {
       "n_rows": 54577,
-      "n_scored": 54577,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 51840
+      "n_scored": 54570,
+      "n_skipped_incomplete": 7,
+      "n_fit_rows": 51833
     },
     "9": {
       "n_rows": 56029,
@@ -410,9 +445,9 @@
     },
     "93": {
       "n_rows": 55873,
-      "n_scored": 55873,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52560
+      "n_scored": 55871,
+      "n_skipped_incomplete": 2,
+      "n_fit_rows": 52558
     },
     "94": {
       "n_rows": 54865,
@@ -429,6 +464,6 @@
   "evidence_still_needed": [
     "signal_map.json (already supplied via --signal-map)"
   ],
-  "generated_at_utc": "2026-08-15T13:08:35.784275+00:00",
+  "generated_at_utc": "2026-08-15T13:54:33.310516+00:00",
   "cli_invocation": "scripts\\base_scorer_md2022.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare --farm Wind Farm C --signal-map .\\signal_map_out\\signal_map_Wind_Farm_C.json --output-dir .\\scores_MD_2022_run2 --evidence-dir .\\evidence_MD_2022_run2"
 }

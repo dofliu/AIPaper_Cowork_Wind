@@ -1,6 +1,6 @@
 {
   "scorer": "MD_2022",
-  "implementation_version": "md2022-v1.1",
+  "implementation_version": "md2022-v1.2",
   "farm": "Wind Farm B",
   "signals_used": [
     "active_power",
@@ -11,37 +11,69 @@
     "ambient_temperature"
   ],
   "signals_declared_unavailable": [],
+  "range_filter": {
+    "enabled": true,
+    "ranges_applied": {
+      "wind_speed": [
+        0.0,
+        60.0
+      ],
+      "rotor_speed": [
+        -6.0,
+        60.0
+      ],
+      "main_bearing_temperature": [
+        -40.0,
+        150.0
+      ],
+      "pitch_angle": [
+        -20.0,
+        120.0
+      ],
+      "ambient_temperature": [
+        -50.0,
+        60.0
+      ]
+    },
+    "readings_rejected_per_column": {
+      "sensor_51_avg": 464,
+      "sensor_52_avg": 4012,
+      "sensor_8_avg": 6,
+      "wind_speed_61_avg": 6
+    },
+    "note": "A reading outside physical possibility is a fault code, not a measurement. Rejected per channel BEFORE redundant channels are averaged, so one bad channel does not discard the rest."
+  },
   "signal_ranges": {
     "active_power": {
       "unit_declared": "kW",
-      "n_samples": 42946,
-      "p01": -0.004120967741935484,
-      "p50": 0.275675,
+      "n_samples": 42935,
+      "p01": -0.004132225806451613,
+      "p50": 0.27596129032258065,
       "p99": 1.0290806451612904,
-      "min": -0.010016129032258065,
+      "min": -0.009338709677419354,
       "max": 1.0301306451612904
     },
     "ambient_temperature": {
       "unit_declared": "degC",
-      "n_samples": 42946,
-      "p01": 3.0589999999999997,
+      "n_samples": 42935,
+      "p01": 3.07,
       "p50": 12.56,
-      "p99": 24.82,
+      "p99": 24.85659999999996,
       "min": -2.16,
       "max": 31.96
     },
     "main_bearing_temperature": {
       "unit_declared": "degC",
-      "n_samples": 42946,
-      "p01": 7.995,
-      "p50": 47.125,
-      "p99": 57.687750000000015,
-      "min": -88.05000000000001,
+      "n_samples": 42935,
+      "p01": 8.4335,
+      "p50": 47.135000000000005,
+      "p99": 57.69329999999998,
+      "min": -29.49,
       "max": 63.165
     },
     "pitch_angle": {
       "unit_declared": "deg",
-      "n_samples": 42946,
+      "n_samples": 42935,
       "p01": -0.02,
       "p50": 1.52,
       "p99": 92.9,
@@ -50,7 +82,7 @@
     },
     "rotor_speed": {
       "unit_declared": "rpm",
-      "n_samples": 42946,
+      "n_samples": 42935,
       "p01": 0.0,
       "p50": 7.96,
       "p99": 10.12,
@@ -59,10 +91,10 @@
     },
     "wind_speed": {
       "unit_declared": "m/s",
-      "n_samples": 42946,
+      "n_samples": 42935,
       "p01": 0.91,
-      "p50": 8.12,
-      "p99": 21.15550000000003,
+      "p50": 8.11,
+      "p99": 21.14,
       "min": 0.0,
       "max": 29.54
     }
@@ -104,15 +136,15 @@
     },
     "34": {
       "n_rows": 56564,
-      "n_scored": 56564,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52531
+      "n_scored": 56563,
+      "n_skipped_incomplete": 1,
+      "n_fit_rows": 52530
     },
     "52": {
       "n_rows": 55268,
-      "n_scored": 55268,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52531
+      "n_scored": 55267,
+      "n_skipped_incomplete": 1,
+      "n_fit_rows": 52530
     },
     "53": {
       "n_rows": 58607,
@@ -140,9 +172,9 @@
     },
     "82": {
       "n_rows": 54992,
-      "n_scored": 54992,
-      "n_skipped_incomplete": 0,
-      "n_fit_rows": 52543
+      "n_scored": 54763,
+      "n_skipped_incomplete": 229,
+      "n_fit_rows": 52314
     },
     "83": {
       "n_rows": 66154,
@@ -171,6 +203,6 @@
   "evidence_still_needed": [
     "signal_map.json (already supplied via --signal-map)"
   ],
-  "generated_at_utc": "2026-08-15T12:49:20.903050+00:00",
+  "generated_at_utc": "2026-08-15T13:36:11.861951+00:00",
   "cli_invocation": "scripts\\base_scorer_md2022.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare --farm Wind Farm B --signal-map .\\signal_map_out\\signal_map_Wind_Farm_B.json --output-dir .\\scores_MD_2022_run2 --evidence-dir .\\evidence_MD_2022_run2"
 }
