@@ -76,7 +76,12 @@ import sys
 from datetime import datetime, timezone
 
 SCORER_NAME = "MD_2022"
-IMPLEMENTATION_VERSION = "md2022-v1.0"
+IMPLEMENTATION_VERSION = "md2022-v1.1"
+
+# Namespace for the per-signal feature columns in the score CSV, so that a
+# signal name can never collide with the canonical timestamp/wind_speed/
+# anomaly_score trio. See the header comment where the row is written.
+SIGNAL_COL_PREFIX = "signal_"
 PAPER = ("Liu, Corbita, Lee, Wang, Applied Sciences 2022, 12(17):8661, "
          "DOI 10.3390/app12178661")
 
@@ -309,7 +314,18 @@ def run(args):
         n_scored = n_skipped = 0
         with open(out_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            writer.writerow(["timestamp", "wind_speed", "anomaly_score"] + order)
+            # The feature block is namespaced. It used to be written under the
+            # bare signal names, which collided with the canonical wind_speed
+            # column: the header carried wind_speed twice, and csv.DictReader
+            # keeps the LAST duplicate, so every downstream tool silently read
+            # the feature copy. Those differ exactly where it matters -- a row
+            # whose feature vector is incomplete still has a perfectly good
+            # wind reading, but the feature copy is blank there. Measured on a
+            # fixture with 50 sensor-dropout rows: 50/50 read as empty wind,
+            # which would route them out of their true regime bin and bias the
+            # conditional-coverage result this paper claims.
+            writer.writerow(["timestamp", "wind_speed", "anomaly_score"]
+                            + [SIGNAL_COL_PREFIX + s for s in order])
             for row in rows:
                 v = feature_vector(row, resolved, order)
                 wind_values = [to_float(row.get(c)) for c in wind_columns]
@@ -335,6 +351,26 @@ def run(args):
 
     # --- C0-C6 evidence, written at fit time because it cannot be reconstructed
     stamp = datetime.now(timezone.utc).isoformat()
+
+    # The C0 gate needs a signal map naming columns of the SCORE CSV, which is
+    # a different thing from the builder's map naming columns of the archive.
+    # Hand-writing the second one is how an operator ends up declaring a column
+    # that does not exist, so derive it here from what was actually written.
+    gate_map = {}
+    for signal in order:
+        entry = signal_map.get(signal) or {}
+        gate_map[signal] = {
+            "column": SIGNAL_COL_PREFIX + signal,
+            "unit": entry.get("unit", "UNKNOWN"),
+            "_derived_from_archive_columns": resolved[signal],
+        }
+    for signal in unavailable:
+        # Carry the ratification through verbatim. The gate FAILs on silent
+        # absence, and rightly so -- the declaration is the evidence.
+        gate_map[signal] = dict(signal_map.get(signal) or {})
+    with open(os.path.join(args.evidence_dir, "signal_map.json"),
+              "w", encoding="utf-8") as f:
+        json.dump(gate_map, f, indent=2, ensure_ascii=False)
     with open(os.path.join(args.evidence_dir, "fit_provenance.json"),
               "w", encoding="utf-8") as f:
         json.dump({

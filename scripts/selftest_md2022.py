@@ -205,6 +205,72 @@ def main():
               after > 3 * before,
               "T1's ratio would have collapsed if status_type_id were read")
 
+        # ---- T7 no duplicate header names ----
+        # The feature block used to be written under the bare signal names, so
+        # the header carried wind_speed twice. csv.DictReader keeps the LAST
+        # duplicate, and every downstream tool reads with DictReader, so all of
+        # them silently got the feature copy -- which is blank on exactly the
+        # rows where a sensor dropped out but wind was still measured fine.
+        # Those rows would then miss their regime bin, biasing the conditional
+        # coverage result the paper claims. Pinned so it cannot come back.
+        print("\nT7  the score CSV has no duplicate column names")
+        with open(os.path.join(out_a, "1.csv"), newline="", encoding="utf-8") as f:
+            header = next(csv.reader(f))
+        dupes = sorted({c for c in header if header.count(c) > 1})
+        check("T7 no column name appears twice", not dupes, "duplicated: %s" % dupes)
+        check("T7 the canonical trio leads the header",
+              header[:3] == ["timestamp", "wind_speed", "anomaly_score"],
+              "got %s" % header[:3])
+        check("T7 feature columns are namespaced",
+              all(c.startswith("signal_") for c in header[3:]),
+              "got %s" % header[3:])
+
+        # A row whose feature vector is incomplete must still report its wind
+        # speed -- that is the whole point of the canonical column.
+        print("\nT7  wind speed survives a row the scorer could not score")
+        hole = os.path.join(datasets, "4.csv")
+        build(hole, random.Random(23), fault_on=None)
+        with open(hole, newline="", encoding="utf-8") as f:
+            rows = list(csv.reader(f, delimiter=";"))
+        head, ri = rows[0], rows[0].index("sensor_52_avg")
+        blanked = 0
+        for r in rows[1:]:
+            if r[head.index("train_test")] == "prediction" and blanked < 40:
+                r[ri] = ""
+                blanked += 1
+        with open(hole, "w", newline="", encoding="utf-8") as f:
+            csv.writer(f, delimiter=";").writerows(rows)
+        out_h = os.path.join(root, "scores_hole")
+        run_scorer(os.path.join(root, "care"), "Wind Farm A", map_a, out_h,
+                   os.path.join(root, "evidence_h"))
+        with open(os.path.join(out_h, "4.csv"), newline="", encoding="utf-8") as f:
+            scored = list(csv.DictReader(f))
+        unscorable = [r for r in scored if not r["anomaly_score"]]
+        check("T7 the dropout rows really were unscorable",
+              len(unscorable) == blanked,
+              "expected %d, got %d" % (blanked, len(unscorable)))
+        check("T7 and every one of them still carries its wind speed",
+              unscorable and all(r["wind_speed"] for r in unscorable),
+              "%d of %d read as empty wind"
+              % (sum(1 for r in unscorable if not r["wind_speed"]), len(unscorable)))
+
+        # ---- T8 the gate's signal map is emitted, not hand-written ----
+        print("\nT8  the C0 map names columns that exist in the score CSV")
+        gate_map = json.load(open(os.path.join(ev_a, "signal_map.json"),
+                                  encoding="utf-8"))
+        named = [e["column"] for e in gate_map.values() if "column" in e]
+        check("T8 every named column is really in the score CSV",
+              named and all(c in header for c in named),
+              "missing: %s" % [c for c in named if c not in header])
+        check("T8 units are carried through from the builder's map",
+              gate_map["wind_speed"].get("unit") == "m/s",
+              "got %r" % gate_map["wind_speed"].get("unit"))
+        gate_map_u = json.load(open(os.path.join(ev_u, "signal_map.json"),
+                                    encoding="utf-8"))
+        check("T8 a not_available declaration is carried through verbatim",
+              gate_map_u["main_bearing_temperature"].get("not_available") is True
+              and gate_map_u["main_bearing_temperature"].get("ratified_by") == "PI")
+
         # ---- T6 determinism ----
         print("\nT6  identical input -> identical output (C5 requirement)")
         out_b = os.path.join(root, "scores_b")

@@ -69,10 +69,17 @@ TEMPLATE = {
             "farms": "Farm B and Farm C only (D5 scope decision 2026-08-15)",
         },
     ],
+    # Not FILL_ME. base_scorer_md2022.py writes these three names verbatim
+    # for every farm, which is the whole reason it normalises them: the raw
+    # archive calls the wind channel wind_speed_3_avg in Farm A,
+    # wind_speed_61_avg in Farm B and wind_speed_236_avg in Farm C, so a
+    # single global name could not serve a stream spanning farms. The
+    # scorer resolves that at write time. Change these only if the score
+    # CSVs came from some other program.
     "columns": {
-        "score_col": "FILL_ME: the score column name in your score CSVs",
-        "wind_col": "FILL_ME: the wind speed column, e.g. wind_speed_3_avg",
-        "timestamp_col": "time_stamp",
+        "score_col": "anomaly_score",
+        "wind_col": "wind_speed",
+        "timestamp_col": "timestamp",
     },
     "paths": {
         "g3_case_metadata": "./manifest_out/g3_case_metadata.csv",
