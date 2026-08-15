@@ -72,11 +72,18 @@ from datetime import datetime, timezone
 
 # Free-text descriptions, so match on ordered rules: the first rule that
 # fires wins, and the rule name is recorded in the output.
+ACTIVE_POWER_RE = re.compile(r"(?<!re)\bactive power\b")
+
+
 SIGNAL_RULES = {
     "active_power": [
         ("exact_active_power", lambda d: re.fullmatch(r"\s*active power\s*", d)),
         ("power_output", lambda d: "power" in d and "output" in d),
-        ("active_power_phrase", lambda d: "active power" in d),
+        # "active power" is a SUBSTRING of "reactive power", which on the real
+        # archive tied 12 channels in Farm A and 11 in Farm C by dragging every
+        # reactive_power_<n> into the match. Require a word boundary and
+        # explicitly refuse a preceding "re".
+        ("active_power_phrase", lambda d: bool(ACTIVE_POWER_RE.search(d))),
     ],
     "wind_speed": [
         ("exact_wind_speed", lambda d: re.fullmatch(r"\s*wind speed\s*", d)),
@@ -87,11 +94,19 @@ SIGNAL_RULES = {
         ("rotor_rpm", lambda d: "rotor" in d and ("speed" in d or "rpm" in d)),
         ("generator_speed", lambda d: "generator" in d and "speed" in d),
     ],
+    # Ordered strictly. The first three identify the MAIN (rotor/slow-shaft)
+    # bearing, which is what Base Scorer 2 models. The last rule is a
+    # deliberate catch-all for any OTHER bearing -- gearbox, generator,
+    # high-speed shaft -- and is reported as a substitute requiring an
+    # explicit decision, never as a resolved mapping. On the real archive it
+    # silently handed Farm A a "Temperature in gearbox bearing on high speed
+    # shaft", which is a different component on the other side of the gearbox.
     "main_bearing_temperature": [
         ("main_bearing_temp", lambda d: "main bearing" in d and "temp" in d),
         ("rotor_bearing_temp", lambda d: "rotor bearing" in d and "temp" in d),
-        ("shaft_bearing_temp", lambda d: "shaft" in d and "bearing" in d and "temp" in d),
-        ("any_bearing_temp", lambda d: "bearing" in d and "temp" in d),
+        ("slow_shaft_bearing_temp", lambda d: ("slow shaft" in d or "main shaft" in d)
+                                              and "bearing" in d and "temp" in d),
+        ("SUBSTITUTE_other_bearing_temp", lambda d: "bearing" in d and "temp" in d),
     ],
     "pitch_angle": [
         ("exact_pitch_angle", lambda d: re.fullmatch(r"\s*pitch angle\s*", d)),
@@ -133,14 +148,21 @@ def read_dictionary(path):
     Windows-Western fallback that produced it before giving up on bytes."""
     delimiter = sniff_delimiter(path)
     rows, encoding_used = None, None
-    for encoding in ("utf-8", "cp1252", "latin-1"):
+    for encoding in ("utf-8-sig", "utf-8", "cp1252", "latin-1"):
         try:
             with open(path, newline="", encoding=encoding) as f:
-                rows = list(csv.DictReader(f, delimiter=delimiter))
-            encoding_used = encoding
-            break
+                candidate_rows = list(csv.DictReader(f, delimiter=delimiter))
         except (UnicodeDecodeError, OSError):
             continue
+        # A decode can succeed and still be wrong: U+FFFD in the text means the
+        # bytes were not this encoding. Keep the result as a fallback but try
+        # the next candidate.
+        blob = "".join(str(v) for r in candidate_rows for v in r.values() if v)
+        if "\ufffd" not in blob:
+            rows, encoding_used = candidate_rows, encoding
+            break
+        if rows is None:
+            rows, encoding_used = candidate_rows, encoding + " (contains U+FFFD)"
     if rows is None:
         with open(path, newline="", encoding="utf-8", errors="replace") as f:
             rows = list(csv.DictReader(f, delimiter=delimiter))
@@ -213,16 +235,28 @@ def match_signals(entries):
     return found
 
 
+def _describe(c):
+    return "%s = %r" % (c["sensor_name"], (c["description"] or "").strip())
+
+
 def choose(candidates):
-    """Pick only when unambiguous: a single best-priority candidate."""
+    """Pick only when unambiguous: a single candidate at the best priority,
+    matched by a rule that actually identifies the signal."""
     if not candidates:
         return None, "no channel in the dictionary matched this signal"
     best = candidates[0]["rule_priority"]
     tied = [c for c in candidates if c["rule_priority"] == best]
-    if len(tied) > 1:
-        return None, ("%d channels tie at rule %r (%s) -- a human must choose"
+
+    if tied[0]["matched_rule"].startswith("SUBSTITUTE_"):
+        return None, ("no exact match; %d substitute channel(s) found via %r, which "
+                      "identify a DIFFERENT component and must be accepted explicitly "
+                      "or rejected: %s"
                       % (len(tied), tied[0]["matched_rule"],
-                         ", ".join(c["sensor_name"] for c in tied)))
+                         "; ".join(_describe(c) for c in tied)))
+    if len(tied) > 1:
+        return None, ("%d channels tie at rule %r -- a human must choose: %s"
+                      % (len(tied), tied[0]["matched_rule"],
+                         "; ".join(_describe(c) for c in tied)))
     return tied[0], None
 
 
