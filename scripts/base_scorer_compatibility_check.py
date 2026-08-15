@@ -420,9 +420,28 @@ def _missing_runs(flags):
     return runs
 
 
-def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes):
+def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes,
+             score_values=None):
     """Wall-clock gap classification per R15, returning a per-row evaluability
-    mask. Returns (result_dict, mask_rows)."""
+    mask. Returns (result_dict, mask_rows).
+
+    score_values, when supplied, adds a third source of non-evaluability
+    alongside long gaps and unparseable timestamps: a row the scorer declined
+    to score. A reading outside physical possibility is a fault code, not a
+    measurement -- the range filter rejects it, the feature vector is then
+    incomplete, and the scorer writes no score. Such a row is in the same
+    category as a data gap: there is nothing there to evaluate.
+
+    Ratified 2026-08-15 after C6 failed on 34 cases (1,974 rows) for exactly
+    this reason. Before that, evaluability was built from timestamps alone, so
+    the mask called these rows evaluable and C6 then demanded a finite score
+    for a row the scorer had deliberately left blank.
+
+    This is deliberately NOT a free pass. The rows land in the same
+    non_evaluable_fraction that C1 caps at NON_EVALUABLE_FLAG_FRACTION, so a
+    scorer that quietly declined most of its input still FAILs here -- it just
+    fails at C1, where the coverage question belongs, instead of at C6, where
+    the question is whether the scores that do exist are sane."""
     n = len(rows)
     if not timestamp_col:
         return {
@@ -515,6 +534,17 @@ def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes):
         if t is None:
             non_evaluable_rows.add(i)
 
+    # Rows the scorer declined to score (see the docstring). Tracked
+    # separately so the summary can say how much of the mask came from this
+    # source rather than from gaps -- two very different data problems.
+    score_absent_rows = set()
+    if score_values is not None and len(score_values) == n:
+        for i, v in enumerate(score_values):
+            if v is None or (isinstance(v, float)
+                             and (math.isnan(v) or math.isinf(v))):
+                score_absent_rows.add(i)
+                non_evaluable_rows.add(i)
+
     n_non_evaluable = len(non_evaluable_rows)
     non_evaluable_fraction = n_non_evaluable / n
     over_flag = non_evaluable_fraction > NON_EVALUABLE_FLAG_FRACTION
@@ -526,6 +556,10 @@ def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes):
             reason = ""
         elif timestamps[i] is None:
             reason = "unparseable_timestamp"
+        elif i in score_absent_rows:
+            # Reported before the gap reason: when a row is both, the scorer
+            # having declined is the more specific fact.
+            reason = "scorer_declined_no_score"
         else:
             reason = "gap_over_%gh" % LONG_GAP_HOURS
         mask_rows.append({
@@ -553,6 +587,13 @@ def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes):
     return {
         "status": status,
         "problems": hard_problems,
+        "n_non_evaluable_from_scorer_declined": len(score_absent_rows),
+        "n_non_evaluable_from_gaps_or_timestamps": (
+            len(non_evaluable_rows) - len(score_absent_rows)),
+        "scorer_declined_note": (
+            "rows the scorer left unscored (range-rejected fault codes or an "
+            "incomplete feature vector) count as non-evaluable and are "
+            "included in the fraction capped above, ratified 2026-08-15"),
         "policy": {
             "interpolate_max_hours": SHORT_GAP_HOURS,
             "forward_fill_max_hours": LONG_GAP_HOURS,
@@ -1069,10 +1110,16 @@ def run_for_scorer(args):
         if timestamp_col and timestamp_col not in header:
             errors.append("timestamp column '%s' not in header of %s" % (timestamp_col, path))
 
-        value_columns = c0.get("value_columns") or []
-        c1, mask_rows = check_c1(rows, timestamp_col, value_columns, args.nominal_interval_minutes)
-
+        # Scores are parsed before C1 now: the evaluability mask needs to know
+        # which rows the scorer declined, so that C1 counts them against its
+        # coverage cap and C6 does not demand a score for them.
         score_values = [to_float(r.get(score_col)) for r in rows] if score_col else []
+
+        value_columns = c0.get("value_columns") or []
+        c1, mask_rows = check_c1(rows, timestamp_col, value_columns,
+                                 args.nominal_interval_minutes,
+                                 score_values=score_values if score_col else None)
+
         c6 = check_c6(score_values, mask_rows, score_col, score_col_confirmed)
 
         if mask_rows:

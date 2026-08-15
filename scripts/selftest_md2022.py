@@ -22,12 +22,18 @@ Exit code: 0 if every property holds, 1 otherwise.
 
 import csv
 import json
+import shutil
 import os
 import random
 import subprocess
 import sys
 import tempfile
 from datetime import datetime, timedelta
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from physical_ranges import PHYSICAL_RANGE as _PR  # noqa: E402
+
+PHYSICAL_RANGE = {k: (v[0], v[1]) for k, v in _PR.items()}
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SCORER = os.path.join(HERE, "base_scorer_md2022.py")
@@ -98,7 +104,7 @@ def mean_score(path, lo, hi):
 
 def run_scorer(root, farm_dir, map_path, out, ev):
     proc = subprocess.run(
-        [sys.executable, SCORER, "--workdir", root, "--farm", "Wind Farm A",
+        [sys.executable, SCORER, "--workdir", root, "--farm", farm_dir,
          "--signal-map", map_path, "--output-dir", out, "--evidence-dir", ev],
         capture_output=True, text=True)
     if proc.returncode != 0:
@@ -176,9 +182,9 @@ def main():
 
         # ---- T4 evidence files ----
         print("\nT4  C0-C6 evidence written at fit time")
-        prov = json.load(open(os.path.join(ev_a, "fit_provenance.json"), encoding="utf-8"))
-        art = json.load(open(os.path.join(ev_a, "artifact_manifest.json"), encoding="utf-8"))
-        frz = json.load(open(os.path.join(ev_a, "freeze_receipt.json"), encoding="utf-8"))
+        prov = json.load(open(os.path.join(ev_a, "fit_provenance_Wind_Farm_A.json"), encoding="utf-8"))
+        art = json.load(open(os.path.join(ev_a, "artifact_manifest_Wind_Farm_A.json"), encoding="utf-8"))
+        frz = json.load(open(os.path.join(ev_a, "freeze_receipt_Wind_Farm_A.json"), encoding="utf-8"))
         check("T4 fit_partition names the normal reference",
               "normal" in prov["fit_partition"].lower())
         check("T4 every fit file carries a sha256",
@@ -256,7 +262,7 @@ def main():
 
         # ---- T8 the gate's signal map is emitted, not hand-written ----
         print("\nT8  the C0 map names columns that exist in the score CSV")
-        gate_map = json.load(open(os.path.join(ev_a, "signal_map.json"),
+        gate_map = json.load(open(os.path.join(ev_a, "signal_map_Wind_Farm_A.json"),
                                   encoding="utf-8"))
         named = [e["column"] for e in gate_map.values() if "column" in e]
         check("T8 every named column is really in the score CSV",
@@ -265,7 +271,7 @@ def main():
         check("T8 units are carried through from the builder's map",
               gate_map["wind_speed"].get("unit") == "m/s",
               "got %r" % gate_map["wind_speed"].get("unit"))
-        gate_map_u = json.load(open(os.path.join(ev_u, "signal_map.json"),
+        gate_map_u = json.load(open(os.path.join(ev_u, "signal_map_Wind_Farm_A.json"),
                                     encoding="utf-8"))
         check("T8 a not_available declaration is carried through verbatim",
               gate_map_u["main_bearing_temperature"].get("not_available") is True
@@ -294,6 +300,16 @@ def main():
             if n % 37 == 0:
                 r[bi] = "850.0"
                 spiked += 1
+        # Negative wind, for T11. The real archive carries 1,451 of these
+        # (median -0.97 m/s, minimum -14.9). Wind speed is a scalar magnitude,
+        # so a negative value is not a small reading, it is not a reading --
+        # the range filter rejects it. Period 53 for the same reason the
+        # bearing spikes use 37: it must not share a factor with the sampling
+        # stride, or the test can pass while measuring nothing.
+        wi = head.index("wind_speed_3_avg")
+        for n, r in enumerate(rows[1:]):
+            if n % 53 == 0:
+                r[wi] = "-0.9724"
         with open(bear, "w", newline="", encoding="utf-8") as f:
             csv.writer(f, delimiter=";").writerows(rows)
 
@@ -350,6 +366,80 @@ def main():
                     same = False
                     break
         check("T6 two runs produce identical score files", same)
+
+        # ---- T10 two farms into ONE evidence dir must not overwrite ----
+        # This is what made C0 FAIL on Farm A's 22 cases: all four evidence
+        # files had fixed names, so a loop over A, B, C left only Farm C's
+        # evidence standing, and Farm A's not_available declaration for
+        # main_bearing_temperature was destroyed after being written
+        # correctly. scorer_summary had already been given per-farm names for
+        # this exact reason; these four were missed.
+        print("\nT10 a second farm must not overwrite the first farm's evidence")
+        farm_b_dir = os.path.join(root, "care", "Wind Farm B")
+        if not os.path.isdir(farm_b_dir):
+            shutil.copytree(os.path.join(root, "care", "Wind Farm A"), farm_b_dir)
+        ev_shared = os.path.join(root, "evidence_shared")
+        run_scorer(os.path.join(root, "care"), "Wind Farm A", map_a,
+                   os.path.join(root, "scores_shared_a"), ev_shared)
+        # map_u declares main_bearing_temperature not_available, standing in
+        # for the Farm A / Farm C asymmetry on a farm the fixture can build.
+        run_scorer(os.path.join(root, "care"), "Wind Farm B", map_u,
+                   os.path.join(root, "scores_shared_b"), ev_shared)
+
+        written = sorted(os.listdir(ev_shared))
+        check("T10 both farms' evidence survives in one directory",
+              len(written) == 8, "got %d files: %s" % (len(written), written))
+        for stem in ("signal_map", "fit_provenance",
+                     "artifact_manifest", "freeze_receipt"):
+            check("T10 %s exists for both farms" % stem,
+                  ("%s_Wind_Farm_A.json" % stem) in written
+                  and ("%s_Wind_Farm_B.json" % stem) in written,
+                  "written: %s" % written)
+
+        # The point is not just that two files exist, but that they still say
+        # different things -- a per-farm name that carried identical content
+        # would be no fix at all.
+        a_map = json.load(open(os.path.join(ev_shared, "signal_map_Wind_Farm_A.json"),
+                               encoding="utf-8"))
+        b_map = json.load(open(os.path.join(ev_shared, "signal_map_Wind_Farm_B.json"),
+                               encoding="utf-8"))
+        check("T10 Farm A's map still declares the signal available",
+              not (a_map.get("main_bearing_temperature") or {}).get("not_available"),
+              "got %s" % a_map.get("main_bearing_temperature"))
+        check("T10 Farm B's not_available declaration survived the second run",
+              (b_map.get("main_bearing_temperature") or {}).get("not_available") is True,
+              "got %s" % b_map.get("main_bearing_temperature"))
+        check("T10 REVERSE: under one fixed name these two would collide",
+              a_map.get("main_bearing_temperature")
+              != b_map.get("main_bearing_temperature"),
+              "the two maps agree, so this test proves nothing")
+
+        # ---- T11 the canonical wind column is range-filtered too ----
+        # It used to be averaged straight from the raw archive columns while
+        # the feature copy was filtered, so a row could carry a physically
+        # impossible wind_speed next to a blank signal_wind_speed. On the real
+        # archive: 1,451 rows, median -0.97 m/s, minimum -14.9.
+        print("\nT11 the canonical wind column gets the same filter as the features")
+        rows_seen = bad_wind = paired = 0
+        with open(os.path.join(out_f, "5.csv"), newline="", encoding="utf-8") as f:
+            lo, hi = PHYSICAL_RANGE["wind_speed"]
+            for row in csv.DictReader(f):
+                rows_seen += 1
+                w = row.get("wind_speed", "").strip()
+                if w == "":
+                    continue
+                v = float(w)
+                if v < lo or v > hi:
+                    bad_wind += 1
+                if row.get("signal_wind_speed", "").strip() == "":
+                    paired += 1
+        check("T11 the fixture actually produced rows to check", rows_seen > 0)
+        check("T11 no canonical wind value is outside the physical range",
+              bad_wind == 0, "%d rows carry an impossible wind_speed" % bad_wind)
+        check("T11 REVERSE: the fixture does contain rejected wind rows, so "
+              "T11 is not passing vacuously",
+              paired > 0,
+              "no row had a blank signal_wind_speed; the check is untested")
 
     print("\n%d checks, %d failed" % (checks, len(failures)))
     if failures:
