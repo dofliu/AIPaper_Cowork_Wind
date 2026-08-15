@@ -192,13 +192,22 @@ def main():
               os.path.isfile(os.path.join(eval_dir, "comparison.md")))
 
         # ---------------- T2 the claim survives the pipeline ----------------
+        # The `detected` column is not decoration. Without it an earlier
+        # reading of this table took a median lead time computed over one
+        # case as if it were computed over all of them, and escalated the
+        # resulting "8-day deficit" to the PI as a fault in the method. A
+        # median lead time is not interpretable without its denominator, so
+        # the two are printed together and never apart.
         print("\nT2  our method has the lowest worst-bin deviation")
-        print("      method   worst-bin   marginal   median lead (d)")
+        print("      method   worst-bin   marginal   detected   median lead (d)")
         for name, e in sorted(comparison.items()):
-            print("      %-8s %-11s %-10s %s" % (
+            det = ("n/a" if not e.get("n_anomaly_cases_total")
+                   else "%d/%d" % (e["n_cases_with_lead"], e["n_anomaly_cases_total"]))
+            print("      %-8s %-11s %-10s %-10s %s" % (
                 name,
                 "n/a" if e["mean_worst_bin_deviation"] is None else "%.4f" % e["mean_worst_bin_deviation"],
                 "n/a" if e["mean_marginal_deviation"] is None else "%.4f" % e["mean_marginal_deviation"],
+                det,
                 "n/a" if e["median_lead_days"] is None else "%.2f" % e["median_lead_days"]))
 
         ours = comparison["ours"]["mean_worst_bin_deviation"]
@@ -222,6 +231,19 @@ def main():
               "no verdict against reference")
         check("T3 margin recorded as the signed-off 2 days",
               comparison["ours"].get("non_inferiority_margin_days", 2.0) == 2.0)
+        check("T3 every method reports the denominator behind its median",
+              all("n_anomaly_cases_total" in e and "detection_rate" in e
+                  for e in comparison.values()),
+              "missing on: %s" % [k for k, e in comparison.items()
+                                  if "detection_rate" not in e])
+        check("T3 our method detected every faulted case in the fixture",
+              comparison["ours"]["n_cases_with_lead"]
+              == comparison["ours"]["n_anomaly_cases_total"],
+              "got %s/%s" % (comparison["ours"]["n_cases_with_lead"],
+                             comparison["ours"]["n_anomaly_cases_total"]))
+        check("T3 the horizon in force is recorded, set or not",
+              "detection_horizon_days" in ev,
+              "keys: %s" % sorted(ev))
 
         # ---------------- T4 uniform work-order rule ----------------
         print("\nT4  the work-order rule is applied to every method")

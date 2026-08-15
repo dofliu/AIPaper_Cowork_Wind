@@ -34,9 +34,42 @@ marginal_deviation    |FAR - alpha| pooled. What a marginal method
 rolling_deviation     max |FAR - alpha| over rolling windows of W points.
 median_lead_days      median detection lead time on ANOMALY cases only,
                       measured from the first work-order alarm to
-                      event_start.
+                      event_start. Reported ONLY over cases the method
+                      actually detected -- always read it next to
+                      detection_rate, never on its own.
+detection_rate        fraction of ANOMALY cases on which the method raised
+                      a work-order alarm at all. A median lead time over
+                      the one case a method happened to catch is not
+                      comparable with a median over all of them, and
+                      without this column the table cannot show the
+                      difference.
+median_lead_missed_0  same median with a missed detection scored as zero
+                      days of warning, which is what a fault you never
+                      alarm on actually gives you. Parameter-free, and
+                      computed over a denominator common to every method.
 non_inferiority       lead-time loss against a reference method, checked
                       against the signed-off margin of 2 days.
+
+THE DETECTION HORIZON, AND WHY IT IS NOT DEFAULTED
+--------------------------------------------------
+Lead time as defined above is unbounded below: it is event_start minus the
+first alarm, whenever that alarm falls. A method that alarms early and
+often therefore harvests lead time from alarms raised before the fault
+existed, and the metric records that as superb early warning.
+
+This is not hypothetical. scripts/diagnose_earliness_gap.py builds a
+fixture where the true ramp index is known, and finds the static reference
+taking 6.11 of its 16.53 reported days from an alarm raised 880 steps
+BEFORE the fault began, with ACI taking 8.28 of 18.70 the same way. On
+CARE the physical onset is unknown, so nothing would have flagged it.
+
+--detection-horizon-days H makes an alarm count as a detection only if it
+falls within H days before event_start; anything earlier is a false alarm,
+not early warning. H is a new evaluation parameter and is therefore NOT
+defaulted: unset, the evaluator keeps the previous unbounded behaviour and
+records detection_horizon_days: null plus an explicit caveat in the
+summary, so an unbounded run can never be mistaken for a bounded one.
+Choosing H is a decision for the PI, not for this file.
 
 WHAT IS NOT HERE
 ----------------
@@ -77,12 +110,12 @@ import os
 import statistics
 import sys
 from collections import deque
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import regime_conditional_calibration as R  # noqa: E402
 
-EVAL_VERSION = "eval-v1.0"
+EVAL_VERSION = "eval-v1.1"
 NON_INFERIORITY_MARGIN_DAYS = 2.0     # signed-off, parameter protocol v1.0
 
 MISSING_METRICS = {
@@ -223,8 +256,14 @@ def read_method(directory, column, mode, alpha):
     return out
 
 
-def evaluate_case(exceeds, timestamps, winds, alpha, window, event):
-    """Metrics for one case under one method."""
+def evaluate_case(exceeds, timestamps, winds, alpha, window, event,
+                  detection_horizon_days=None):
+    """Metrics for one case under one method.
+
+    detection_horizon_days bounds how early an alarm may be and still count
+    as a detection. Unset means unbounded, which is the historical
+    behaviour and lets an alarm raised long before the fault be scored as
+    early warning -- see the module docstring."""
     alarms = work_order_alarms(exceeds)
 
     records = []
@@ -235,11 +274,28 @@ def evaluate_case(exceeds, timestamps, winds, alpha, window, event):
 
     lead_days = None
     first_alarm = None
-    if event and event.get("start"):
+    first_alarm_any = None
+    pre_window_alarm = False
+    has_event_window = bool(event and event.get("start"))
+    if has_event_window:
+        horizon_start = None
+        if detection_horizon_days is not None:
+            horizon_start = event["start"] - timedelta(days=detection_horizon_days)
+
         for a, ts in zip(alarms, timestamps):
-            if a and ts is not None:
-                first_alarm = ts
-                break
+            if not a or ts is None:
+                continue
+            if first_alarm_any is None:
+                first_alarm_any = ts
+            # Outside the horizon this alarm is a false alarm, not early
+            # warning; keep looking for one inside it rather than crediting
+            # this one and stopping.
+            if horizon_start is not None and ts < horizon_start:
+                pre_window_alarm = True
+                continue
+            first_alarm = ts
+            break
+
         if first_alarm is not None:
             delta = (event["start"] - first_alarm).total_seconds() / 86400.0
             lead_days = delta          # positive = alarmed before the event
@@ -251,6 +307,9 @@ def evaluate_case(exceeds, timestamps, winds, alpha, window, event):
         "rolling_max_deviation": rolling.get("max_deviation"),
         "n_work_order_alarm_points": sum(1 for a in alarms if a),
         "first_alarm": first_alarm.isoformat() if first_alarm else None,
+        "first_alarm_any": first_alarm_any.isoformat() if first_alarm_any else None,
+        "alarm_before_detection_horizon": pre_window_alarm,
+        "has_event_window": has_event_window,
         "lead_days": lead_days,
     }
 
@@ -299,7 +358,8 @@ def run(args):
             n = min(len(exceeds), len(ref["timestamps"]))
             per_case[case_id] = evaluate_case(
                 exceeds[:n], ref["timestamps"][:n], ref["winds"][:n],
-                args.alpha, args.window, events.get(case_id))
+                args.alpha, args.window, events.get(case_id),
+                detection_horizon_days=args.detection_horizon_days)
             per_case[case_id]["label"] = labels.get(case_id)
 
         # The research question is explicit about which cases each metric
@@ -315,22 +375,51 @@ def run(args):
 
         worst = _far_pool("worst_bin_deviation")
         marg = _far_pool("marginal_deviation")
-        leads = [v["lead_days"] for v in per_case.values()
-                 if isinstance(v, dict) and v.get("lead_days") is not None
-                 and (v.get("label") == "anomaly" or not labels)]
+        # Every anomaly case with an event window is a case this method was
+        # asked to detect, whether or not it managed to. Keeping the two
+        # counts apart is the whole point: median_lead_days is a median over
+        # the detected ones, so on its own it rewards a method for missing
+        # the hard cases -- the ones it misses simply leave the pool. A
+        # method that caught 1 of 6 faults once out-ranked one that caught
+        # 6 of 6 on exactly this arithmetic.
+        anomaly_cases = [v for v in per_case.values()
+                         if isinstance(v, dict) and "error" not in v
+                         and (v.get("label") == "anomaly" or not labels)]
+        # Only cases carrying an event window can be detected early or late
+        # at all; one without a window is outside this metric, not a miss.
+        detectable = [v for v in anomaly_cases if v.get("has_event_window")]
+        leads = [v["lead_days"] for v in detectable
+                 if v.get("lead_days") is not None]
+        n_anomaly = len(detectable)
+        # A fault never alarmed on gives zero days of warning. Scoring a miss
+        # as 0 puts every method on one denominator without inventing a
+        # parameter; it is reported next to, not instead of, the median over
+        # detections.
+        leads_missed_zero = list(leads) + [0.0] * max(0, n_anomaly - len(leads))
+        n_pre_horizon = sum(1 for v in detectable
+                            if v.get("alarm_before_detection_horizon"))
 
         per_method[name] = {
             "n_cases": len(per_case),
             "n_normal_cases_for_far": len(worst),
-            "n_anomaly_cases_for_earliness": len(leads),
+            "n_anomaly_cases_for_earliness": n_anomaly,
             "metric_scoping_note": (
                 "false-alarm deviations are computed on NORMAL cases only and "
                 "earliness on ANOMALY cases only, per the research question. An "
                 "alarm on a faulted case is a detection, not a false alarm."),
+            "earliness_denominator_note": (
+                "median_lead_days is a median over DETECTED cases only. Read it "
+                "with detection_rate; a high median over few detections is not "
+                "comparable with a lower median over all of them."),
             "mean_worst_bin_deviation": (sum(worst) / len(worst)) if worst else None,
             "mean_marginal_deviation": (sum(marg) / len(marg)) if marg else None,
             "median_lead_days": statistics.median(leads) if leads else None,
+            "median_lead_days_missed_as_zero": (
+                statistics.median(leads_missed_zero) if leads_missed_zero else None),
             "n_cases_with_lead": len(leads),
+            "n_anomaly_cases_total": n_anomaly,
+            "detection_rate": (len(leads) / n_anomaly) if n_anomaly else None,
+            "n_cases_alarmed_before_detection_horizon": n_pre_horizon,
             "per_case": per_case,
         }
 
@@ -343,12 +432,29 @@ def run(args):
             "mean_worst_bin_deviation": block["mean_worst_bin_deviation"],
             "mean_marginal_deviation": block["mean_marginal_deviation"],
             "median_lead_days": block["median_lead_days"],
+            "median_lead_days_missed_as_zero": block["median_lead_days_missed_as_zero"],
+            "detection_rate": block["detection_rate"],
+            "n_cases_with_lead": block["n_cases_with_lead"],
+            "n_anomaly_cases_total": block["n_anomaly_cases_total"],
+            "n_cases_alarmed_before_detection_horizon":
+                block["n_cases_alarmed_before_detection_horizon"],
         }
         if ref_median is not None and block["median_lead_days"] is not None:
             loss = ref_median - block["median_lead_days"]
             entry["lead_days_lost_vs_reference"] = loss
             entry["non_inferior"] = loss <= NON_INFERIORITY_MARGIN_DAYS
             entry["non_inferiority_margin_days"] = NON_INFERIORITY_MARGIN_DAYS
+            # The verdict compares two medians taken over different case
+            # sets whenever the detection rates differ. Say so on the
+            # record rather than letting the yes/no stand unqualified.
+            ref_rate = (per_method.get(ref_name) or {}).get("detection_rate")
+            this_rate = block["detection_rate"]
+            if ref_rate is not None and this_rate is not None and ref_rate != this_rate:
+                entry["verdict_caveat"] = (
+                    "detection rates differ (%s %.2f vs %s %.2f); the two "
+                    "medians are taken over different case sets and the "
+                    "verdict is not a like-for-like comparison"
+                    % (name, this_rate, ref_name, ref_rate))
         comparison[name] = entry
 
     os.makedirs(args.output_dir, exist_ok=True)
@@ -360,6 +466,14 @@ def run(args):
         "work_order_rule": "%d of last %d, applied identically to every method"
                            % (R.ALARM_OF, R.ALARM_WINDOW),
         "reference_method": ref_name,
+        "detection_horizon_days": args.detection_horizon_days,
+        "detection_horizon_note": (
+            "UNSET: lead time is unbounded and an alarm raised before the fault "
+            "began still counts as early warning. Not a safe basis for a "
+            "non-inferiority claim; see the module docstring."
+            if args.detection_horizon_days is None else
+            "an alarm earlier than this many days before event_start is a false "
+            "alarm, not a detection"),
         "excluded_cases": sorted(excluded),
         "missing_metrics": MISSING_METRICS,
         "comparison": comparison,
@@ -369,25 +483,49 @@ def run(args):
     with open(os.path.join(args.output_dir, "evaluation.json"), "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
 
-    lines = ["| method | worst-bin dev | marginal dev | median lead (d) | "
-             "lead lost | non-inferior |",
-             "|---|---|---|---|---|---|"]
+    lines = ["| method | worst-bin dev | marginal dev | detected | "
+             "median lead (d) | lead, miss=0 (d) | lead lost | non-inferior |",
+             "|---|---|---|---|---|---|---|---|"]
     for name, e in sorted(comparison.items(),
                           key=lambda kv: (kv[1]["mean_worst_bin_deviation"] is None,
                                           kv[1]["mean_worst_bin_deviation"])):
-        lines.append("| %s | %s | %s | %s | %s | %s |" % (
+        detected = ("n/a" if e.get("n_anomaly_cases_total") in (None, 0)
+                    else "%d/%d (%.0f%%)" % (e["n_cases_with_lead"],
+                                             e["n_anomaly_cases_total"],
+                                             100.0 * e["detection_rate"]))
+        lines.append("| %s | %s | %s | %s | %s | %s | %s | %s |" % (
             name,
             "n/a" if e["mean_worst_bin_deviation"] is None else "%.4f" % e["mean_worst_bin_deviation"],
             "n/a" if e["mean_marginal_deviation"] is None else "%.4f" % e["mean_marginal_deviation"],
+            detected,
             "n/a" if e["median_lead_days"] is None else "%.2f" % e["median_lead_days"],
+            "n/a" if e["median_lead_days_missed_as_zero"] is None else "%.2f" % e["median_lead_days_missed_as_zero"],
             "n/a" if e.get("lead_days_lost_vs_reference") is None else "%.2f" % e["lead_days_lost_vs_reference"],
             "" if e.get("non_inferior") is None else ("yes" if e["non_inferior"] else "NO")))
     table = "\n".join(lines)
+
+    if args.detection_horizon_days is None:
+        horizon_note = (
+            "**Detection horizon: UNSET.** Lead time is unbounded, so an alarm "
+            "raised before the fault began is still counted as early warning. "
+            "Run with --detection-horizon-days to bound it. See "
+            "scripts/diagnose_earliness_gap.py for a fixture where this "
+            "inflates a baseline by 6.11 of its 16.53 reported days.\n")
+    else:
+        horizon_note = (
+            "Detection horizon: %.2f days. An alarm earlier than that before "
+            "event_start is counted as a false alarm, not a detection.\n"
+            % args.detection_horizon_days)
+
     with open(os.path.join(args.output_dir, "comparison.md"), "w", encoding="utf-8") as f:
         f.write("# Comparison (alpha = %s)\n\n%s\n\n"
-                "Work-order rule %d-of-%d applied identically to every method.\n"
+                "Work-order rule %d-of-%d applied identically to every method.\n\n"
+                "%s\n"
+                "`median lead (d)` is a median over DETECTED cases only; read it "
+                "with the `detected` column. `lead, miss=0` scores a missed fault "
+                "as zero days of warning, over one denominator for every method.\n\n"
                 "CARE score and Reliability are not implemented; see missing_metrics.\n"
-                % (args.alpha, table, R.ALARM_OF, R.ALARM_WINDOW))
+                % (args.alpha, table, R.ALARM_OF, R.ALARM_WINDOW, horizon_note))
 
     print("\n" + table)
     print("\nWrote %s" % args.output_dir, file=sys.stderr)
@@ -412,6 +550,12 @@ def main():
                     metavar="NAME=DIR:COLUMN:MODE")
     ap.add_argument("--reference", default="static",
                     help="Method to measure earliness non-inferiority against")
+    ap.add_argument("--detection-horizon-days", type=float, default=None,
+                    help="an alarm counts as a detection only within this many "
+                         "days before event_start; earlier alarms are false "
+                         "alarms. Unset = unbounded (previous behaviour), which "
+                         "credits pre-onset alarms as early warning. Not "
+                         "defaulted on purpose: this is a ratifiable parameter.")
     ap.add_argument("--exclude-cases",
                     help="Comma-separated case_ids to drop (D1/D6 exclusion plan)")
     ap.add_argument("--output-dir", required=True)
