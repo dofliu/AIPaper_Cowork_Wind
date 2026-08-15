@@ -108,8 +108,14 @@ SIGNAL_RULES = {
                                               and "bearing" in d and "temp" in d),
         ("SUBSTITUTE_other_bearing_temp", lambda d: "bearing" in d and "temp" in d),
     ],
+    # "Min pitch angle" is a derived aggregate, while "Position rotor blade
+    # axis N" is the per-blade pitch position actually measured. Farm C
+    # carries both, so the blade-position rule sits alongside the plain
+    # pitch-angle rule rather than below the catch-all.
     "pitch_angle": [
         ("exact_pitch_angle", lambda d: re.fullmatch(r"\s*pitch angle\s*", d)),
+        ("blade_position", lambda d: "blade" in d and ("position" in d or "axis" in d)
+                                     and "temp" not in d),
         ("blade_pitch", lambda d: "pitch" in d and ("angle" in d or "position" in d)),
         ("blade_angle", lambda d: "blade" in d and "angle" in d),
         ("pitch_any", lambda d: "pitch" in d),
@@ -124,6 +130,12 @@ SIGNAL_RULES = {
 # A counter channel (kWh totalisers and the like) is a cumulative register,
 # never an instantaneous reading, so it can never satisfy these signals.
 EXCLUDE_IF_COUNTER = True
+
+# is_counter is not always set even when the channel plainly is one: Farm A
+# carries "Active power - generator connected in delta" in Wh. The unit
+# settles it -- energy is not power.
+ENERGY_UNITS = {"wh", "kwh", "mwh", "varh", "kvarh", "mvarh"}
+POWER_SIGNALS_REJECTING_ENERGY = {"active_power"}
 
 CANDIDATE_DELIMITERS = [";", ",", "\t", "|"]
 
@@ -210,7 +222,10 @@ def match_signals(entries):
             continue
         if EXCLUDE_IF_COUNTER and truthy(entry.get("is_counter")):
             continue
+        unit = (entry.get("unit") or "").strip().lower()
         for signal, rules in SIGNAL_RULES.items():
+            if signal in POWER_SIGNALS_REJECTING_ENERGY and unit in ENERGY_UNITS:
+                continue
             for priority, (rule_name, test) in enumerate(rules):
                 try:
                     hit = test(desc)
