@@ -1,0 +1,30 @@
+{
+  "pitch_angle": {
+    "column": "sensor_76_avg",
+    "unit": "deg",
+    "_source": "feature_description.csv",
+    "_sensor_name": "sensor_76",
+    "_description": "Min pitch angle",
+    "_matched_rule": "blade_pitch",
+    "_all_columns_for_this_sensor": [
+      "sensor_76_avg",
+      "sensor_76_max",
+      "sensor_76_std",
+      "sensor_76_min"
+    ]
+  },
+  "ambient_temperature": {
+    "column": "sensor_7_avg",
+    "unit": "Celsius",
+    "_source": "feature_description.csv",
+    "_sensor_name": "sensor_7",
+    "_description": "Ambient temperature",
+    "_matched_rule": "exact_ambient_temp",
+    "_all_columns_for_this_sensor": [
+      "sensor_7_avg",
+      "sensor_7_max",
+      "sensor_7_min",
+      "sensor_7_std"
+    ]
+  }
+}

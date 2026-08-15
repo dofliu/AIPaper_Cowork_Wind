@@ -1,0 +1,1913 @@
+{
+  "farm": "Wind Farm C",
+  "source": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\feature_description.csv",
+  "delimiter": ";",
+  "encoding_used": "utf-8",
+  "n_entries": 238,
+  "entries": [
+    {
+      "sensor_name": "sensor_0",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "ABB-LS Input K1, IL1",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_1",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Generator acceleration",
+      "unit": "rpm/s",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "power_2",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "ABB-LS Active Power",
+      "unit": "kW",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_3",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Active power aeration motor A",
+      "unit": "%",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_4",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Active power aeration motor B",
+      "unit": "%",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "power_5",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Active power grid side converter",
+      "unit": "kW",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "power_6",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Active power HV grid",
+      "unit": "kW",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_7",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Ambient temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_8",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Generator angle speed",
+      "unit": "rad/s",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_9",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Battery charge 1",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_10",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Battery charge 2",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_11",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Battery charge 3",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_12",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Battery discharge current axis 1",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_13",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Battery discharge current axis 2",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_14",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Battery discharge current axis 3",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_15",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Board temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_16",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Compensation angle I/U converter",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "power_17",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Active power converter",
+      "unit": "kW",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_18",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Generator cooling air temperature A",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_19",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Generator cooling air temperature B",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_20",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Generator cooling air temperature C",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_21",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Generator cooling air temperature D",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_22",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Current hydraulic tank heating",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_23",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Current water cooler pump 1",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_24",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Current water cooler pump 2",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_25",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Current drain 24V nacelle",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_26",
+      "statistics_type": "std_dev,minimum,average,maximum",
+      "description": "Current drain pitch L1",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_27",
+      "statistics_type": "average,std_dev,maximum,minimum",
+      "description": "Current yaw motor A",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_28",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Current yaw motor B",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_29",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Current yaw motor C",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_30",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Current yaw motor D",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_31",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Current yaw motor E",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_32",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Current yaw motor F",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_33",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Current yaw motor G",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_34",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Current yaw motor H",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_35",
+      "statistics_type": "maximum,std_dev,average,minimum",
+      "description": "DC link voltage converter",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_36",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Direct current link volt axis 1",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_37",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Direct current link volt axis 2",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_38",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Direct current link volt axis 3",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_39",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Electrical cabinet ambient temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_40",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Nacelle external air pressure",
+      "unit": "hPa",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_41",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Nacelle outside temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_42",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Rotor bearing flow rate",
+      "unit": "L/min",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_43",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Flow meter stator cooler",
+      "unit": "l/h",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_44",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Fluid level oil container A1",
+      "unit": "%",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_45",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Fluid level oil container A2",
+      "unit": "%",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_46",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Water temperature flow TT1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_47",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Mains frequency OS-side",
+      "unit": "Hz",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_48",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Hydraulic pressure Aggregate System pressure",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_49",
+      "statistics_type": "average,minimum,maximum,std_dev",
+      "description": "Hydraulic pressure azimuth circuit A",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_50",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Hydraulic pressure azimuth circuit B",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_51",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Hydraulic pressure azimuth memory A",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_52",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Hydraulic pressure azimuth memory B",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_53",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Hydraulic pressure locking memory ",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_54",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Hydraulic pressure rotor brake B",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_55",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Hydraulic pressure rotor brake A",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_56",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "ABB-LS Input K1, IL2",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_57",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "ABB-LS Input K1, IL3",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_58",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "ABB-LS Input K4, UL1",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_59",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "ABB-LS Input K4, UL2",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_60",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "ABB-LS Input K4, UL3",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_61",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Nacelle air pressure",
+      "unit": "hPa",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_62",
+      "statistics_type": "maximum,std_dev,average,minimum",
+      "description": "Temperature Axis 1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_63",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Temperature Axis 2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_64",
+      "statistics_type": "maximum,std_dev,minimum,average",
+      "description": "Temperature Axis 3",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_65",
+      "statistics_type": "maximum,std_dev,minimum,average",
+      "description": "Hub temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_66",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Internal consumption current L1",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_67",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Internal consumption current L2",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_68",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Internal consumption current L3",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_69",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Internal consumption power L2",
+      "unit": "kW",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_70",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Internal consumption power L3",
+      "unit": "kW",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_71",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Internal consumption voltage L1",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_72",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Internal consumption voltage L2",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_73",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Internal consumption voltage L3",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_74",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Hydraulic oil tank level",
+      "unit": "L",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_75",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Maximum reactive power HV converter",
+      "unit": "kvar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_76",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Min pitch angle",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_77",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Motor current generator cooler 1",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_78",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current generator cooler 2",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_79",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current generator cooler 3",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_80",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current generator cooler 4",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_81",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current hydraulic pump A",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_82",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current hydraulic pump B",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_83",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current water cooler fan 1",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_84",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current water cooler fan 2",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_85",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current water cooler fan 3",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_86",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current water cooler fan 4",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_87",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current gear oil pump A",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_88",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current gear oil pump B",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_89",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Motor current gear oil pump C",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_90",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Nacelle vibration longitudinal 1",
+      "unit": "m/s^2",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_91",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Nacelle vibration longitudinal 2",
+      "unit": "m/s^2",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_92",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Nacelle vibration transverse 1",
+      "unit": "m/s^2",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_93",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Nacelle vibration transverse 2",
+      "unit": "m/s^2",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_94",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "gearbox oil level",
+      "unit": "L",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_95",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Pollution indicator filter pump 1",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_96",
+      "statistics_type": "std_dev,average,minimum,maximum",
+      "description": "Pollution indicator filter pump 2",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_97",
+      "statistics_type": "std_dev,average,maximum,minimum",
+      "description": "Pollution indicator gearbox filter A",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_98",
+      "statistics_type": "std_dev,average,minimum,maximum",
+      "description": "Pollution indicator gearbox filter B",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_99",
+      "statistics_type": "average,std_dev,maximum,minimum",
+      "description": "Pollution indicator gearbox filter C",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_100",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Position motor axis 1",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_101",
+      "statistics_type": "average,minimum,maximum,std_dev",
+      "description": "Position motor axis 2",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_102",
+      "statistics_type": "average,std_dev,minimum,maximum",
+      "description": "Position motor axis 3",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_103",
+      "statistics_type": "maximum,std_dev,average,minimum",
+      "description": "Position rotor blade axis 1",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_104",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Position rotor blade axis 2",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_105",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Position rotor blade axis 3",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_106",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "RM position bypass valve gearbox radiator",
+      "unit": "%",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_107",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Internal consumption",
+      "unit": "kW",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_108",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Internal consumption power L1",
+      "unit": "kW",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_109",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Pressure difference aeration 1st filter stage 1",
+      "unit": "Pa",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_110",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Pressure difference aeration 1st filter stage 2",
+      "unit": "Pa",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_111",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Pressure difference aeration 2nd filter stage A 1",
+      "unit": "Pa",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_112",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Pressure difference aeration 2nd filter stage A 2",
+      "unit": "Pa",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_113",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Pressure difference aeration 2nd filter stage B 1",
+      "unit": "Pa",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_114",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Pressure difference aeration 2nd filter stage B 2",
+      "unit": "Pa",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_115",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Pressure difference spinner 1",
+      "unit": "Pa",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_116",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Pressure difference spinner 2",
+      "unit": "Pa",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_117",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Gearbox oil pressure input 1",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_118",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Gearbox oil pressure input 2",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "reactive_power_119",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "ABB-LS Reactive Power",
+      "unit": "kvar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "reactive_power_120",
+      "statistics_type": "average,std_dev,maximum,minimum",
+      "description": "Reactive power converter",
+      "unit": "kvar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "reactive_power_121",
+      "statistics_type": "maximum,std_dev,average,minimum",
+      "description": "Reactive power GS converter",
+      "unit": "kvar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "reactive_power_122",
+      "statistics_type": "maximum,std_dev,average,minimum",
+      "description": "Reactive power HV grid",
+      "unit": "kvar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_123",
+      "statistics_type": "maximum,average,std_dev,minimum",
+      "description": "Relative wind direction 1+2",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_124",
+      "statistics_type": "average,std_dev,minimum,maximum",
+      "description": "Relative wind direction Yaw",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_125",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Relative wind direction 1",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_126",
+      "statistics_type": "average,std_dev,minimum,maximum",
+      "description": "Relative wind direction 2",
+      "unit": "deg",
+      "is_angle": "True",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_127",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "RMS current phase 1 HV grid",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_128",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "RMS current phase 2 HV grid",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_129",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "RMS current phase 3 HV grid",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_130",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Generator RMS current L1",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_131",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Generator RMS current L2",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_132",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Generator RMS current L3",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_133",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "RMS line to line current axis 1",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_134",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "RMS line to line current axis 2",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_135",
+      "statistics_type": "maximum,average,minimum,std_dev",
+      "description": "RMS line to line current axis 3",
+      "unit": "A",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_136",
+      "statistics_type": "average,minimum,maximum,std_dev",
+      "description": "Generator RMS voltage L1-L2",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_137",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Generator RMS voltage L2-L3",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_138",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Generator RMS voltage L3-L1",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_139",
+      "statistics_type": "maximum,std_dev,minimum,average",
+      "description": "RMS voltage phase 1 HV grid",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_140",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "RMS voltage phase 2 HV grid",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_141",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "RMS voltage phase 3 HV grid",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_142",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Rotational speed aerator A",
+      "unit": "Hz",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_143",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Rotational speed aerator B",
+      "unit": "Hz",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_144",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Rotor speed 1",
+      "unit": "1/min",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_145",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Rotor speed 2",
+      "unit": "1/min",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_146",
+      "statistics_type": "minimum,std_dev,maximum,average",
+      "description": "Rotor speed gearbox main shaft 1",
+      "unit": "1/min",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_147",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Rotor speed gearbox main shaft 2",
+      "unit": "1/min",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_148",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "RPM motor axis 1",
+      "unit": "1/min",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_149",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "RPM motor axis 2",
+      "unit": "1/min",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_150",
+      "statistics_type": "minimum,std_dev,maximum,average",
+      "description": "RPM motor axis 3",
+      "unit": "1/min",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_151",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Temperature 1 planetary bearing A1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_152",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature 1 planetary bearing A2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_153",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature 1 planetary bearing B1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_154",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Temperature 1 planetary bearing B2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_155",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Temperature 1 planetary bearing C1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_156",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature 1 planetary bearing C2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_157",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature 1 planetary bearing D1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_158",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Temperature 1 planetary bearing D2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_159",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature 2 planetary bearing A1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_160",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature 2 planetary bearing A2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_161",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature 2 planetary bearing B1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_162",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature 2 planetary bearing B2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_163",
+      "statistics_type": "maximum,minimum,average,std_dev",
+      "description": "Temperature 2 planetary bearing C1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_164",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature 2 planetary bearing C2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_165",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Temperature 2 planetary bearing D1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_166",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature 2 planetary bearing D2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_167",
+      "statistics_type": "average,std_dev,minimum,maximum",
+      "description": "Air temp. transformer container",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_168",
+      "statistics_type": "maximum,std_dev,minimum,average",
+      "description": "Temperature of axial bearing 1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_169",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature of axial bearing 2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_170",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Control box temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_171",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Temperature converter room",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_172",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Converter cabinet temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_173",
+      "statistics_type": "maximum,average,std_dev,minimum",
+      "description": "Generator temperature 1 cooling air inlet",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_174",
+      "statistics_type": "minimum,std_dev,average,maximum",
+      "description": "Generator temperature 2 cooling air inlet",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_175",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Axis 3 cooling element temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_176",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature cooling air exit",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_177",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Outside temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_178",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Hydraulic oil tank temperature 1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_179",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Hydraulic oil tank temperature 2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_180",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Axis1 Motor temperature KTY84",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_181",
+      "statistics_type": "average,maximum,std_dev,minimum",
+      "description": "Axis2 Motor temperature KTY84",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_182",
+      "statistics_type": "std_dev,average,minimum,maximum",
+      "description": "Axis3 Motor temperature KTY84",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_183",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Axis 1 Motor temperature PT100",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_184",
+      "statistics_type": "minimum,std_dev,average,maximum",
+      "description": "Axis 2 Motor temperature PT100",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_185",
+      "statistics_type": "minimum,std_dev,average,maximum",
+      "description": "Axis 3 Motor temperature PT100",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_186",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Gearbox oil temperature 1 ",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_187",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Gearbox oil temperature 2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_188",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Oil temperature EB transformer",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_189",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Gearbox oil inlet temperature 1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_190",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Gearbox oil inlet temperature 2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_191",
+      "statistics_type": "maximum,minimum,average,std_dev",
+      "description": "Oil temperature 1 main transformer",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_192",
+      "statistics_type": "minimum,maximum,average,std_dev",
+      "description": "Oil temperature 2 main transformer",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_193",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Temperature platform TBC200",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_194",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Axis 1 Rotor bearing inner ring temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_195",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Axis 2 Rotor bearing inner ring temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_196",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Rotor bearing temperature 1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_197",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Rotor bearing temperature 2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_198",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Rotor bearing temperature 3",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_199",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Temperature of stator winding U1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_200",
+      "statistics_type": "maximum,minimum,average,std_dev",
+      "description": "Temperature of stator winding U2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_201",
+      "statistics_type": "maximum,minimum,average,std_dev",
+      "description": "Temperature of stator winding V1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_202",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature of stator winding V2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_203",
+      "statistics_type": "average,minimum,maximum,std_dev",
+      "description": "Temperature of stator winding W1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_204",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature of stator winding W2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_205",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Temperature electrical cabinet ",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_206",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature electrical cabinet 1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_207",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Temperature electrical cabinet 2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_208",
+      "statistics_type": "minimum,std_dev,average,maximum",
+      "description": "Axis 1 cooling element temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_209",
+      "statistics_type": "minimum,std_dev,maximum,average",
+      "description": "Axis 2 cooling element temperature",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_210",
+      "statistics_type": "maximum,minimum,std_dev,average",
+      "description": "Electrical cabinet temperature 3/4",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_211",
+      "statistics_type": "maximum,minimum,average,std_dev",
+      "description": "Trigger bypass valve gearbox",
+      "unit": "%",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_212",
+      "statistics_type": "maximum,std_dev,average,minimum",
+      "description": "24VDC power pack 1",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_213",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "24VDC power pack 2",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_214",
+      "statistics_type": "maximum,average,minimum,std_dev",
+      "description": "Axis 1 voltage 1 battery 100%",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_215",
+      "statistics_type": "maximum,average,minimum,std_dev",
+      "description": "Axis 2 Voltage 1 battery 100%",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_216",
+      "statistics_type": "maximum,std_dev,minimum,average",
+      "description": "Axis 3 Voltage 1 battery 100%",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_217",
+      "statistics_type": "maximum,std_dev,average,minimum",
+      "description": "Voltage 24 VDC hub",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_218",
+      "statistics_type": "maximum,std_dev,minimum,average",
+      "description": "Voltage 24 VDC nacelle",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_219",
+      "statistics_type": "maximum,std_dev,average,minimum",
+      "description": "Axis 1 Voltage 2 Battery 100%",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_220",
+      "statistics_type": "maximum,std_dev,minimum,average",
+      "description": "Axis 2 Voltage 2 Battery 100%",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_221",
+      "statistics_type": "maximum,std_dev,average,minimum",
+      "description": "Axis 3 voltage 2 battery 100%",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_222",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Axis 1 Voltage battery 50%",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_223",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Axis 2 Voltage battery 50%",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_224",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Axis 3 Voltage battery 50%",
+      "unit": "V",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_225",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Water conductivity QIT1",
+      "unit": "DL",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_226",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Water pressure PT1",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_227",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Water pressure PT2",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_228",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Cooling water temp. generator inlet 1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_229",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Cooling water temp. generator inlet 2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_230",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Water flow",
+      "unit": "DL",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_231",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Water pressure 1 cooling system",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_232",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Water pressure 2 cooling system",
+      "unit": "bar",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_233",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Cooling water temp. generator outlet 1",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "sensor_234",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Cooling water temp. generator outlet 2",
+      "unit": "Celsius",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "wind_speed_235",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Wind speed 1",
+      "unit": "m/s",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "wind_speed_236",
+      "statistics_type": "average,maximum,minimum,std_dev",
+      "description": "Wind speed 1+2",
+      "unit": "m/s",
+      "is_angle": "False",
+      "is_counter": "False"
+    },
+    {
+      "sensor_name": "wind_speed_237",
+      "statistics_type": "average,minimum,std_dev,maximum",
+      "description": "Wind speed 2",
+      "unit": "m/s",
+      "is_angle": "False",
+      "is_counter": "False"
+    }
+  ]
+}

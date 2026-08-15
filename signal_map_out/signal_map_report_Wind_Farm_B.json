@@ -1,0 +1,325 @@
+{
+  "farm": "Wind Farm B",
+  "n_dictionary_entries": 63,
+  "signals_resolved": [
+    "active_power",
+    "ambient_temperature",
+    "pitch_angle",
+    "rotor_speed",
+    "wind_speed"
+  ],
+  "signals_unresolved": [
+    "main_bearing_temperature"
+  ],
+  "per_signal": {
+    "active_power": {
+      "n_candidates": 2,
+      "candidates": [
+        {
+          "sensor_name": "power_62",
+          "description": "Active power",
+          "unit": "kW",
+          "is_angle": false,
+          "statistics_type": "minimum,std_dev,maximum,average",
+          "columns": [
+            "power_62_min",
+            "power_62_std",
+            "power_62_max",
+            "power_62_avg"
+          ],
+          "matched_rule": "exact_active_power",
+          "rule_priority": 0
+        },
+        {
+          "sensor_name": "reactive_power_11",
+          "description": "Reactive power",
+          "unit": "kvar",
+          "is_angle": false,
+          "statistics_type": "average,std_dev,maximum,minimum",
+          "columns": [
+            "reactive_power_11_avg",
+            "reactive_power_11_std",
+            "reactive_power_11_max",
+            "reactive_power_11_min"
+          ],
+          "matched_rule": "active_power_phrase",
+          "rule_priority": 2
+        }
+      ],
+      "problem": null
+    },
+    "wind_speed": {
+      "n_candidates": 4,
+      "candidates": [
+        {
+          "sensor_name": "wind_speed_61",
+          "description": "Wind speed",
+          "unit": "m/s",
+          "is_angle": false,
+          "statistics_type": "minimum,average,maximum,std_dev",
+          "columns": [
+            "wind_speed_61_min",
+            "wind_speed_61_avg",
+            "wind_speed_61_max",
+            "wind_speed_61_std"
+          ],
+          "matched_rule": "exact_wind_speed",
+          "rule_priority": 0
+        },
+        {
+          "sensor_name": "sensor_6",
+          "description": "Wind speed anemometer 2 calculated",
+          "unit": "m/s",
+          "is_angle": false,
+          "statistics_type": "average,minimum,std_dev,maximum",
+          "columns": [
+            "sensor_6_avg",
+            "sensor_6_min",
+            "sensor_6_std",
+            "sensor_6_max"
+          ],
+          "matched_rule": "wind_speed_phrase",
+          "rule_priority": 1
+        },
+        {
+          "sensor_name": "wind_speed_59",
+          "description": "Wind speed 1",
+          "unit": "m/s",
+          "is_angle": false,
+          "statistics_type": "average,maximum,minimum,std_dev",
+          "columns": [
+            "wind_speed_59_avg",
+            "wind_speed_59_max",
+            "wind_speed_59_min",
+            "wind_speed_59_std"
+          ],
+          "matched_rule": "wind_speed_phrase",
+          "rule_priority": 1
+        },
+        {
+          "sensor_name": "wind_speed_60",
+          "description": "Wind speed 2",
+          "unit": "m/s",
+          "is_angle": false,
+          "statistics_type": "average,minimum,maximum,std_dev",
+          "columns": [
+            "wind_speed_60_avg",
+            "wind_speed_60_min",
+            "wind_speed_60_max",
+            "wind_speed_60_std"
+          ],
+          "matched_rule": "wind_speed_phrase",
+          "rule_priority": 1
+        }
+      ],
+      "problem": null
+    },
+    "rotor_speed": {
+      "n_candidates": 1,
+      "candidates": [
+        {
+          "sensor_name": "sensor_25",
+          "description": "Rotor speed",
+          "unit": "rpm",
+          "is_angle": false,
+          "statistics_type": "average,maximum,minimum,std_dev",
+          "columns": [
+            "sensor_25_avg",
+            "sensor_25_max",
+            "sensor_25_min",
+            "sensor_25_std"
+          ],
+          "matched_rule": "exact_rotor_speed",
+          "rule_priority": 0
+        }
+      ],
+      "problem": null
+    },
+    "main_bearing_temperature": {
+      "n_candidates": 8,
+      "candidates": [
+        {
+          "sensor_name": "sensor_51",
+          "description": "Rotor bearing temperature 1",
+          "unit": "�C",
+          "is_angle": false,
+          "statistics_type": "average,std_dev,maximum,minimum",
+          "columns": [
+            "sensor_51_avg",
+            "sensor_51_std",
+            "sensor_51_max",
+            "sensor_51_min"
+          ],
+          "matched_rule": "rotor_bearing_temp",
+          "rule_priority": 1
+        },
+        {
+          "sensor_name": "sensor_52",
+          "description": "Rotor bearing temperature 2",
+          "unit": "�C",
+          "is_angle": false,
+          "statistics_type": "maximum,minimum,std_dev,average",
+          "columns": [
+            "sensor_52_max",
+            "sensor_52_min",
+            "sensor_52_std",
+            "sensor_52_avg"
+          ],
+          "matched_rule": "rotor_bearing_temp",
+          "rule_priority": 1
+        },
+        {
+          "sensor_name": "sensor_32",
+          "description": "Generator bearing temperature 1",
+          "unit": "�C",
+          "is_angle": false,
+          "statistics_type": "average,maximum,minimum,std_dev",
+          "columns": [
+            "sensor_32_avg",
+            "sensor_32_max",
+            "sensor_32_min",
+            "sensor_32_std"
+          ],
+          "matched_rule": "any_bearing_temp",
+          "rule_priority": 3
+        },
+        {
+          "sensor_name": "sensor_33",
+          "description": "Generator bearing temperature 2",
+          "unit": "�C",
+          "is_angle": false,
+          "statistics_type": "average,maximum,minimum,std_dev",
+          "columns": [
+            "sensor_33_avg",
+            "sensor_33_max",
+            "sensor_33_min",
+            "sensor_33_std"
+          ],
+          "matched_rule": "any_bearing_temp",
+          "rule_priority": 3
+        },
+        {
+          "sensor_name": "sensor_34",
+          "description": "Gearbox bearing temperature 1",
+          "unit": "�C",
+          "is_angle": false,
+          "statistics_type": "average,maximum,std_dev,minimum",
+          "columns": [
+            "sensor_34_avg",
+            "sensor_34_max",
+            "sensor_34_std",
+            "sensor_34_min"
+          ],
+          "matched_rule": "any_bearing_temp",
+          "rule_priority": 3
+        },
+        {
+          "sensor_name": "sensor_35",
+          "description": "Gearbox bearing temperature 2",
+          "unit": "�C",
+          "is_angle": false,
+          "statistics_type": "minimum,std_dev,average,maximum",
+          "columns": [
+            "sensor_35_min",
+            "sensor_35_std",
+            "sensor_35_avg",
+            "sensor_35_max"
+          ],
+          "matched_rule": "any_bearing_temp",
+          "rule_priority": 3
+        },
+        {
+          "sensor_name": "sensor_36",
+          "description": "Gearbox bearing temperature 3",
+          "unit": "�C",
+          "is_angle": false,
+          "statistics_type": "minimum,std_dev,maximum,average",
+          "columns": [
+            "sensor_36_min",
+            "sensor_36_std",
+            "sensor_36_max",
+            "sensor_36_avg"
+          ],
+          "matched_rule": "any_bearing_temp",
+          "rule_priority": 3
+        },
+        {
+          "sensor_name": "sensor_37",
+          "description": "Gearbox bearing temperature 4",
+          "unit": "�C",
+          "is_angle": false,
+          "statistics_type": "minimum,maximum,std_dev,average",
+          "columns": [
+            "sensor_37_min",
+            "sensor_37_max",
+            "sensor_37_std",
+            "sensor_37_avg"
+          ],
+          "matched_rule": "any_bearing_temp",
+          "rule_priority": 3
+        }
+      ],
+      "problem": "2 channels tie at rule 'rotor_bearing_temp' (sensor_51, sensor_52) -- a human must choose"
+    },
+    "pitch_angle": {
+      "n_candidates": 1,
+      "candidates": [
+        {
+          "sensor_name": "sensor_10",
+          "description": "Pitch angle",
+          "unit": "�",
+          "is_angle": true,
+          "statistics_type": "maximum,std_dev,average,minimum",
+          "columns": [
+            "sensor_10_max",
+            "sensor_10_std",
+            "sensor_10_avg",
+            "sensor_10_min"
+          ],
+          "matched_rule": "exact_pitch_angle",
+          "rule_priority": 0
+        }
+      ],
+      "problem": null
+    },
+    "ambient_temperature": {
+      "n_candidates": 1,
+      "candidates": [
+        {
+          "sensor_name": "sensor_8",
+          "description": "Outside temperature",
+          "unit": "�C",
+          "is_angle": false,
+          "statistics_type": "maximum,average,minimum,std_dev",
+          "columns": [
+            "sensor_8_max",
+            "sensor_8_avg",
+            "sensor_8_min",
+            "sensor_8_std"
+          ],
+          "matched_rule": "outdoor_temp",
+          "rule_priority": 1
+        }
+      ],
+      "problem": null
+    }
+  },
+  "cross_validation_vs_profiler": {
+    "rotor_speed": {
+      "dictionary": "sensor_25_avg",
+      "profiler_guess": "sensor_6_avg",
+      "agree": false
+    },
+    "ambient_temperature": {
+      "dictionary": "sensor_8_avg",
+      "profiler_guess": "sensor_22_avg",
+      "agree": false
+    },
+    "pitch_angle": {
+      "dictionary": "sensor_10_avg",
+      "profiler_guess": "sensor_54_min",
+      "agree": false
+    }
+  },
+  "note": "Entries marked with a leading underscore are provenance, not C0 fields. Units come from the dictionary verbatim -- check them before use; a mangled degree sign means the source file is not UTF-8."
+}

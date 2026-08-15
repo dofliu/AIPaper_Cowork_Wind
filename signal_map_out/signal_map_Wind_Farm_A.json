@@ -1,0 +1,54 @@
+{
+  "rotor_speed": {
+    "column": "sensor_52_avg",
+    "unit": "rpm",
+    "_source": "feature_description.csv",
+    "_sensor_name": "sensor_52",
+    "_description": "Rotor rpm",
+    "_matched_rule": "rotor_rpm",
+    "_all_columns_for_this_sensor": [
+      "sensor_52_min",
+      "sensor_52_avg",
+      "sensor_52_std",
+      "sensor_52_max"
+    ]
+  },
+  "main_bearing_temperature": {
+    "column": "sensor_11_avg",
+    "unit": "�C",
+    "_source": "feature_description.csv",
+    "_sensor_name": "sensor_11",
+    "_description": "Temperature in gearbox bearing on high speed shaft",
+    "_matched_rule": "shaft_bearing_temp",
+    "_all_columns_for_this_sensor": [
+      "sensor_11_avg",
+      "sensor_11"
+    ]
+  },
+  "pitch_angle": {
+    "column": "sensor_5_avg",
+    "unit": "�",
+    "_source": "feature_description.csv",
+    "_sensor_name": "sensor_5",
+    "_description": "Pitch angle",
+    "_matched_rule": "exact_pitch_angle",
+    "_all_columns_for_this_sensor": [
+      "sensor_5_max",
+      "sensor_5_min",
+      "sensor_5_std",
+      "sensor_5_avg"
+    ]
+  },
+  "ambient_temperature": {
+    "column": "sensor_0_avg",
+    "unit": "�C",
+    "_source": "feature_description.csv",
+    "_sensor_name": "sensor_0",
+    "_description": "Ambient temperature",
+    "_matched_rule": "exact_ambient_temp",
+    "_all_columns_for_this_sensor": [
+      "sensor_0_avg",
+      "sensor_0"
+    ]
+  }
+}
