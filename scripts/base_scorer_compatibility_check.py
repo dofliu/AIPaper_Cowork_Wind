@@ -72,7 +72,9 @@ GATE DEFINITIONS
 C0  Signal availability & mapping   — all 6 core signals (Active Power,
     Wind Speed, Rotor Speed, Main Bearing Temperature, Pitch Angle,
     Ambient Temperature) mapped to real columns with declared units, via
-    an operator-supplied map. No silent substring guessing.
+    an operator-supplied map. No silent substring guessing. A signal the
+    archive genuinely lacks may be declared not_available with a reason
+    and a ratifier; the omission is then recorded, never inferred.
 C1  Missing-feature policy applied  — R15 policy applied over wall-clock
     gaps; per-case evaluability mask emitted; non-evaluable fraction
     reported and flagged above 5% (PI decision 2026-08-15, from the G4
@@ -322,10 +324,32 @@ def check_c0(header, signal_map):
     mapping = {}
     value_columns = []
     problems = []
+    declared_unavailable = {}
     for signal in CORE_SIGNALS:
         entry = signal_map.get(signal)
         if not isinstance(entry, dict):
             problems.append("signal '%s' missing from signal map" % signal)
+            continue
+
+        # A signal the archive genuinely does not carry can be declared absent
+        # rather than faked -- Farm A has no main bearing temperature channel,
+        # only gearbox and generator bearings. The declaration must name a
+        # reason and a ratifier, so an omission is always a recorded decision
+        # and never a silent gap. Absence is NOT inferred from a missing key:
+        # that path still fails.
+        if entry.get("not_available"):
+            missing_fields = [k for k in ("reason", "ratified_by", "ratified_on")
+                              if is_absent(entry.get(k))]
+            if missing_fields:
+                problems.append(
+                    "signal '%s' is declared not_available but the declaration is "
+                    "incomplete: %s" % (signal, missing_fields))
+                continue
+            declared_unavailable[signal] = {
+                "reason": entry["reason"],
+                "ratified_by": entry["ratified_by"],
+                "ratified_on": entry["ratified_on"],
+            }
             continue
         unit = entry.get("unit")
         if is_absent(unit):
@@ -361,13 +385,21 @@ def check_c0(header, signal_map):
         else:
             problems.append("signal '%s' entry has neither 'column' nor 'derived_from'" % signal)
 
-    return {
+    result = {
         "status": PASS if not problems else FAIL,
         "problems": problems,
         "mapping": mapping,
         "value_columns": sorted(set(value_columns)),
         "suggested_mapping_for_operator_review": suggestion,
     }
+    if declared_unavailable:
+        result["declared_unavailable_signals"] = declared_unavailable
+        result["declared_unavailable_note"] = (
+            "%d of the %d core signals are declared absent from this archive with a "
+            "ratified reason. C0 can pass without them, but any manuscript claim "
+            "resting on this scorer must state the reduced signal set explicitly."
+            % (len(declared_unavailable), len(CORE_SIGNALS)))
+    return result
 
 
 # --------------------------------------------------------------------------
@@ -1095,6 +1127,10 @@ def run_for_scorer(args):
         "C0_signal_availability_and_mapping": {
             "status": c0_status,
             "detail": "per-case; see per_case_c0_c6.json",
+            "declared_unavailable_signals": sorted({
+                sig for c in per_case.values()
+                for sig in (c["C0_signal_mapping"].get("declared_unavailable_signals") or {})
+            }),
             "n_cases_failing": sum(
                 1 for c in per_case.values() if c["C0_signal_mapping"]["status"] == FAIL),
         },

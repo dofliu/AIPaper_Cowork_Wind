@@ -27,6 +27,8 @@ behaviour fails loudly rather than silently returning a green gate.
   T5  run2 differs from run1        -> C5 FAIL       [P0-4 regression test]
   T6  clean header, no fit evidence -> C3 UNVERIFIED [P0-3 regression test]
   T7  no --signal-map               -> C0 UNVERIFIED [P1  regression test]
+  T9  signal declared not_available -> C0 PASS only when the declaration
+      names a reason and a ratifier; silent absence still fails
 
 Exit code: 0 if every scenario behaves as specified, 1 otherwise.
 """
@@ -336,6 +338,45 @@ def main():
                   .get("suggested_mapping_for_operator_review", {})
                   .get("wind_speed") == "wind_speed")
         r.check("T7 overall not PASS", s["gate_status"] != "PASS")
+
+
+        # --- declared-absent signal (Farm A has no main bearing channel) ---
+        print("\nT9  a signal declared not_available with a ratified reason -> PASS")
+        fx = build_fixture(os.path.join(root, "t9"), cases)
+        sm = json.load(open(fx["signal_map"], encoding="utf-8"))
+        sm["main_bearing_temperature"] = {
+            "not_available": True,
+            "reason": "archive carries only gearbox and generator bearing channels",
+            "ratified_by": "PI", "ratified_on": "2026-08-15",
+        }
+        write_json(fx["signal_map"], sm)
+        rc, s, _ = run_checker(os.path.join(root, "t9_out"), full_args(fx))
+        r.check("T9 C0 PASS with a ratified absence",
+                gate_status(s, "C0_signal_availability_and_mapping") == "PASS",
+                "got %s" % gate_status(s, "C0_signal_availability_and_mapping"))
+        r.check("T9 absence surfaced in the summary",
+                s["gates"]["C0_signal_availability_and_mapping"]
+                 ["declared_unavailable_signals"] == ["main_bearing_temperature"])
+
+        print("\nT9b an incomplete not_available declaration -> C0 FAIL")
+        fx = build_fixture(os.path.join(root, "t9b"), cases)
+        sm = json.load(open(fx["signal_map"], encoding="utf-8"))
+        sm["main_bearing_temperature"] = {"not_available": True}   # no reason/ratifier
+        write_json(fx["signal_map"], sm)
+        rc, s, _ = run_checker(os.path.join(root, "t9b_out"), full_args(fx))
+        r.check("T9b C0 FAIL on an unratified absence",
+                gate_status(s, "C0_signal_availability_and_mapping") == "FAIL",
+                "got %s" % gate_status(s, "C0_signal_availability_and_mapping"))
+
+        print("\nT9c a silently missing signal -> C0 FAIL (absence is never inferred)")
+        fx = build_fixture(os.path.join(root, "t9c"), cases)
+        sm = json.load(open(fx["signal_map"], encoding="utf-8"))
+        del sm["main_bearing_temperature"]
+        write_json(fx["signal_map"], sm)
+        rc, s, _ = run_checker(os.path.join(root, "t9c_out"), full_args(fx))
+        r.check("T9c C0 FAIL when a signal is simply absent from the map",
+                gate_status(s, "C0_signal_availability_and_mapping") == "FAIL",
+                "got %s" % gate_status(s, "C0_signal_availability_and_mapping"))
 
         # ---------------- templates ----------------
         print("\nT8  --emit-templates writes the four evidence templates")

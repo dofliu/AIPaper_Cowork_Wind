@@ -250,11 +250,20 @@ def match_signals(entries):
     return found
 
 
+def _pick_for(picks, farm_key, signal):
+    for (farm_prefix, sig), sensor in picks.items():
+        if sig != signal:
+            continue
+        if farm_prefix is None or farm_prefix in farm_key:
+            return sensor
+    return None
+
+
 def _describe(c):
     return "%s = %r" % (c["sensor_name"], (c["description"] or "").strip())
 
 
-def choose(candidates, average_ties=False):
+def choose(candidates, average_ties=False, pick_sensor=None):
     """Pick only when unambiguous: a single candidate at the best priority,
     matched by a rule that actually identifies the signal.
 
@@ -266,6 +275,21 @@ def choose(candidates, average_ties=False):
     would manufacture a quantity that no sensor measures."""
     if not candidates:
         return None, "no channel in the dictionary matched this signal"
+
+    # An explicit operator pick outranks both the rule order and averaging.
+    # Some ties are between DIFFERENT measurement points rather than redundant
+    # sensors -- Farm C offers active power at the ABB-LS, the grid-side
+    # converter, the converter and the HV grid -- and averaging those would
+    # invent a quantity. Only a human can say which point the study means.
+    if pick_sensor:
+        chosen = [c for c in candidates if c["sensor_name"] == pick_sensor]
+        if not chosen:
+            return None, ("operator picked %r but no candidate for this signal has "
+                          "that sensor_name; candidates were: %s"
+                          % (pick_sensor, "; ".join(_describe(c) for c in candidates)))
+        chosen[0] = dict(chosen[0], matched_rule=chosen[0]["matched_rule"] + "+operator_pick")
+        return chosen[0], None
+
     best = candidates[0]["rule_priority"]
     tied = [c for c in candidates if c["rule_priority"] == best]
 
@@ -306,16 +330,29 @@ def run(args):
                 profiler_picks = {k: v.get("top_pick", {})
                                   for k, v in json.load(f).get("farms", {}).items()}
 
+    picks = {}
+    for spec in (args.pick or []):
+        if "=" not in spec:
+            continue
+        key, sensor = spec.split("=", 1)
+        if ":" in key:
+            farm_prefix, signal = key.split(":", 1)
+            picks[(farm_prefix.strip().lower(), signal.strip())] = sensor.strip()
+        else:
+            picks[(None, key.strip())] = sensor.strip()
+
     overall = {}
     for path in dict_paths:
         farm = os.path.basename(os.path.dirname(path))
+        farm_key = farm.strip().lower()
         entries, delimiter, encoding_used = read_dictionary(path)
         matched = match_signals(entries)
 
         signal_map, report = {}, {}
         for signal in SIGNAL_RULES:
             candidates = matched.get(signal, [])
-            pick, problem = choose(candidates, args.average_ties)
+            pick, problem = choose(candidates, args.average_ties,
+                                   _pick_for(picks, farm_key, signal))
             report[signal] = {
                 "n_candidates": len(candidates),
                 "candidates": candidates,
@@ -467,6 +504,10 @@ def main():
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--workdir", required=True, help="Extracted CARE v6 root")
     ap.add_argument("--output-dir", required=True)
+    ap.add_argument("--pick", action="append", metavar="[FARM:]SIGNAL=SENSOR",
+                    help="Resolve a tie explicitly, e.g. 'C:active_power=power_6'. "
+                         "Use when the tied channels are different measurement "
+                         "points rather than redundant sensors. Repeatable.")
     ap.add_argument("--average-ties", action="store_true",
                     help="Resolve a tie between channels measuring the same quantity "
                          "by averaging them (emitted as C0 derived_from). Never "

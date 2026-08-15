@@ -229,7 +229,41 @@ def overlap_days(a_start, a_end, b_start, b_end):
 
 
 
-def build_exclusion_plan(pairs, inventory):
+
+def _trim_spec(trim_case, other_case, inventory):
+    """Express the cut concretely: which end of the trimmed case's evaluation
+    window moves, and to what timestamp. Returning the new boundary rather than
+    a duration means the downstream filter is an unambiguous comparison, not an
+    arithmetic re-derivation that could drift."""
+    def window(cid):
+        ev = ((inventory.get(cid) or {}).get("partitions") or {}).get("eval")
+        if not ev or not ev["first_timestamp"] or not ev["last_timestamp"]:
+            return None, None
+        return parse_ts(ev["first_timestamp"]), parse_ts(ev["last_timestamp"])
+
+    ts, te = window(trim_case)
+    os_, oe = window(other_case)
+    if None in (ts, te, os_, oe):
+        return None
+    lo, hi = max(ts, os_), min(te, oe)
+    if lo >= hi:
+        return None
+    # Cut whichever end of the trimmed case the overlap sits against.
+    if ts >= lo:
+        return {"case_id": trim_case, "drop_rows": "eval timestamps <= %s" % hi.isoformat(),
+                "new_eval_start": hi.isoformat(), "new_eval_end": te.isoformat(),
+                "end_moved": "start"}
+    if te <= hi:
+        return {"case_id": trim_case, "drop_rows": "eval timestamps >= %s" % lo.isoformat(),
+                "new_eval_start": ts.isoformat(), "new_eval_end": lo.isoformat(),
+                "end_moved": "end"}
+    return {"case_id": trim_case,
+            "drop_rows": "eval timestamps between %s and %s" % (lo.isoformat(), hi.isoformat()),
+            "note": "overlap sits strictly inside the window; this splits it in two",
+            "end_moved": "interior"}
+
+
+def build_exclusion_plan(pairs, inventory, trim_below_days=0.0):
     """Turn contaminated pairs into a concrete, auditable exclusion list.
 
     The PI ratified exclusion over re-splitting on 2026-08-15, so each
@@ -243,9 +277,12 @@ def build_exclusion_plan(pairs, inventory):
       2. Same-label pair -> drop the case with the SHORTER evaluation window,
          since that discards less evaluable evidence.
 
-    Overlaps are also reported in absolute terms. An overlap of a few hours
-    costs a whole case under this rule, which may be a poor trade; the plan
-    flags those rather than hiding them inside the total.
+    trim_below_days softens the rule where it would be wasteful. An overlap of
+    a few hours costs a whole case under plain exclusion; below this threshold
+    the plan emits a TRIM instead, cutting the contaminated slice off the
+    case that exclusion would have dropped and keeping the rest. The PI set it
+    to 1.0 day on 2026-08-15 after case 93 would have cost 3313 evaluation
+    rows to remove a 0.12-day overlap.
     """
     def eval_span_days(case_id):
         ev = ((inventory.get(case_id) or {}).get("partitions") or {}).get("eval")
@@ -273,20 +310,35 @@ def build_exclusion_plan(pairs, inventory):
                 drop = a if sa < sb else b
                 rule = "same_label_drop_shorter_eval_window"
         keep = b if drop == a else (a if drop == b else None)
+        overlap = p["eval_overlap_days"] or 0.0
+        action = "EXCLUDE"
+        trim = None
+        if drop and 0.0 < overlap < trim_below_days:
+            action = "TRIM"
+            trim = _trim_spec(drop, keep, inventory)
+            if trim is None:
+                action = "EXCLUDE"   # cannot express the cut; fall back
         decisions.append({
+            "action": action,
+            "trim": trim,
             "farm": p["farm"], "turbine_id": p["turbine_id"],
             "case_a": a, "label_a": la, "eval_span_days_a": _r(eval_span_days(a)),
             "case_b": b, "label_b": lb, "eval_span_days_b": _r(eval_span_days(b)),
             "eval_overlap_days": p["eval_overlap_days"],
-            "exclude": drop, "keep": keep, "rule": rule,
-            "flag_tiny_overlap": (p["eval_overlap_days"] or 0) < 1.0,
+            "exclude": drop if action == "EXCLUDE" else None,
+            "trim_case": drop if action == "TRIM" else None,
+            "keep": keep, "rule": rule,
         })
 
     excluded = sorted({d["exclude"] for d in decisions if d["exclude"]})
+    trimmed = [d for d in decisions if d["action"] == "TRIM"]
     by_label = Counter((inventory.get(c) or {}).get("label") for c in excluded)
-    tiny = [d for d in decisions if d["flag_tiny_overlap"] and d["exclude"]]
     return {
-        "policy": "exclusion (PI decision 2026-08-15), one case per contaminated pair",
+        "policy": ("exclusion with sub-threshold trimming (PI decision 2026-08-15): "
+                   "one case per contaminated pair is dropped, unless the overlap is "
+                   "below %.2f day(s), in which case the contaminated slice is trimmed "
+                   "and the case kept" % trim_below_days),
+        "trim_below_days": trim_below_days,
         "rules": {
             "cross_label_drop_normal": "anomaly cases are scarcer and carry the "
                                        "labelled event Earliness is measured on",
@@ -296,12 +348,10 @@ def build_exclusion_plan(pairs, inventory):
         "excluded_case_ids": excluded,
         "n_excluded": len(excluded),
         "excluded_by_label": dict(by_label),
+        "n_trimmed": len(trimmed),
+        "trimmed_cases": [{"case_id": d["trim_case"], "overlap_days": d["eval_overlap_days"],
+                           "trim": d["trim"]} for d in trimmed],
         "decisions": decisions,
-        "review_before_accepting": (
-            [] if not tiny else
-            ["case %s is excluded over an overlap of only %s days; trimming that "
-             "window instead would keep the case -- confirm the trade is intended"
-             % (d["exclude"], d["eval_overlap_days"]) for d in tiny]),
     }
 
 
@@ -433,7 +483,7 @@ def run(args):
     with open(os.path.join(args.output_dir, "leakage_verdict.json"), "w", encoding="utf-8") as f:
         json.dump(verdict, f, indent=2, ensure_ascii=False)
 
-    plan = build_exclusion_plan(pairs, inventory)
+    plan = build_exclusion_plan(pairs, inventory, args.trim_below_days)
     with open(os.path.join(args.output_dir, "exclusion_plan.json"), "w", encoding="utf-8") as f:
         json.dump(plan, f, indent=2, ensure_ascii=False)
 
@@ -452,8 +502,9 @@ def run(args):
         print("\nexclusion plan: drop %d case(s) -> %s  (by label: %s)"
               % (plan["n_excluded"], ", ".join(plan["excluded_case_ids"]),
                  plan["excluded_by_label"]))
-        for note in plan["review_before_accepting"]:
-            print("  REVIEW: %s" % note)
+    for t in plan["trimmed_cases"]:
+        print("  TRIM case %s (overlap %s d): %s"
+              % (t["case_id"], t["overlap_days"], (t["trim"] or {}).get("drop_rows")))
     print("\nWrote %s" % args.output_dir, file=sys.stderr)
     return 0
 
@@ -493,6 +544,9 @@ def main():
     ap.add_argument("--case-glob", default="**/datasets/*.csv")
     ap.add_argument("--split-col", default="train_test")
     ap.add_argument("--timestamp-col", default="time_stamp")
+    ap.add_argument("--trim-below-days", type=float, default=1.0,
+                    help="Contaminated pairs overlapping by less than this are trimmed "
+                         "rather than having a whole case excluded (PI default 1.0)")
     ap.add_argument("--delimiter", default=None,
                     help="CSV delimiter; auto-detected from the header when omitted")
     args = ap.parse_args()
