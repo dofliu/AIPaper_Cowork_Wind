@@ -72,7 +72,9 @@ import hashlib
 import json
 import math
 import os
+import re
 import sys
+from collections import defaultdict
 from datetime import datetime, timezone
 
 SCORER_NAME = "MD_2022"
@@ -82,6 +84,11 @@ IMPLEMENTATION_VERSION = "md2022-v1.1"
 # signal name can never collide with the canonical timestamp/wind_speed/
 # anomaly_score trio. See the header comment where the row is written.
 SIGNAL_COL_PREFIX = "signal_"
+
+# Every Nth scored row feeds the per-signal range report. 1-in-20 over a farm
+# is tens of thousands of samples -- ample for percentiles, negligible in
+# memory.
+SIGNAL_RANGE_STRIDE = 20
 PAPER = ("Liu, Corbita, Lee, Wang, Applied Sciences 2022, 12(17):8661, "
          "DOI 10.3390/app12178661")
 
@@ -155,6 +162,18 @@ def resolve_columns(signal_map):
         else:
             raise SystemExit("signal %r has neither column nor derived_from" % signal)
     return resolved, unavailable
+
+
+def percentile(values, q):
+    if not values:
+        return None
+    s = sorted(values)
+    if len(s) == 1:
+        return s[0]
+    pos = q * (len(s) - 1)
+    low = int(pos)
+    high = min(low + 1, len(s) - 1)
+    return s[low] + (s[high] - s[low]) * (pos - low)
 
 
 def feature_vector(row, resolved, order):
@@ -237,6 +256,7 @@ def run(args):
     with open(args.signal_map, encoding="utf-8") as f:
         signal_map = json.load(f)
     resolved, unavailable = resolve_columns(signal_map)
+    signal_samples = defaultdict(list)
     order = [s for s in CORE_SIGNALS if s not in unavailable]
     if len(order) < 2:
         raise SystemExit("fewer than two usable signals; nothing to score")
@@ -339,6 +359,16 @@ def run(args):
                     continue
                 score = mahalanobis(v, mean, inverse)
                 n_scored += 1
+                # Reservoir-free sampling for the Phase 5.1 unit check: the
+                # three farms label the same quantities differently (degC vs
+                # Celsius, rpm vs 1/min). Those are the same physical unit if
+                # and only if the VALUES occupy the same range, and a silent
+                # mismatch distorts the covariance without erroring. Collect
+                # it here, in the pass that already reads every row, rather
+                # than making the operator run the archive again.
+                if n_scored % SIGNAL_RANGE_STRIDE == 0:
+                    for name, value in zip(order, v):
+                        signal_samples[name].append(value)
                 writer.writerow([row.get(args.timestamp_col, ""),
                                  "" if wind is None else wind,
                                  "%.10g" % score]
@@ -430,6 +460,17 @@ def run(args):
         "farm": args.farm,
         "signals_used": order,
         "signals_declared_unavailable": unavailable,
+        # Phase 5.1 evidence. Compare these across farms: degC and "Celsius"
+        # are the same unit iff the numbers agree; rpm and "1/min" likewise.
+        "signal_ranges": {
+            name: {"unit_declared": (signal_map.get(name) or {}).get("unit"),
+                   "n_samples": len(values),
+                   "p01": percentile(values, 0.01),
+                   "p50": percentile(values, 0.50),
+                   "p99": percentile(values, 0.99),
+                   "min": min(values) if values else None,
+                   "max": max(values) if values else None}
+            for name, values in sorted(signal_samples.items())},
         "fit_scope": args.fit_scope,
         "ridge": args.ridge,
         "n_cases": len(per_case),
@@ -441,7 +482,13 @@ def run(args):
         "generated_at_utc": stamp,
         "cli_invocation": " ".join(sys.argv),
     }
-    with open(os.path.join(args.output_dir, "scorer_summary.json"),
+    # Per farm, not one shared name. The runbook has all three farms writing
+    # into a single score directory (case_ids are globally unique, so the CSVs
+    # coexist fine) -- but a fixed summary filename meant Farm C silently
+    # overwrote Farm A's and Farm B's, taking the per-case counts and the
+    # Phase 5.1 signal ranges with it. Nothing would have reported the loss.
+    safe_farm = re.sub(r"[^A-Za-z0-9_-]+", "_", args.farm)
+    with open(os.path.join(args.output_dir, "scorer_summary_%s.json" % safe_farm),
               "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
 

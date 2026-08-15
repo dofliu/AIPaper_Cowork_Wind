@@ -167,7 +167,7 @@ def main():
               abs(u_after - u_before) / u_before < 0.30,
               "%.3f -> %.3f -- if this now detects, the limitation text is stale"
               % (u_before, u_after))
-        summary = json.load(open(os.path.join(out_u, "scorer_summary.json"),
+        summary = json.load(open(os.path.join(out_u, "scorer_summary_Wind_Farm_A.json"),
                                  encoding="utf-8"))
         check("T3 the exclusion is recorded in the summary",
               summary["signals_declared_unavailable"] == ["main_bearing_temperature"])

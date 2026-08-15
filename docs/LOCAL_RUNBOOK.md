@@ -262,6 +262,7 @@ python3 scripts/care_v6_signal_map_builder.py \
   --pick "C:wind_speed=wind_speed_236" \
   --unit-override "A:ambient_temperature=degC" \
   --unit-override "A:pitch_angle=deg" \
+  --unit-override "B:main_bearing_temperature=degC" \
   --not-available "A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components." \
   --ratified-by "劉老師" --ratified-on "2026-08-15"
 ```
@@ -277,6 +278,7 @@ python scripts\care_v6_signal_map_builder.py `
   --pick "C:wind_speed=wind_speed_236" `
   --unit-override "A:ambient_temperature=degC" `
   --unit-override "A:pitch_angle=deg" `
+  --unit-override "B:main_bearing_temperature=degC" `
   --not-available "A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components." `
   --ratified-by "劉老師" --ratified-on "2026-08-15"
 ```
@@ -346,6 +348,7 @@ Farm A 叫 `wind_speed_3_avg`、Farm B 叫 `wind_speed_61_avg`、Farm C 叫
 > 已修正並以測試釘住（`selftest_md2022.py` T7）。
 
 `--evidence-dir` 裡的四份 C0–C6 佐證是 fit 當下寫的，不用手填。
+每個風場另外寫一份 `scorer_summary_<farm>.json`（含 Phase 5.1 要的訊號範圍）。
 
 ### 3.1 檔案格式要求（給 MainBearing_2026）
 
@@ -535,18 +538,30 @@ $LASTEXITCODE
 
 **C0–C6 未通過之前不要跑 Phase 5。** 閘門存在的意義就是擋在這裡。
 
-### 5.1 單位確認（五分鐘，但別跳過）
+### 5.1 單位確認（一道指令，不用自己比對）
 
-三個風場的單位標示不一致：
+三個風場的單位標示不一致：溫度 Farm A/B 是 `degC`、Farm C 是 `Celsius`；
+轉速 Farm A/B 是 `rpm`、Farm C 是 `1/min`。字面不同，實質**應該**相同。
 
-| 訊號 | Farm A | Farm B | Farm C |
-|---|---|---|---|
-| 溫度 | `°C` | `°C` | `Celsius` |
-| 轉速 | `rpm` | `rpm` | `1/min` |
+但只要有一個其實不同（華氏、rad/s、標么值），Mahalanobis 的共變異數就會被
+靜靜扭曲——不會報錯，只會給出錯的分數，而跨風場的主張就跟著錯。
 
-字面不同、實質應該相同。但**只要有一個其實不同**，Mahalanobis 的共變異數就會被靜靜地扭曲——不會報錯，只會給出錯的分數。
+`base_scorer_md2022.py` 在評分那一趟就已經把每個訊號的 p01/p50/p99 記進
+`scorer_summary_<farm>.json`，所以這一步不必再讀一次 archive：
 
-確認方式：對每個風場的溫度欄取 p01 與 p99，看數值範圍是否落在同一個物理區間（環境溫度 −20~45、主軸承 5~90）。轉速同理。範圍對得上就沒事，記錄下來即可。
+```bash
+python3 scripts/check_unit_consistency.py ./scores_MD_2022_run1
+```
+
+```powershell
+python scripts\check_unit_consistency.py .\scores_MD_2022_run1
+```
+
+exit code 0 表示各風場一致且落在物理合理範圍；1 表示有不一致，輸出會指出
+是哪個訊號、哪兩個風場、差多少。**exit code 不是 0 就不要進 5.2。**
+
+> `active_power` 不做跨風場中位數比較——額定功率本來就隨機型不同，
+> 拿它比會是假警報。它只列出範圍供你看。
 
 ### 5.2 執行實驗（一個設定檔，一道指令）
 
