@@ -438,21 +438,31 @@ python3 scripts/base_scorer_compatibility_check.py \
 
 ```powershell
 python scripts/base_scorer_compatibility_check.py `
-  --workdir           C:\path\to\extract_dir `
+  --workdir           $WD `
   --g2-inventory      .\manifest_out\g2_case_inventory.json `
   --g3-case-metadata  .\manifest_out\g3_case_metadata.csv `
   --score-dir         .\scores_MD_2022_run1 `
   --score-dir-run2    .\scores_MD_2022_run2 `
   --scorer-name       "MD_2022" `
   --output-dir        .\compat_out_MD_2022 `
-  --timestamp-col     <你的 timestamp 欄名> `
-  --score-col         <你的 score 欄名> `
-  --signal-map        .\evidence_MD_2022\signal_map.json `
-  --artifact-manifest .\evidence_MD_2022\artifact_manifest.json `
-  --fit-provenance    .\evidence_MD_2022\fit_provenance.json `
-  --freeze-receipt    .\evidence_MD_2022\freeze_receipt.json `
+  --timestamp-col     timestamp `
+  --score-col         anomaly_score `
+  --signal-map        .\evidence_MD_2022_run1\signal_map.json `
+  --artifact-manifest .\evidence_MD_2022_run1\artifact_manifest.json `
+  --fit-provenance    .\evidence_MD_2022_run1\fit_provenance.json `
+  --freeze-receipt    .\evidence_MD_2022_run1\freeze_receipt.json `
   --determinism-mode  bit_identical
 ```
+
+> **這段先前留著 `<你的 timestamp 欄名>` 這類角括號佔位符。**
+> 在 PowerShell 裡 `<` 是保留運算子，貼上去會直接語法錯誤——
+> 這個缺陷 v3.7 已在 Phase 5 修過，Phase 4 漏了，現已補上。
+>
+> 欄名不需要代換：評分器輸出時已把三個風場正規化成同一組
+> （`timestamp` / `wind_speed` / `anomaly_score` + `signal_*`），
+> 所以這裡就是 `timestamp` 與 `anomaly_score`，三場通用。
+> 證據取 run1 那份即可（run1／run2 的四份佐證內容相同，
+> gate 比對的是兩份 score stream，不是兩份證據）。
 
 ### 4.2 MainBearing_2026
 
