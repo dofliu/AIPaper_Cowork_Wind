@@ -1,0 +1,30 @@
+{
+  "archive_path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\CARE_To_Compare_v6.zip",
+  "sha256": "ca61379e98956d891041ad45c885109bd8a14199fde0688d0184a11c2d4194f1",
+  "sha256_note": null,
+  "sha256_matches_expected": true,
+  "expected_sha256": "ca61379e98956d891041ad45c885109bd8a14199fde0688d0184a11c2d4194f1",
+  "size_bytes": 5503439673,
+  "size_matches_expected": true,
+  "expected_size_bytes": 5503439673,
+  "top_level_tree": [
+    {
+      "path": ".",
+      "n_subdirs": 2,
+      "n_files": 1
+    },
+    {
+      "path": "CARE_To_Compare",
+      "n_subdirs": 3,
+      "n_files": 2
+    },
+    {
+      "path": "segments",
+      "n_subdirs": 1,
+      "n_files": 1
+    }
+  ],
+  "extracted_file_count": 254,
+  "extracted_total_bytes": 25490925920,
+  "generated_at_utc": "2026-08-15T06:17:52.271016+00:00"
+}
