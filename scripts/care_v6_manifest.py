@@ -77,7 +77,7 @@ import statistics
 import sys
 import zipfile
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 
 EXPECTED_ARCHIVE_SIZE_BYTES = 5_503_439_673
 # Established 2026-08-14 by the local operator on the archive of record.
@@ -120,7 +120,14 @@ def run_g1(archive_path, output_dir, workdir, skip_extract):
     # was kept. Record that as an explicit null with a reason -- the earlier
     # local run wrote the string "pre_extracted_from_local_storage" into the
     # sha256 field, which reads like a hash to anything consuming the JSON.
-    if archive_path and os.path.isfile(archive_path):
+    if archive_path and not os.path.isfile(archive_path):
+        raise SystemExit(
+            "[G1] --archive was given but no file exists at %r.\n"
+            "      Passing a path that is not there must not be treated as "
+            "'no archive supplied' -- that would silently produce a manifest "
+            "with no identity evidence. Fix the path, or omit --archive "
+            "deliberately to record sha256 as null." % archive_path)
+    if archive_path:
         print("[G1] hashing archive (this can take a while for a 5.5GB file)...",
               file=sys.stderr)
         size_bytes = os.path.getsize(archive_path)
@@ -171,7 +178,7 @@ def run_g1(archive_path, output_dir, workdir, skip_extract):
         "top_level_tree": tree,
         "extracted_file_count": file_count,
         "extracted_total_bytes": total_bytes,
-        "generated_at_utc": datetime.utcnow().isoformat() + "Z",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
     }
     with open(os.path.join(output_dir, "g1_archive_integrity.json"), "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2, ensure_ascii=False)
@@ -327,7 +334,9 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
 
     farm_events = load_event_info(workdir)
 
-    for path in case_files:
+    for case_index, path in enumerate(case_files, 1):
+        if case_index % 10 == 0 or case_index == len(case_files):
+            print("[G2-G6] %d/%d cases" % (case_index, len(case_files)), file=sys.stderr)
         delimiter = sniff_delimiter(path)
         header = read_header(path, delimiter)
         if not header:
@@ -360,22 +369,48 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
         wind_speeds = []
         label_value = None
         n_rows = 0
+        # Index-based reading, not DictReader. Farm C has 957 columns and 58
+        # cases of ~55k rows; DictReader would build roughly 3.4 billion dict
+        # entries across the archive to reach the four columns actually used,
+        # which is the difference between minutes and hours.
         asset_value = None
+        first_ts = last_ts = None
+        idx_ts = header.index(ts_col) if ts_col in header else None
+        idx_ws = header.index(ws_col) if ws_col in header else None
+        idx_lbl = header.index(label_col) if label_col in header else None
+        idx_turb = header.index(turbine_col) if turbine_col in header else None
+        width = len(header)
+
         with open(path, newline="", encoding="utf-8", errors="replace") as f:
-            reader = csv.DictReader(f, delimiter=delimiter)
+            reader = csv.reader(f, delimiter=delimiter)
+            next(reader, None)                     # header already read
             for row in reader:
+                if len(row) < width:
+                    continue                       # ragged/blank trailing line
                 n_rows += 1
-                if turbine_col and asset_value is None and row.get(turbine_col) not in (None, ""):
-                    asset_value = row[turbine_col]
-                if ts_col and row.get(ts_col):
-                    timestamps.append(row[ts_col])
-                if ws_col and row.get(ws_col) not in (None, ""):
-                    try:
-                        wind_speeds.append(float(row[ws_col]))
-                    except ValueError:
-                        pass
-                if label_col and label_value is None and row.get(label_col) not in (None, ""):
-                    label_value = row[label_col]
+                if idx_ts is not None:
+                    value = row[idx_ts]
+                    if value:
+                        if first_ts is None:
+                            first_ts = value
+                        last_ts = value
+                if idx_ws is not None:
+                    value = row[idx_ws]
+                    if value:
+                        try:
+                            wind_speeds.append(float(value))
+                        except ValueError:
+                            try:
+                                wind_speeds.append(float(value.replace(",", ".", 1)))
+                            except ValueError:
+                                pass
+                if idx_turb is not None and asset_value is None and row[idx_turb]:
+                    asset_value = row[idx_turb]
+                if idx_lbl is not None and label_value is None and row[idx_lbl]:
+                    label_value = row[idx_lbl]
+        # Only the ends are ever consumed; holding all 55k strings per case
+        # bought nothing but memory pressure.
+        timestamps = [t for t in (first_ts, last_ts) if t is not None]
 
         label_source = "column:%s" % label_col if label_col else "none"
         if has_event_info:
@@ -409,8 +444,8 @@ def run_g2_g6(workdir, output_dir, case_glob, ts_col_override, ws_col_override, 
         sentinel_hits = 0  # populated in schema pass below, per-file spot check
         case_rows.append({
             "case_id": case_id,
-            "farm_id": farm_guess or (row.get(farm_col) if farm_col else "unknown"),
-            "turbine_id": (row.get(turbine_col) if turbine_col else "unknown"),
+            "farm_id": farm_guess or "unknown",
+            "turbine_id": asset_value or "unknown",
             "label": label_norm,
             "start_timestamp": start_ts,
             "end_timestamp": end_ts,
