@@ -127,7 +127,7 @@ import json
 import math
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 GATE_VERSION = "c0c6-gate-v2.0"
 
@@ -1169,7 +1169,7 @@ def run_for_scorer(args):
             "below describes evidence only."
         ),
         "scorer_name": args.scorer_name,
-        "generated_at_utc": datetime.utcnow().isoformat() + "Z",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "gate_status": gate_status,
         "status_enum": [PASS, FAIL, UNVERIFIED, NOT_APPLICABLE],
         "gates": gates,

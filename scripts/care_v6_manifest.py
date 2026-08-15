@@ -146,16 +146,33 @@ def run_g1(archive_path, output_dir, workdir, skip_extract):
         with zipfile.ZipFile(archive_path) as zf:
             zf.extractall(workdir)
 
+    # G1 counts the ARCHIVE, not everything that happens to sit under
+    # --workdir. On the 2026-08-15 rerun the workdir held a sibling
+    # `segments/` directory and other project files, which inflated the count
+    # from 103 to 254 and the byte total by 5.5GB -- a file count that moves
+    # with unrelated neighbours is not integrity evidence. Descend into the
+    # archive root when it is present directly under the workdir.
+    count_root = workdir
+    if archive_path:
+        stem = os.path.splitext(os.path.basename(archive_path))[0]
+        for candidate in (stem, stem.replace("_v6", ""), "CARE_To_Compare"):
+            probe = os.path.join(workdir, candidate)
+            if os.path.isdir(probe):
+                count_root = probe
+                break
+    elif os.path.isdir(os.path.join(workdir, "CARE_To_Compare")):
+        count_root = os.path.join(workdir, "CARE_To_Compare")
+
     # Top-2-level tree
     tree = []
     depth_limit = 2
-    root_depth = workdir.rstrip(os.sep).count(os.sep)
+    root_depth = count_root.rstrip(os.sep).count(os.sep)
     file_count = 0
     total_bytes = 0
-    for dirpath, dirnames, filenames in os.walk(workdir):
+    for dirpath, dirnames, filenames in os.walk(count_root):
         depth = dirpath.rstrip(os.sep).count(os.sep) - root_depth
         if depth < depth_limit:
-            rel = os.path.relpath(dirpath, workdir)
+            rel = os.path.relpath(dirpath, count_root)
             tree.append({"path": rel, "n_subdirs": len(dirnames), "n_files": len(filenames)})
         for fn in filenames:
             file_count += 1
@@ -175,6 +192,11 @@ def run_g1(archive_path, output_dir, workdir, skip_extract):
         "size_matches_expected": (size_bytes == EXPECTED_ARCHIVE_SIZE_BYTES
                                   if size_bytes is not None else None),
         "expected_size_bytes": EXPECTED_ARCHIVE_SIZE_BYTES,
+        "counted_from": os.path.abspath(count_root),
+        "counted_from_note": (
+            "File count and byte total describe this directory only. If it is not "
+            "the archive root, they include unrelated neighbours and are not "
+            "integrity evidence."),
         "top_level_tree": tree,
         "extracted_file_count": file_count,
         "extracted_total_bytes": total_bytes,
@@ -653,7 +675,7 @@ def write_summary(output_dir, g1, g2, g5_summary, g6):
     lines = []
     lines.append("# CARE v6 G1-G6 Manifest — auto-generated summary")
     lines.append("")
-    lines.append(f"Generated: {datetime.utcnow().isoformat()}Z")
+    lines.append(f"Generated: {datetime.now(timezone.utc).isoformat()}")
     lines.append("")
     lines.append("## G1 — Archive Integrity")
     lines.append(f"- SHA-256: `{g1['sha256']}` (matches expected: {g1.get('sha256_matches_expected')})")
