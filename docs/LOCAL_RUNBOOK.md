@@ -53,7 +53,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：九支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 223 checks。
+**預期**：九支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 229 checks。
 
 | 測試 | checks |
 |---|---|
@@ -62,7 +62,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_end_to_end.py` | 17 |
 | `selftest_w1_acas.py` | 17 |
 | `selftest_regime_conditional.py` | 16 |
-| `selftest_md2022.py` | 23 |
+| `selftest_md2022.py` | 29 |
 | `selftest_online_baselines.py` | 13 |
 | `selftest_signal_map_builder.py` | 48 |
 | `selftest_unit_consistency.py` | 17 |
