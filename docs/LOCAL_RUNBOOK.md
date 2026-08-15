@@ -53,7 +53,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：九支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 218 checks。
+**預期**：九支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 223 checks。
 
 | 測試 | checks |
 |---|---|
@@ -64,7 +64,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_regime_conditional.py` | 16 |
 | `selftest_md2022.py` | 23 |
 | `selftest_online_baselines.py` | 13 |
-| `selftest_signal_map_builder.py` | 43 |
+| `selftest_signal_map_builder.py` | 48 |
 | `selftest_unit_consistency.py` | 17 |
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
@@ -264,6 +264,7 @@ python3 scripts/care_v6_signal_map_builder.py \
   --unit-override "A:ambient_temperature=degC" \
   --unit-override "A:pitch_angle=deg" \
   --unit-override "B:main_bearing_temperature=degC" \
+  --exclude-sensor "C:rotor_speed=sensor_146,sensor_147" \
   --not-available "A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components." \
   --ratified-by "劉老師" --ratified-on "2026-08-15"
 ```
@@ -280,6 +281,7 @@ python scripts\care_v6_signal_map_builder.py `
   --unit-override "A:ambient_temperature=degC" `
   --unit-override "A:pitch_angle=deg" `
   --unit-override "B:main_bearing_temperature=degC" `
+  --exclude-sensor "C:rotor_speed=sensor_146,sensor_147" `
   --not-available "A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components." `
   --ratified-by "劉老師" --ratified-on "2026-08-15"
 ```

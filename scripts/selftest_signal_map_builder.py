@@ -393,6 +393,64 @@ def main():
     check("T9 no angle is ever suggested a temperature unit",
           not any(u == "degC" for s, u in B.LIKELY_UNIT.items() if "angle" in s))
 
+    # ------- T10 --exclude-sensor -------
+    # Farm C's rotor speed matched four channels. sensor_144/145 ("Rotor
+    # speed 1/2") correlate at r=1.0000 with each other and have a median of
+    # 9.8, matching Farms A and B. sensor_146/147 ("Rotor speed gearbox main
+    # shaft 1/2") have a median of 80, a minimum of -55, and correlate with
+    # EACH OTHER at only r=0.21 -- two sensors named for the same shaft that
+    # do not agree. Averaging all four moved the median to 46.6. --pick takes
+    # one sensor and cannot express "these two, averaged", so exclusion is
+    # the operation that fits.
+    print("\nT10  --exclude-sensor drops members and lets the rest average")
+    with tempfile.TemporaryDirectory() as root:
+        farm = os.path.join(root, "Wind Farm C")
+        os.makedirs(farm)
+        with open(os.path.join(farm, "feature_description.csv"), "w",
+                  encoding="utf-8", newline="") as f:
+            f.write("sensor_name;statistics_type;description;unit;is_angle;is_counter\n")
+            for n, desc in (("144", "Rotor speed 1"), ("145", "Rotor speed 2"),
+                            ("146", "Rotor speed gearbox main shaft 1"),
+                            ("147", "Rotor speed gearbox main shaft 2")):
+                f.write("sensor_%s;average;%s;1/min;False;False\n" % (n, desc))
+            f.write("sensor_7;average;Ambient temperature;Celsius;False;False\n")
+        out = os.path.join(root, "out")
+        proc = subprocess.run(
+            [sys.executable, BUILDER, "--workdir", root, "--output-dir", out,
+             "--average-ties",
+             "--exclude-sensor", "C:rotor_speed=sensor_146,sensor_147"],
+            capture_output=True, text=True)
+        check("T10 the builder runs", proc.returncode == 0, (proc.stderr or "")[-400:])
+        if proc.returncode == 0:
+            m = json.load(open(os.path.join(out, "signal_map_Wind_Farm_C.json"),
+                               encoding="utf-8"))
+            check("T10 the survivors average, rather than one being picked",
+                  sorted(m["rotor_speed"].get("derived_from") or [])
+                  == ["sensor_144_avg", "sensor_145_avg"],
+                  "got %s" % m["rotor_speed"])
+            rep = json.load(open(os.path.join(out,
+                                              "signal_map_report_Wind_Farm_C.json"),
+                                 encoding="utf-8"))
+            names = [e["sensor_name"] for e in
+                     rep["per_signal"]["rotor_speed"].get("excluded_by_operator", [])]
+            # The audit trail is the point: a reader must be able to see which
+            # channels were dropped and what they were called.
+            check("T10 the exclusion is recorded with descriptions",
+                  sorted(names) == ["sensor_146", "sensor_147"], "got %s" % names)
+            check("T10 and survives the report assignment that once wiped it",
+                  all(e.get("description") for e in
+                      rep["per_signal"]["rotor_speed"]["excluded_by_operator"]))
+        # Without the flag, all four average -- the behaviour being corrected.
+        out2 = os.path.join(root, "out2")
+        subprocess.run([sys.executable, BUILDER, "--workdir", root,
+                        "--output-dir", out2, "--average-ties"],
+                       capture_output=True, text=True)
+        m2 = json.load(open(os.path.join(out2, "signal_map_Wind_Farm_C.json"),
+                            encoding="utf-8"))
+        check("T10 without the flag all four are averaged",
+              len(m2["rotor_speed"].get("derived_from") or []) == 4,
+              "got %s" % m2["rotor_speed"].get("derived_from"))
+
     print("\n%d checks, %d failed" % (checks, len(failures)))
     if failures:
         print("FAILED: %s" % ", ".join(failures))

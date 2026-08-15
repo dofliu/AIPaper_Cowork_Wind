@@ -108,8 +108,19 @@ def main():
     ap.add_argument("--workdir", required=True)
     ap.add_argument("--farm", required=True, help='e.g. "Wind Farm C"')
     ap.add_argument("--columns", required=True, help="Comma-separated column names")
-    ap.add_argument("--max-files", type=int, default=8)
-    ap.add_argument("--max-rows", type=int, default=300000)
+    # Default to EVERY case file. The previous default of 8 read 8 of Farm C's
+    # 58 cases and printed "from 8 case file(s)" without saying 8 of what, so
+    # a p99 of 363 C that the scorer found across all 58 was invisible here
+    # and looked like a contradiction. A tool that silently samples a corner
+    # of the data and reports it as the data is worse than a slow one.
+    ap.add_argument("--max-files", type=int, default=0,
+                    help="0 (default) = every case file in the farm")
+    ap.add_argument("--max-rows", type=int, default=400000,
+                    help="cap on SAMPLED rows; raise --stride to cover more data "
+                         "within the same cap")
+    ap.add_argument("--stride", type=int, default=1,
+                    help="keep every Nth row. Use 10 or 20 to sweep every case "
+                         "file without holding millions of values in memory.")
     ap.add_argument("--correlate", action="store_true",
                     help="Also print pairwise correlations between the columns")
     args = ap.parse_args()
@@ -132,11 +143,13 @@ def main():
             break
     if not files:
         raise SystemExit("no case CSVs under %s/datasets" % farm_dir)
-    files = files[:args.max_files]
+    n_available = len(files)
+    if args.max_files and args.max_files > 0:
+        files = files[:args.max_files]
 
     values = {c: [] for c in columns}
     aligned = {c: [] for c in columns}   # only rows where ALL columns are present
-    n_rows = n_missing_any = 0
+    n_rows = n_kept = n_missing_any = 0
     for path in files:
         delimiter = sniff_delimiter(path)
         with open(path, newline="", encoding="utf-8", errors="replace") as f:
@@ -155,7 +168,10 @@ def main():
                 if len(record) <= max(idx.values()):
                     continue
                 n_rows += 1
+                if args.stride > 1 and (n_rows % args.stride):
+                    continue
                 row = {c: to_float(record[idx[c]]) for c in columns}
+                n_kept += 1
                 for c in columns:
                     if row[c] is not None:
                         values[c].append(row[c])
@@ -164,13 +180,17 @@ def main():
                         aligned[c].append(row[c])
                 else:
                     n_missing_any += 1
-                if n_rows >= args.max_rows:
+                if n_kept >= args.max_rows:
                     break
-        if n_rows >= args.max_rows:
+        if n_kept >= args.max_rows:
             break
 
-    print("%s -- %d rows from %d case file(s)\n"
-          % (os.path.basename(farm_dir), n_rows, len(files)))
+    # Say what fraction of the farm this actually is. Silence here is how a
+    # partial view gets mistaken for the whole one.
+    coverage = "ALL %d case files" % n_available if len(files) == n_available \
+        else "%d of %d case files -- NOT the whole farm" % (len(files), n_available)
+    print("%s -- %d rows scanned, %d sampled (stride %d), %s\n"
+          % (os.path.basename(farm_dir), n_rows, n_kept, args.stride, coverage))
     print("%-22s %8s %10s %10s %10s %10s %10s %8s"
           % ("column", "n", "min", "p01", "p50", "p99", "max", "sentinel"))
     print("-" * 96)
@@ -187,8 +207,8 @@ def main():
                  fmt(v[-1]), n_sent))
 
     if n_missing_any:
-        print("\n%d of %d rows had at least one of these columns missing"
-              % (n_missing_any, n_rows))
+        print("\n%d of %d sampled rows had at least one of these columns missing"
+              % (n_missing_any, n_kept))
 
     if args.correlate and len(columns) > 1 and aligned[columns[0]]:
         print("\npairwise correlation on %d complete rows:" % len(aligned[columns[0]]))

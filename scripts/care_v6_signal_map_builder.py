@@ -382,6 +382,15 @@ def header_candidates(farm_dir, stem):
     return []
 
 
+def excluded_for(exclusions, farm, signal):
+    """Sensor names the operator has ruled out for this farm and signal."""
+    out = set()
+    for (farm_prefix, sig), names in exclusions.items():
+        if sig == signal and farm_matches(farm_prefix, farm):
+            out |= names
+    return out
+
+
 def _pick_for(picks, farm_key, signal):
     for (farm_prefix, sig), sensor in picks.items():
         if sig != signal:
@@ -490,6 +499,19 @@ def run(args):
         else:
             picks[(None, key.strip())] = sensor.strip()
 
+    exclusions = {}
+    for spec in (args.exclude_sensor or []):
+        if "=" not in spec:
+            continue
+        key, sensors = spec.split("=", 1)
+        if ":" in key:
+            farm_prefix, signal = key.split(":", 1)
+        else:
+            farm_prefix, signal = None, key
+        names = {n.strip() for n in sensors.split(",") if n.strip()}
+        exclusions.setdefault((farm_prefix and farm_prefix.strip().lower(),
+                               signal.strip()), set()).update(names)
+
     overall = {}
     for path in dict_paths:
         farm = os.path.basename(os.path.dirname(path))
@@ -501,9 +523,27 @@ def run(args):
         signal_map, report = {}, {}
         for signal in SIGNAL_RULES:
             candidates = matched.get(signal, [])
+            # Drop channels the operator has ruled out. Farm C's rotor speed
+            # matched four channels: sensor_144/145 ("Rotor speed 1/2",
+            # r=1.0000 with each other, median 9.8 -- the real rotor) and
+            # sensor_146/147 ("Rotor speed gearbox main shaft 1/2", median 80,
+            # minimum -55, and correlated with each other at only r=0.21).
+            # Averaging all four moved the median from 9.8 to 46.6. --pick
+            # cannot express "these two, averaged", so exclusion is the tool
+            # that fits: it removes the bad members and lets the good ones
+            # average as ratified.
+            dropped = []
+            ruled_out = excluded_for(exclusions, farm, signal)
+            if ruled_out:
+                dropped = [c for c in candidates if c["sensor_name"] in ruled_out]
+                candidates = [c for c in candidates
+                              if c["sensor_name"] not in ruled_out]
             pick, problem = choose(candidates, args.average_ties,
                                    _pick_for(picks, farm_key, signal))
             report[signal] = {
+                "excluded_by_operator": [
+                    {"sensor_name": c["sensor_name"],
+                     "description": c["description"]} for c in dropped],
                 "n_candidates": len(candidates),
                 "candidates": candidates,
                 "problem": problem,
@@ -763,6 +803,11 @@ def main():
     ap.add_argument("--not-available", action="append", metavar="[FARM:]SIGNAL=REASON",
                     help="Declare that this farm carries no such signal, emitting the "
                          "ratified not_available block C0 requires. Repeatable.")
+    ap.add_argument("--exclude-sensor", action="append",
+                    metavar="[FARM:]SIGNAL=SENSOR[,SENSOR...]",
+                    help="Remove named channels from a signal's candidates before "
+                         "choosing, so the remaining ones resolve or average "
+                         "normally. Repeatable.")
     ap.add_argument("--force-not-available", action="store_true",
                     help="Allow --not-available to override a signal that did resolve")
     ap.add_argument("--ratified-by", default="PI",
