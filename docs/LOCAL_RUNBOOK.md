@@ -19,12 +19,12 @@ Windows 使用者請用 PowerShell，不要用 CMD（換行接續符號不同）
 ### 0.1 取得程式
 
 ```bash
-git clone -b claude/lucid-hypatia-rnqwj0 https://github.com/dofliu/AIPaper_Cowork_Wind.git
+git clone -b claude/practical-sagan-thkia5 https://github.com/dofliu/AIPaper_Cowork_Wind.git
 cd AIPaper_Cowork_Wind
 ```
 
 ```powershell
-git clone -b claude/lucid-hypatia-rnqwj0 https://github.com/dofliu/AIPaper_Cowork_Wind.git
+git clone -b claude/practical-sagan-thkia5 https://github.com/dofliu/AIPaper_Cowork_Wind.git
 cd AIPaper_Cowork_Wind
 ```
 
@@ -45,7 +45,7 @@ python --version
 
 ### 0.3 先跑自我測試（重要）
 
-在碰真實資料之前，先確認**整套**工具在你的環境行為正確。九支測試一次跑完：
+在碰真實資料之前，先確認**整套**工具在你的環境行為正確。十支測試一次跑完：
 
 ```bash
 for t in scripts/selftest_*.py; do echo "== $t"; python3 "$t" | tail -2; done
@@ -56,19 +56,20 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：九支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 241 checks。
+**預期**：十支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 285 checks。
 
 | 測試 | checks |
 |---|---|
-| `selftest_c0_c6_gate.py` | 51 |
+| `selftest_c0_c6_gate.py` | 59 |
 | `selftest_sensor_identification.py` | 21 |
-| `selftest_end_to_end.py` | 17 |
+| `selftest_end_to_end.py` | 20 |
 | `selftest_w1_acas.py` | 17 |
 | `selftest_regime_conditional.py` | 16 |
-| `selftest_md2022.py` | 29 |
+| `selftest_md2022.py` | 40 |
 | `selftest_online_baselines.py` | 13 |
 | `selftest_signal_map_builder.py` | 48 |
 | `selftest_unit_consistency.py` | 29 |
+| `selftest_earliness_metric.py` | 22 |
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。
@@ -436,23 +437,49 @@ python3 scripts/base_scorer_compatibility_check.py \
   --determinism-mode  bit_identical
 ```
 
+**gate 分三次跑，每個風場一份，而且一定要加 `--farm`。**
+
+三個風場的 signal map 不同（Farm A 沒有主軸承通道，以 `not_available` 宣告），
+一次 gate 只檢查一份 map，所以它必須只看該風場的案子。
+
+`--farm` 依 `g3_case_metadata.csv` 的 `farm_id` 限縮案子集合，run1 與 run2
+兩側都套用。**少了它，score 目錄裡三個風場的案子會全部拿去比對同一份 map，
+結果一定失敗**——而且失敗方向會隨你指哪一份 map 而反轉：用 Farm A 的 map，
+B/C 的案子多出一欄；用 B 或 C 的 map，Farm A 的 22 案少一欄。
+2026-08-15 兩個方向都實測過。
+
 ```powershell
+foreach ($FARM in "A","B","C") {
+Write-Host "== C0-C6 Farm $FARM"
 python scripts/base_scorer_compatibility_check.py `
-  --workdir           C:\path\to\extract_dir `
+  --workdir           $WD `
   --g2-inventory      .\manifest_out\g2_case_inventory.json `
   --g3-case-metadata  .\manifest_out\g3_case_metadata.csv `
+  --farm              "Wind Farm $FARM" `
   --score-dir         .\scores_MD_2022_run1 `
   --score-dir-run2    .\scores_MD_2022_run2 `
-  --scorer-name       "MD_2022" `
-  --output-dir        .\compat_out_MD_2022 `
-  --timestamp-col     <你的 timestamp 欄名> `
-  --score-col         <你的 score 欄名> `
-  --signal-map        .\evidence_MD_2022\signal_map.json `
-  --artifact-manifest .\evidence_MD_2022\artifact_manifest.json `
-  --fit-provenance    .\evidence_MD_2022\fit_provenance.json `
-  --freeze-receipt    .\evidence_MD_2022\freeze_receipt.json `
+  --scorer-name       "MD_2022_Wind_Farm_$FARM" `
+  --output-dir        .\compat_out_MD_2022_$FARM `
+  --timestamp-col     timestamp `
+  --score-col         anomaly_score `
+  --signal-map        .\evidence_MD_2022_run1\signal_map_Wind_Farm_$FARM.json `
+  --artifact-manifest .\evidence_MD_2022_run1\artifact_manifest_Wind_Farm_$FARM.json `
+  --fit-provenance    .\evidence_MD_2022_run1\fit_provenance_Wind_Farm_$FARM.json `
+  --freeze-receipt    .\evidence_MD_2022_run1\freeze_receipt_Wind_Farm_$FARM.json `
   --determinism-mode  bit_identical
+Write-Host "  exit=$LASTEXITCODE"
+}
 ```
+
+> **這段先前留著 `<你的 timestamp 欄名>` 這類角括號佔位符。**
+> 在 PowerShell 裡 `<` 是保留運算子，貼上去會直接語法錯誤——
+> 這個缺陷 v3.7 已在 Phase 5 修過，Phase 4 漏了，現已補上。
+>
+> 欄名不需要代換：評分器輸出時已把三個風場正規化成同一組
+> （`timestamp` / `wind_speed` / `anomaly_score` + `signal_*`），
+> 所以這裡就是 `timestamp` 與 `anomaly_score`，三場通用。
+> 證據取 run1 那份即可（run1／run2 的四份佐證內容相同，
+> gate 比對的是兩份 score stream，不是兩份證據）。
 
 ### 4.2 MainBearing_2026
 

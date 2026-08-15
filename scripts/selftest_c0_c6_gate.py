@@ -29,6 +29,8 @@ behaviour fails loudly rather than silently returning a green gate.
   T7  no --signal-map               -> C0 UNVERIFIED [P1  regression test]
   T9  signal declared not_available -> C0 PASS only when the declaration
       names a reason and a ratifier; silent absence still fails
+  T10 --farm restricts the audited case set, on both runs, and an
+      unmatched farm is an error rather than a PASS over zero cases
 
 Exit code: 0 if every scenario behaves as specified, 1 otherwise.
 """
@@ -350,7 +352,7 @@ def main():
             "ratified_by": "PI", "ratified_on": "2026-08-15",
         }
         write_json(fx["signal_map"], sm)
-        rc, s, _ = run_checker(os.path.join(root, "t9_out"), full_args(fx))
+        rc, s, _ = run_checker(os.path.join(root, "farmfilter_out"), full_args(fx))
         r.check("T9 C0 PASS with a ratified absence",
                 gate_status(s, "C0_signal_availability_and_mapping") == "PASS",
                 "got %s" % gate_status(s, "C0_signal_availability_and_mapping"))
@@ -363,7 +365,7 @@ def main():
         sm = json.load(open(fx["signal_map"], encoding="utf-8"))
         sm["main_bearing_temperature"] = {"not_available": True}   # no reason/ratifier
         write_json(fx["signal_map"], sm)
-        rc, s, _ = run_checker(os.path.join(root, "t9b_out"), full_args(fx))
+        rc, s, _ = run_checker(os.path.join(root, "farmfilter_b_out"), full_args(fx))
         r.check("T9b C0 FAIL on an unratified absence",
                 gate_status(s, "C0_signal_availability_and_mapping") == "FAIL",
                 "got %s" % gate_status(s, "C0_signal_availability_and_mapping"))
@@ -373,7 +375,7 @@ def main():
         sm = json.load(open(fx["signal_map"], encoding="utf-8"))
         del sm["main_bearing_temperature"]
         write_json(fx["signal_map"], sm)
-        rc, s, _ = run_checker(os.path.join(root, "t9c_out"), full_args(fx))
+        rc, s, _ = run_checker(os.path.join(root, "farmfilter_c_out"), full_args(fx))
         r.check("T9c C0 FAIL when a signal is simply absent from the map",
                 gate_status(s, "C0_signal_availability_and_mapping") == "FAIL",
                 "got %s" % gate_status(s, "C0_signal_availability_and_mapping"))
@@ -387,6 +389,67 @@ def main():
         for name in ("signal_map.json", "artifact_manifest.json",
                      "fit_provenance.json", "freeze_receipt.json"):
             r.check("T8 %s written" % name, os.path.isfile(os.path.join(tdir, name)))
+
+        # ---------------- T9 --farm restricts the audited case set ---------
+        # Three farms carry three different signal maps: Farm A has no
+        # main-bearing channel and declares it not_available, B and C have
+        # one. A single invocation checks a single map, so it must see a
+        # single farm's cases. Without --farm the run fails whichever map you
+        # point it at, and the failure reverses direction: under Farm A's map
+        # the B/C cases carry a column the map calls unavailable, under B's
+        # the Farm A cases lack one it calls available.
+        print("\nT10 --farm restricts the audited case set to one farm")
+        fx9 = build_fixture(os.path.join(root, "farmfilter"), ["1", "2", "3", "4"])
+        # Relabel two cases onto a second farm.
+        with open(fx9["g3"], newline="", encoding="utf-8") as f:
+            g3_rows = list(csv.DictReader(f))
+        for row in g3_rows:
+            row["farm_id"] = "B" if row["case_id"] in ("3", "4") else "A"
+        with open(fx9["g3"], "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=list(g3_rows[0]))
+            w.writeheader()
+            w.writerows(g3_rows)
+        # g2 counts only farm A's cases now, so C4 has a consistent expectation.
+        write_json(fx9["g2"], {"n_detected": 2, "n_undetected": 0,
+                               "n_case_files_found": 2,
+                               "unknown_label_case_ids": []})
+
+        rc9, s9, err9 = run_checker(os.path.join(root, "t9_out"),
+                                    full_args(fx9) + ["--farm", "A"])
+        r.check("T10 the run completes", s9 is not None, err9[-300:])
+        if s9:
+            r.check("T10 only farm A's two cases were audited",
+                    s9.get("n_cases_audited") == 2,
+                    "audited %s" % s9.get("n_cases_audited"))
+            r.check("T10 C4 passes against the farm-restricted expectation",
+                    s9["gates"]["C4_case_coverage"]["status"] == "PASS",
+                    json.dumps(s9["gates"]["C4_case_coverage"])[:300])
+            r.check("T10 C5 passes, so run2 was restricted the same way",
+                    s9["gates"]["C5_determinism_and_freeze"]["status"] == "PASS",
+                    json.dumps(s9["gates"]["C5_determinism_and_freeze"])[:300])
+            r.check("T10 the restriction is on the record, not implied",
+                    (s9["input_receipts"]["g3_case_metadata"] or {})
+                    .get("restricted_to_farm") == "A",
+                    json.dumps(s9["input_receipts"].get("g3_case_metadata"))[:200])
+
+        # REVERSE: without --farm the same fixture audits all four cases.
+        # If the filter silently did nothing, this would match the run above
+        # and T9 would be proving nothing.
+        rc9b, s9b, _ = run_checker(os.path.join(root, "t9b_out"), full_args(fx9))
+        r.check("T10 REVERSE: without --farm all four cases are audited",
+                s9b is not None and s9b.get("n_cases_audited") == 4,
+                "audited %s" % (s9b or {}).get("n_cases_audited"))
+        r.check("T10 REVERSE: the two runs genuinely differ",
+                s9 is not None and s9b is not None
+                and s9["n_cases_audited"] != s9b["n_cases_audited"],
+                "both audited the same number of cases")
+
+        # A farm that matches nothing must be an explicit error, not a
+        # silently empty audit that reports PASS over zero cases.
+        rc9c, s9c, _ = run_checker(os.path.join(root, "t9c_out"),
+                                   full_args(fx9) + ["--farm", "NoSuchFarm"])
+        r.check("T10 an unmatched --farm does not PASS over zero cases",
+                rc9c != 0, "exit %s" % rc9c)
 
     print("\n%d checks, %d failed" % (r.n, len(r.failures)))
     if r.failures:

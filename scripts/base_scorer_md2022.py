@@ -391,8 +391,29 @@ def run(args):
                             + [SIGNAL_COL_PREFIX + s for s in order])
             for row in rows:
                 v = feature_vector(row, resolved, order, ranges, rejected)
-                wind_values = [to_float(row.get(c)) for c in wind_columns]
-                wind_present = [x for x in wind_values if x is not None]
+                # The canonical wind column gets the SAME range filter as the
+                # feature copy. It used to be averaged straight from the raw
+                # archive columns, so the two disagreed: a row could carry
+                # wind_speed = -14.9 here while signal_wind_speed was blank,
+                # because the filter had rejected it as a fault code. Wind
+                # speed is a scalar magnitude -- negative is not a reading at
+                # a low value, it is not a reading at all. Measured on the
+                # real archive: 1,451 such rows, median -0.97, minimum -14.9.
+                #
+                # Harmless today only because those rows have no score and the
+                # calibrator skips them. But this is the third time this
+                # project has been bitten by wind_speed having two sources of
+                # truth, and the previous two were harmless right up until
+                # they were not. One filter, applied once, for both copies.
+                wind_lo_hi = (ranges or {}).get("wind_speed")
+                wind_present = []
+                for column in wind_columns:
+                    value = to_float(row.get(column))
+                    if value is None:
+                        continue
+                    if wind_lo_hi and not (wind_lo_hi[0] <= value <= wind_lo_hi[1]):
+                        continue
+                    wind_present.append(value)
                 wind = (sum(wind_present) / len(wind_present)) if wind_present else None
                 if v is None:
                     n_skipped += 1
@@ -425,6 +446,23 @@ def run(args):
     # --- C0-C6 evidence, written at fit time because it cannot be reconstructed
     stamp = datetime.now(timezone.utc).isoformat()
 
+    # Per-farm filenames. These four files used to be written under fixed
+    # names into a shared --evidence-dir, so a loop over A, B, C left only
+    # Farm C's evidence standing. That is how C0 came to FAIL on Farm A's 22
+    # cases: Farm A's not_available declaration for main_bearing_temperature
+    # was written correctly and then overwritten, and the gate went on to
+    # check Farm A against Farm C's signal map.
+    #
+    # The worse half was quieter. freeze_receipt's artifact_sha256 attested
+    # one farm's fitted artifact while presenting as the receipt for all 95
+    # cases -- a provenance claim that was simply not true. scorer_summary
+    # was given per-farm names for exactly this reason; these four were
+    # missed at the time.
+    safe_farm = re.sub(r"[^A-Za-z0-9_-]+", "_", args.farm)
+
+    def evidence_path(stem):
+        return os.path.join(args.evidence_dir, "%s_%s.json" % (stem, safe_farm))
+
     # The C0 gate needs a signal map naming columns of the SCORE CSV, which is
     # a different thing from the builder's map naming columns of the archive.
     # Hand-writing the second one is how an operator ends up declaring a column
@@ -441,10 +479,10 @@ def run(args):
         # Carry the ratification through verbatim. The gate FAILs on silent
         # absence, and rightly so -- the declaration is the evidence.
         gate_map[signal] = dict(signal_map.get(signal) or {})
-    with open(os.path.join(args.evidence_dir, "signal_map.json"),
+    with open(evidence_path("signal_map"),
               "w", encoding="utf-8") as f:
         json.dump(gate_map, f, indent=2, ensure_ascii=False)
-    with open(os.path.join(args.evidence_dir, "fit_provenance.json"),
+    with open(evidence_path("fit_provenance"),
               "w", encoding="utf-8") as f:
         json.dump({
             "fit_partition": ("CARE normal reference partition: rows where %s == 'train', "
@@ -465,7 +503,7 @@ def run(args):
     config_sha = hashlib.sha256(config_blob.encode("utf-8")).hexdigest()
     self_sha = sha256_of_file(os.path.abspath(__file__))
 
-    with open(os.path.join(args.evidence_dir, "artifact_manifest.json"),
+    with open(evidence_path("artifact_manifest"),
               "w", encoding="utf-8") as f:
         json.dump({
             "implementation_source": "re-implementation-from-method: %s" % PAPER,
@@ -485,7 +523,7 @@ def run(args):
             "frozen_at": stamp,
         }, f, indent=2, ensure_ascii=False)
 
-    with open(os.path.join(args.evidence_dir, "freeze_receipt.json"),
+    with open(evidence_path("freeze_receipt"),
               "w", encoding="utf-8") as f:
         json.dump({
             "environment": {"python": sys.version.split()[0], "os": sys.platform,
@@ -538,14 +576,14 @@ def run(args):
     # coexist fine) -- but a fixed summary filename meant Farm C silently
     # overwrote Farm A's and Farm B's, taking the per-case counts and the
     # Phase 5.1 signal ranges with it. Nothing would have reported the loss.
-    safe_farm = re.sub(r"[^A-Za-z0-9_-]+", "_", args.farm)
     with open(os.path.join(args.output_dir, "scorer_summary_%s.json" % safe_farm),
               "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
 
     print("\nscored %d/%d cases; scores in %s"
           % (summary["n_cases_scored"], len(per_case), args.output_dir))
-    print("C0-C6 evidence written to %s" % args.evidence_dir)
+    print("C0-C6 evidence written to %s (suffixed _%s)"
+          % (args.evidence_dir, safe_farm))
     if unavailable:
         print("signals declared unavailable and excluded: %s" % unavailable)
     # Print it rather than burying it in JSON: this feeds C1's non-evaluable

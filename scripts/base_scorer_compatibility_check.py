@@ -420,9 +420,28 @@ def _missing_runs(flags):
     return runs
 
 
-def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes):
+def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes,
+             score_values=None):
     """Wall-clock gap classification per R15, returning a per-row evaluability
-    mask. Returns (result_dict, mask_rows)."""
+    mask. Returns (result_dict, mask_rows).
+
+    score_values, when supplied, adds a third source of non-evaluability
+    alongside long gaps and unparseable timestamps: a row the scorer declined
+    to score. A reading outside physical possibility is a fault code, not a
+    measurement -- the range filter rejects it, the feature vector is then
+    incomplete, and the scorer writes no score. Such a row is in the same
+    category as a data gap: there is nothing there to evaluate.
+
+    Ratified 2026-08-15 after C6 failed on 34 cases (1,974 rows) for exactly
+    this reason. Before that, evaluability was built from timestamps alone, so
+    the mask called these rows evaluable and C6 then demanded a finite score
+    for a row the scorer had deliberately left blank.
+
+    This is deliberately NOT a free pass. The rows land in the same
+    non_evaluable_fraction that C1 caps at NON_EVALUABLE_FLAG_FRACTION, so a
+    scorer that quietly declined most of its input still FAILs here -- it just
+    fails at C1, where the coverage question belongs, instead of at C6, where
+    the question is whether the scores that do exist are sane."""
     n = len(rows)
     if not timestamp_col:
         return {
@@ -515,6 +534,17 @@ def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes):
         if t is None:
             non_evaluable_rows.add(i)
 
+    # Rows the scorer declined to score (see the docstring). Tracked
+    # separately so the summary can say how much of the mask came from this
+    # source rather than from gaps -- two very different data problems.
+    score_absent_rows = set()
+    if score_values is not None and len(score_values) == n:
+        for i, v in enumerate(score_values):
+            if v is None or (isinstance(v, float)
+                             and (math.isnan(v) or math.isinf(v))):
+                score_absent_rows.add(i)
+                non_evaluable_rows.add(i)
+
     n_non_evaluable = len(non_evaluable_rows)
     non_evaluable_fraction = n_non_evaluable / n
     over_flag = non_evaluable_fraction > NON_EVALUABLE_FLAG_FRACTION
@@ -526,6 +556,10 @@ def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes):
             reason = ""
         elif timestamps[i] is None:
             reason = "unparseable_timestamp"
+        elif i in score_absent_rows:
+            # Reported before the gap reason: when a row is both, the scorer
+            # having declined is the more specific fact.
+            reason = "scorer_declined_no_score"
         else:
             reason = "gap_over_%gh" % LONG_GAP_HOURS
         mask_rows.append({
@@ -553,6 +587,13 @@ def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes):
     return {
         "status": status,
         "problems": hard_problems,
+        "n_non_evaluable_from_scorer_declined": len(score_absent_rows),
+        "n_non_evaluable_from_gaps_or_timestamps": (
+            len(non_evaluable_rows) - len(score_absent_rows)),
+        "scorer_declined_note": (
+            "rows the scorer left unscored (range-rejected fault codes or an "
+            "incomplete feature vector) count as non-evaluable and are "
+            "included in the fraction capped above, ratified 2026-08-15"),
         "policy": {
             "interpolate_max_hours": SHORT_GAP_HOURS,
             "forward_fill_max_hours": LONG_GAP_HOURS,
@@ -683,7 +724,19 @@ def check_c3(fit_provenance, receipt, headers_by_case):
 # C4 — case coverage by IDENTITY (P0-2)
 # --------------------------------------------------------------------------
 
-def read_expected_case_ids(g3_path, errors):
+def read_expected_case_ids(g3_path, errors, farm=None):
+    """Expected case ids, optionally restricted to one farm.
+
+    The farm filter exists because the three farms carry DIFFERENT signal
+    maps -- Farm A has no main-bearing channel and declares it
+    not_available, B and C do have one. One gate invocation checks one
+    signal map, so it must see one farm's cases. Run without it against a
+    score directory holding all three and the run fails whichever way you
+    point it: under Farm A's map the B and C cases carry a column the map
+    calls unavailable, and under B's or C's map the 22 Farm A cases are
+    missing a column the map calls available. Measured both ways here on
+    2026-08-15; Farm A's map passed only because its 22 failures happened
+    to be the mirror image."""
     if not g3_path:
         return None, None
     if not os.path.isfile(g3_path):
@@ -695,11 +748,25 @@ def read_expected_case_ids(g3_path, errors):
             if not reader.fieldnames or "case_id" not in reader.fieldnames:
                 errors.append("g3_case_metadata.csv has no 'case_id' column: %s" % g3_path)
                 return None, None
-            ids = [row["case_id"].strip() for row in reader if row.get("case_id")]
+            if farm and "farm_id" not in (reader.fieldnames or []):
+                errors.append(
+                    "--farm given but g3_case_metadata.csv has no 'farm_id' "
+                    "column, so the case set cannot be restricted: %s" % g3_path)
+                return None, None
+            ids = [row["case_id"].strip() for row in reader
+                   if row.get("case_id")
+                   and (not farm or (row.get("farm_id") or "").strip() == farm)]
     except OSError as exc:
         errors.append("g3_case_metadata.csv unreadable (%s): %s" % (exc, g3_path))
         return None, None
-    return ids, {"path": os.path.abspath(g3_path), "sha256": sha256_of_file(g3_path)}
+    if farm and not ids:
+        errors.append("--farm %r matched no row in g3_case_metadata.csv" % farm)
+        return None, None
+    receipt = {"path": os.path.abspath(g3_path), "sha256": sha256_of_file(g3_path)}
+    if farm:
+        receipt["restricted_to_farm"] = farm
+        receipt["n_cases_after_farm_filter"] = len(ids)
+    return ids, receipt
 
 
 def check_c4(expected_ids, observed_ids, g2_inventory, g3_receipt):
@@ -763,7 +830,7 @@ FREEZE_RECEIPT_REQUIRED = [
 
 def check_c5(run1_scores, run2_dir, score_glob, case_id_from, case_id_col,
              score_col, timestamp_col, mode, tolerance, freeze_receipt, freeze_receipt_meta,
-             errors):
+             errors, allowed_case_ids=None):
     if not run2_dir:
         return {
             "status": UNVERIFIED,
@@ -793,6 +860,11 @@ def check_c5(run1_scores, run2_dir, score_glob, case_id_from, case_id_col,
     for path in run2_files:
         case_id, rows, header = read_score_file(path, case_id_from, case_id_col, errors)
         if case_id is None:
+            continue
+        # Same farm restriction as run1, or the two case sets differ by
+        # construction and C5 reports a determinism failure that is really
+        # just the filter applied to one side.
+        if allowed_case_ids is not None and case_id not in allowed_case_ids:
             continue
         run2_scores[case_id] = {
             "path": path,
@@ -1033,7 +1105,8 @@ def run_for_scorer(args):
     fit_provenance, fit_receipt = load_json_or_none(args.fit_provenance, "--fit-provenance", errors)
     freeze_receipt, freeze_receipt_meta = load_json_or_none(
         args.freeze_receipt, "--freeze-receipt", errors)
-    expected_ids, g3_receipt = read_expected_case_ids(args.g3_case_metadata, errors)
+    expected_ids, g3_receipt = read_expected_case_ids(
+        args.g3_case_metadata, errors, farm=args.farm)
 
     workdir_status = NOT_APPLICABLE
     workdir_note = None
@@ -1057,6 +1130,11 @@ def run_for_scorer(args):
         case_id, rows, header = read_score_file(path, args.case_id_from, args.case_id_col, errors)
         if case_id is None:
             continue
+        # With --farm, the score directory still holds every farm's cases;
+        # auditing them here would defeat the filter, since the whole point
+        # is that this invocation checks one farm's signal map.
+        if args.farm and expected_ids is not None and case_id not in expected_ids:
+            continue
         observed_ids.append(case_id)
         headers_by_case[case_id] = header
 
@@ -1069,10 +1147,16 @@ def run_for_scorer(args):
         if timestamp_col and timestamp_col not in header:
             errors.append("timestamp column '%s' not in header of %s" % (timestamp_col, path))
 
-        value_columns = c0.get("value_columns") or []
-        c1, mask_rows = check_c1(rows, timestamp_col, value_columns, args.nominal_interval_minutes)
-
+        # Scores are parsed before C1 now: the evaluability mask needs to know
+        # which rows the scorer declined, so that C1 counts them against its
+        # coverage cap and C6 does not demand a score for them.
         score_values = [to_float(r.get(score_col)) for r in rows] if score_col else []
+
+        value_columns = c0.get("value_columns") or []
+        c1, mask_rows = check_c1(rows, timestamp_col, value_columns,
+                                 args.nominal_interval_minutes,
+                                 score_values=score_values if score_col else None)
+
         c6 = check_c6(score_values, mask_rows, score_col, score_col_confirmed)
 
         if mask_rows:
@@ -1121,7 +1205,10 @@ def run_for_scorer(args):
                                      suggest_column(next(iter(headers_by_case.values()), []),
                                                     SCORE_HINTS)),
                   args.timestamp_col, args.determinism_mode, args.tolerance,
-                  freeze_receipt, freeze_receipt_meta, errors)
+                  freeze_receipt, freeze_receipt_meta, errors,
+                  allowed_case_ids=(set(expected_ids)
+                                    if (args.farm and expected_ids is not None)
+                                    else None))
 
     gates = {
         "C0_signal_availability_and_mapping": {
@@ -1243,6 +1330,11 @@ def main():
     ap.add_argument("--score-dir", help="Directory of per-case score CSVs (run 1)")
     ap.add_argument("--score-dir-run2", help="Directory of per-case score CSVs from an independent run 2 (C5)")
     ap.add_argument("--score-glob", default="*.csv", help="Filename glob for score CSVs (default *.csv)")
+    ap.add_argument("--farm", help="Restrict the audited case set to this "
+                    "farm_id from g3_case_metadata.csv. Required when the "
+                    "score directory holds more than one farm, because one "
+                    "invocation checks one signal map and the farms' maps "
+                    "differ. Score files for other farms are skipped.")
     ap.add_argument("--case-id-from", choices=["filename", "column"], default="filename",
                     help="Where each file's case_id comes from (default filename)")
     ap.add_argument("--case-id-col", default="case_id",
