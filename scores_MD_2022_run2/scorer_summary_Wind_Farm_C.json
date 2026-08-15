@@ -1,0 +1,434 @@
+{
+  "scorer": "MD_2022",
+  "implementation_version": "md2022-v1.1",
+  "farm": "Wind Farm C",
+  "signals_used": [
+    "active_power",
+    "wind_speed",
+    "rotor_speed",
+    "main_bearing_temperature",
+    "pitch_angle",
+    "ambient_temperature"
+  ],
+  "signals_declared_unavailable": [],
+  "signal_ranges": {
+    "active_power": {
+      "unit_declared": "kW",
+      "n_samples": 159315,
+      "p01": -0.0036,
+      "p50": 0.23035999999999998,
+      "p99": 1.0121,
+      "min": -0.043345999999999996,
+      "max": 1.05392
+    },
+    "ambient_temperature": {
+      "unit_declared": "Celsius",
+      "n_samples": 159315,
+      "p01": 15.09514,
+      "p50": 28.1,
+      "p99": 40.059439999999945,
+      "min": -44.0,
+      "max": 47.877
+    },
+    "main_bearing_temperature": {
+      "unit_declared": "Celsius",
+      "n_samples": 159315,
+      "p01": 18.724864,
+      "p50": 48.564,
+      "p99": 362.9755599999998,
+      "min": 0.0,
+      "max": 371.21979999999996
+    },
+    "pitch_angle": {
+      "unit_declared": "deg",
+      "n_samples": 159315,
+      "p01": -1.9989999999999999,
+      "p50": -1.0383333333333333,
+      "p99": 90.09333333333332,
+      "min": -2.384,
+      "max": 135.32000000000002
+    },
+    "rotor_speed": {
+      "unit_declared": "1/min",
+      "n_samples": 159315,
+      "p01": -13.444550000000001,
+      "p50": 46.64,
+      "p99": 81.8195,
+      "min": -29.745,
+      "max": 82.61175
+    },
+    "wind_speed": {
+      "unit_declared": "m/s",
+      "n_samples": 159315,
+      "p01": 0.7918540000000001,
+      "p50": 6.939,
+      "p99": 20.255,
+      "min": -5.057,
+      "max": 33.581
+    }
+  },
+  "fit_scope": "case",
+  "ridge": 1e-06,
+  "n_cases": 58,
+  "n_cases_scored": 58,
+  "per_case": {
+    "1": {
+      "n_rows": 53569,
+      "n_scored": 53569,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51408
+    },
+    "11": {
+      "n_rows": 56437,
+      "n_scored": 56437,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52416
+    },
+    "12": {
+      "n_rows": 56107,
+      "n_scored": 56107,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "15": {
+      "n_rows": 54433,
+      "n_scored": 54433,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51696
+    },
+    "16": {
+      "n_rows": 53568,
+      "n_scored": 53568,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51264
+    },
+    "18": {
+      "n_rows": 52848,
+      "n_scored": 52848,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51120
+    },
+    "20": {
+      "n_rows": 54001,
+      "n_scored": 54001,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51408
+    },
+    "28": {
+      "n_rows": 55918,
+      "n_scored": 55918,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "29": {
+      "n_rows": 54865,
+      "n_scored": 54865,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "30": {
+      "n_rows": 56111,
+      "n_scored": 56111,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "31": {
+      "n_rows": 54589,
+      "n_scored": 54589,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "32": {
+      "n_rows": 55009,
+      "n_scored": 55009,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "33": {
+      "n_rows": 55873,
+      "n_scored": 55873,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "35": {
+      "n_rows": 52615,
+      "n_scored": 52615,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51408
+    },
+    "36": {
+      "n_rows": 55448,
+      "n_scored": 55160,
+      "n_skipped_incomplete": 288,
+      "n_fit_rows": 52416
+    },
+    "37": {
+      "n_rows": 53713,
+      "n_scored": 53713,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51264
+    },
+    "39": {
+      "n_rows": 53727,
+      "n_scored": 53727,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "4": {
+      "n_rows": 56449,
+      "n_scored": 56449,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "41": {
+      "n_rows": 55666,
+      "n_scored": 55666,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51408
+    },
+    "43": {
+      "n_rows": 55153,
+      "n_scored": 55153,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "44": {
+      "n_rows": 63003,
+      "n_scored": 63003,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "46": {
+      "n_rows": 55133,
+      "n_scored": 55133,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "47": {
+      "n_rows": 53993,
+      "n_scored": 53993,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52416
+    },
+    "48": {
+      "n_rows": 55297,
+      "n_scored": 55297,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "49": {
+      "n_rows": 53014,
+      "n_scored": 53014,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51408
+    },
+    "5": {
+      "n_rows": 52795,
+      "n_scored": 52795,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52128
+    },
+    "50": {
+      "n_rows": 55153,
+      "n_scored": 55153,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51696
+    },
+    "54": {
+      "n_rows": 55585,
+      "n_scored": 55585,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "55": {
+      "n_rows": 55753,
+      "n_scored": 55753,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "56": {
+      "n_rows": 53416,
+      "n_scored": 53416,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51120
+    },
+    "57": {
+      "n_rows": 55009,
+      "n_scored": 55009,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "58": {
+      "n_rows": 54433,
+      "n_scored": 54433,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "59": {
+      "n_rows": 54865,
+      "n_scored": 54865,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52128
+    },
+    "6": {
+      "n_rows": 54865,
+      "n_scored": 54865,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "60": {
+      "n_rows": 54433,
+      "n_scored": 54433,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51984
+    },
+    "61": {
+      "n_rows": 55585,
+      "n_scored": 55585,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "62": {
+      "n_rows": 53448,
+      "n_scored": 53448,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52416
+    },
+    "63": {
+      "n_rows": 54865,
+      "n_scored": 54865,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "64": {
+      "n_rows": 54433,
+      "n_scored": 54433,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "65": {
+      "n_rows": 55918,
+      "n_scored": 55918,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "66": {
+      "n_rows": 53503,
+      "n_scored": 53503,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51696
+    },
+    "67": {
+      "n_rows": 61489,
+      "n_scored": 61489,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "70": {
+      "n_rows": 56038,
+      "n_scored": 56038,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "75": {
+      "n_rows": 56161,
+      "n_scored": 56161,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "76": {
+      "n_rows": 52086,
+      "n_scored": 52086,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51264
+    },
+    "78": {
+      "n_rows": 53146,
+      "n_scored": 53146,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "79": {
+      "n_rows": 53281,
+      "n_scored": 53281,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "8": {
+      "n_rows": 54802,
+      "n_scored": 54802,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "80": {
+      "n_rows": 54913,
+      "n_scored": 54913,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "81": {
+      "n_rows": 53932,
+      "n_scored": 53932,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "85": {
+      "n_rows": 52417,
+      "n_scored": 52417,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 50832
+    },
+    "88": {
+      "n_rows": 55441,
+      "n_scored": 55441,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "89": {
+      "n_rows": 54577,
+      "n_scored": 54577,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51840
+    },
+    "9": {
+      "n_rows": 56029,
+      "n_scored": 56029,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "90": {
+      "n_rows": 54880,
+      "n_scored": 54880,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "91": {
+      "n_rows": 56608,
+      "n_scored": 56608,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "93": {
+      "n_rows": 55873,
+      "n_scored": 55873,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52560
+    },
+    "94": {
+      "n_rows": 54865,
+      "n_scored": 54865,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52128
+    }
+  },
+  "evidence_written": [
+    "fit_provenance.json",
+    "artifact_manifest.json",
+    "freeze_receipt.json"
+  ],
+  "evidence_still_needed": [
+    "signal_map.json (already supplied via --signal-map)"
+  ],
+  "generated_at_utc": "2026-08-15T11:52:10.711090+00:00",
+  "cli_invocation": "scripts\\base_scorer_md2022.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6 --farm Wind Farm C --signal-map .\\signal_map_out\\signal_map_Wind_Farm_C.json --output-dir .\\scores_MD_2022_run2 --evidence-dir .\\evidence_MD_2022_run2"
+}

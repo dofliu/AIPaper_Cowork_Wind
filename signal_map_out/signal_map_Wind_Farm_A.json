@@ -1,4 +1,18 @@
 {
+  "active_power": {
+    "column": "power_30_avg",
+    "unit": "kW",
+    "_source": "feature_description.csv",
+    "_sensor_name": "power_30",
+    "_description": "Grid power",
+    "_matched_rule": "grid_power",
+    "_all_columns_for_this_sensor": [
+      "power_30_max",
+      "power_30_std",
+      "power_30_min",
+      "power_30_avg"
+    ]
+  },
   "rotor_speed": {
     "column": "sensor_52_avg",
     "unit": "rpm",
@@ -13,21 +27,9 @@
       "sensor_52_max"
     ]
   },
-  "main_bearing_temperature": {
-    "column": "sensor_11_avg",
-    "unit": "�C",
-    "_source": "feature_description.csv",
-    "_sensor_name": "sensor_11",
-    "_description": "Temperature in gearbox bearing on high speed shaft",
-    "_matched_rule": "shaft_bearing_temp",
-    "_all_columns_for_this_sensor": [
-      "sensor_11_avg",
-      "sensor_11"
-    ]
-  },
   "pitch_angle": {
     "column": "sensor_5_avg",
-    "unit": "�",
+    "unit": "deg",
     "_source": "feature_description.csv",
     "_sensor_name": "sensor_5",
     "_description": "Pitch angle",
@@ -37,11 +39,12 @@
       "sensor_5_min",
       "sensor_5_std",
       "sensor_5_avg"
-    ]
+    ],
+    "_unit_source": "operator --unit-override (was 'UNREADABLE_IN_SOURCE')"
   },
   "ambient_temperature": {
     "column": "sensor_0_avg",
-    "unit": "�C",
+    "unit": "degC",
     "_source": "feature_description.csv",
     "_sensor_name": "sensor_0",
     "_description": "Ambient temperature",
@@ -49,6 +52,19 @@
     "_all_columns_for_this_sensor": [
       "sensor_0_avg",
       "sensor_0"
-    ]
+    ],
+    "_unit_source": "operator --unit-override (was 'UNREADABLE_IN_SOURCE')"
+  },
+  "wind_speed": {
+    "column": "wind_speed_3_avg",
+    "unit": "m/s",
+    "_source": "operator --header-override (not in feature_description.csv)"
+  },
+  "main_bearing_temperature": {
+    "not_available": true,
+    "reason": "Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components.",
+    "ratified_by": "劉老師",
+    "ratified_on": "2026-08-15",
+    "_source": "operator --not-available"
   }
 }

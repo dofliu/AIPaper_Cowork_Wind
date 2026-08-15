@@ -1,0 +1,11 @@
+{
+  "environment": {
+    "python": "3.12.5",
+    "os": "win32",
+    "note": "set OMP_NUM_THREADS=1 etc before both runs per the C5 protocol"
+  },
+  "seed": "not applicable - closed-form estimator, no randomness",
+  "config_sha256": "2186dce1c654e7574550d54d77ae336e27a4fd6a51d7c5c0112d0062b6822e7c",
+  "artifact_sha256": "523cf673a86c609e27435af777bfbbffdc1a43bbeb9be85571120abe892989c2",
+  "run_started_at": "2026-08-15T11:52:10.711090+00:00"
+}

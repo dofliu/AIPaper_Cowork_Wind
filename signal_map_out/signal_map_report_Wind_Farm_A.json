@@ -2,23 +2,23 @@
   "farm": "Wind Farm A",
   "n_dictionary_entries": 54,
   "signals_resolved": [
+    "active_power",
     "ambient_temperature",
     "main_bearing_temperature",
     "pitch_angle",
-    "rotor_speed"
-  ],
-  "signals_unresolved": [
-    "active_power",
+    "rotor_speed",
     "wind_speed"
   ],
+  "signals_unresolved": [],
   "per_signal": {
     "active_power": {
-      "n_candidates": 12,
+      "n_candidates": 2,
       "candidates": [
         {
           "sensor_name": "power_29",
           "description": "Possible grid active power",
           "unit": "kW",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "maximum,std_dev,average,minimum",
           "columns": [
@@ -28,166 +28,35 @@
             "power_29_min"
           ],
           "matched_rule": "active_power_phrase",
-          "rule_priority": 2
+          "rule_priority": 2,
+          "is_capability_estimate": true
         },
         {
-          "sensor_name": "reactive_power_27",
-          "description": "Possible grid capacitive reactive power",
-          "unit": "kVAr",
+          "sensor_name": "power_30",
+          "description": "Grid power",
+          "unit": "kW",
+          "_unit_raw_in_source": null,
           "is_angle": false,
-          "statistics_type": "average,maximum,minimum,std_dev",
+          "statistics_type": "maximum,std_dev,minimum,average",
           "columns": [
-            "reactive_power_27_avg",
-            "reactive_power_27_max",
-            "reactive_power_27_min",
-            "reactive_power_27_std"
+            "power_30_max",
+            "power_30_std",
+            "power_30_min",
+            "power_30_avg"
           ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "reactive_power_28",
-          "description": "Possible grid inductive reactive power",
-          "unit": "kVAr",
-          "is_angle": false,
-          "statistics_type": "average,maximum,minimum,std_dev",
-          "columns": [
-            "reactive_power_28_avg",
-            "reactive_power_28_max",
-            "reactive_power_28_min",
-            "reactive_power_28_std"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "sensor_31",
-          "description": "Grid reactive power",
-          "unit": "kVAr",
-          "is_angle": false,
-          "statistics_type": "average,maximum,minimum,std_dev",
-          "columns": [
-            "sensor_31_avg",
-            "sensor_31_max",
-            "sensor_31_min",
-            "sensor_31_std"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "sensor_44",
-          "description": "Active power - generator disconnected",
-          "unit": "Wh",
-          "is_angle": false,
-          "statistics_type": "average",
-          "columns": [
-            "sensor_44_avg",
-            "sensor_44"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "sensor_45",
-          "description": "Active power - generator connected in delta",
-          "unit": "Wh",
-          "is_angle": false,
-          "statistics_type": "average",
-          "columns": [
-            "sensor_45_avg",
-            "sensor_45"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "sensor_46",
-          "description": "Active power - generator connected in star",
-          "unit": "Wh",
-          "is_angle": false,
-          "statistics_type": "average",
-          "columns": [
-            "sensor_46_avg",
-            "sensor_46"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "sensor_47",
-          "description": "Reactive power - generator disconnected",
-          "unit": "VArh",
-          "is_angle": false,
-          "statistics_type": "average",
-          "columns": [
-            "sensor_47_avg",
-            "sensor_47"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "sensor_48",
-          "description": "Reactive power - generator connected in delta",
-          "unit": "VArh",
-          "is_angle": false,
-          "statistics_type": "average",
-          "columns": [
-            "sensor_48_avg",
-            "sensor_48"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "sensor_49",
-          "description": "Reactive power - generator connected in star",
-          "unit": "VArh",
-          "is_angle": false,
-          "statistics_type": "average",
-          "columns": [
-            "sensor_49_avg",
-            "sensor_49"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "sensor_50",
-          "description": "Total active power",
-          "unit": "Wh",
-          "is_angle": false,
-          "statistics_type": "average",
-          "columns": [
-            "sensor_50_avg",
-            "sensor_50"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "sensor_51",
-          "description": "Total reactive power",
-          "unit": "VArh",
-          "is_angle": false,
-          "statistics_type": "average",
-          "columns": [
-            "sensor_51_avg",
-            "sensor_51"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
+          "matched_rule": "grid_power",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         }
       ],
-      "problem": "12 channels tie at rule 'active_power_phrase' (power_29, reactive_power_27, reactive_power_28, sensor_31, sensor_44, sensor_45, sensor_46, sensor_47, sensor_48, sensor_49, sensor_50, sensor_51) -- a human must choose",
-      "hint": "Active power and wind speed already carry semantic column names in CARE v6 (power_<n>_*, wind_speed_<n>_*). If the dictionary has no sensor_<n> entry for them, read the column name straight from the case-file header instead."
+      "problem": null
     },
     "wind_speed": {
       "n_candidates": 0,
       "candidates": [],
       "problem": "no channel in the dictionary matched this signal",
-      "hint": "Active power and wind speed already carry semantic column names in CARE v6 (power_<n>_*, wind_speed_<n>_*). If the dictionary has no sensor_<n> entry for them, read the column name straight from the case-file header instead."
+      "hint": "Active power and wind speed already carry semantic column names in CARE v6 (power_<n>_*, wind_speed_<n>_*). If the dictionary has no sensor_<n> entry for them, read the column name straight from the case-file header instead.",
+      "overridden_by_operator": "wind_speed_3_avg"
     },
     "rotor_speed": {
       "n_candidates": 1,
@@ -196,6 +65,7 @@
           "sensor_name": "sensor_52",
           "description": "Rotor rpm",
           "unit": "rpm",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "minimum,average,std_dev,maximum",
           "columns": [
@@ -205,7 +75,8 @@
             "sensor_52_max"
           ],
           "matched_rule": "rotor_rpm",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         }
       ],
       "problem": null
@@ -216,44 +87,51 @@
         {
           "sensor_name": "sensor_11",
           "description": "Temperature in gearbox bearing on high speed shaft",
-          "unit": "�C",
+          "unit": "UNREADABLE_IN_SOURCE",
+          "_unit_raw_in_source": "�C",
           "is_angle": false,
           "statistics_type": "average",
           "columns": [
             "sensor_11_avg",
             "sensor_11"
           ],
-          "matched_rule": "shaft_bearing_temp",
-          "rule_priority": 2
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_13",
           "description": "Temperature in generator bearing 2 (Drive End)",
-          "unit": "�C",
+          "unit": "UNREADABLE_IN_SOURCE",
+          "_unit_raw_in_source": "�C",
           "is_angle": false,
           "statistics_type": "average",
           "columns": [
             "sensor_13_avg",
             "sensor_13"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_14",
           "description": "Temperature in generator bearing 1 (Non-Drive End)",
-          "unit": "�C",
+          "unit": "UNREADABLE_IN_SOURCE",
+          "_unit_raw_in_source": "�C",
           "is_angle": false,
           "statistics_type": "average",
           "columns": [
             "sensor_14_avg",
             "sensor_14"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         }
       ],
-      "problem": null
+      "problem": "no exact match; 3 substitute channel(s) found via 'SUBSTITUTE_other_bearing_temp', which identify a DIFFERENT component and must be accepted explicitly or rejected: sensor_11 = 'Temperature in gearbox bearing on high speed shaft'; sensor_13 = 'Temperature in generator bearing 2 (Drive End)'; sensor_14 = 'Temperature in generator bearing 1 (Non-Drive End)'",
+      "declared_not_available": "Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components."
     },
     "pitch_angle": {
       "n_candidates": 1,
@@ -261,7 +139,8 @@
         {
           "sensor_name": "sensor_5",
           "description": "Pitch angle",
-          "unit": "�",
+          "unit": "UNREADABLE_IN_SOURCE",
+          "_unit_raw_in_source": "�",
           "is_angle": true,
           "statistics_type": "maximum,minimum,std_dev,average",
           "columns": [
@@ -271,10 +150,12 @@
             "sensor_5_avg"
           ],
           "matched_rule": "exact_pitch_angle",
-          "rule_priority": 0
+          "rule_priority": 0,
+          "is_capability_estimate": false
         }
       ],
-      "problem": null
+      "problem": null,
+      "unit_overridden_by_operator": "deg"
     },
     "ambient_temperature": {
       "n_candidates": 1,
@@ -282,7 +163,8 @@
         {
           "sensor_name": "sensor_0",
           "description": "Ambient temperature",
-          "unit": "�C",
+          "unit": "UNREADABLE_IN_SOURCE",
+          "_unit_raw_in_source": "�C",
           "is_angle": false,
           "statistics_type": "average",
           "columns": [
@@ -290,33 +172,14 @@
             "sensor_0"
           ],
           "matched_rule": "exact_ambient_temp",
-          "rule_priority": 0
+          "rule_priority": 0,
+          "is_capability_estimate": false
         }
       ],
-      "problem": null
+      "problem": null,
+      "unit_overridden_by_operator": "degC"
     }
   },
-  "cross_validation_vs_profiler": {
-    "rotor_speed": {
-      "dictionary": "sensor_52_avg",
-      "profiler_guess": "sensor_15_avg",
-      "agree": false
-    },
-    "ambient_temperature": {
-      "dictionary": "sensor_0_avg",
-      "profiler_guess": "sensor_0_avg",
-      "agree": true
-    },
-    "main_bearing_temperature": {
-      "dictionary": "sensor_11_avg",
-      "profiler_guess": "sensor_7_avg",
-      "agree": false
-    },
-    "pitch_angle": {
-      "dictionary": "sensor_5_avg",
-      "profiler_guess": "sensor_5_std",
-      "agree": true
-    }
-  },
+  "cross_validation_vs_profiler": {},
   "note": "Entries marked with a leading underscore are provenance, not C0 fields. Units come from the dictionary verbatim -- check them before use; a mangled degree sign means the source file is not UTF-8."
 }

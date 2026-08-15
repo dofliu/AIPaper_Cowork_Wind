@@ -1,97 +1,46 @@
 {
-  "generated_at_utc": "2026-08-15T02:20:01.583458+00:00",
+  "generated_at_utc": "2026-08-15T10:16:31.959252+00:00",
   "source": "CARE v6 feature_description.csv (archive ground truth)",
   "farms": {
     "Wind Farm A": {
       "n_dictionary_entries": 54,
       "resolved": {
+        "active_power": "power_30_avg",
         "ambient_temperature": "sensor_0_avg",
-        "main_bearing_temperature": "sensor_11_avg",
+        "main_bearing_temperature": "NOT AVAILABLE (ratified)",
         "pitch_angle": "sensor_5_avg",
-        "rotor_speed": "sensor_52_avg"
+        "rotor_speed": "sensor_52_avg",
+        "wind_speed": "wind_speed_3_avg"
       },
-      "unresolved": [
-        "active_power",
-        "wind_speed"
-      ],
-      "cross_validation": {
-        "rotor_speed": {
-          "dictionary": "sensor_52_avg",
-          "profiler_guess": "sensor_15_avg",
-          "agree": false
-        },
-        "ambient_temperature": {
-          "dictionary": "sensor_0_avg",
-          "profiler_guess": "sensor_0_avg",
-          "agree": true
-        },
-        "main_bearing_temperature": {
-          "dictionary": "sensor_11_avg",
-          "profiler_guess": "sensor_7_avg",
-          "agree": false
-        },
-        "pitch_angle": {
-          "dictionary": "sensor_5_avg",
-          "profiler_guess": "sensor_5_std",
-          "agree": true
-        }
-      }
+      "unresolved": [],
+      "cross_validation": {}
     },
     "Wind Farm B": {
       "n_dictionary_entries": 63,
       "resolved": {
         "active_power": "power_62_avg",
         "ambient_temperature": "sensor_8_avg",
+        "main_bearing_temperature": "mean(sensor_51_avg, sensor_52_avg)",
         "pitch_angle": "sensor_10_avg",
         "rotor_speed": "sensor_25_avg",
         "wind_speed": "wind_speed_61_avg"
       },
-      "unresolved": [
-        "main_bearing_temperature"
-      ],
-      "cross_validation": {
-        "rotor_speed": {
-          "dictionary": "sensor_25_avg",
-          "profiler_guess": "sensor_6_avg",
-          "agree": false
-        },
-        "ambient_temperature": {
-          "dictionary": "sensor_8_avg",
-          "profiler_guess": "sensor_22_avg",
-          "agree": false
-        },
-        "pitch_angle": {
-          "dictionary": "sensor_10_avg",
-          "profiler_guess": "sensor_54_min",
-          "agree": false
-        }
-      }
+      "unresolved": [],
+      "cross_validation": {}
     },
     "Wind Farm C": {
       "n_dictionary_entries": 238,
       "resolved": {
+        "active_power": "power_6_avg",
         "ambient_temperature": "sensor_7_avg",
-        "pitch_angle": "sensor_76_avg"
+        "main_bearing_temperature": "mean(sensor_194_avg, sensor_195_avg, sensor_196_avg, sensor_197_avg, sensor_198_avg)",
+        "pitch_angle": "mean(sensor_103_avg, sensor_104_avg, sensor_105_avg)",
+        "rotor_speed": "mean(sensor_144_avg, sensor_145_avg, sensor_146_avg, sensor_147_avg)",
+        "wind_speed": "wind_speed_236_avg"
       },
-      "unresolved": [
-        "active_power",
-        "wind_speed",
-        "rotor_speed",
-        "main_bearing_temperature"
-      ],
-      "cross_validation": {
-        "ambient_temperature": {
-          "dictionary": "sensor_7_avg",
-          "profiler_guess": "sensor_39_avg",
-          "agree": false
-        },
-        "pitch_angle": {
-          "dictionary": "sensor_76_avg",
-          "profiler_guess": "sensor_1_std",
-          "agree": false
-        }
-      }
+      "unresolved": [],
+      "cross_validation": {}
     }
   },
-  "cli_invocation": "scripts\\care_v6_signal_map_builder.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6 --output-dir .\\signal_map_out --profiles-dir .\\sensor_profile_out"
+  "cli_invocation": "scripts\\care_v6_signal_map_builder.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6 --output-dir .\\signal_map_out --average-ties --pick C:active_power=power_6 --pick C:wind_speed=wind_speed_236 --header-override A:wind_speed=wind_speed_3_avg --override-unit m/s --unit-override A:ambient_temperature=degC --unit-override A:pitch_angle=deg --unit-override B:pitch_angle=deg --unit-override B:ambient_temperature=degC --unit-override B:main_bearing_temperature=degC --not-available A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components. --ratified-by 劉老師 --ratified-on 2026-08-15"
 }
