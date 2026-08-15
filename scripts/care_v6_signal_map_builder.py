@@ -472,8 +472,12 @@ def run(args):
                 mark = "" if agree is None else ("  [profiler agrees]" if agree
                                                  else "  [profiler DISAGREED: %s]"
                                                  % cross[signal]["profiler_guess"])
+                # An operator override carries no dictionary description, since
+                # by definition the dictionary did not name the signal.
+                description = m.get("_description") or m.get("_source") or ""
                 print("  %-26s %-16s %-8s %s%s"
-                      % (signal, m["column"], m["unit"], m["_description"], mark))
+                      % (signal, m.get("column", "?"), m.get("unit", "?"),
+                         description, mark))
             else:
                 extra = ""
                 if signal in ("active_power", "wind_speed"):
