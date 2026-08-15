@@ -390,4 +390,78 @@ $LASTEXITCODE
 
 ---
 
+
+---
+
+## Phase 5 — 產生實驗數字
+
+前四個 Phase 產出的是**閘門證據**，不是實驗結果。這個 Phase 才開始有數字。
+
+### 5.0 先確認前置
+
+| 前置 | 狀態 |
+|---|---|
+| D0 | ✅ 2026-08-15 關閉 |
+| 三份 signal map | Phase 2，含 Farm A 的 `not_available` 區塊 |
+| 單位一致 | 見 5.1 |
+| score stream ×2 runs | Phase 3，**這是最大的一塊** |
+| C0–C6 | Phase 4，兩個 scorer 各一份 |
+
+**C0–C6 未通過之前不要跑 Phase 5。** 閘門存在的意義就是擋在這裡。
+
+### 5.1 單位確認（五分鐘，但別跳過）
+
+三個風場的單位標示不一致：
+
+| 訊號 | Farm A | Farm B | Farm C |
+|---|---|---|---|
+| 溫度 | `°C` | `°C` | `Celsius` |
+| 轉速 | `rpm` | `rpm` | `1/min` |
+
+字面不同、實質應該相同。但**只要有一個其實不同**，Mahalanobis 的共變異數就會被靜靜地扭曲——不會報錯，只會給出錯的分數。
+
+確認方式：對每個風場的溫度欄取 p01 與 p99，看數值範圍是否落在同一個物理區間（環境溫度 −20~45、主軸承 5~90）。轉速同理。範圍對得上就沒事，記錄下來即可。
+
+### 5.2 執行基線
+
+C0–C6 通過後，基線可以立刻跑，不需要等我們自己的方法。
+
+**W1-ACAS**（R17 認定的最近外部競品）：
+
+```powershell
+python scripts\baseline_w1_acas.py --score-dir .\scores_MD_2022_run1 --output-dir .\w1acas_MD_2022 --score-col <分數欄> --timestamp-col <時間欄>
+```
+
+`--max-past` 已凍結為 1440（對齊 W = 1440 步），不要改。
+
+**ACI / DtACI / static split conformal**：
+
+```powershell
+python scripts\baselines_online_calibration.py --score-dir .\scores_MD_2022_run1 --output-dir .\baselines_MD_2022_a001 --score-col <分數欄> --timestamp-col <時間欄> --alpha 0.01 --methods static_split_conformal,aci,dtaci
+```
+
+**α 要跑三次**：0.01（主要）、0.05、0.001，輸出到不同目錄。這三個值來自已簽核的參數協定，不是掃描。
+
+每個 scorer 各跑一輪：MD_2022 三個風場、MainBearing_2026 僅 Farm B/C（D5 範圍裁決）。
+
+### 5.3 回傳什麼
+
+- `w1acas_*/w1acas_summary.json`
+- `baselines_*/baselines_summary.json`（三個 α 各一份）
+- **不要**回傳每案的逐列 CSV，那會很大；需要時再針對特定 case 要
+
+### 5.4 兩件尚未就緒的事（誠實記錄）
+
+**（一）我們自己的方法還沒實作。** 目前有的是基線：static split conformal、ACI、DtACI、W1-ACAS。論文的貢獻——運轉區間條件校準層——尚未寫成程式。基線先跑不浪費（它們是獨立的對照組），但**完整比較要等該層實作完成**。
+
+**（二）CARE 原始 adaptive threshold 缺席。** 它在評估契約的基線清單裡，但其定義在 CARE 論文中，本專案尚未讀取。archive 的 README.txt 可能有，但沒人萃取過。
+
+```powershell
+python scripts\baselines_online_calibration.py --list-missing
+```
+
+會把這個缺席以機器可讀形式印出來。**猜測競品的方法再贏過它，比沒有這個基線更糟。** 解法是先從 CARE 論文或 README 萃取定義、逐字記入 Drive 文件，再依該文字實作。
+
+---
+
 *對應 gate 版本：`c0c6-gate-v2.0`。手冊有更新時會同步改版本號。*

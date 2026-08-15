@@ -55,10 +55,12 @@ USAGE
         --output-dir ./w1acas_MD_2022 \\
         --score-col  anomaly_score \\
         --timestamp-col timestamp \\
-        [--alpha-c 0.01] [--batch-size 10] [--lr 0.001] [--max-past 1000]
+        [--alpha-c 0.01] [--batch-size 10] [--lr 0.001] [--max-past 1440]
 
 Defaults follow the paper's experimental section: alpha_c = 0.01,
-n_b = 10, gamma = 0.001, ADAM.
+n_b = 10, gamma = 0.001, ADAM. The one value not from the paper is
+--max-past, frozen at 1440 by PI decision 2026-08-15 so the buffer spans
+the same horizon as the project's signed-off rolling window W.
 
 Output per case: timestamp, score, beta — beta being the adaptive p-value,
 directly comparable to an alarm rate. Alarm when beta < alpha.
@@ -287,9 +289,12 @@ def main():
                     help="Critical false alarm rate; also the p-value resolution floor")
     ap.add_argument("--batch-size", type=int, default=DEFAULT_BATCH)
     ap.add_argument("--lr", type=float, default=DEFAULT_LR)
-    ap.add_argument("--max-past", type=int, default=1000,
-                    help="Past-score buffer. Cost is O(buffer) per step, so this "
-                         "trades runtime against how far back the weights can look.")
+    ap.add_argument("--max-past", type=int, default=1440,
+                    help="Past-score buffer, frozen at 1440 by PI decision "
+                         "2026-08-15 to match the signed-off rolling window "
+                         "W = 1440 steps (~10 days at 10-minute sampling). Cost is "
+                         "O(buffer) per step. Changing it changes a frozen "
+                         "parameter and must be ratified.")
     args = ap.parse_args()
 
     if not os.path.isdir(args.score_dir):
