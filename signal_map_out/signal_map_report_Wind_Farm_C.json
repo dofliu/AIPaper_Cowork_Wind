@@ -12,6 +12,7 @@
   "signals_unresolved": [],
   "per_signal": {
     "active_power": {
+      "excluded_by_operator": [],
       "n_candidates": 6,
       "candidates": [
         {
@@ -120,6 +121,7 @@
       "problem": null
     },
     "wind_speed": {
+      "excluded_by_operator": [],
       "n_candidates": 3,
       "candidates": [
         {
@@ -177,7 +179,17 @@
       "problem": null
     },
     "rotor_speed": {
-      "n_candidates": 5,
+      "excluded_by_operator": [
+        {
+          "sensor_name": "sensor_146",
+          "description": "Rotor speed gearbox main shaft 1"
+        },
+        {
+          "sensor_name": "sensor_147",
+          "description": "Rotor speed gearbox main shaft 2"
+        }
+      ],
+      "n_candidates": 3,
       "candidates": [
         {
           "sensor_name": "sensor_144",
@@ -214,40 +226,6 @@
           "is_capability_estimate": false
         },
         {
-          "sensor_name": "sensor_146",
-          "description": "Rotor speed gearbox main shaft 1",
-          "unit": "1/min",
-          "_unit_raw_in_source": null,
-          "is_angle": false,
-          "statistics_type": "minimum,std_dev,maximum,average",
-          "columns": [
-            "sensor_146_min",
-            "sensor_146_std",
-            "sensor_146_max",
-            "sensor_146_avg"
-          ],
-          "matched_rule": "rotor_rpm",
-          "rule_priority": 1,
-          "is_capability_estimate": false
-        },
-        {
-          "sensor_name": "sensor_147",
-          "description": "Rotor speed gearbox main shaft 2",
-          "unit": "1/min",
-          "_unit_raw_in_source": null,
-          "is_angle": false,
-          "statistics_type": "maximum,minimum,std_dev,average",
-          "columns": [
-            "sensor_147_max",
-            "sensor_147_min",
-            "sensor_147_std",
-            "sensor_147_avg"
-          ],
-          "matched_rule": "rotor_rpm",
-          "rule_priority": 1,
-          "is_capability_estimate": false
-        },
-        {
           "sensor_name": "sensor_8",
           "description": "Generator angle speed",
           "unit": "rad/s",
@@ -268,6 +246,7 @@
       "problem": null
     },
     "main_bearing_temperature": {
+      "excluded_by_operator": [],
       "n_candidates": 23,
       "candidates": [
         {
@@ -665,6 +644,7 @@
       "problem": null
     },
     "pitch_angle": {
+      "excluded_by_operator": [],
       "n_candidates": 5,
       "candidates": [
         {
@@ -756,6 +736,7 @@
       "problem": null
     },
     "ambient_temperature": {
+      "excluded_by_operator": [],
       "n_candidates": 4,
       "candidates": [
         {

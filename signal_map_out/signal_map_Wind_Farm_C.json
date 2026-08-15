@@ -30,12 +30,10 @@
   "rotor_speed": {
     "derived_from": [
       "sensor_144_avg",
-      "sensor_145_avg",
-      "sensor_146_avg",
-      "sensor_147_avg"
+      "sensor_145_avg"
     ],
     "unit": "1/min",
-    "derivation": "arithmetic mean of 4 redundant channels measuring the same quantity (PI decision 2026-08-15)",
+    "derivation": "arithmetic mean of 2 redundant channels measuring the same quantity (PI decision 2026-08-15)",
     "_source": "feature_description.csv",
     "_matched_rule": "rotor_rpm",
     "_members": [
@@ -46,14 +44,6 @@
       {
         "sensor_name": "sensor_145",
         "description": "Rotor speed 2"
-      },
-      {
-        "sensor_name": "sensor_146",
-        "description": "Rotor speed gearbox main shaft 1"
-      },
-      {
-        "sensor_name": "sensor_147",
-        "description": "Rotor speed gearbox main shaft 2"
       }
     ]
   },

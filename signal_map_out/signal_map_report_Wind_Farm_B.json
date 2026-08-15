@@ -12,6 +12,7 @@
   "signals_unresolved": [],
   "per_signal": {
     "active_power": {
+      "excluded_by_operator": [],
       "n_candidates": 1,
       "candidates": [
         {
@@ -35,6 +36,7 @@
       "problem": null
     },
     "wind_speed": {
+      "excluded_by_operator": [],
       "n_candidates": 4,
       "candidates": [
         {
@@ -109,6 +111,7 @@
       "problem": null
     },
     "rotor_speed": {
+      "excluded_by_operator": [],
       "n_candidates": 1,
       "candidates": [
         {
@@ -132,6 +135,7 @@
       "problem": null
     },
     "main_bearing_temperature": {
+      "excluded_by_operator": [],
       "n_candidates": 8,
       "candidates": [
         {
@@ -275,6 +279,7 @@
       "unit_overridden_by_operator": "degC"
     },
     "pitch_angle": {
+      "excluded_by_operator": [],
       "n_candidates": 1,
       "candidates": [
         {
@@ -299,6 +304,7 @@
       "unit_overridden_by_operator": "deg"
     },
     "ambient_temperature": {
+      "excluded_by_operator": [],
       "n_candidates": 1,
       "candidates": [
         {

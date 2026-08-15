@@ -12,6 +12,7 @@
   "signals_unresolved": [],
   "per_signal": {
     "active_power": {
+      "excluded_by_operator": [],
       "n_candidates": 2,
       "candidates": [
         {
@@ -52,6 +53,7 @@
       "problem": null
     },
     "wind_speed": {
+      "excluded_by_operator": [],
       "n_candidates": 0,
       "candidates": [],
       "problem": "no channel in the dictionary matched this signal",
@@ -59,6 +61,7 @@
       "overridden_by_operator": "wind_speed_3_avg"
     },
     "rotor_speed": {
+      "excluded_by_operator": [],
       "n_candidates": 1,
       "candidates": [
         {
@@ -82,6 +85,7 @@
       "problem": null
     },
     "main_bearing_temperature": {
+      "excluded_by_operator": [],
       "n_candidates": 3,
       "candidates": [
         {
@@ -134,6 +138,7 @@
       "declared_not_available": "Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components."
     },
     "pitch_angle": {
+      "excluded_by_operator": [],
       "n_candidates": 1,
       "candidates": [
         {
@@ -158,6 +163,7 @@
       "unit_overridden_by_operator": "deg"
     },
     "ambient_temperature": {
+      "excluded_by_operator": [],
       "n_candidates": 1,
       "candidates": [
         {
