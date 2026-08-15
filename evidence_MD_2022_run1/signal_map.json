@@ -1,7 +1,7 @@
 {
   "active_power": {
     "column": "signal_active_power",
-    "unit": "kW",
+    "unit": "p.u.",
     "_derived_from_archive_columns": [
       "power_6_avg"
     ]

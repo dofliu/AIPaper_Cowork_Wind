@@ -45,7 +45,7 @@
   },
   "signal_ranges": {
     "active_power": {
-      "unit_declared": "kW",
+      "unit_declared": "p.u.",
       "n_samples": 42935,
       "p01": -0.004132225806451613,
       "p50": 0.27596129032258065,
@@ -203,6 +203,6 @@
   "evidence_still_needed": [
     "signal_map.json (already supplied via --signal-map)"
   ],
-  "generated_at_utc": "2026-08-15T13:35:30.776684+00:00",
+  "generated_at_utc": "2026-08-15T14:05:19.684962+00:00",
   "cli_invocation": "scripts\\base_scorer_md2022.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare --farm Wind Farm B --signal-map .\\signal_map_out\\signal_map_Wind_Farm_B.json --output-dir .\\scores_MD_2022_run1 --evidence-dir .\\evidence_MD_2022_run1"
 }

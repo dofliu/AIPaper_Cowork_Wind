@@ -118,7 +118,8 @@
           "is_capability_estimate": false
         }
       ],
-      "problem": null
+      "problem": null,
+      "unit_overridden_by_operator": "p.u."
     },
     "wind_speed": {
       "excluded_by_operator": [],
