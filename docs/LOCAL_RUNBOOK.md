@@ -53,7 +53,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：八支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 190 checks。
+**預期**：八支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 201 checks。
 
 | 測試 | checks |
 |---|---|
@@ -64,7 +64,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_regime_conditional.py` | 16 |
 | `selftest_md2022.py` | 23 |
 | `selftest_online_baselines.py` | 13 |
-| `selftest_signal_map_builder.py` | 32 |
+| `selftest_signal_map_builder.py` | 43 |
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。
@@ -641,3 +641,9 @@ MD_2022 的三份佐證已自動產生；Phase 3.0 新增 Base Scorer 1 的完�
 三個風場（`farm` 這個字裡有 a），導致 Farm A 的 `--header-override` 覆蓋掉
 Farm B/C 的風速欄位。未解出的 active_power / wind_speed 現在會直接讀 case
 檔表頭，列出真實欄位與可直接貼上的旗標。*
+
+*v1.1c（2026-08-15）：Farm A 的 `active_power` 原本解到 power_29
+「Possible grid active power」——那是 IEC 61400-24 意義下的**可能發電量**
+（模型值），不是實測。改為實測通道優先，Farm A 轉為 power_30「Grid power」。
+新增 `check_power_channel.py` 供本機核對。修正單位建議對 pitch_angle
+誤建議 degC。*

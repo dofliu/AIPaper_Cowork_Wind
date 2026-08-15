@@ -84,6 +84,9 @@ SIGNAL_RULES = {
         # reactive_power_<n> into the match. Require a word boundary and
         # explicitly refuse a preceding "re".
         ("active_power_phrase", lambda d: bool(ACTIVE_POWER_RE.search(d))),
+        # Farm A calls its measured channel simply "Grid power" (kW). Without
+        # this it matched nothing and the capability channel won by default.
+        ("grid_power", lambda d: "grid power" in d and "reactive" not in d),
     ],
     "wind_speed": [
         ("exact_wind_speed", lambda d: re.fullmatch(r"\s*wind speed\s*", d)),
@@ -135,6 +138,18 @@ EXCLUDE_IF_COUNTER = True
 # carries "Active power - generator connected in delta" in Wh. The unit
 # settles it -- energy is not power.
 ENERGY_UNITS = {"wh", "kwh", "mwh", "varh", "kvarh", "mvarh"}
+
+# A modelled capability, not a measurement. "Possible power" is standard wind
+# availability terminology (IEC 61400-26) for the power a turbine COULD have
+# produced at the current wind -- it is a smooth function of wind speed, so a
+# turbine that is underperforming shows NO deviation in it. That is precisely
+# the anomaly the detector exists to find. Farm A's dictionary offers both
+# "Possible grid active power" and "Grid power"; the phrase rule matched the
+# first. Demote these so a measured channel wins, and refuse to resolve
+# silently to one when it is all that is left.
+CAPABILITY_WORDS = ("possible", "potential", "available", "theoretical",
+                    "estimated", "expected", "reference", "setpoint",
+                    "set point", "demanded", "nominal", "rated")
 POWER_SIGNALS_REJECTING_ENERGY = {"active_power"}
 
 CANDIDATE_DELIMITERS = [";", ",", "\t", "|"]
@@ -161,6 +176,18 @@ def sniff_delimiter(path):
 MOJIBAKE_MARKERS = ("ï¿½", "Â°", "Ã‚", "Ã©", "Ã¤", "Ã¶", "Ã¼")
 
 UNIT_UNREADABLE = "UNREADABLE_IN_SOURCE"
+
+# Only ever a SUGGESTION printed next to a destroyed unit, for the operator to
+# confirm. Temperatures are degC and angles are deg; conflating them is how a
+# wrong unit reaches the C0 map.
+LIKELY_UNIT = {
+    "ambient_temperature": "degC",
+    "main_bearing_temperature": "degC",
+    "pitch_angle": "deg",
+    "rotor_speed": "rpm",
+    "wind_speed": "m/s",
+    "active_power": "kW",
+}
 
 
 def has_mojibake(text):
@@ -285,6 +312,7 @@ def match_signals(entries):
                     # point where dictionary units enter, so the tie comparison
                     # and every downstream write see the same flagged value.
                     unit_value, unit_raw = clean_unit(entry.get("unit"))
+                    lowered = (entry.get("description") or "").lower()
                     found[signal].append({
                         "sensor_name": entry.get("sensor_name"),
                         "description": entry.get("description"),
@@ -297,6 +325,8 @@ def match_signals(entries):
                             parse_stats_types(entry.get("statistics_type"))),
                         "matched_rule": rule_name,
                         "rule_priority": priority,
+                        "is_capability_estimate": any(
+                            w in lowered for w in CAPABILITY_WORDS),
                     })
                     break
     for signal in found:
@@ -391,6 +421,23 @@ def choose(candidates, average_ties=False, pick_sensor=None):
                           % (pick_sensor, "; ".join(_describe(c) for c in candidates)))
         chosen[0] = dict(chosen[0], matched_rule=chosen[0]["matched_rule"] + "+operator_pick")
         return chosen[0], None
+
+    # A measured channel always beats a modelled capability, whatever the rule
+    # order says. If capability channels are ALL that matched, do not resolve
+    # silently -- say so, the way a substitute bearing is said.
+    measured = [c for c in candidates if not c.get("is_capability_estimate")]
+    if measured:
+        candidates = measured
+    elif candidates:
+        return None, ("every candidate is a modelled capability, not a measurement "
+                      "(%s). 'Possible/available power' is what the turbine COULD "
+                      "have produced at this wind, so an underperforming turbine "
+                      "shows no deviation in it. Pick a measured channel with "
+                      "--pick, or declare this signal --not-available: %s"
+                      % (", ".join(sorted({w for c in candidates for w in
+                                           CAPABILITY_WORDS
+                                           if w in (c["description"] or "").lower()})),
+                         "; ".join(_describe(c) for c in candidates)))
 
     best = candidates[0]["rule_priority"]
     tied = [c for c in candidates if c["rule_priority"] == best]
@@ -669,8 +716,12 @@ def run(args):
             print("      unit unreadable in the source file for: %s"
                   % ", ".join(unreadable_units))
             for signal in unreadable_units:
-                print('      --unit-override "%s:%s=degC"   <- confirm the unit'
-                      % (farm.split()[-1], signal))
+                # Do NOT suggest degC for everything. Pitch angle is degrees;
+                # suggesting degC here would have put a wrong unit into the C0
+                # map, in the one place whose entire job is recording units.
+                guess = LIKELY_UNIT.get(signal, "CONFIRM")
+                print('      --unit-override "%s:%s=%s"   <- confirm the unit'
+                      % (farm.split()[-1], signal, guess))
 
     with open(os.path.join(args.output_dir, "signal_map_summary.json"),
               "w", encoding="utf-8") as f:

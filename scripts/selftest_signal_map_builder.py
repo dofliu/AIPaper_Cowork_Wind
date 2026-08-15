@@ -326,6 +326,73 @@ def main():
                   and "wind_speed_236_avg" in proc.stdout,
                   "stdout did not name the per-farm wind columns")
 
+    # ------- T8 a modelled capability is not a measurement -------
+    # Farm A's dictionary carries "Possible grid active power" (kW) and
+    # "Grid power" (kW). "Possible power" is IEC 61400-26 terminology for what
+    # the turbine COULD have produced at this wind: a smooth function of wind
+    # speed, in which an underperforming turbine leaves no trace at all. The
+    # phrase rule matched it and the measured channel matched nothing, so the
+    # single most informative feature in the vector would have been a channel
+    # that cannot express the anomaly.
+    print("\nT8  a modelled capability loses to a measured channel")
+    farm_a_power = entries([
+        ("reactive_power_27", "average", "Possible grid capacitive reactive power",
+         "kVAr", "False"),
+        ("power_29", "average", "Possible grid active power", "kW", "False"),
+        ("power_30", "average", "Grid power", "kW", "False"),
+        ("sensor_31", "average", "Grid reactive power", "kVAr", "False"),
+        ("sensor_50", "average", "Total active power", "Wh", "False"),
+    ])
+    matched = B.match_signals(farm_a_power)
+    names = [c["sensor_name"] for c in matched.get("active_power", [])]
+    check("T8 both power candidates are seen", sorted(names) == ["power_29", "power_30"],
+          "got %s" % names)
+    flags = {c["sensor_name"]: c["is_capability_estimate"]
+             for c in matched.get("active_power", [])}
+    check("T8 'Possible ...' is flagged as a capability", flags.get("power_29") is True)
+    check("T8 'Grid power' is not", flags.get("power_30") is False)
+    pick, problem = B.choose(matched.get("active_power", []), average_ties=True)
+    check("T8 the MEASURED channel wins",
+          pick and pick["sensor_name"] == "power_30",
+          "got %s / %s" % (pick and pick.get("sensor_name"), problem))
+
+    # If a capability channel is all there is, refuse rather than resolve.
+    only_capability = entries([
+        ("power_29", "average", "Possible grid active power", "kW", "False"),
+    ])
+    pick, problem = B.choose(B.match_signals(only_capability).get("active_power", []),
+                             average_ties=True)
+    check("T8 a capability-only signal does not resolve silently", pick is None,
+          "resolved to %s" % (pick or {}).get("sensor_name"))
+    check("T8 and the reason explains why it cannot express the anomaly",
+          problem and "capability" in problem and "underperforming" in problem,
+          "got %s" % (problem or "")[:120])
+
+    # The other farms name their power plainly and must be unaffected.
+    for label, rows, expect in (
+            ("B", [("power_62", "average", "Active power", "kW", "False")], "power_62"),
+            ("C", [("power_6", "average", "Active power HV grid", "kW", "False")],
+             "power_6")):
+        pick, problem = B.choose(
+            B.match_signals(entries(rows)).get("active_power", []), average_ties=True)
+        check("T8 Farm %s still resolves to %s" % (label, expect),
+              pick and pick["sensor_name"] == expect,
+              "got %s / %s" % (pick and pick.get("sensor_name"), problem))
+
+    # ------- T9 the unit suggestion must not be degC for an angle -------
+    # The hint printed next to an unreadable unit hardcoded degC for every
+    # signal. Pasting it for pitch_angle would have written a temperature unit
+    # into the one artifact whose job is recording units.
+    print("\nT9  the unit hint respects the signal's dimension")
+    check("T9 pitch angle is suggested in degrees",
+          B.LIKELY_UNIT.get("pitch_angle") == "deg",
+          "got %r" % B.LIKELY_UNIT.get("pitch_angle"))
+    check("T9 temperatures are suggested in degC",
+          B.LIKELY_UNIT.get("ambient_temperature") == "degC"
+          and B.LIKELY_UNIT.get("main_bearing_temperature") == "degC")
+    check("T9 no angle is ever suggested a temperature unit",
+          not any(u == "degC" for s, u in B.LIKELY_UNIT.items() if "angle" in s))
+
     print("\n%d checks, %d failed" % (checks, len(failures)))
     if failures:
         print("FAILED: %s" % ", ".join(failures))
