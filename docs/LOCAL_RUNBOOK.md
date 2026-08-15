@@ -53,7 +53,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：八支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 171 checks。
+**預期**：八支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 180 checks。
 
 | 測試 | checks |
 |---|---|
@@ -64,7 +64,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_regime_conditional.py` | 16 |
 | `selftest_md2022.py` | 23 |
 | `selftest_online_baselines.py` | 13 |
-| `selftest_signal_map_builder.py` | 13 |
+| `selftest_signal_map_builder.py` | 22 |
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。
@@ -259,7 +259,11 @@ python3 scripts/care_v6_signal_map_builder.py \
   --header-override "A:wind_speed=wind_speed_3_avg" \
   --override-unit  "m/s" \
   --pick "C:active_power=power_6" \
-  --pick "C:wind_speed=wind_speed_236"
+  --pick "C:wind_speed=wind_speed_236" \
+  --unit-override "A:ambient_temperature=degC" \
+  --unit-override "A:pitch_angle=deg" \
+  --not-available "A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components." \
+  --ratified-by "劉老師" --ratified-on "2026-08-15"
 ```
 
 ```powershell
@@ -270,24 +274,31 @@ python scripts\care_v6_signal_map_builder.py `
   --header-override "A:wind_speed=wind_speed_3_avg" `
   --override-unit  "m/s" `
   --pick "C:active_power=power_6" `
-  --pick "C:wind_speed=wind_speed_236"
+  --pick "C:wind_speed=wind_speed_236" `
+  --unit-override "A:ambient_temperature=degC" `
+  --unit-override "A:pitch_angle=deg" `
+  --not-available "A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components." `
+  --ratified-by "劉老師" --ratified-on "2026-08-15"
 ```
 
-**Farm A 沒有主軸承通道。** 這不是缺陷，是該風場的事實——字典裡只有齒輪箱
-與發電機軸承，工具依設計拒絕拿它們冒充。把下面這段貼進
-`signal_map_out/signal_map_Wind_Farm_A.json`，取代
-`main_bearing_temperature` 那一項：
+**兩件事在這道指令裡一起解決了，不需要再手改 JSON。**
 
-```json
-"main_bearing_temperature": {
-  "not_available": true,
-  "reason": "Wind Farm A's feature_description.csv names no main/rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components.",
-  "ratified_by": "劉老師",
-  "ratified_on": "2026-08-15"
-}
-```
+**（一）Farm A 沒有主軸承通道。** 這不是缺陷，是該風場的事實——字典裡只有
+齒輪箱與發電機軸承（三個），工具依設計拒絕拿它們冒充主軸承。
+`--not-available` 會直接寫出 C0 要的 ratified 宣告區塊。
+C0 gate 接受這個宣告；**靜默缺席仍然會 FAIL**，所以不能省。
+（若該訊號其實有解出來，工具會拒絕覆寫並告訴你，除非加
+`--force-not-available`。）
 
-C0 gate 會接受這個宣告；**靜默缺席仍然會 FAIL**，所以這段不能省。
+**（二）Farm A 字典裡的度數符號是壞的。** 這不是我們讀錯編碼——
+**檔案裡的位元組本身就已經被破壞了**，存的是 U+FFFD 的 UTF-8 位元組。
+用 utf-8 讀會得到 U+FFFD，用 cp1252 讀會得到字面上的 `ï¿½`。原字元
+已經救不回來。所以工具現在會把這種單位標成 `UNREADABLE_IN_SOURCE`
+而**不是**假裝它是真的單位寫進 C0 map，再由 `--unit-override` 明確宣告。
+
+> 若你在輸出看到某個單位是 `UNREADABLE_IN_SOURCE` 而上面指令沒涵蓋，
+> 照樣加一條 `--unit-override "風場:訊號=單位"`。單位是 C0 的必要欄位，
+> 而且 Phase 5.1 的單位一致性檢查靠它。
 
 **接著跑評分器。** 每個風場、每個 run 各一次（run1 / run2 是 C5 要的兩次
 獨立執行，不是複製目錄）：
@@ -621,3 +632,7 @@ MD_2022 的三份佐證已自動產生；Phase 3.0 新增 Base Scorer 1 的完�
 佔位符；Phase 5.4 刪去「我們自己的方法還沒實作」——已實作。
 另修正評分器輸出表頭 `wind_speed` 重複的缺陷（md2022-v1.1），並改由評分器
 自動產生 C0 的 signal_map.json。*
+
+*v1.1a（2026-08-15）：修正 signal map builder 在「有訊號取平均」的風場崩潰
+（`KeyError: 'column'`——平均出來的條目帶的是 `derived_from`，沒有 `column`）；
+新增 `--not-available` 與 `--unit-override`，Phase 3.0 不再需要手改 JSON。*

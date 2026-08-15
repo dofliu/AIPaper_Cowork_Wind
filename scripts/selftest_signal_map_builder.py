@@ -158,6 +158,102 @@ def main():
                   written["ambient_temperature"]["unit"] == "°C",
                   "got %r" % written["ambient_temperature"]["unit"])
 
+    # ------- T6 the operator's REAL archive shape, end to end -------
+    # T4's fixture was sanitised: one farm, no averaging, no substitutes. The
+    # operator's archive is not like that, and the tool died on it at the
+    # first farm whose channels actually averaged -- after printing Farm A
+    # and looking healthy. Reproduce the real shape: Farm A with substitutes
+    # only and a destroyed degree sign, Farm B with two rotor bearings that
+    # DO average. Anything less than this is not a test of the run path.
+    print("\nT6  three farms, the shape the real archive actually has")
+    with tempfile.TemporaryDirectory() as root:
+        a = os.path.join(root, "Wind Farm A")
+        b = os.path.join(root, "Wind Farm B")
+        os.makedirs(a)
+        os.makedirs(b)
+        # Farm A: the degree sign is ALREADY DESTROYED in the file -- these
+        # are literally the UTF-8 bytes of U+FFFD, as CARE v6 ships them.
+        with open(os.path.join(a, "feature_description.csv"), "wb") as f:
+            f.write(b"sensor_name;statistics_type;description;unit;is_angle;is_counter\n")
+            f.write(b"sensor_0;average;Ambient temperature;\xef\xbf\xbdC;False;False\n")
+            f.write(b"sensor_52;average;Rotor rpm;rpm;False;False\n")
+            f.write(b"power_29;average;Possible grid active power;kW;False;False\n")
+            f.write(b"sensor_5;average;Pitch angle;\xef\xbf\xbd;True;False\n")
+            f.write(b"sensor_11;average;Temperature in gearbox bearing on high speed shaft;"
+                    b"\xef\xbf\xbdC;False;False\n")
+            f.write(b"sensor_13;average;Temperature in generator bearing 2 (Drive End);"
+                    b"\xef\xbf\xbdC;False;False\n")
+        # Farm B: two genuine rotor bearings -> --average-ties averages them,
+        # producing a derived_from entry with NO "column" key. This is the
+        # exact entry shape that crashed.
+        with open(os.path.join(b, "feature_description.csv"), "w",
+                  encoding="utf-8", newline="") as f:
+            f.write("sensor_name;statistics_type;description;unit;is_angle;is_counter\n")
+            f.write("sensor_51;average;Rotor bearing temperature 1;degC;False;False\n")
+            f.write("sensor_52;average;Rotor bearing temperature 2;degC;False;False\n")
+            f.write("sensor_0;average;Ambient temperature;degC;False;False\n")
+            f.write("sensor_60;average;Rotor rpm;rpm;False;False\n")
+            f.write("power_5;average;Grid active power;kW;False;False\n")
+            f.write("sensor_9;average;Pitch angle;deg;True;False\n")
+        out = os.path.join(root, "out")
+        proc = subprocess.run(
+            [sys.executable, BUILDER, "--workdir", root, "--output-dir", out,
+             "--average-ties",
+             "--header-override", "A:wind_speed=wind_speed_3_avg",
+             "--header-override", "B:wind_speed=wind_speed_61_avg",
+             "--override-unit", "m/s",
+             "--unit-override", "A:ambient_temperature=degC",
+             "--not-available",
+             "A:main_bearing_temperature=Farm A carries no main bearing channel",
+             ],
+            capture_output=True, text=True)
+        check("T6 the builder survives a farm whose channels average",
+              proc.returncode == 0,
+              (proc.stderr or "")[-500:])
+        if proc.returncode == 0:
+            summary = json.load(open(os.path.join(out, "signal_map_summary.json"),
+                                     encoding="utf-8"))
+            check("T6 both farms reach the summary",
+                  sorted(summary["farms"]) == ["Wind Farm A", "Wind Farm B"],
+                  "got %s" % sorted(summary["farms"]))
+            resolved_b = summary["farms"]["Wind Farm B"]["resolved"]
+            check("T6 an averaged signal is labelled, not crashed on",
+                  resolved_b.get("main_bearing_temperature", "").startswith("mean("),
+                  "got %r" % resolved_b.get("main_bearing_temperature"))
+
+            map_b = json.load(open(os.path.join(out, "signal_map_Wind_Farm_B.json"),
+                                   encoding="utf-8"))
+            check("T6 and it really is an average of the two rotor bearings",
+                  sorted(map_b["main_bearing_temperature"]["derived_from"])
+                  == ["sensor_51_avg", "sensor_52_avg"],
+                  "got %s" % map_b["main_bearing_temperature"].get("derived_from"))
+
+            map_a = json.load(open(os.path.join(out, "signal_map_Wind_Farm_A.json"),
+                                   encoding="utf-8"))
+            mb = map_a["main_bearing_temperature"]
+            check("T6 --not-available emits the ratified block C0 requires",
+                  mb.get("not_available") is True and mb.get("reason")
+                  and mb.get("ratified_by") and mb.get("ratified_on"),
+                  "got %s" % mb)
+            check("T6 the summary shows it as declared, not missing",
+                  summary["farms"]["Wind Farm A"]["resolved"]
+                  .get("main_bearing_temperature") == "NOT AVAILABLE (ratified)",
+                  "got %r" % summary["farms"]["Wind Farm A"]["resolved"]
+                  .get("main_bearing_temperature"))
+
+            # The destroyed degree sign must never reach the C0 map as if real.
+            check("T6 a corrupted unit is flagged, not silently recorded",
+                  "UNREADABLE" in map_a["pitch_angle"]["unit"],
+                  "got %r -- this is what shipped as the C0 unit"
+                  % map_a["pitch_angle"]["unit"])
+            check("T6 --unit-override repairs the one the operator declared",
+                  map_a["ambient_temperature"]["unit"] == "degC",
+                  "got %r" % map_a["ambient_temperature"]["unit"])
+            check("T6 no signal map anywhere still carries mojibake",
+                  not any("ï¿½" in json.dumps(json.load(open(
+                      os.path.join(out, n), encoding="utf-8")), ensure_ascii=False)
+                      for n in os.listdir(out) if n.startswith("signal_map_Wind")))
+
     print("\n%d checks, %d failed" % (checks, len(failures)))
     if failures:
         print("FAILED: %s" % ", ".join(failures))
