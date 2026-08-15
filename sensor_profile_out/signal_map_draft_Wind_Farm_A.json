@@ -1,0 +1,58 @@
+{
+  "_status": "CANDIDATE_UNRATIFIED",
+  "_warning": "Auto-proposed from statistical signatures. NOT valid C0 evidence. A human must confirm each column against a CARE data dictionary or physical inspection, replace every unit placeholder with the real unit, and delete this _status/_warning block before passing the file to base_scorer_compatibility_check.py --signal-map.",
+  "_farm": "Wind Farm A",
+  "active_power": {
+    "column": "power_29_avg",
+    "unit": "<CONFIRM: kW or MW>"
+  },
+  "wind_speed": {
+    "column": "wind_speed_3_avg",
+    "unit": "<CONFIRM: m s-1>"
+  },
+  "rotor_speed": {
+    "column": "sensor_15_avg",
+    "unit": "<CONFIRM: rpm>",
+    "_candidate_score": 1.0,
+    "_candidate_evidence": [
+      "non-negative (0.0% negative)",
+      "strong positive corr with wind speed (r=0.85)",
+      "strong positive corr with power (r=0.85)",
+      "p01-p99 range plausible as rotor or generator speed (20.0 to 139.0)"
+    ],
+    "_runner_up": "sensor_16_avg"
+  },
+  "ambient_temperature": {
+    "column": "sensor_0_avg",
+    "unit": "<CONFIRM: degC>",
+    "_candidate_score": 1.0,
+    "_candidate_evidence": [
+      "p01-p99 range plausible for outdoor air (9.0 to 34.0)",
+      "strong annual cycle (r=-0.71 vs cos(day-of-year))",
+      "near-independent of power (r=0.14), as outdoor air should be"
+    ],
+    "_runner_up": "sensor_6_avg"
+  },
+  "main_bearing_temperature": {
+    "column": "sensor_7_avg",
+    "unit": "<CONFIRM: degC>",
+    "_candidate_score": 1.0,
+    "_candidate_evidence": [
+      "p01-p99 range plausible for a lubricated bearing (29.0 to 55.0)",
+      "rises with power in the expected band (r=0.63)",
+      "carries an ambient-driven seasonal component (r=-0.49)",
+      "median 40.0 is 21.0 above the best ambient candidate — consistent with a heated component"
+    ],
+    "_runner_up": "sensor_9_avg"
+  },
+  "pitch_angle": {
+    "column": "sensor_5_std",
+    "unit": "<CONFIRM: deg>",
+    "_candidate_score": 0.55,
+    "_candidate_evidence": [
+      "p01-p99 range plausible for blade pitch (0.0 to 18.6)",
+      "59% of samples sit within +/-0.5 of zero — the classic below-rated fine-pitch mass"
+    ],
+    "_runner_up": "sensor_31_avg"
+  }
+}
