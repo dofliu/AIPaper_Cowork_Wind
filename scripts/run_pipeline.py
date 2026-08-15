@@ -99,17 +99,25 @@ def emit_config(path):
     return 0
 
 
+def columns_for(config, scorer):
+    """Per-scorer column overrides on top of the global block.
+
+    The three farms name their wind channel differently (wind_speed_3_avg,
+    wind_speed_61_avg, wind_speed_236_avg), so a single global name cannot
+    serve a score stream that spans farms. Split the stream per farm, or
+    have the scorer emit one canonical name; either way the override exists
+    so the config can say what is true rather than what is convenient."""
+    merged = dict(config.get("columns", {}))
+    merged.update(scorer.get("columns", {}) or {})
+    return merged
+
+
 def preflight(config):
     """Check everything cheap before anything expensive. Returns a list of
     problems; empty means go."""
     problems = []
     columns = config.get("columns", {})
     paths = config.get("paths", {})
-
-    for key in ("score_col", "wind_col", "timestamp_col"):
-        value = columns.get(key)
-        if not value or "FILL_ME" in str(value):
-            problems.append("columns.%s is not filled in" % key)
 
     for key in ("g3_case_metadata", "event_info_root", "output_root"):
         value = paths.get(key)
@@ -144,6 +152,14 @@ def preflight(config):
         if not files:
             problems.append("scorer %s: no CSVs in %s" % (scorer.get("name"), directory))
             continue
+        cols = columns_for(config, scorer)
+        for key in ("score_col", "wind_col", "timestamp_col"):
+            value = cols.get(key)
+            if not value or "FILL_ME" in str(value):
+                problems.append("scorer %s: columns.%s is not filled in"
+                                % (scorer.get("name"), key))
+        if problems:
+            continue
         with open(files[0], newline="", encoding="utf-8", errors="replace") as f:
             header = next(csv.reader(f), []) or []
         if len(header) <= 2:
@@ -154,10 +170,10 @@ def preflight(config):
                                       len(header)))
             continue
         for key in ("score_col", "wind_col", "timestamp_col"):
-            if columns[key] not in header:
+            if cols[key] not in header:
                 problems.append(
                     "scorer %s: column %r (columns.%s) is not in %s. That file has: %s"
-                    % (scorer.get("name"), columns[key], key,
+                    % (scorer.get("name"), cols[key], key,
                        os.path.basename(files[0]), header[:12]))
     return problems
 
@@ -185,7 +201,6 @@ def run(config, config_path):
     print("preflight OK\n")
 
     py = sys.executable
-    columns = config["columns"]
     paths = config["paths"]
     experiment = config["experiment"]
     out_root = paths["output_root"]
@@ -198,6 +213,7 @@ def run(config, config_path):
 
     for scorer in scorers:
         name, score_dir = scorer["name"], scorer["score_dir"]
+        columns = columns_for(config, scorer)
         print("scorer %s" % name)
 
         # W1-ACAS emits p-values, so it is alpha-independent: run once.
