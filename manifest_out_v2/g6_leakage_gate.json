@@ -1,0 +1,1259 @@
+{
+  "official_train_test_split_found": "column:train_test",
+  "split_columns_by_farm": {
+    "Wind Farm A": [
+      "train_test"
+    ],
+    "Wind Farm B": [
+      "train_test"
+    ],
+    "Wind Farm C": [
+      "train_test"
+    ]
+  },
+  "note_official_split": "Split column detected per farm. This records only that the column EXISTS; its value distribution per case has not been read. Tabulate train/test row counts per case before treating the split as D0 evidence.",
+  "asset_level_overlap_method": "grouped by (farm_id, turbine_id); all pairs compared; overlap measured as min(end) - max(start) on case span timestamps",
+  "n_distinct_assets": 36,
+  "n_assets_in_multiple_cases": 30,
+  "assets_in_multiple_cases": {
+    "Wind Farm A|0": [
+      "0",
+      "24",
+      "26",
+      "71",
+      "73"
+    ],
+    "Wind Farm A|10": [
+      "10",
+      "17",
+      "3",
+      "40",
+      "42"
+    ],
+    "Wind Farm A|11": [
+      "25",
+      "68",
+      "69",
+      "92"
+    ],
+    "Wind Farm A|13": [
+      "14",
+      "38",
+      "45",
+      "84"
+    ],
+    "Wind Farm A|21": [
+      "13",
+      "22",
+      "51",
+      "72"
+    ],
+    "Wind Farm B|11": [
+      "19",
+      "74"
+    ],
+    "Wind Farm B|12": [
+      "77",
+      "86"
+    ],
+    "Wind Farm B|13": [
+      "2",
+      "7"
+    ],
+    "Wind Farm B|14": [
+      "34",
+      "52"
+    ],
+    "Wind Farm B|6": [
+      "23",
+      "53"
+    ],
+    "Wind Farm B|7": [
+      "27",
+      "87"
+    ],
+    "Wind Farm C|12": [
+      "15",
+      "50",
+      "66"
+    ],
+    "Wind Farm C|15": [
+      "64",
+      "78"
+    ],
+    "Wind Farm C|16": [
+      "30",
+      "46",
+      "65",
+      "79"
+    ],
+    "Wind Farm C|2": [
+      "12",
+      "36"
+    ],
+    "Wind Farm C|21": [
+      "47",
+      "62"
+    ],
+    "Wind Farm C|23": [
+      "37",
+      "70",
+      "80"
+    ],
+    "Wind Farm C|32": [
+      "5",
+      "59"
+    ],
+    "Wind Farm C|33": [
+      "41",
+      "49"
+    ],
+    "Wind Farm C|34": [
+      "18",
+      "4",
+      "56",
+      "94"
+    ],
+    "Wind Farm C|35": [
+      "31",
+      "48",
+      "58",
+      "67"
+    ],
+    "Wind Farm C|38": [
+      "6",
+      "81"
+    ],
+    "Wind Farm C|42": [
+      "32",
+      "91"
+    ],
+    "Wind Farm C|43": [
+      "11",
+      "33",
+      "61",
+      "93"
+    ],
+    "Wind Farm C|44": [
+      "44",
+      "75"
+    ],
+    "Wind Farm C|50": [
+      "55",
+      "8"
+    ],
+    "Wind Farm C|52": [
+      "28",
+      "39",
+      "43",
+      "54"
+    ],
+    "Wind Farm C|53": [
+      "1",
+      "16",
+      "20",
+      "35",
+      "60",
+      "76"
+    ],
+    "Wind Farm C|55": [
+      "57",
+      "88",
+      "9"
+    ],
+    "Wind Farm C|56": [
+      "63",
+      "90"
+    ]
+  },
+  "n_asset_level_overlapping_pairs": 108,
+  "n_cross_label_overlapping_pairs": 73,
+  "max_overlap_days": 386.0,
+  "median_overlap_days": 291.44,
+  "asset_level_overlaps": [
+    {
+      "farm": "Wind Farm B",
+      "turbine_id": "7",
+      "case_a": "27",
+      "label_a": "anomaly",
+      "case_b": "87",
+      "label_b": "normal",
+      "overlap_days": 386.0,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "34",
+      "case_a": "4",
+      "label_a": "anomaly",
+      "case_b": "56",
+      "label_b": "normal",
+      "overlap_days": 380.76,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "21",
+      "case_a": "51",
+      "label_a": "anomaly",
+      "case_b": "72",
+      "label_b": "anomaly",
+      "overlap_days": 378.31,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "42",
+      "case_a": "32",
+      "label_a": "normal",
+      "case_b": "91",
+      "label_b": "anomaly",
+      "overlap_days": 369.83,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "43",
+      "case_a": "33",
+      "label_a": "anomaly",
+      "case_b": "93",
+      "label_b": "normal",
+      "overlap_days": 365.12,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "1",
+      "label_a": "normal",
+      "case_b": "35",
+      "label_b": "anomaly",
+      "overlap_days": 364.38,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "35",
+      "case_a": "31",
+      "label_a": "anomaly",
+      "case_b": "67",
+      "label_b": "anomaly",
+      "overlap_days": 363.08,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm B",
+      "turbine_id": "13",
+      "case_a": "2",
+      "label_a": "normal",
+      "case_b": "7",
+      "label_b": "anomaly",
+      "overlap_days": 362.19,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "12",
+      "case_a": "15",
+      "label_a": "anomaly",
+      "case_b": "66",
+      "label_b": "anomaly",
+      "overlap_days": 359.54,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "38",
+      "case_a": "6",
+      "label_a": "normal",
+      "case_b": "81",
+      "label_b": "anomaly",
+      "overlap_days": 357.63,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm B",
+      "turbine_id": "11",
+      "case_a": "19",
+      "label_a": "anomaly",
+      "case_b": "74",
+      "label_b": "normal",
+      "overlap_days": 355.29,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "32",
+      "case_a": "5",
+      "label_a": "anomaly",
+      "case_b": "59",
+      "label_b": "normal",
+      "overlap_days": 354.62,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm B",
+      "turbine_id": "12",
+      "case_a": "77",
+      "label_a": "anomaly",
+      "case_b": "86",
+      "label_b": "normal",
+      "overlap_days": 354.05,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "10",
+      "case_a": "10",
+      "label_a": "anomaly",
+      "case_b": "17",
+      "label_b": "normal",
+      "overlap_days": 351.72,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "34",
+      "case_a": "18",
+      "label_a": "anomaly",
+      "case_b": "4",
+      "label_b": "anomaly",
+      "overlap_days": 347.42,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "56",
+      "case_a": "63",
+      "label_a": "normal",
+      "case_b": "90",
+      "label_b": "anomaly",
+      "overlap_days": 347.34,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "23",
+      "case_a": "70",
+      "label_a": "anomaly",
+      "case_b": "80",
+      "label_b": "normal",
+      "overlap_days": 346.84,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "10",
+      "case_a": "10",
+      "label_a": "anomaly",
+      "case_b": "42",
+      "label_b": "anomaly",
+      "overlap_days": 346.3,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "35",
+      "case_a": "48",
+      "label_a": "normal",
+      "case_b": "67",
+      "label_b": "anomaly",
+      "overlap_days": 345.5,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "16",
+      "case_a": "30",
+      "label_a": "anomaly",
+      "case_b": "65",
+      "label_b": "normal",
+      "overlap_days": 345.49,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "11",
+      "case_a": "68",
+      "label_a": "anomaly",
+      "case_b": "69",
+      "label_b": "normal",
+      "overlap_days": 344.52,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm B",
+      "turbine_id": "14",
+      "case_a": "34",
+      "label_a": "anomaly",
+      "case_b": "52",
+      "label_b": "normal",
+      "overlap_days": 342.0,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "0",
+      "case_a": "24",
+      "label_a": "normal",
+      "case_b": "73",
+      "label_b": "anomaly",
+      "overlap_days": 339.99,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "2",
+      "case_a": "12",
+      "label_a": "anomaly",
+      "case_b": "36",
+      "label_b": "normal",
+      "overlap_days": 339.8,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "34",
+      "case_a": "56",
+      "label_a": "normal",
+      "case_b": "94",
+      "label_b": "normal",
+      "overlap_days": 336.2,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "34",
+      "case_a": "18",
+      "label_a": "anomaly",
+      "case_b": "56",
+      "label_b": "normal",
+      "overlap_days": 336.18,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "34",
+      "case_a": "4",
+      "label_a": "anomaly",
+      "case_b": "94",
+      "label_b": "normal",
+      "overlap_days": 336.03,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "13",
+      "case_a": "14",
+      "label_a": "normal",
+      "case_b": "45",
+      "label_b": "anomaly",
+      "overlap_days": 334.02,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "43",
+      "case_a": "11",
+      "label_a": "anomaly",
+      "case_b": "33",
+      "label_b": "anomaly",
+      "overlap_days": 334.02,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "60",
+      "label_a": "normal",
+      "case_b": "76",
+      "label_b": "anomaly",
+      "overlap_days": 331.47,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "55",
+      "case_a": "88",
+      "label_a": "normal",
+      "case_b": "9",
+      "label_b": "anomaly",
+      "overlap_days": 328.4,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "11",
+      "case_a": "25",
+      "label_a": "normal",
+      "case_b": "92",
+      "label_b": "normal",
+      "overlap_days": 328.13,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "21",
+      "case_a": "47",
+      "label_a": "anomaly",
+      "case_b": "62",
+      "label_b": "normal",
+      "overlap_days": 325.99,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "10",
+      "case_a": "17",
+      "label_a": "normal",
+      "case_b": "42",
+      "label_b": "anomaly",
+      "overlap_days": 324.02,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "33",
+      "case_a": "41",
+      "label_a": "normal",
+      "case_b": "49",
+      "label_b": "anomaly",
+      "overlap_days": 321.77,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "21",
+      "case_a": "22",
+      "label_a": "anomaly",
+      "case_b": "51",
+      "label_b": "anomaly",
+      "overlap_days": 320.35,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "0",
+      "case_a": "0",
+      "label_a": "anomaly",
+      "case_b": "73",
+      "label_b": "anomaly",
+      "overlap_days": 319.23,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "52",
+      "case_a": "39",
+      "label_a": "anomaly",
+      "case_b": "43",
+      "label_b": "normal",
+      "overlap_days": 318.59,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "21",
+      "case_a": "22",
+      "label_a": "anomaly",
+      "case_b": "72",
+      "label_b": "anomaly",
+      "overlap_days": 317.05,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "13",
+      "case_a": "38",
+      "label_a": "normal",
+      "case_b": "84",
+      "label_b": "anomaly",
+      "overlap_days": 316.67,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "0",
+      "case_a": "0",
+      "label_a": "anomaly",
+      "case_b": "26",
+      "label_b": "anomaly",
+      "overlap_days": 315.83,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "50",
+      "case_a": "55",
+      "label_a": "anomaly",
+      "case_b": "8",
+      "label_b": "normal",
+      "overlap_days": 315.79,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "11",
+      "case_a": "25",
+      "label_a": "normal",
+      "case_b": "68",
+      "label_b": "anomaly",
+      "overlap_days": 315.55,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "15",
+      "case_a": "64",
+      "label_a": "normal",
+      "case_b": "78",
+      "label_b": "anomaly",
+      "overlap_days": 314.58,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "43",
+      "case_a": "11",
+      "label_a": "anomaly",
+      "case_b": "93",
+      "label_b": "normal",
+      "overlap_days": 311.14,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "20",
+      "label_a": "normal",
+      "case_b": "35",
+      "label_b": "anomaly",
+      "overlap_days": 311.05,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "52",
+      "case_a": "28",
+      "label_a": "anomaly",
+      "case_b": "43",
+      "label_b": "normal",
+      "overlap_days": 309.72,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "16",
+      "case_a": "46",
+      "label_a": "normal",
+      "case_b": "79",
+      "label_b": "anomaly",
+      "overlap_days": 307.77,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "13",
+      "case_a": "38",
+      "label_a": "normal",
+      "case_b": "45",
+      "label_b": "anomaly",
+      "overlap_days": 302.1,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "1",
+      "label_a": "normal",
+      "case_b": "20",
+      "label_b": "normal",
+      "overlap_days": 302.05,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "43",
+      "case_a": "61",
+      "label_a": "normal",
+      "case_b": "93",
+      "label_b": "normal",
+      "overlap_days": 297.34,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "1",
+      "label_a": "normal",
+      "case_b": "16",
+      "label_b": "anomaly",
+      "overlap_days": 297.0,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "44",
+      "case_a": "44",
+      "label_a": "anomaly",
+      "case_b": "75",
+      "label_b": "normal",
+      "overlap_days": 296.88,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "34",
+      "case_a": "18",
+      "label_a": "anomaly",
+      "case_b": "94",
+      "label_b": "normal",
+      "overlap_days": 291.44,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "21",
+      "case_a": "13",
+      "label_a": "normal",
+      "case_b": "22",
+      "label_b": "anomaly",
+      "overlap_days": 286.02,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "55",
+      "case_a": "57",
+      "label_a": "normal",
+      "case_b": "9",
+      "label_b": "anomaly",
+      "overlap_days": 283.92,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "0",
+      "case_a": "0",
+      "label_a": "anomaly",
+      "case_b": "24",
+      "label_b": "normal",
+      "overlap_days": 282.22,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "35",
+      "case_a": "31",
+      "label_a": "anomaly",
+      "case_b": "48",
+      "label_b": "normal",
+      "overlap_days": 281.58,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "16",
+      "label_a": "anomaly",
+      "case_b": "35",
+      "label_b": "anomaly",
+      "overlap_days": 281.38,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "11",
+      "case_a": "25",
+      "label_a": "normal",
+      "case_b": "69",
+      "label_b": "normal",
+      "overlap_days": 279.07,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm B",
+      "turbine_id": "6",
+      "case_a": "23",
+      "label_a": "normal",
+      "case_b": "53",
+      "label_b": "anomaly",
+      "overlap_days": 278.8,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "10",
+      "case_a": "3",
+      "label_a": "normal",
+      "case_b": "40",
+      "label_b": "anomaly",
+      "overlap_days": 276.42,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "43",
+      "case_a": "33",
+      "label_a": "anomaly",
+      "case_b": "61",
+      "label_b": "normal",
+      "overlap_days": 274.46,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "16",
+      "case_a": "65",
+      "label_a": "normal",
+      "case_b": "79",
+      "label_b": "anomaly",
+      "overlap_days": 270.19,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "52",
+      "case_a": "28",
+      "label_a": "anomaly",
+      "case_b": "54",
+      "label_b": "normal",
+      "overlap_days": 269.85,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "0",
+      "case_a": "24",
+      "label_a": "normal",
+      "case_b": "71",
+      "label_b": "normal",
+      "overlap_days": 268.38,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "11",
+      "case_a": "68",
+      "label_a": "anomaly",
+      "case_b": "92",
+      "label_b": "normal",
+      "overlap_days": 261.86,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "13",
+      "case_a": "14",
+      "label_a": "normal",
+      "case_b": "38",
+      "label_b": "normal",
+      "overlap_days": 261.12,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "10",
+      "case_a": "3",
+      "label_a": "normal",
+      "case_b": "42",
+      "label_b": "anomaly",
+      "overlap_days": 252.39,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "0",
+      "case_a": "26",
+      "label_a": "anomaly",
+      "case_b": "73",
+      "label_b": "anomaly",
+      "overlap_days": 250.06,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "52",
+      "case_a": "28",
+      "label_a": "anomaly",
+      "case_b": "39",
+      "label_b": "anomaly",
+      "overlap_days": 245.31,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "13",
+      "case_a": "45",
+      "label_a": "anomaly",
+      "case_b": "84",
+      "label_b": "anomaly",
+      "overlap_days": 235.11,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "20",
+      "label_a": "normal",
+      "case_b": "60",
+      "label_b": "normal",
+      "overlap_days": 234.18,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "21",
+      "case_a": "13",
+      "label_a": "normal",
+      "case_b": "51",
+      "label_b": "anomaly",
+      "overlap_days": 233.37,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "21",
+      "case_a": "13",
+      "label_a": "normal",
+      "case_b": "72",
+      "label_b": "anomaly",
+      "overlap_days": 230.07,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "16",
+      "case_a": "30",
+      "label_a": "anomaly",
+      "case_b": "79",
+      "label_b": "anomaly",
+      "overlap_days": 227.38,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "11",
+      "case_a": "69",
+      "label_a": "normal",
+      "case_b": "92",
+      "label_b": "normal",
+      "overlap_days": 225.38,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "0",
+      "case_a": "71",
+      "label_a": "normal",
+      "case_b": "73",
+      "label_b": "anomaly",
+      "overlap_days": 224.51,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "55",
+      "case_a": "57",
+      "label_a": "normal",
+      "case_b": "88",
+      "label_b": "normal",
+      "overlap_days": 223.24,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "10",
+      "case_a": "10",
+      "label_a": "anomaly",
+      "case_b": "3",
+      "label_b": "normal",
+      "overlap_days": 222.69,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "43",
+      "case_a": "11",
+      "label_a": "anomaly",
+      "case_b": "61",
+      "label_b": "normal",
+      "overlap_days": 220.48,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "16",
+      "label_a": "anomaly",
+      "case_b": "20",
+      "label_b": "normal",
+      "overlap_days": 219.05,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "0",
+      "case_a": "24",
+      "label_a": "normal",
+      "case_b": "26",
+      "label_b": "anomaly",
+      "overlap_days": 213.04,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "35",
+      "case_a": "48",
+      "label_a": "normal",
+      "case_b": "58",
+      "label_b": "normal",
+      "overlap_days": 212.14,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "16",
+      "case_a": "46",
+      "label_a": "normal",
+      "case_b": "65",
+      "label_b": "normal",
+      "overlap_days": 207.97,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "10",
+      "case_a": "17",
+      "label_a": "normal",
+      "case_b": "3",
+      "label_b": "normal",
+      "overlap_days": 200.41,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "13",
+      "case_a": "14",
+      "label_a": "normal",
+      "case_b": "84",
+      "label_b": "anomaly",
+      "overlap_days": 194.13,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "52",
+      "case_a": "43",
+      "label_a": "normal",
+      "case_b": "54",
+      "label_b": "normal",
+      "overlap_days": 191.26,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "20",
+      "label_a": "normal",
+      "case_b": "76",
+      "label_b": "anomaly",
+      "overlap_days": 183.65,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "35",
+      "case_a": "58",
+      "label_a": "normal",
+      "case_b": "67",
+      "label_b": "anomaly",
+      "overlap_days": 173.64,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "0",
+      "case_a": "0",
+      "label_a": "anomaly",
+      "case_b": "71",
+      "label_b": "normal",
+      "overlap_days": 166.74,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "16",
+      "case_a": "30",
+      "label_a": "anomaly",
+      "case_b": "46",
+      "label_b": "normal",
+      "overlap_days": 165.15,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "35",
+      "label_a": "anomaly",
+      "case_b": "60",
+      "label_b": "normal",
+      "overlap_days": 162.23,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "23",
+      "case_a": "37",
+      "label_a": "normal",
+      "case_b": "80",
+      "label_b": "normal",
+      "overlap_days": 159.66,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "1",
+      "label_a": "normal",
+      "case_b": "60",
+      "label_b": "normal",
+      "overlap_days": 153.23,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "10",
+      "case_a": "40",
+      "label_a": "anomaly",
+      "case_b": "42",
+      "label_b": "anomaly",
+      "overlap_days": 140.88,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "52",
+      "case_a": "39",
+      "label_a": "anomaly",
+      "case_b": "54",
+      "label_b": "normal",
+      "overlap_days": 126.85,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "23",
+      "case_a": "37",
+      "label_a": "normal",
+      "case_b": "70",
+      "label_b": "anomaly",
+      "overlap_days": 125.17,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "12",
+      "case_a": "15",
+      "label_a": "anomaly",
+      "case_b": "50",
+      "label_b": "normal",
+      "overlap_days": 113.0,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "35",
+      "label_a": "anomaly",
+      "case_b": "76",
+      "label_b": "anomaly",
+      "overlap_days": 111.7,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "10",
+      "case_a": "10",
+      "label_a": "anomaly",
+      "case_b": "40",
+      "label_b": "anomaly",
+      "overlap_days": 111.18,
+      "cross_label": false
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "35",
+      "case_a": "31",
+      "label_a": "anomaly",
+      "case_b": "58",
+      "label_b": "normal",
+      "overlap_days": 109.72,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "1",
+      "label_a": "normal",
+      "case_b": "76",
+      "label_b": "anomaly",
+      "overlap_days": 102.7,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "0",
+      "case_a": "26",
+      "label_a": "anomaly",
+      "case_b": "71",
+      "label_b": "normal",
+      "overlap_days": 97.57,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm A",
+      "turbine_id": "10",
+      "case_a": "17",
+      "label_a": "normal",
+      "case_b": "40",
+      "label_b": "anomaly",
+      "overlap_days": 88.9,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "12",
+      "case_a": "50",
+      "label_a": "normal",
+      "case_b": "66",
+      "label_b": "anomaly",
+      "overlap_days": 88.54,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "16",
+      "label_a": "anomaly",
+      "case_b": "60",
+      "label_b": "normal",
+      "overlap_days": 70.23,
+      "cross_label": true
+    },
+    {
+      "farm": "Wind Farm C",
+      "turbine_id": "53",
+      "case_a": "16",
+      "label_a": "anomaly",
+      "case_b": "76",
+      "label_b": "anomaly",
+      "overlap_days": 19.7,
+      "cross_label": false
+    }
+  ],
+  "n_pairs_skipped_unparseable_span": 0,
+  "leakage_interpretation": "Case-span overlap on the same asset does NOT by itself prove contamination: the spans come from G3 and ignore both the train_test column and the actual event windows. It DOES mean asset-period isolation cannot be assumed, so any calibration/evaluation split must be constructed at the asset level, not the case level. Verify against event_info and the train_test column before recording a D1/D6 verdict.",
+  "normal_cases_with_fault_pointing_columns": [],
+  "event_label_storage_note": "Populate manually from source_file inspection; not auto-derivable without knowing v6's event-window schema."
+}

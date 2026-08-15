@@ -1,4 +1,4 @@
-# 本機執行手冊 v1.0 — D0 manifest 與 C0–C6 gate
+# 本機執行手冊 v1.1 — D0 manifest、C0–C6 gate 與實驗
 
 給有 CARE v6 資料的本機執行者。雲端協作者無法處理 5.5GB archive，這份手冊把
 每一步的指令寫死，執行者不需要自己組指令。
@@ -42,25 +42,32 @@ python --version
 
 ### 0.3 先跑自我測試（重要）
 
-在碰真實資料之前，先確認工具在你的環境行為正確：
+在碰真實資料之前，先確認**整套**工具在你的環境行為正確。八支測試一次跑完：
 
 ```bash
-python3 scripts/selftest_c0_c6_gate.py
+for t in scripts/selftest_*.py; do echo "== $t"; python3 "$t" | tail -2; done
 ```
 
 ```powershell
-python scripts/selftest_c0_c6_gate.py
+Get-ChildItem scripts\selftest_*.py | ForEach-Object {
+  Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期輸出結尾**：
+**預期**：八支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 171 checks。
 
-```
-47 checks, 0 failed
-ALL SELF-TESTS PASSED
-```
+| 測試 | checks |
+|---|---|
+| `selftest_c0_c6_gate.py` | 51 |
+| `selftest_sensor_identification.py` | 21 |
+| `selftest_end_to_end.py` | 17 |
+| `selftest_w1_acas.py` | 17 |
+| `selftest_regime_conditional.py` | 16 |
+| `selftest_md2022.py` | 23 |
+| `selftest_online_baselines.py` | 13 |
+| `selftest_signal_map_builder.py` | 13 |
 
-若不是 47/0，**先停下來**把完整輸出回傳，不要繼續。這代表工具在你的環境
-行為與雲端不同，之後所有結果都不可信。
+任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
+你的環境行為與雲端不同，之後所有結果都不可信。
 
 ---
 
@@ -167,6 +174,18 @@ python3 scripts/care_v6_manifest.py \
 
 ## Phase 2 — 四份證據檔（D0 通過後）
 
+> **2026-08-15 更新：MD_2022 的這一整節完全不用手做。**
+> `base_scorer_md2022.py` 在 fit 當下就會把**四份**證據檔全部寫進
+> `--evidence-dir`：`fit_provenance.json`、`artifact_manifest.json`、
+> `freeze_receipt.json`，以及 `signal_map.json`。
+>
+> 最後一份特別說明：C0 要的 signal map 指的是 **score CSV 的欄名**，
+> 和 builder 產出的那份（指向 archive 原始欄名）是兩份不同的東西。
+> 手寫第二份正是操作者最容易填到不存在欄位的地方，所以改由評分器
+> 依「實際寫出去的欄」自動產生，單位則從 builder 那份沿用。
+>
+> 以下手動流程只剩 **MainBearing_2026** 需要。
+
 C2/C3/C5 三個 gate 無法從資料本身推導，必須由你提供證據檔。
 先產生空白樣板：
 
@@ -217,11 +236,107 @@ normal reference partition —— 這是 D1 標籤防火牆的底線，gate 會�
 
 ---
 
-## Phase 3 — 產生 score stream（你的實作，我無法代勞）
+## Phase 3 — 產生 score stream
 
-兩個 frozen base scorer 的實作是你的，我只能給**檔案格式契約**。
+> **2026-08-15 更新：Base Scorer 1（MD_2022）已由雲端這側實作完成，
+> 不再是你的工作。** 先前把它列為「你的實作，我無法代勞」是誤派。
+> 執行方式見 3.0。
+>
+> **Base Scorer 2（MainBearing_2026）**仍然只能由你這側提供 —— 它需要
+> 主軸承 SCADA 框架論文的實作，雲端這側沒有。3.1 之後的檔案格式契約
+> 是給它用的。
 
-### 3.1 檔案格式要求
+### 3.0 Base Scorer 1（MD_2022）— 三行指令
+
+**先做 signal map。** 三個風場各一份，依已簽核的選點決定
+（51/52 取平均、Farm C 其餘取平均、Farm A 風速取 header 的 `wind_speed_3_avg`）：
+
+```bash
+python3 scripts/care_v6_signal_map_builder.py \
+  --workdir    /path/to/extract_dir \
+  --output-dir ./signal_map_out \
+  --average-ties \
+  --header-override "A:wind_speed=wind_speed_3_avg" \
+  --override-unit  "m/s" \
+  --pick "C:active_power=power_6" \
+  --pick "C:wind_speed=wind_speed_236"
+```
+
+```powershell
+python scripts\care_v6_signal_map_builder.py `
+  --workdir    C:\path\to\extract_dir `
+  --output-dir .\signal_map_out `
+  --average-ties `
+  --header-override "A:wind_speed=wind_speed_3_avg" `
+  --override-unit  "m/s" `
+  --pick "C:active_power=power_6" `
+  --pick "C:wind_speed=wind_speed_236"
+```
+
+**Farm A 沒有主軸承通道。** 這不是缺陷，是該風場的事實——字典裡只有齒輪箱
+與發電機軸承，工具依設計拒絕拿它們冒充。把下面這段貼進
+`signal_map_out/signal_map_Wind_Farm_A.json`，取代
+`main_bearing_temperature` 那一項：
+
+```json
+"main_bearing_temperature": {
+  "not_available": true,
+  "reason": "Wind Farm A's feature_description.csv names no main/rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components.",
+  "ratified_by": "劉老師",
+  "ratified_on": "2026-08-15"
+}
+```
+
+C0 gate 會接受這個宣告；**靜默缺席仍然會 FAIL**，所以這段不能省。
+
+**接著跑評分器。** 每個風場、每個 run 各一次（run1 / run2 是 C5 要的兩次
+獨立執行，不是複製目錄）：
+
+```bash
+export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONHASHSEED=0
+for FARM in A B C; do
+  for RUN in 1 2; do
+    python3 scripts/base_scorer_md2022.py \
+      --workdir      /path/to/extract_dir \
+      --farm         "Wind Farm $FARM" \
+      --signal-map   ./signal_map_out/signal_map_Wind_Farm_$FARM.json \
+      --output-dir   ./scores_MD_2022_run$RUN \
+      --evidence-dir ./evidence_MD_2022_run$RUN
+  done
+done
+```
+
+```powershell
+$env:OMP_NUM_THREADS=1; $env:MKL_NUM_THREADS=1
+$env:OPENBLAS_NUM_THREADS=1; $env:PYTHONHASHSEED=0
+foreach ($FARM in "A","B","C") {
+  foreach ($RUN in 1,2) {
+    python scripts\base_scorer_md2022.py `
+      --workdir      C:\path\to\extract_dir `
+      --farm         "Wind Farm $FARM" `
+      --signal-map   .\signal_map_out\signal_map_Wind_Farm_$FARM.json `
+      --output-dir   .\scores_MD_2022_run$RUN `
+      --evidence-dir .\evidence_MD_2022_run$RUN
+  }
+}
+```
+
+三個風場寫進同一個 `scores_MD_2022_run1/`，因為 case_id 全域唯一。
+輸出欄位固定是 `timestamp` / `wind_speed` / `anomaly_score`，後面接六個
+`signal_*` 特徵欄，**三個風場一致**——這是評分器刻意正規化的，原始檔在
+Farm A 叫 `wind_speed_3_avg`、Farm B 叫 `wind_speed_61_avg`、Farm C 叫
+`wind_speed_236_avg`，不正規化的話 Phase 5 沒辦法用單一欄名跨風場跑。
+
+> 特徵欄之所以加 `signal_` 前綴，是因為不加的話 `wind_speed` 會在表頭
+> 出現兩次，而 `csv.DictReader` 只保留**後**一個。兩者在關鍵處不同：
+> 某個感測器掉線、特徵向量不完整的那些列，風速其實量得好好的，但特徵
+> 那一份是空的。實測 50 列掉線資料，50 列全被下游讀成空風速——那會讓
+> 它們落不進正確的風速分箱，直接偏誤本論文主張的條件覆蓋率結果。
+> 已修正並以測試釘住（`selftest_md2022.py` T7）。
+
+`--evidence-dir` 裡的四份 C0–C6 佐證是 fit 當下寫的，不用手填。
+
+### 3.1 檔案格式要求（給 MainBearing_2026）
 
 每個 case 一個 CSV，**檔名就是 case_id**（要和 `g3_case_metadata.csv` 的
 `case_id` 完全一致）：
@@ -390,4 +505,119 @@ $LASTEXITCODE
 
 ---
 
+
+---
+
+## Phase 5 — 產生實驗數字
+
+前四個 Phase 產出的是**閘門證據**，不是實驗結果。這個 Phase 才開始有數字。
+
+### 5.0 先確認前置
+
+| 前置 | 狀態 |
+|---|---|
+| D0 | ✅ 2026-08-15 關閉 |
+| 三份 signal map | Phase 2，含 Farm A 的 `not_available` 區塊 |
+| 單位一致 | 見 5.1 |
+| score stream ×2 runs | Phase 3.0（MD_2022 已可一鍵產生）；MainBearing_2026 仍待你這側 |
+| C0–C6 | Phase 4，兩個 scorer 各一份 |
+
+**C0–C6 未通過之前不要跑 Phase 5。** 閘門存在的意義就是擋在這裡。
+
+### 5.1 單位確認（五分鐘，但別跳過）
+
+三個風場的單位標示不一致：
+
+| 訊號 | Farm A | Farm B | Farm C |
+|---|---|---|---|
+| 溫度 | `°C` | `°C` | `Celsius` |
+| 轉速 | `rpm` | `rpm` | `1/min` |
+
+字面不同、實質應該相同。但**只要有一個其實不同**，Mahalanobis 的共變異數就會被靜靜地扭曲——不會報錯，只會給出錯的分數。
+
+確認方式：對每個風場的溫度欄取 p01 與 p99，看數值範圍是否落在同一個物理區間（環境溫度 −20~45、主軸承 5~90）。轉速同理。範圍對得上就沒事，記錄下來即可。
+
+### 5.2 執行實驗（一個設定檔，一道指令）
+
+> **2026-08-15 更新：本節先前列出的指令含 `<分數欄>` 這類角括號佔位符，
+> 在 PowerShell 會直接語法錯誤（`<` 是保留運算子）。那是交付面的缺陷。
+> 現在改成設定檔驅動，不需要任何手動代換。**
+
+先產生設定檔：
+
+```bash
+python3 scripts/run_pipeline.py --emit-config pipeline_config.json
+```
+
+```powershell
+python scripts\run_pipeline.py --emit-config pipeline_config.json
+```
+
+**只有 `paths` 區塊需要你填**，欄位名稱已經預先填好
+（`anomaly_score` / `wind_speed` / `timestamp`，即 3.0 評分器的輸出）：
+
+```json
+"paths": {
+  "g3_case_metadata": "./manifest_out/g3_case_metadata.csv",
+  "event_info_root":  "填這裡：解壓後的 CARE v6 根目錄，底下有 Wind Farm A/B/C",
+  "output_root":      "./experiments"
+}
+```
+
+`scorers[0].score_dir` 填 `./scores_MD_2022_run1`。
+`MainBearing_2026` 若尚未就緒，把整個項目留著 `FILL_ME` 即可，會被跳過。
+
+**先做預檢**（幾秒鐘，會逐一核對每個路徑與每個欄名是否真的在 CSV 裡）：
+
+```bash
+python3 scripts/run_pipeline.py --config pipeline_config.json --preflight-only
+```
+
+```powershell
+python scripts\run_pipeline.py --config pipeline_config.json --preflight-only
+```
+
+預檢過了再正式跑：
+
+```bash
+python3 scripts/run_pipeline.py --config pipeline_config.json
+```
+
+```powershell
+python scripts\run_pipeline.py --config pipeline_config.json
+```
+
+一道指令會依序跑完：提出方法（regime-conditional calibration）、W1-ACAS、
+static / ACI / DtACI，以及共同評估尺規，三個 α（0.01 主要、0.05、0.001）
+各一輪。**α 的三個值來自已簽核的參數協定，不是掃描**；`--max-past` 與
+`W` 都已凍結為 1440，設定檔裡不要改。
+
+`MainBearing_2026` 僅 Farm B/C（D5 範圍裁決）。
+
+### 5.3 回傳什麼
+
+- `experiments/comparison_index.json` ← 最重要，指向所有比較表
+- 各 α 的 `comparison_*.json`
+- `w1acas_*/w1acas_summary.json`、`baselines_*/baselines_summary.json`
+- **不要**回傳每案的逐列 CSV，那會很大；需要時再針對特定 case 要
+
+### 5.4 一件尚未就緒的事（誠實記錄）
+
+**CARE 原始 adaptive threshold 缺席。** 它在評估契約的基線清單裡，但其定義在 CARE 論文中，本專案尚未讀取。archive 的 README.txt 可能有，但沒人萃取過。
+
+```powershell
+python scripts\baselines_online_calibration.py --list-missing
+```
+
+會把這個缺席以機器可讀形式印出來。**猜測競品的方法再贏過它，比沒有這個基線更糟。** 解法是先從 CARE 論文或 README 萃取定義、逐字記入 Drive 文件，再依該文字實作。
+
+---
+
 *對應 gate 版本：`c0c6-gate-v2.0`。手冊有更新時會同步改版本號。*
+
+*v1.1（2026-08-15）：Phase 0.3 改為八支測試共 163 checks；Phase 2 註明
+MD_2022 的三份佐證已自動產生；Phase 3.0 新增 Base Scorer 1 的完整指令
+（先前誤列為「你的實作」）；Phase 5.2 改為設定檔驅動，移除所有角括號
+佔位符；Phase 5.4 刪去「我們自己的方法還沒實作」——已實作。
+另修正評分器輸出表頭 `wind_speed` 重複的缺陷（md2022-v1.1），並改由評分器
+自動產生 C0 的 signal_map.json。*

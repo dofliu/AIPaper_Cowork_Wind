@@ -111,9 +111,21 @@ CONVENTIONAL_SENTINELS = {
 NAMED_FAMILY_RE = re.compile(r"^(power|wind_speed|reactive_power)_\d+(_(avg|max|min|std))?$", re.I)
 
 
+AGGREGATE_SUFFIX_RE = re.compile(r"_(max|min|std)$", re.I)
+
+
 def _is_named_family(col):
     """True when the column's identity is already given by its name."""
     return bool(NAMED_FAMILY_RE.match(col)) or col in NON_SIGNAL
+
+
+def _is_aggregate(col):
+    """`_std`, `_min`, `_max` are dispersion/extremum statistics OF another
+    channel, never the channel itself. They must stay out of the candidate
+    pool: on the real archive every farm's pitch winner was a `_std` or
+    `_min` column, because the std of a steady window is trivially ~0 and so
+    satisfies the fine-pitch "mass at zero" signature for free."""
+    return bool(AGGREGATE_SUFFIX_RE.search(col))
 
 # --- CSV dialect handling -------------------------------------------------
 # CARE v6 case files are not guaranteed to be comma-separated. A semicolon
@@ -345,28 +357,43 @@ def _range_fit(prof, lo, hi, tol_frac=0.15):
 def score_rotor_speed(prof, ctx):
     ev = []
     s = 0.0
+    cw = prof["corr_wind"]
+    cp = prof["corr_power"]
+
+    # Wind is the gate, not a bonus. A channel that tracks power but not wind
+    # is power-derived, not a speed: on the real archive Farm C's winner had
+    # corr_power 0.999 against corr_wind 0.10.
+    if cw is None or cw < 0.50:
+        return 0.0, ["rejected: corr with wind speed is %s, below the 0.50 floor "
+                     "a rotor speed must clear" % ("None" if cw is None else "%.2f" % cw)]
+    if cp is not None and cp > 0.98:
+        return 0.0, ["rejected: corr with power is %.4f -- that is a power-derived "
+                     "channel, not an independent speed measurement" % cp]
+
     if prof["frac_negative"] <= 0.01:
         s += 0.20
         ev.append("non-negative (%.1f%% negative)" % (100 * prof["frac_negative"]))
-    cw = prof["corr_wind"]
-    if cw is not None and cw >= 0.75:
+    if cw >= 0.75:
         s += 0.40
         ev.append("strong positive corr with wind speed (r=%.2f)" % cw)
-    elif cw is not None and cw >= 0.55:
+    else:
         s += 0.22
         ev.append("moderate corr with wind speed (r=%.2f)" % cw)
-    cp = prof["corr_power"]
     if cp is not None and cp >= 0.75:
-        s += 0.30
+        s += 0.20
         ev.append("strong positive corr with power (r=%.2f)" % cp)
     elif cp is not None and cp >= 0.55:
-        s += 0.15
+        s += 0.10
         ev.append("moderate corr with power (r=%.2f)" % cp)
     # Either a direct-drive rotor (~5-20 rpm) or a generator-side speed (~1000-2000 rpm).
     if _range_fit(prof, 0, 25) or _range_fit(prof, 500, 2200):
-        s += 0.10
+        s += 0.20
         ev.append("p01-p99 range plausible as rotor or generator speed "
                   "(%.1f to %.1f)" % (prof["p01"], prof["p99"]))
+    else:
+        ev.append("NOTE: p01-p99 (%.1f to %.1f) matches neither a direct-drive rotor "
+                  "(0-25 rpm) nor a generator shaft (500-2200 rpm)"
+                  % (prof["p01"], prof["p99"]))
     return min(s, 1.0), ev
 
 
@@ -387,12 +414,27 @@ def score_ambient_temperature(prof, ctx):
         ev.append("moderate annual cycle (r=%.2f)" % cs)
     cp = prof["corr_power"]
     if cp is not None and abs(cp) <= 0.20:
-        s += 0.30
+        s += 0.20
         ev.append("near-independent of power (r=%.2f), as outdoor air should be" % cp)
     elif cp is not None and abs(cp) <= 0.35:
-        s += 0.12
+        s += 0.08
         ev.append("weak dependence on power (r=%.2f)" % cp)
-    return min(s, 1.0), ev
+
+    # Cold tail. Cases span roughly a year, so genuine outdoor air at a
+    # mid-latitude site reaches near freezing at the 1st percentile. Many
+    # nacelle and converter temperatures also track the season while sitting
+    # 10-20 K warmer, and on the real archive those outranked everything.
+    p01 = prof["p01"]
+    if p01 is not None:
+        if p01 <= 2.0:
+            s += 0.10
+            ev.append("p01 = %.1f, cold enough for outdoor air over a year" % p01)
+        else:
+            s -= 0.25
+            ev.append("WARNING: p01 = %.1f never approaches freezing across a "
+                      "year-long span -- more consistent with an internal "
+                      "temperature that merely follows the season" % p01)
+    return max(0.0, min(s, 1.0)), ev
 
 
 def score_main_bearing_temperature(prof, ctx):
@@ -472,7 +514,7 @@ def rank_candidates(profiles, top_n):
     correlates 1.0 with itself and strongly with wind."""
     usable = {
         c: p for c, p in profiles.items()
-        if p.get("usable") and not _is_named_family(c)
+        if p.get("usable") and not _is_named_family(c) and not _is_aggregate(c)
     }
     ctx = {}
 
@@ -660,10 +702,57 @@ def run(args):
     return 0
 
 
+
+def rerank_from_profiles(args):
+    """Re-rank candidates from previously written sensor_profile_<farm>.json
+    files, without re-reading the archive.
+
+    Scoring templates get revised as their failure modes surface; re-scanning
+    20GB to test a template change is not a sensible loop. The profiles hold
+    every statistic the templates consume, so a revision can be replayed
+    against them in seconds."""
+    paths = sorted(glob.glob(os.path.join(args.from_profiles, "sensor_profile_*.json")))
+    if not paths:
+        print("no sensor_profile_*.json under %s" % args.from_profiles, file=sys.stderr)
+        return 3
+    os.makedirs(args.output_dir, exist_ok=True)
+    overall = {}
+    for path in paths:
+        with open(path, encoding="utf-8") as f:
+            blob = json.load(f)
+        farm = blob["farm"]
+        candidates = rank_candidates(blob["profiles"], args.top_n)
+        overall[farm] = {
+            "top_pick": {sig: (v["candidates"][0]["column"] if v["candidates"] else None)
+                         for sig, v in candidates.items()},
+            "top_score": {sig: (v["candidates"][0]["score"] if v["candidates"] else None)
+                          for sig, v in candidates.items()},
+        }
+        safe = re.sub(r"[^A-Za-z0-9_-]+", "_", farm)
+        with open(os.path.join(args.output_dir, "signal_candidates_%s.json" % safe),
+                  "w", encoding="utf-8") as f:
+            json.dump({"farm": farm, "reranked_from": os.path.abspath(path),
+                       "candidates": candidates}, f, indent=2, ensure_ascii=False)
+        print("[%s] re-ranked %d columns" % (farm, len(blob["profiles"])), file=sys.stderr)
+
+    with open(os.path.join(args.output_dir, "identification_summary.json"),
+              "w", encoding="utf-8") as f:
+        json.dump({"generated_at_utc": datetime.now(timezone.utc).isoformat(),
+                   "status": "CANDIDATE_UNRATIFIED",
+                   "mode": "reranked from existing profiles",
+                   "farms": overall,
+                   "cli_invocation": " ".join(sys.argv)}, f, indent=2, ensure_ascii=False)
+    print(json.dumps(overall, indent=2, ensure_ascii=False))
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--workdir", required=True, help="Extracted CARE v6 root")
+    ap.add_argument("--workdir", help="Extracted CARE v6 root")
+    ap.add_argument("--from-profiles", metavar="DIR",
+                    help="Re-rank from existing sensor_profile_*.json in DIR instead "
+                         "of re-reading the archive")
     ap.add_argument("--output-dir", required=True)
     ap.add_argument("--case-glob", default="**/datasets/*.csv",
                     help="Glob relative to --workdir (default **/datasets/*.csv)")
@@ -674,6 +763,10 @@ def main():
     ap.add_argument("--delimiter", default=None,
                     help="CSV delimiter; auto-detected from the header when omitted")
     args = ap.parse_args()
+    if args.from_profiles:
+        return rerank_from_profiles(args)
+    if not args.workdir:
+        ap.error("--workdir is required unless --from-profiles is given")
     return run(args)
 
 

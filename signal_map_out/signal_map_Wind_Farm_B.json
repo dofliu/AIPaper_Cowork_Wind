@@ -1,0 +1,72 @@
+{
+  "active_power": {
+    "column": "power_62_avg",
+    "unit": "kW",
+    "_source": "feature_description.csv",
+    "_sensor_name": "power_62",
+    "_description": "Active power",
+    "_matched_rule": "exact_active_power",
+    "_all_columns_for_this_sensor": [
+      "power_62_min",
+      "power_62_std",
+      "power_62_max",
+      "power_62_avg"
+    ]
+  },
+  "wind_speed": {
+    "column": "wind_speed_61_avg",
+    "unit": "m/s",
+    "_source": "feature_description.csv",
+    "_sensor_name": "wind_speed_61",
+    "_description": "Wind speed",
+    "_matched_rule": "exact_wind_speed",
+    "_all_columns_for_this_sensor": [
+      "wind_speed_61_min",
+      "wind_speed_61_avg",
+      "wind_speed_61_max",
+      "wind_speed_61_std"
+    ]
+  },
+  "rotor_speed": {
+    "column": "sensor_25_avg",
+    "unit": "rpm",
+    "_source": "feature_description.csv",
+    "_sensor_name": "sensor_25",
+    "_description": "Rotor speed",
+    "_matched_rule": "exact_rotor_speed",
+    "_all_columns_for_this_sensor": [
+      "sensor_25_avg",
+      "sensor_25_max",
+      "sensor_25_min",
+      "sensor_25_std"
+    ]
+  },
+  "pitch_angle": {
+    "column": "sensor_10_avg",
+    "unit": "�",
+    "_source": "feature_description.csv",
+    "_sensor_name": "sensor_10",
+    "_description": "Pitch angle",
+    "_matched_rule": "exact_pitch_angle",
+    "_all_columns_for_this_sensor": [
+      "sensor_10_max",
+      "sensor_10_std",
+      "sensor_10_avg",
+      "sensor_10_min"
+    ]
+  },
+  "ambient_temperature": {
+    "column": "sensor_8_avg",
+    "unit": "�C",
+    "_source": "feature_description.csv",
+    "_sensor_name": "sensor_8",
+    "_description": "Outside temperature",
+    "_matched_rule": "outdoor_temp",
+    "_all_columns_for_this_sensor": [
+      "sensor_8_max",
+      "sensor_8_avg",
+      "sensor_8_min",
+      "sensor_8_std"
+    ]
+  }
+}
