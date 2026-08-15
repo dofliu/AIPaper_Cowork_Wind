@@ -75,7 +75,8 @@ C0  Signal availability & mapping   — all 6 core signals (Active Power,
     an operator-supplied map. No silent substring guessing.
 C1  Missing-feature policy applied  — R15 policy applied over wall-clock
     gaps; per-case evaluability mask emitted; non-evaluable fraction
-    reported and flagged above 30%.
+    reported and flagged above 5% (PI decision 2026-08-15, from the G4
+    measured distribution: p95 0.0237, max 0.0364).
 C2  Artifact reproducibility        — implementation source, version and
     parameter provenance recorded and hashed (--artifact-manifest).
 C3  Label independence              — fit step provably touched only the
@@ -164,7 +165,16 @@ LABEL_HINTS = ["label", "anomaly", "fault", "event", "class", "status"]
 # C1 policy (R15 section 1), expressed in wall-clock time (P0-5 fix).
 SHORT_GAP_HOURS = 1.0     # <= 1h  -> linear interpolation
 LONG_GAP_HOURS = 3.0      # <= 3h  -> forward fill ; > 3h -> non-evaluable
-NON_EVALUABLE_FLAG_FRACTION = 0.30
+# Tightened from 0.30 to 0.05 by PI decision, 2026-08-15, on evidence rather
+# than convention. The original 0.30 was borrowed from the G5 regime-bin
+# exclusion rule before anyone had seen CARE v6's real gap distribution. The
+# G4 deep scan then measured it across 15 cases: median non-evaluable fraction
+# 0.0037, p95 0.0237, MAXIMUM 0.0364. At 0.30 the threshold sat roughly an
+# order of magnitude above the worst case in the archive, so it could never
+# fire -- it excluded nothing and protected against nothing. 0.05 still leaves
+# more than twice the observed p95 as headroom, while being low enough that a
+# genuinely degraded case cannot pass unnoticed.
+NON_EVALUABLE_FLAG_FRACTION = 0.05
 NOMINAL_INTERVAL_MINUTES_DEFAULT = 10.0
 
 TIMESTAMP_FORMATS = [
@@ -523,7 +533,7 @@ def check_c1(rows, timestamp_col, value_columns, nominal_interval_minutes):
         "clock_gaps_over_policy": clock_gaps,
         "n_non_evaluable_rows": n_non_evaluable,
         "non_evaluable_fraction": non_evaluable_fraction,
-        "flag_over_30pct_non_evaluable": over_flag,
+        "flag_over_threshold": over_flag,
         "per_column": per_column,
     }, mask_rows
 
@@ -1091,9 +1101,9 @@ def run_for_scorer(args):
         "C1_missing_feature_policy": {
             "status": c1_status,
             "detail": "per-case; wall-clock gap classification + evaluability mask",
-            "n_cases_over_30pct_non_evaluable": sum(
+            "n_cases_over_flag_fraction": sum(
                 1 for c in per_case.values()
-                if c["C1_missing_feature_policy"].get("flag_over_30pct_non_evaluable")),
+                if c["C1_missing_feature_policy"].get("flag_over_threshold")),
         },
         "C2_artifact_reproducibility": c2,
         "C3_label_independence": c3,

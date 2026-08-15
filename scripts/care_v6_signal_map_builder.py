@@ -254,9 +254,16 @@ def _describe(c):
     return "%s = %r" % (c["sensor_name"], (c["description"] or "").strip())
 
 
-def choose(candidates):
+def choose(candidates, average_ties=False):
     """Pick only when unambiguous: a single candidate at the best priority,
-    matched by a rule that actually identifies the signal."""
+    matched by a rule that actually identifies the signal.
+
+    With average_ties, a tie between channels that all describe the SAME
+    quantity (three anemometers, two rotor bearings, three blade axes) is
+    resolved by averaging them, per the PI decision of 2026-08-15. A
+    SUBSTITUTE tie is never averaged: those channels describe DIFFERENT
+    components, and averaging a gearbox bearing with a generator bearing
+    would manufacture a quantity that no sensor measures."""
     if not candidates:
         return None, "no channel in the dictionary matched this signal"
     best = candidates[0]["rule_priority"]
@@ -269,6 +276,14 @@ def choose(candidates):
                       % (len(tied), tied[0]["matched_rule"],
                          "; ".join(_describe(c) for c in tied)))
     if len(tied) > 1:
+        if average_ties:
+            units = {(c["unit"] or "").strip().lower() for c in tied}
+            if len(units) > 1:
+                return None, ("%d channels tie at rule %r but their units differ (%s) "
+                              "-- averaging them would be meaningless: %s"
+                              % (len(tied), tied[0]["matched_rule"], sorted(units),
+                                 "; ".join(_describe(c) for c in tied)))
+            return {"_average_of": tied}, None
         return None, ("%d channels tie at rule %r -- a human must choose: %s"
                       % (len(tied), tied[0]["matched_rule"],
                          "; ".join(_describe(c) for c in tied)))
@@ -300,7 +315,7 @@ def run(args):
         signal_map, report = {}, {}
         for signal in SIGNAL_RULES:
             candidates = matched.get(signal, [])
-            pick, problem = choose(candidates)
+            pick, problem = choose(candidates, args.average_ties)
             report[signal] = {
                 "n_candidates": len(candidates),
                 "candidates": candidates,
@@ -312,7 +327,24 @@ def run(args):
                     "names in CARE v6 (power_<n>_*, wind_speed_<n>_*). If the "
                     "dictionary has no sensor_<n> entry for them, read the column "
                     "name straight from the case-file header instead.")
-            if pick:
+            if pick and "_average_of" in pick:
+                members = pick["_average_of"]
+                cols = []
+                for m in members:
+                    avg = [c for c in m["columns"] if c.endswith("_avg")]
+                    cols.append((avg or m["columns"])[0])
+                signal_map[signal] = {
+                    "derived_from": cols,
+                    "unit": members[0]["unit"],
+                    "derivation": ("arithmetic mean of %d redundant channels measuring "
+                                   "the same quantity (PI decision 2026-08-15)"
+                                   % len(cols)),
+                    "_source": "feature_description.csv",
+                    "_matched_rule": members[0]["matched_rule"],
+                    "_members": [{"sensor_name": m["sensor_name"],
+                                  "description": m["description"]} for m in members],
+                }
+            elif pick:
                 avg_cols = [c for c in pick["columns"] if c.endswith("_avg")]
                 signal_map[signal] = {
                     "column": (avg_cols or pick["columns"])[0],
@@ -335,6 +367,26 @@ def run(args):
                     "profiler_guess": guess,
                     "agree": base_t == base_g,
                 }
+
+        for spec in (args.header_override or []):
+            if "=" not in spec:
+                continue
+            key, column = spec.split("=", 1)
+            if ":" in key:
+                farm_prefix, signal = key.split(":", 1)
+                if farm_prefix.strip().lower() not in farm.lower():
+                    continue
+            else:
+                signal = key
+            signal = signal.strip()
+            if signal not in SIGNAL_RULES:
+                continue
+            signal_map[signal] = {
+                "column": column.strip(),
+                "unit": args.override_unit or "<CONFIRM>",
+                "_source": "operator --header-override (not in feature_description.csv)",
+            }
+            report.setdefault(signal, {})["overridden_by_operator"] = column.strip()
 
         missing = [s for s in SIGNAL_RULES if s not in signal_map]
         safe = re.sub(r"[^A-Za-z0-9_-]+", "_", farm)
@@ -374,6 +426,11 @@ def run(args):
         for signal in SIGNAL_RULES:
             if signal in signal_map:
                 m = signal_map[signal]
+                if "derived_from" in m:
+                    print("  %-26s mean(%s) %-8s %d redundant channels"
+                          % (signal, ", ".join(m["derived_from"]), m["unit"],
+                             len(m["derived_from"])))
+                    continue
                 agree = cross.get(signal, {}).get("agree")
                 mark = "" if agree is None else ("  [profiler agrees]" if agree
                                                  else "  [profiler DISAGREED: %s]"
@@ -410,6 +467,14 @@ def main():
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--workdir", required=True, help="Extracted CARE v6 root")
     ap.add_argument("--output-dir", required=True)
+    ap.add_argument("--average-ties", action="store_true",
+                    help="Resolve a tie between channels measuring the same quantity "
+                         "by averaging them (emitted as C0 derived_from). Never "
+                         "applied to SUBSTITUTE ties.")
+    ap.add_argument("--header-override", action="append", metavar="[FARM:]SIGNAL=COLUMN",
+                    help="Map a signal the dictionary does not name, e.g. "
+                         "'A:wind_speed=wind_speed_3_avg'. Repeatable.")
+    ap.add_argument("--override-unit", help="Unit to record for --header-override entries")
     ap.add_argument("--profiles-dir",
                     help="sensor_profile_out/ from the statistical profiler, to "
                          "cross-validate the dictionary against the guesses")

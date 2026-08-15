@@ -52,7 +52,7 @@ SIGNAL_COLUMNS = {
 }
 HEADER = ["timestamp"] + [c for c, _ in SIGNAL_COLUMNS.values()] + ["anomaly_score"]
 
-N_ROWS = 200
+N_ROWS = 600
 INTERVAL_MIN = 10
 START = datetime(2026, 1, 1, 0, 0, 0)
 
@@ -250,7 +250,9 @@ def main():
 
         # ---------------- T4: >3h gap (P0-5) ----------------
         print("\nT4  >3h gap with absent scores -> C1 masks, C6 still PASS  [P0-5]")
-        # 25 blank steps = 250 min > 3h, and 25/200 = 12.5% non-evaluable (< 30% flag).
+        # 25 blank steps = 250 min > 3h. 25/600 = 4.2%, just under the 5% flag
+        # ratified on 2026-08-15 -- the series has to be long enough that a
+        # single >3h gap does not by itself exceed the threshold.
         fx = build_fixture(os.path.join(root, "t4"), cases, gap=(50, 25),
                            blank_scores_in_gap=True)
         rc, s, _ = run_checker(os.path.join(root, "t4_out"), full_args(fx))
@@ -263,12 +265,12 @@ def main():
         r.check("T4 C1 classifies the run as non_evaluable",
                 any(run["policy"] == "non_evaluable"
                     for col in c1["per_column"].values() for run in col["missing_runs"]))
-        r.check("T4 C1 stays PASS below the 30%% flag", c1["status"] == "PASS",
+        r.check("T4 C1 stays PASS below the 5%% flag", c1["status"] == "PASS",
                 "got %s" % c1["status"])
         r.check("T4 C6 PASS — absent scores fall inside the mask", c6["status"] == "PASS",
                 "got %s (%s)" % (c6["status"], c6.get("problems")))
         r.check("T4 C6 reports non-evaluable coverage",
-                abs(c6["non_evaluable_coverage_fraction"] - 0.125) < 1e-9,
+                abs(c6["non_evaluable_coverage_fraction"] - 25 / 600) < 1e-9,
                 "got %s" % c6["non_evaluable_coverage_fraction"])
         r.check("T4 overall PASS", s["gate_status"] == "PASS", "got %s" % s["gate_status"])
         mask = os.path.join(root, "t4_out", "evaluability_masks", "case_001_evaluability_mask.csv")
