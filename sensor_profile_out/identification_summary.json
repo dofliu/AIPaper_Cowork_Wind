@@ -1,6 +1,37 @@
 {
-  "generated_at_utc": "2026-08-14T15:48:12.955969Z",
+  "generated_at_utc": "2026-08-14T17:57:26.355333+00:00",
   "status": "CANDIDATE_UNRATIFIED",
-  "farms": {},
+  "farms": {
+    "Wind Farm A": {
+      "anchor_power": "power_29_avg",
+      "anchor_wind": "wind_speed_3_avg",
+      "top_pick": {
+        "rotor_speed": "sensor_15_avg",
+        "ambient_temperature": "sensor_0_avg",
+        "main_bearing_temperature": "sensor_7_avg",
+        "pitch_angle": "sensor_5_std"
+      }
+    },
+    "Wind Farm B": {
+      "anchor_power": "power_58_avg",
+      "anchor_wind": "wind_speed_59_avg",
+      "top_pick": {
+        "rotor_speed": "sensor_6_avg",
+        "ambient_temperature": "sensor_22_avg",
+        "main_bearing_temperature": "sensor_16_avg",
+        "pitch_angle": "sensor_54_min"
+      }
+    },
+    "Wind Farm C": {
+      "anchor_power": "power_17_avg",
+      "anchor_wind": "wind_speed_235_avg",
+      "top_pick": {
+        "rotor_speed": "sensor_0_avg",
+        "ambient_temperature": "sensor_39_avg",
+        "main_bearing_temperature": "sensor_151_avg",
+        "pitch_angle": "sensor_1_std"
+      }
+    }
+  },
   "cli_invocation": "scripts\\sensor_identification_profile.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6 --output-dir .\\sensor_profile_out"
 }

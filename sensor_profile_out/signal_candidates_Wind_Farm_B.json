@@ -1,0 +1,544 @@
+{
+  "farm": "Wind Farm B",
+  "n_cases_sampled": 3,
+  "n_cases_total": 15,
+  "sampled_files": [
+    "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\19.csv",
+    "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\2.csv",
+    "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm B\\datasets\\21.csv"
+  ],
+  "n_rows_sampled": 82281,
+  "anchor_columns": {
+    "active_power": "power_58_avg",
+    "wind_speed": "wind_speed_59_avg",
+    "power_candidates_seen": [
+      "power_58_avg",
+      "power_62_avg"
+    ],
+    "wind_candidates_seen": [
+      "wind_speed_59_avg",
+      "wind_speed_60_avg",
+      "wind_speed_61_avg"
+    ],
+    "anchor_selection_rule": "named column with the largest standard deviation"
+  },
+  "n_columns_profiled": 252,
+  "n_anonymised_columns": 228,
+  "wind_p80_used_for_highwind_mask": 12.71,
+  "candidates": {
+    "rotor_speed": {
+      "expected_unit": "rpm",
+      "n_columns_scored": 228,
+      "candidates": [
+        {
+          "column": "sensor_6_avg",
+          "score": 1.0,
+          "evidence": [
+            "non-negative (0.0% negative)",
+            "strong positive corr with wind speed (r=0.98)",
+            "strong positive corr with power (r=0.89)",
+            "p01-p99 range plausible as rotor or generator speed (0.9 to 18.8)"
+          ],
+          "stats": {
+            "min": 0.21,
+            "p01": 0.94,
+            "median": 6.41,
+            "mean": 7.0716,
+            "p99": 18.83,
+            "max": 30.17,
+            "std": 3.9687,
+            "corr_wind": 0.9813,
+            "corr_power": 0.8893,
+            "corr_season": 0.3531,
+            "corr_wind_highwind_only": 0.9609,
+            "frac_near_zero": 0.0022,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_6_max",
+          "score": 1.0,
+          "evidence": [
+            "non-negative (0.0% negative)",
+            "strong positive corr with wind speed (r=0.98)",
+            "strong positive corr with power (r=0.89)",
+            "p01-p99 range plausible as rotor or generator speed (1.7 to 24.9)"
+          ],
+          "stats": {
+            "min": 0.47,
+            "p01": 1.69,
+            "median": 10.29,
+            "mean": 10.6835,
+            "p99": 24.86,
+            "max": 41.89,
+            "std": 5.0682,
+            "corr_wind": 0.9837,
+            "corr_power": 0.8924,
+            "corr_season": 0.3689,
+            "corr_wind_highwind_only": 0.9339,
+            "frac_near_zero": 0.0,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_6_min",
+          "score": 1.0,
+          "evidence": [
+            "non-negative (0.0% negative)",
+            "strong positive corr with wind speed (r=0.85)",
+            "strong positive corr with power (r=0.78)",
+            "p01-p99 range plausible as rotor or generator speed (0.2 to 3.4)"
+          ],
+          "stats": {
+            "min": 0.04,
+            "p01": 0.22,
+            "median": 1.49,
+            "mean": 1.4741,
+            "p99": 3.36,
+            "max": 9.08,
+            "std": 0.6259,
+            "corr_wind": 0.851,
+            "corr_power": 0.7804,
+            "corr_season": 0.3394,
+            "corr_wind_highwind_only": 0.4352,
+            "frac_near_zero": 0.0477,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_6_std",
+          "score": 1.0,
+          "evidence": [
+            "non-negative (0.0% negative)",
+            "strong positive corr with wind speed (r=0.88)",
+            "strong positive corr with power (r=0.79)",
+            "p01-p99 range plausible as rotor or generator speed (0.1 to 10.1)"
+          ],
+          "stats": {
+            "min": 0.0,
+            "p01": 0.09,
+            "median": 1.88,
+            "mean": 2.5049,
+            "p99": 10.13,
+            "max": 22.05,
+            "std": 2.223,
+            "corr_wind": 0.8788,
+            "corr_power": 0.7883,
+            "corr_season": 0.2986,
+            "corr_wind_highwind_only": 0.7539,
+            "frac_near_zero": 0.129,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_28_avg",
+          "score": 1.0,
+          "evidence": [
+            "non-negative (0.0% negative)",
+            "strong positive corr with wind speed (r=0.76)",
+            "strong positive corr with power (r=0.81)",
+            "p01-p99 range plausible as rotor or generator speed (0.0 to 19.2)"
+          ],
+          "stats": {
+            "min": -29.91,
+            "p01": 0.0,
+            "median": 1.91,
+            "mean": 6.0919,
+            "p99": 19.21,
+            "max": 37.25,
+            "std": 6.6916,
+            "corr_wind": 0.7629,
+            "corr_power": 0.8125,
+            "corr_season": 0.3149,
+            "corr_wind_highwind_only": 0.1344,
+            "frac_near_zero": 0.1025,
+            "missing_fraction": 0.0
+          }
+        }
+      ]
+    },
+    "ambient_temperature": {
+      "expected_unit": "degC",
+      "n_columns_scored": 228,
+      "candidates": [
+        {
+          "column": "sensor_22_avg",
+          "score": 1.0,
+          "evidence": [
+            "p01-p99 range plausible for outdoor air (14.4 to 34.0)",
+            "strong annual cycle (r=-0.60 vs cos(day-of-year))",
+            "near-independent of power (r=-0.19), as outdoor air should be"
+          ],
+          "stats": {
+            "min": 0.0,
+            "p01": 14.44,
+            "median": 23.99,
+            "mean": 24.1306,
+            "p99": 33.98,
+            "max": 37.05,
+            "std": 4.309,
+            "corr_wind": -0.1739,
+            "corr_power": -0.1852,
+            "corr_season": -0.5998,
+            "corr_wind_highwind_only": -0.3037,
+            "frac_near_zero": 0.0,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_22_max",
+          "score": 1.0,
+          "evidence": [
+            "p01-p99 range plausible for outdoor air (15.0 to 34.0)",
+            "strong annual cycle (r=-0.60 vs cos(day-of-year))",
+            "near-independent of power (r=-0.19), as outdoor air should be"
+          ],
+          "stats": {
+            "min": 0.0,
+            "p01": 15.0,
+            "median": 24.0,
+            "mean": 24.4557,
+            "p99": 34.0,
+            "max": 38.0,
+            "std": 4.2904,
+            "corr_wind": -0.1808,
+            "corr_power": -0.1911,
+            "corr_season": -0.6027,
+            "corr_wind_highwind_only": -0.3005,
+            "frac_near_zero": 0.0,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_22_std",
+          "score": 1.0,
+          "evidence": [
+            "p01-p99 range plausible for outdoor air (14.0 to 33.0)",
+            "strong annual cycle (r=-0.60 vs cos(day-of-year))",
+            "near-independent of power (r=-0.18), as outdoor air should be"
+          ],
+          "stats": {
+            "min": 0.0,
+            "p01": 14.0,
+            "median": 23.22,
+            "mean": 23.7938,
+            "p99": 33.0,
+            "max": 37.0,
+            "std": 4.3257,
+            "corr_wind": -0.1692,
+            "corr_power": -0.1812,
+            "corr_season": -0.5986,
+            "corr_wind_highwind_only": -0.3043,
+            "frac_near_zero": 0.0,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_8_avg",
+          "score": 0.82,
+          "evidence": [
+            "p01-p99 range plausible for outdoor air (3.4 to 25.1)",
+            "strong annual cycle (r=-0.72 vs cos(day-of-year))",
+            "weak dependence on power (r=-0.24)"
+          ],
+          "stats": {
+            "min": 0.78,
+            "p01": 3.37,
+            "median": 12.28,
+            "mean": 12.5918,
+            "p99": 25.09,
+            "max": 31.79,
+            "std": 5.1661,
+            "corr_wind": -0.2445,
+            "corr_power": -0.2441,
+            "corr_season": -0.7211,
+            "corr_wind_highwind_only": -0.2325,
+            "frac_near_zero": 0.0,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_8_max",
+          "score": 0.82,
+          "evidence": [
+            "p01-p99 range plausible for outdoor air (3.5 to 25.3)",
+            "strong annual cycle (r=-0.72 vs cos(day-of-year))",
+            "weak dependence on power (r=-0.24)"
+          ],
+          "stats": {
+            "min": 1.0,
+            "p01": 3.5,
+            "median": 12.4,
+            "mean": 12.7347,
+            "p99": 25.3,
+            "max": 32.0,
+            "std": 5.1631,
+            "corr_wind": -0.2422,
+            "corr_power": -0.2418,
+            "corr_season": -0.7209,
+            "corr_wind_highwind_only": -0.2283,
+            "frac_near_zero": 0.0,
+            "missing_fraction": 0.0
+          }
+        }
+      ]
+    },
+    "main_bearing_temperature": {
+      "expected_unit": "degC",
+      "n_columns_scored": 228,
+      "candidates": [
+        {
+          "column": "sensor_16_avg",
+          "score": 0.875,
+          "evidence": [
+            "p01-p99 range plausible for a lubricated bearing (0.1 to 110.5)",
+            "rises with power in the expected band (r=0.81)",
+            "carries an ambient-driven seasonal component (r=0.30)",
+            "median 31.3 is 7.3 above the best ambient candidate — consistent with a heated component"
+          ],
+          "stats": {
+            "min": 0.0,
+            "p01": 0.06,
+            "median": 31.28,
+            "mean": 37.9519,
+            "p99": 110.51,
+            "max": 110.93,
+            "std": 33.7001,
+            "corr_wind": 0.7089,
+            "corr_power": 0.8078,
+            "corr_season": 0.3047,
+            "corr_wind_highwind_only": -0.2251,
+            "frac_near_zero": 0.0509,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_16_max",
+          "score": 0.875,
+          "evidence": [
+            "p01-p99 range plausible for a lubricated bearing (0.2 to 115.5)",
+            "rises with power in the expected band (r=0.75)",
+            "carries an ambient-driven seasonal component (r=0.31)",
+            "median 41.9 is 17.9 above the best ambient candidate — consistent with a heated component"
+          ],
+          "stats": {
+            "min": 0.0,
+            "p01": 0.18,
+            "median": 41.87,
+            "mean": 46.1239,
+            "p99": 115.51,
+            "max": 122.95,
+            "std": 37.8168,
+            "corr_wind": 0.6651,
+            "corr_power": 0.7494,
+            "corr_season": 0.3059,
+            "corr_wind_highwind_only": -0.1952,
+            "frac_near_zero": 0.0248,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_17_avg",
+          "score": 0.875,
+          "evidence": [
+            "p01-p99 range plausible for a lubricated bearing (0.3 to 110.5)",
+            "rises with power in the expected band (r=0.81)",
+            "carries an ambient-driven seasonal component (r=0.30)",
+            "median 31.3 is 7.3 above the best ambient candidate — consistent with a heated component"
+          ],
+          "stats": {
+            "min": 0.01,
+            "p01": 0.33,
+            "median": 31.33,
+            "mean": 37.9842,
+            "p99": 110.5,
+            "max": 110.9,
+            "std": 33.6588,
+            "corr_wind": 0.7088,
+            "corr_power": 0.8077,
+            "corr_season": 0.3046,
+            "corr_wind_highwind_only": -0.2252,
+            "frac_near_zero": 0.0438,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_17_max",
+          "score": 0.875,
+          "evidence": [
+            "p01-p99 range plausible for a lubricated bearing (0.4 to 115.5)",
+            "rises with power in the expected band (r=0.75)",
+            "carries an ambient-driven seasonal component (r=0.31)",
+            "median 41.9 is 17.9 above the best ambient candidate — consistent with a heated component"
+          ],
+          "stats": {
+            "min": 0.06,
+            "p01": 0.41,
+            "median": 41.92,
+            "mean": 46.1398,
+            "p99": 115.45,
+            "max": 122.62,
+            "std": 37.7655,
+            "corr_wind": 0.665,
+            "corr_power": 0.7493,
+            "corr_season": 0.3058,
+            "corr_wind_highwind_only": -0.1954,
+            "frac_near_zero": 0.0185,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_18_avg",
+          "score": 0.875,
+          "evidence": [
+            "p01-p99 range plausible for a lubricated bearing (0.1 to 110.5)",
+            "rises with power in the expected band (r=0.81)",
+            "carries an ambient-driven seasonal component (r=0.30)",
+            "median 31.3 is 7.4 above the best ambient candidate — consistent with a heated component"
+          ],
+          "stats": {
+            "min": 0.0,
+            "p01": 0.1,
+            "median": 31.34,
+            "mean": 37.9939,
+            "p99": 110.47,
+            "max": 110.9,
+            "std": 33.6695,
+            "corr_wind": 0.7088,
+            "corr_power": 0.8075,
+            "corr_season": 0.3046,
+            "corr_wind_highwind_only": -0.2249,
+            "frac_near_zero": 0.0618,
+            "missing_fraction": 0.0
+          }
+        }
+      ]
+    },
+    "pitch_angle": {
+      "expected_unit": "deg",
+      "n_columns_scored": 228,
+      "candidates": [
+        {
+          "column": "sensor_54_min",
+          "score": 0.9,
+          "evidence": [
+            "p01-p99 range plausible for blade pitch (0.0 to 0.5)",
+            "99% of samples sit within +/-0.5 of zero — the classic below-rated fine-pitch mass",
+            "correlation with wind jumps from r=0.52 overall to r=0.75 in the top wind quintile — pitching in above rated"
+          ],
+          "stats": {
+            "min": 0.0,
+            "p01": 0.04,
+            "median": 0.09,
+            "mean": 0.1275,
+            "p99": 0.48,
+            "max": 28.64,
+            "std": 0.1643,
+            "corr_wind": 0.5181,
+            "corr_power": 0.452,
+            "corr_season": 0.2325,
+            "corr_wind_highwind_only": 0.7522,
+            "frac_near_zero": 0.9922,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_54_avg",
+          "score": 0.7,
+          "evidence": [
+            "p01-p99 range plausible for blade pitch (0.2 to 1.1)",
+            "81% of samples sit within +/-0.5 of zero — the classic below-rated fine-pitch mass",
+            "correlates with wind in the high-wind regime (r=0.75)"
+          ],
+          "stats": {
+            "min": 0.0,
+            "p01": 0.23,
+            "median": 0.31,
+            "mean": 0.3843,
+            "p99": 1.1,
+            "max": 13.38,
+            "std": 0.2015,
+            "corr_wind": 0.7784,
+            "corr_power": 0.6635,
+            "corr_season": 0.3466,
+            "corr_wind_highwind_only": 0.7486,
+            "frac_near_zero": 0.8054,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_54_std",
+          "score": 0.7,
+          "evidence": [
+            "p01-p99 range plausible for blade pitch (0.1 to 0.2)",
+            "100% of samples sit within +/-0.5 of zero — the classic below-rated fine-pitch mass",
+            "correlates with wind in the high-wind regime (r=0.56)"
+          ],
+          "stats": {
+            "min": 0.01,
+            "p01": 0.06,
+            "median": 0.13,
+            "mean": 0.1284,
+            "p99": 0.24,
+            "max": 0.5,
+            "std": 0.0316,
+            "corr_wind": 0.4074,
+            "corr_power": 0.2925,
+            "corr_season": 0.161,
+            "corr_wind_highwind_only": 0.5567,
+            "frac_near_zero": 1.0,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_0_avg",
+          "score": 0.65,
+          "evidence": [
+            "p01-p99 range plausible for blade pitch (0.0 to 53.0)",
+            "71% of samples sit within +/-0.5 of zero — the classic below-rated fine-pitch mass",
+            "heavily right-skewed (median 0.0, p99 53.0)"
+          ],
+          "stats": {
+            "min": 0.0,
+            "p01": 0.0,
+            "median": 0.0,
+            "mean": 51478.0797,
+            "p99": 53.0,
+            "max": 4235210000.0,
+            "std": 14764628.6751,
+            "corr_wind": -0.0045,
+            "corr_power": -0.0034,
+            "corr_season": -0.0032,
+            "corr_wind_highwind_only": 0.0753,
+            "frac_near_zero": 0.7138,
+            "missing_fraction": 0.0
+          }
+        },
+        {
+          "column": "sensor_10_std",
+          "score": 0.65,
+          "evidence": [
+            "p01-p99 range plausible for blade pitch (-0.1 to 92.8)",
+            "48% of samples sit within +/-0.5 of zero — the classic below-rated fine-pitch mass",
+            "heavily right-skewed (median 1.0, p99 92.8)"
+          ],
+          "stats": {
+            "min": -23.46,
+            "p01": -0.1,
+            "median": 1.0,
+            "mean": 14.2602,
+            "p99": 92.84,
+            "max": 93.7,
+            "std": 25.8844,
+            "corr_wind": -0.1428,
+            "corr_power": -0.104,
+            "corr_season": -0.0697,
+            "corr_wind_highwind_only": 0.2368,
+            "frac_near_zero": 0.4823,
+            "missing_fraction": 0.0
+          }
+        }
+      ]
+    }
+  }
+}
