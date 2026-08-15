@@ -18,9 +18,7 @@
     "unit": "1/min",
     "_derived_from_archive_columns": [
       "sensor_144_avg",
-      "sensor_145_avg",
-      "sensor_146_avg",
-      "sensor_147_avg"
+      "sensor_145_avg"
     ]
   },
   "main_bearing_temperature": {
