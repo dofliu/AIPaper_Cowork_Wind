@@ -2,23 +2,24 @@
   "farm": "Wind Farm C",
   "n_dictionary_entries": 238,
   "signals_resolved": [
-    "ambient_temperature",
-    "pitch_angle"
-  ],
-  "signals_unresolved": [
     "active_power",
-    "wind_speed",
+    "ambient_temperature",
+    "main_bearing_temperature",
+    "pitch_angle",
     "rotor_speed",
-    "main_bearing_temperature"
+    "wind_speed"
   ],
+  "signals_unresolved": [],
   "per_signal": {
     "active_power": {
-      "n_candidates": 11,
+      "excluded_by_operator": [],
+      "n_candidates": 6,
       "candidates": [
         {
           "sensor_name": "power_17",
           "description": "Active power converter",
           "unit": "kW",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,minimum,std_dev,maximum",
           "columns": [
@@ -28,12 +29,14 @@
             "power_17_max"
           ],
           "matched_rule": "active_power_phrase",
-          "rule_priority": 2
+          "rule_priority": 2,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "power_2",
           "description": "ABB-LS Active Power",
           "unit": "kW",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,std_dev,minimum",
           "columns": [
@@ -43,12 +46,14 @@
             "power_2_min"
           ],
           "matched_rule": "active_power_phrase",
-          "rule_priority": 2
+          "rule_priority": 2,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "power_5",
           "description": "Active power grid side converter",
           "unit": "kW",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -58,12 +63,14 @@
             "power_5_std"
           ],
           "matched_rule": "active_power_phrase",
-          "rule_priority": 2
+          "rule_priority": 2,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "power_6",
           "description": "Active power HV grid",
           "unit": "kW",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -73,72 +80,14 @@
             "power_6_std"
           ],
           "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "reactive_power_119",
-          "description": "ABB-LS Reactive Power",
-          "unit": "kvar",
-          "is_angle": false,
-          "statistics_type": "maximum,minimum,std_dev,average",
-          "columns": [
-            "reactive_power_119_max",
-            "reactive_power_119_min",
-            "reactive_power_119_std",
-            "reactive_power_119_avg"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "reactive_power_120",
-          "description": "Reactive power converter",
-          "unit": "kvar",
-          "is_angle": false,
-          "statistics_type": "average,std_dev,maximum,minimum",
-          "columns": [
-            "reactive_power_120_avg",
-            "reactive_power_120_std",
-            "reactive_power_120_max",
-            "reactive_power_120_min"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "reactive_power_121",
-          "description": "Reactive power GS converter",
-          "unit": "kvar",
-          "is_angle": false,
-          "statistics_type": "maximum,std_dev,average,minimum",
-          "columns": [
-            "reactive_power_121_max",
-            "reactive_power_121_std",
-            "reactive_power_121_avg",
-            "reactive_power_121_min"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "reactive_power_122",
-          "description": "Reactive power HV grid",
-          "unit": "kvar",
-          "is_angle": false,
-          "statistics_type": "maximum,std_dev,average,minimum",
-          "columns": [
-            "reactive_power_122_max",
-            "reactive_power_122_std",
-            "reactive_power_122_avg",
-            "reactive_power_122_min"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
+          "rule_priority": 2,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_3",
           "description": "Active power aeration motor A",
           "unit": "%",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -148,12 +97,14 @@
             "sensor_3_std"
           ],
           "matched_rule": "active_power_phrase",
-          "rule_priority": 2
+          "rule_priority": 2,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_4",
           "description": "Active power aeration motor B",
           "unit": "%",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -163,34 +114,21 @@
             "sensor_4_std"
           ],
           "matched_rule": "active_power_phrase",
-          "rule_priority": 2
-        },
-        {
-          "sensor_name": "sensor_75",
-          "description": "Maximum reactive power HV converter",
-          "unit": "kvar",
-          "is_angle": false,
-          "statistics_type": "average,maximum,std_dev,minimum",
-          "columns": [
-            "sensor_75_avg",
-            "sensor_75_max",
-            "sensor_75_std",
-            "sensor_75_min"
-          ],
-          "matched_rule": "active_power_phrase",
-          "rule_priority": 2
+          "rule_priority": 2,
+          "is_capability_estimate": false
         }
       ],
-      "problem": "11 channels tie at rule 'active_power_phrase' (power_17, power_2, power_5, power_6, reactive_power_119, reactive_power_120, reactive_power_121, reactive_power_122, sensor_3, sensor_4, sensor_75) -- a human must choose",
-      "hint": "Active power and wind speed already carry semantic column names in CARE v6 (power_<n>_*, wind_speed_<n>_*). If the dictionary has no sensor_<n> entry for them, read the column name straight from the case-file header instead."
+      "problem": null
     },
     "wind_speed": {
+      "excluded_by_operator": [],
       "n_candidates": 3,
       "candidates": [
         {
           "sensor_name": "wind_speed_235",
           "description": "Wind speed 1",
           "unit": "m/s",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -200,12 +138,14 @@
             "wind_speed_235_std"
           ],
           "matched_rule": "wind_speed_phrase",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "wind_speed_236",
           "description": "Wind speed 1+2",
           "unit": "m/s",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -215,12 +155,14 @@
             "wind_speed_236_std"
           ],
           "matched_rule": "wind_speed_phrase",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "wind_speed_237",
           "description": "Wind speed 2",
           "unit": "m/s",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,minimum,std_dev,maximum",
           "columns": [
@@ -230,19 +172,30 @@
             "wind_speed_237_max"
           ],
           "matched_rule": "wind_speed_phrase",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         }
       ],
-      "problem": "3 channels tie at rule 'wind_speed_phrase' (wind_speed_235, wind_speed_236, wind_speed_237) -- a human must choose",
-      "hint": "Active power and wind speed already carry semantic column names in CARE v6 (power_<n>_*, wind_speed_<n>_*). If the dictionary has no sensor_<n> entry for them, read the column name straight from the case-file header instead."
+      "problem": null
     },
     "rotor_speed": {
-      "n_candidates": 5,
+      "excluded_by_operator": [
+        {
+          "sensor_name": "sensor_146",
+          "description": "Rotor speed gearbox main shaft 1"
+        },
+        {
+          "sensor_name": "sensor_147",
+          "description": "Rotor speed gearbox main shaft 2"
+        }
+      ],
+      "n_candidates": 3,
       "candidates": [
         {
           "sensor_name": "sensor_144",
           "description": "Rotor speed 1",
           "unit": "1/min",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -252,12 +205,14 @@
             "sensor_144_std"
           ],
           "matched_rule": "rotor_rpm",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_145",
           "description": "Rotor speed 2",
           "unit": "1/min",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -267,42 +222,14 @@
             "sensor_145_std"
           ],
           "matched_rule": "rotor_rpm",
-          "rule_priority": 1
-        },
-        {
-          "sensor_name": "sensor_146",
-          "description": "Rotor speed gearbox main shaft 1",
-          "unit": "1/min",
-          "is_angle": false,
-          "statistics_type": "minimum,std_dev,maximum,average",
-          "columns": [
-            "sensor_146_min",
-            "sensor_146_std",
-            "sensor_146_max",
-            "sensor_146_avg"
-          ],
-          "matched_rule": "rotor_rpm",
-          "rule_priority": 1
-        },
-        {
-          "sensor_name": "sensor_147",
-          "description": "Rotor speed gearbox main shaft 2",
-          "unit": "1/min",
-          "is_angle": false,
-          "statistics_type": "maximum,minimum,std_dev,average",
-          "columns": [
-            "sensor_147_max",
-            "sensor_147_min",
-            "sensor_147_std",
-            "sensor_147_avg"
-          ],
-          "matched_rule": "rotor_rpm",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_8",
           "description": "Generator angle speed",
           "unit": "rad/s",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -312,18 +239,21 @@
             "sensor_8_std"
           ],
           "matched_rule": "generator_speed",
-          "rule_priority": 2
+          "rule_priority": 2,
+          "is_capability_estimate": false
         }
       ],
-      "problem": "4 channels tie at rule 'rotor_rpm' (sensor_144, sensor_145, sensor_146, sensor_147) -- a human must choose"
+      "problem": null
     },
     "main_bearing_temperature": {
+      "excluded_by_operator": [],
       "n_candidates": 23,
       "candidates": [
         {
           "sensor_name": "sensor_194",
           "description": "Axis 1 Rotor bearing inner ring temperature",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "maximum,minimum,std_dev,average",
           "columns": [
@@ -333,12 +263,14 @@
             "sensor_194_avg"
           ],
           "matched_rule": "rotor_bearing_temp",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_195",
           "description": "Axis 2 Rotor bearing inner ring temperature",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "maximum,minimum,std_dev,average",
           "columns": [
@@ -348,12 +280,14 @@
             "sensor_195_avg"
           ],
           "matched_rule": "rotor_bearing_temp",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_196",
           "description": "Rotor bearing temperature 1",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "maximum,minimum,std_dev,average",
           "columns": [
@@ -363,12 +297,14 @@
             "sensor_196_avg"
           ],
           "matched_rule": "rotor_bearing_temp",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_197",
           "description": "Rotor bearing temperature 2",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "maximum,minimum,std_dev,average",
           "columns": [
@@ -378,12 +314,14 @@
             "sensor_197_avg"
           ],
           "matched_rule": "rotor_bearing_temp",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_198",
           "description": "Rotor bearing temperature 3",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "maximum,minimum,std_dev,average",
           "columns": [
@@ -393,12 +331,14 @@
             "sensor_198_avg"
           ],
           "matched_rule": "rotor_bearing_temp",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_151",
           "description": "Temperature 1 planetary bearing A1",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "maximum,minimum,std_dev,average",
           "columns": [
@@ -407,13 +347,15 @@
             "sensor_151_std",
             "sensor_151_avg"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_152",
           "description": "Temperature 1 planetary bearing A2",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -422,13 +364,15 @@
             "sensor_152_min",
             "sensor_152_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_153",
           "description": "Temperature 1 planetary bearing B1",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -437,13 +381,15 @@
             "sensor_153_min",
             "sensor_153_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_154",
           "description": "Temperature 1 planetary bearing B2",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,std_dev,minimum",
           "columns": [
@@ -452,13 +398,15 @@
             "sensor_154_std",
             "sensor_154_min"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_155",
           "description": "Temperature 1 planetary bearing C1",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "maximum,minimum,std_dev,average",
           "columns": [
@@ -467,13 +415,15 @@
             "sensor_155_std",
             "sensor_155_avg"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_156",
           "description": "Temperature 1 planetary bearing C2",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -482,13 +432,15 @@
             "sensor_156_min",
             "sensor_156_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_157",
           "description": "Temperature 1 planetary bearing D1",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -497,13 +449,15 @@
             "sensor_157_min",
             "sensor_157_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_158",
           "description": "Temperature 1 planetary bearing D2",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,minimum,std_dev,maximum",
           "columns": [
@@ -512,13 +466,15 @@
             "sensor_158_std",
             "sensor_158_max"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_159",
           "description": "Temperature 2 planetary bearing A1",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -527,13 +483,15 @@
             "sensor_159_min",
             "sensor_159_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_160",
           "description": "Temperature 2 planetary bearing A2",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -542,13 +500,15 @@
             "sensor_160_min",
             "sensor_160_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_161",
           "description": "Temperature 2 planetary bearing B1",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -557,13 +517,15 @@
             "sensor_161_min",
             "sensor_161_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_162",
           "description": "Temperature 2 planetary bearing B2",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -572,13 +534,15 @@
             "sensor_162_min",
             "sensor_162_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_163",
           "description": "Temperature 2 planetary bearing C1",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "maximum,minimum,average,std_dev",
           "columns": [
@@ -587,13 +551,15 @@
             "sensor_163_avg",
             "sensor_163_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_164",
           "description": "Temperature 2 planetary bearing C2",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -602,13 +568,15 @@
             "sensor_164_min",
             "sensor_164_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_165",
           "description": "Temperature 2 planetary bearing D1",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,std_dev,minimum",
           "columns": [
@@ -617,13 +585,15 @@
             "sensor_165_std",
             "sensor_165_min"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_166",
           "description": "Temperature 2 planetary bearing D2",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -632,13 +602,15 @@
             "sensor_166_min",
             "sensor_166_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_168",
           "description": "Temperature of axial bearing 1",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "maximum,std_dev,minimum,average",
           "columns": [
@@ -647,13 +619,15 @@
             "sensor_168_min",
             "sensor_168_avg"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_169",
           "description": "Temperature of axial bearing 2",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -662,19 +636,73 @@
             "sensor_169_min",
             "sensor_169_std"
           ],
-          "matched_rule": "any_bearing_temp",
-          "rule_priority": 3
+          "matched_rule": "SUBSTITUTE_other_bearing_temp",
+          "rule_priority": 3,
+          "is_capability_estimate": false
         }
       ],
-      "problem": "5 channels tie at rule 'rotor_bearing_temp' (sensor_194, sensor_195, sensor_196, sensor_197, sensor_198) -- a human must choose"
+      "problem": null
     },
     "pitch_angle": {
-      "n_candidates": 2,
+      "excluded_by_operator": [],
+      "n_candidates": 5,
       "candidates": [
+        {
+          "sensor_name": "sensor_103",
+          "description": "Position rotor blade axis 1",
+          "unit": "deg",
+          "_unit_raw_in_source": null,
+          "is_angle": true,
+          "statistics_type": "maximum,std_dev,average,minimum",
+          "columns": [
+            "sensor_103_max",
+            "sensor_103_std",
+            "sensor_103_avg",
+            "sensor_103_min"
+          ],
+          "matched_rule": "blade_position",
+          "rule_priority": 1,
+          "is_capability_estimate": false
+        },
+        {
+          "sensor_name": "sensor_104",
+          "description": "Position rotor blade axis 2",
+          "unit": "deg",
+          "_unit_raw_in_source": null,
+          "is_angle": true,
+          "statistics_type": "average,maximum,std_dev,minimum",
+          "columns": [
+            "sensor_104_avg",
+            "sensor_104_max",
+            "sensor_104_std",
+            "sensor_104_min"
+          ],
+          "matched_rule": "blade_position",
+          "rule_priority": 1,
+          "is_capability_estimate": false
+        },
+        {
+          "sensor_name": "sensor_105",
+          "description": "Position rotor blade axis 3",
+          "unit": "deg",
+          "_unit_raw_in_source": null,
+          "is_angle": true,
+          "statistics_type": "average,maximum,std_dev,minimum",
+          "columns": [
+            "sensor_105_avg",
+            "sensor_105_max",
+            "sensor_105_std",
+            "sensor_105_min"
+          ],
+          "matched_rule": "blade_position",
+          "rule_priority": 1,
+          "is_capability_estimate": false
+        },
         {
           "sensor_name": "sensor_76",
           "description": "Min pitch angle",
           "unit": "deg",
+          "_unit_raw_in_source": null,
           "is_angle": true,
           "statistics_type": "average,maximum,std_dev,minimum",
           "columns": [
@@ -684,12 +712,14 @@
             "sensor_76_min"
           ],
           "matched_rule": "blade_pitch",
-          "rule_priority": 1
+          "rule_priority": 2,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_26",
           "description": "Current drain pitch L1",
           "unit": "A",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "std_dev,minimum,average,maximum",
           "columns": [
@@ -699,18 +729,21 @@
             "sensor_26_max"
           ],
           "matched_rule": "pitch_any",
-          "rule_priority": 3
+          "rule_priority": 4,
+          "is_capability_estimate": false
         }
       ],
       "problem": null
     },
     "ambient_temperature": {
+      "excluded_by_operator": [],
       "n_candidates": 4,
       "candidates": [
         {
           "sensor_name": "sensor_7",
           "description": "Ambient temperature",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -720,12 +753,14 @@
             "sensor_7_std"
           ],
           "matched_rule": "exact_ambient_temp",
-          "rule_priority": 0
+          "rule_priority": 0,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_177",
           "description": "Outside temperature",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -735,12 +770,14 @@
             "sensor_177_std"
           ],
           "matched_rule": "outdoor_temp",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_41",
           "description": "Nacelle outside temperature",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -750,12 +787,14 @@
             "sensor_41_std"
           ],
           "matched_rule": "outdoor_temp",
-          "rule_priority": 1
+          "rule_priority": 1,
+          "is_capability_estimate": false
         },
         {
           "sensor_name": "sensor_39",
           "description": "Electrical cabinet ambient temperature",
           "unit": "Celsius",
+          "_unit_raw_in_source": null,
           "is_angle": false,
           "statistics_type": "average,maximum,minimum,std_dev",
           "columns": [
@@ -765,23 +804,13 @@
             "sensor_39_std"
           ],
           "matched_rule": "ambient_any",
-          "rule_priority": 2
+          "rule_priority": 2,
+          "is_capability_estimate": false
         }
       ],
       "problem": null
     }
   },
-  "cross_validation_vs_profiler": {
-    "ambient_temperature": {
-      "dictionary": "sensor_7_avg",
-      "profiler_guess": "sensor_39_avg",
-      "agree": false
-    },
-    "pitch_angle": {
-      "dictionary": "sensor_76_avg",
-      "profiler_guess": "sensor_1_std",
-      "agree": false
-    }
-  },
+  "cross_validation_vs_profiler": {},
   "note": "Entries marked with a leading underscore are provenance, not C0 fields. Units come from the dictionary verbatim -- check them before use; a mangled degree sign means the source file is not UTF-8."
 }

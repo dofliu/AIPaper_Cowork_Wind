@@ -167,7 +167,7 @@ def main():
               abs(u_after - u_before) / u_before < 0.30,
               "%.3f -> %.3f -- if this now detects, the limitation text is stale"
               % (u_before, u_after))
-        summary = json.load(open(os.path.join(out_u, "scorer_summary.json"),
+        summary = json.load(open(os.path.join(out_u, "scorer_summary_Wind_Farm_A.json"),
                                  encoding="utf-8"))
         check("T3 the exclusion is recorded in the summary",
               summary["signals_declared_unavailable"] == ["main_bearing_temperature"])
@@ -270,6 +270,72 @@ def main():
         check("T8 a not_available declaration is carried through verbatim",
               gate_map_u["main_bearing_temperature"].get("not_available") is True
               and gate_map_u["main_bearing_temperature"].get("ratified_by") == "PI")
+
+        # ---- T9 fault codes do not reach the covariance ----
+        # Farm C's sensor_194/195 sit at 850.0 for over 1% of rows. Averaged
+        # with three genuine channels near 46 C that produced a main bearing
+        # temperature of 363 C, which would have entered the covariance and
+        # generated enormous distances -- false alarms, with nothing reported.
+        print("\nT9  an out-of-range fault code is rejected per channel")
+        bear = os.path.join(datasets, "5.csv")
+        build(bear, random.Random(31), fault_on=None)
+        with open(bear, newline="", encoding="utf-8") as f:
+            rows = list(csv.reader(f, delimiter=";"))
+        head = rows[0]
+        bi = head.index("sensor_7_avg")
+        # Period 37, not 40. The summary's signal_ranges sample every 20th
+        # scored row, so a spike period sharing a factor with 20 can land
+        # perfectly out of phase and never be sampled -- which is exactly what
+        # a first version of this test did, and it read as the filter failing.
+        # Stride sampling can miss a periodic artefact entirely; the score CSV
+        # below is the ground truth, so assert against that.
+        spiked = 0
+        for n, r in enumerate(rows[1:]):
+            if n % 37 == 0:
+                r[bi] = "850.0"
+                spiked += 1
+        with open(bear, "w", newline="", encoding="utf-8") as f:
+            csv.writer(f, delimiter=";").writerows(rows)
+
+        out_f = os.path.join(root, "scores_filtered")
+        out_r = os.path.join(root, "scores_raw")
+        run_scorer(os.path.join(root, "care"), "Wind Farm A", map_a, out_f,
+                   os.path.join(root, "ev_f"))
+        proc = subprocess.run(
+            [sys.executable, SCORER, "--workdir", os.path.join(root, "care"),
+             "--farm", "Wind Farm A", "--signal-map", map_a,
+             "--output-dir", out_r, "--evidence-dir", os.path.join(root, "ev_r"),
+             "--no-range-filter"], capture_output=True, text=True)
+        check("T9 both runs completed", proc.returncode == 0, proc.stderr[-300:])
+
+        sf = json.load(open(os.path.join(out_f, "scorer_summary_Wind_Farm_A.json"),
+                            encoding="utf-8"))
+        sr = json.load(open(os.path.join(out_r, "scorer_summary_Wind_Farm_A.json"),
+                            encoding="utf-8"))
+
+        def max_bearing(directory):
+            with open(os.path.join(directory, "5.csv"), newline="",
+                      encoding="utf-8") as f:
+                vals = [float(r["signal_main_bearing_temperature"])
+                        for r in csv.DictReader(f)
+                        if r["signal_main_bearing_temperature"]]
+            return max(vals)
+
+        mb_f = max_bearing(out_f)
+        mb_r = max_bearing(out_r)
+        print("      bearing max: filtered %.2f, unfiltered %.2f" % (mb_f, mb_r))
+        check("T9 the fault code reaches the feature vector when unfiltered",
+              mb_r > 800, "unfiltered max %.2f -- fixture did not inject" % mb_r)
+        check("T9 and is gone when filtered", mb_f < 150,
+              "filtered max %.2f" % mb_f)
+        check("T9 the rejections are counted per channel, not just dropped",
+              sf["range_filter"]["readings_rejected_per_column"].get("sensor_7_avg", 0) > 0,
+              "got %s" % sf["range_filter"]["readings_rejected_per_column"])
+        check("T9 the filter records that it was enabled",
+              sf["range_filter"]["enabled"] is True
+              and sr["range_filter"]["enabled"] is False)
+        check("T9 and the ranges applied are recorded, not implied",
+              "main_bearing_temperature" in sf["range_filter"]["ranges_applied"])
 
         # ---- T6 determinism ----
         print("\nT6  identical input -> identical output (C5 requirement)")

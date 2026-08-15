@@ -41,9 +41,30 @@
       "sensor_25_std"
     ]
   },
+  "main_bearing_temperature": {
+    "derived_from": [
+      "sensor_51_avg",
+      "sensor_52_avg"
+    ],
+    "unit": "degC",
+    "derivation": "arithmetic mean of 2 redundant channels measuring the same quantity (PI decision 2026-08-15)",
+    "_source": "feature_description.csv",
+    "_matched_rule": "rotor_bearing_temp",
+    "_members": [
+      {
+        "sensor_name": "sensor_51",
+        "description": "Rotor bearing temperature 1"
+      },
+      {
+        "sensor_name": "sensor_52",
+        "description": "Rotor bearing temperature 2"
+      }
+    ],
+    "_unit_source": "operator --unit-override (was 'UNREADABLE_IN_SOURCE')"
+  },
   "pitch_angle": {
     "column": "sensor_10_avg",
-    "unit": "�",
+    "unit": "deg",
     "_source": "feature_description.csv",
     "_sensor_name": "sensor_10",
     "_description": "Pitch angle",
@@ -53,11 +74,12 @@
       "sensor_10_std",
       "sensor_10_avg",
       "sensor_10_min"
-    ]
+    ],
+    "_unit_source": "operator --unit-override (was 'UNREADABLE_IN_SOURCE')"
   },
   "ambient_temperature": {
     "column": "sensor_8_avg",
-    "unit": "�C",
+    "unit": "degC",
     "_source": "feature_description.csv",
     "_sensor_name": "sensor_8",
     "_description": "Outside temperature",
@@ -67,6 +89,7 @@
       "sensor_8_avg",
       "sensor_8_min",
       "sensor_8_std"
-    ]
+    ],
+    "_unit_source": "operator --unit-override (was 'UNREADABLE_IN_SOURCE')"
   }
 }

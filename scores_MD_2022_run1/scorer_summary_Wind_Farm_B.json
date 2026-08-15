@@ -1,0 +1,208 @@
+{
+  "scorer": "MD_2022",
+  "implementation_version": "md2022-v1.2",
+  "farm": "Wind Farm B",
+  "signals_used": [
+    "active_power",
+    "wind_speed",
+    "rotor_speed",
+    "main_bearing_temperature",
+    "pitch_angle",
+    "ambient_temperature"
+  ],
+  "signals_declared_unavailable": [],
+  "range_filter": {
+    "enabled": true,
+    "ranges_applied": {
+      "wind_speed": [
+        0.0,
+        60.0
+      ],
+      "rotor_speed": [
+        -6.0,
+        60.0
+      ],
+      "main_bearing_temperature": [
+        -40.0,
+        150.0
+      ],
+      "pitch_angle": [
+        -20.0,
+        120.0
+      ],
+      "ambient_temperature": [
+        -50.0,
+        60.0
+      ]
+    },
+    "readings_rejected_per_column": {
+      "sensor_51_avg": 464,
+      "sensor_52_avg": 4012,
+      "sensor_8_avg": 6,
+      "wind_speed_61_avg": 6
+    },
+    "note": "A reading outside physical possibility is a fault code, not a measurement. Rejected per channel BEFORE redundant channels are averaged, so one bad channel does not discard the rest."
+  },
+  "signal_ranges": {
+    "active_power": {
+      "unit_declared": "kW",
+      "n_samples": 42935,
+      "p01": -0.004132225806451613,
+      "p50": 0.27596129032258065,
+      "p99": 1.0290806451612904,
+      "min": -0.009338709677419354,
+      "max": 1.0301306451612904
+    },
+    "ambient_temperature": {
+      "unit_declared": "degC",
+      "n_samples": 42935,
+      "p01": 3.07,
+      "p50": 12.56,
+      "p99": 24.85659999999996,
+      "min": -2.16,
+      "max": 31.96
+    },
+    "main_bearing_temperature": {
+      "unit_declared": "degC",
+      "n_samples": 42935,
+      "p01": 8.4335,
+      "p50": 47.135000000000005,
+      "p99": 57.69329999999998,
+      "min": -29.49,
+      "max": 63.165
+    },
+    "pitch_angle": {
+      "unit_declared": "deg",
+      "n_samples": 42935,
+      "p01": -0.02,
+      "p50": 1.52,
+      "p99": 92.9,
+      "min": -2.99,
+      "max": 93.71
+    },
+    "rotor_speed": {
+      "unit_declared": "rpm",
+      "n_samples": 42935,
+      "p01": 0.0,
+      "p50": 7.96,
+      "p99": 10.12,
+      "min": 0.0,
+      "max": 10.13
+    },
+    "wind_speed": {
+      "unit_declared": "m/s",
+      "n_samples": 42935,
+      "p01": 0.91,
+      "p50": 8.11,
+      "p99": 21.14,
+      "min": 0.0,
+      "max": 29.54
+    }
+  },
+  "fit_scope": "case",
+  "ridge": 1e-06,
+  "n_cases": 15,
+  "n_cases_scored": 15,
+  "per_case": {
+    "19": {
+      "n_rows": 56274,
+      "n_scored": 56274,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52529
+    },
+    "2": {
+      "n_rows": 54774,
+      "n_scored": 54774,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52559
+    },
+    "21": {
+      "n_rows": 53514,
+      "n_scored": 53514,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52217
+    },
+    "23": {
+      "n_rows": 54542,
+      "n_scored": 54542,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52559
+    },
+    "27": {
+      "n_rows": 62268,
+      "n_scored": 62268,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52331
+    },
+    "34": {
+      "n_rows": 56564,
+      "n_scored": 56563,
+      "n_skipped_incomplete": 1,
+      "n_fit_rows": 52530
+    },
+    "52": {
+      "n_rows": 55268,
+      "n_scored": 55267,
+      "n_skipped_incomplete": 1,
+      "n_fit_rows": 52530
+    },
+    "53": {
+      "n_rows": 58607,
+      "n_scored": 58607,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52559
+    },
+    "7": {
+      "n_rows": 57888,
+      "n_scored": 57888,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52559
+    },
+    "74": {
+      "n_rows": 55602,
+      "n_scored": 55602,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52529
+    },
+    "77": {
+      "n_rows": 61776,
+      "n_scored": 61776,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52559
+    },
+    "82": {
+      "n_rows": 54992,
+      "n_scored": 54763,
+      "n_skipped_incomplete": 229,
+      "n_fit_rows": 52314
+    },
+    "83": {
+      "n_rows": 66154,
+      "n_scored": 66154,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52041
+    },
+    "86": {
+      "n_rows": 55486,
+      "n_scored": 55486,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52559
+    },
+    "87": {
+      "n_rows": 55356,
+      "n_scored": 55356,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52331
+    }
+  },
+  "evidence_written": [
+    "fit_provenance.json",
+    "artifact_manifest.json",
+    "freeze_receipt.json"
+  ],
+  "evidence_still_needed": [
+    "signal_map.json (already supplied via --signal-map)"
+  ],
+  "generated_at_utc": "2026-08-15T13:35:30.776684+00:00",
+  "cli_invocation": "scripts\\base_scorer_md2022.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare --farm Wind Farm B --signal-map .\\signal_map_out\\signal_map_Wind_Farm_B.json --output-dir .\\scores_MD_2022_run1 --evidence-dir .\\evidence_MD_2022_run1"
+}

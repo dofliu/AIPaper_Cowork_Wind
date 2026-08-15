@@ -1,0 +1,237 @@
+{
+  "scorer": "MD_2022",
+  "implementation_version": "md2022-v1.2",
+  "farm": "Wind Farm A",
+  "signals_used": [
+    "active_power",
+    "wind_speed",
+    "rotor_speed",
+    "pitch_angle",
+    "ambient_temperature"
+  ],
+  "signals_declared_unavailable": [
+    "main_bearing_temperature"
+  ],
+  "range_filter": {
+    "enabled": true,
+    "ranges_applied": {
+      "wind_speed": [
+        0.0,
+        60.0
+      ],
+      "rotor_speed": [
+        -6.0,
+        60.0
+      ],
+      "main_bearing_temperature": [
+        -40.0,
+        150.0
+      ],
+      "pitch_angle": [
+        -20.0,
+        120.0
+      ],
+      "ambient_temperature": [
+        -50.0,
+        60.0
+      ]
+    },
+    "readings_rejected_per_column": {},
+    "note": "A reading outside physical possibility is a fault code, not a measurement. Rejected per channel BEFORE redundant channels are averaged, so one bad channel does not discard the rest."
+  },
+  "signal_ranges": {
+    "active_power": {
+      "unit_declared": "kW",
+      "n_samples": 59826,
+      "p01": -0.00878048780487805,
+      "p50": 0.11297560975609756,
+      "p99": 0.9755609756097562,
+      "min": -0.014585365853658536,
+      "max": 0.9758536585365853
+    },
+    "ambient_temperature": {
+      "unit_declared": "degC",
+      "n_samples": 59826,
+      "p01": 9.0,
+      "p50": 19.0,
+      "p99": 34.0,
+      "min": 4.0,
+      "max": 41.0
+    },
+    "pitch_angle": {
+      "unit_declared": "deg",
+      "n_samples": 59826,
+      "p01": -2.2,
+      "p50": -0.1,
+      "p99": 89.5,
+      "min": -2.3,
+      "max": 90.0
+    },
+    "rotor_speed": {
+      "unit_declared": "rpm",
+      "n_samples": 59826,
+      "p01": 0.0,
+      "p50": 11.4,
+      "p99": 14.9,
+      "min": 0.0,
+      "max": 14.9
+    },
+    "wind_speed": {
+      "unit_declared": "m/s",
+      "n_samples": 59826,
+      "p01": 1.0,
+      "p50": 5.5,
+      "p99": 16.9,
+      "min": 0.4,
+      "max": 26.6
+    }
+  },
+  "fit_scope": "case",
+  "ridge": 1e-06,
+  "n_cases": 22,
+  "n_cases_scored": 22,
+  "per_case": {
+    "0": {
+      "n_rows": 54986,
+      "n_scored": 54986,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52148
+    },
+    "10": {
+      "n_rows": 53592,
+      "n_scored": 53592,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52323
+    },
+    "13": {
+      "n_rows": 54010,
+      "n_scored": 54010,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 50427
+    },
+    "14": {
+      "n_rows": 54197,
+      "n_scored": 54197,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52296
+    },
+    "17": {
+      "n_rows": 55090,
+      "n_scored": 55090,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52309
+    },
+    "22": {
+      "n_rows": 53036,
+      "n_scored": 53036,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51888
+    },
+    "24": {
+      "n_rows": 55003,
+      "n_scored": 55003,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52289
+    },
+    "25": {
+      "n_rows": 54712,
+      "n_scored": 54712,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52289
+    },
+    "26": {
+      "n_rows": 53702,
+      "n_scored": 53702,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52261
+    },
+    "3": {
+      "n_rows": 55487,
+      "n_scored": 55487,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52185
+    },
+    "38": {
+      "n_rows": 54835,
+      "n_scored": 54835,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52291
+    },
+    "40": {
+      "n_rows": 56158,
+      "n_scored": 56158,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 51219
+    },
+    "42": {
+      "n_rows": 53886,
+      "n_scored": 53886,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52303
+    },
+    "45": {
+      "n_rows": 53739,
+      "n_scored": 53739,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52299
+    },
+    "51": {
+      "n_rows": 54436,
+      "n_scored": 54436,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52043
+    },
+    "68": {
+      "n_rows": 54358,
+      "n_scored": 54358,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52063
+    },
+    "69": {
+      "n_rows": 54813,
+      "n_scored": 54813,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52220
+    },
+    "71": {
+      "n_rows": 54744,
+      "n_scored": 54744,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52295
+    },
+    "72": {
+      "n_rows": 54082,
+      "n_scored": 54082,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52065
+    },
+    "73": {
+      "n_rows": 54042,
+      "n_scored": 54042,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52313
+    },
+    "84": {
+      "n_rows": 53772,
+      "n_scored": 53772,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52335
+    },
+    "92": {
+      "n_rows": 54067,
+      "n_scored": 54067,
+      "n_skipped_incomplete": 0,
+      "n_fit_rows": 52293
+    }
+  },
+  "evidence_written": [
+    "fit_provenance.json",
+    "artifact_manifest.json",
+    "freeze_receipt.json"
+  ],
+  "evidence_still_needed": [
+    "signal_map.json (already supplied via --signal-map)"
+  ],
+  "generated_at_utc": "2026-08-15T13:34:49.458101+00:00",
+  "cli_invocation": "scripts\\base_scorer_md2022.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare --farm Wind Farm A --signal-map .\\signal_map_out\\signal_map_Wind_Farm_A.json --output-dir .\\scores_MD_2022_run2 --evidence-dir .\\evidence_MD_2022_run2"
+}

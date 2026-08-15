@@ -2,7 +2,7 @@
   "farm": "Wind Farm C",
   "source": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm C\\feature_description.csv",
   "delimiter": ";",
-  "encoding_used": "utf-8",
+  "encoding_used": "utf-8-sig",
   "n_entries": 238,
   "entries": [
     {

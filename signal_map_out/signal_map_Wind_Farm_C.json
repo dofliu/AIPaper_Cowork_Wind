@@ -1,16 +1,110 @@
 {
-  "pitch_angle": {
-    "column": "sensor_76_avg",
-    "unit": "deg",
+  "active_power": {
+    "column": "power_6_avg",
+    "unit": "kW",
     "_source": "feature_description.csv",
-    "_sensor_name": "sensor_76",
-    "_description": "Min pitch angle",
-    "_matched_rule": "blade_pitch",
+    "_sensor_name": "power_6",
+    "_description": "Active power HV grid",
+    "_matched_rule": "active_power_phrase+operator_pick",
     "_all_columns_for_this_sensor": [
-      "sensor_76_avg",
-      "sensor_76_max",
-      "sensor_76_std",
-      "sensor_76_min"
+      "power_6_avg",
+      "power_6_max",
+      "power_6_min",
+      "power_6_std"
+    ]
+  },
+  "wind_speed": {
+    "column": "wind_speed_236_avg",
+    "unit": "m/s",
+    "_source": "feature_description.csv",
+    "_sensor_name": "wind_speed_236",
+    "_description": "Wind speed 1+2",
+    "_matched_rule": "wind_speed_phrase+operator_pick",
+    "_all_columns_for_this_sensor": [
+      "wind_speed_236_avg",
+      "wind_speed_236_max",
+      "wind_speed_236_min",
+      "wind_speed_236_std"
+    ]
+  },
+  "rotor_speed": {
+    "derived_from": [
+      "sensor_144_avg",
+      "sensor_145_avg"
+    ],
+    "unit": "1/min",
+    "derivation": "arithmetic mean of 2 redundant channels measuring the same quantity (PI decision 2026-08-15)",
+    "_source": "feature_description.csv",
+    "_matched_rule": "rotor_rpm",
+    "_members": [
+      {
+        "sensor_name": "sensor_144",
+        "description": "Rotor speed 1"
+      },
+      {
+        "sensor_name": "sensor_145",
+        "description": "Rotor speed 2"
+      }
+    ]
+  },
+  "main_bearing_temperature": {
+    "derived_from": [
+      "sensor_194_avg",
+      "sensor_195_avg",
+      "sensor_196_avg",
+      "sensor_197_avg",
+      "sensor_198_avg"
+    ],
+    "unit": "Celsius",
+    "derivation": "arithmetic mean of 5 redundant channels measuring the same quantity (PI decision 2026-08-15)",
+    "_source": "feature_description.csv",
+    "_matched_rule": "rotor_bearing_temp",
+    "_members": [
+      {
+        "sensor_name": "sensor_194",
+        "description": "Axis 1 Rotor bearing inner ring temperature"
+      },
+      {
+        "sensor_name": "sensor_195",
+        "description": "Axis 2 Rotor bearing inner ring temperature"
+      },
+      {
+        "sensor_name": "sensor_196",
+        "description": "Rotor bearing temperature 1"
+      },
+      {
+        "sensor_name": "sensor_197",
+        "description": "Rotor bearing temperature 2"
+      },
+      {
+        "sensor_name": "sensor_198",
+        "description": "Rotor bearing temperature 3"
+      }
+    ]
+  },
+  "pitch_angle": {
+    "derived_from": [
+      "sensor_103_avg",
+      "sensor_104_avg",
+      "sensor_105_avg"
+    ],
+    "unit": "deg",
+    "derivation": "arithmetic mean of 3 redundant channels measuring the same quantity (PI decision 2026-08-15)",
+    "_source": "feature_description.csv",
+    "_matched_rule": "blade_position",
+    "_members": [
+      {
+        "sensor_name": "sensor_103",
+        "description": "Position rotor blade axis 1"
+      },
+      {
+        "sensor_name": "sensor_104",
+        "description": "Position rotor blade axis 2"
+      },
+      {
+        "sensor_name": "sensor_105",
+        "description": "Position rotor blade axis 3"
+      }
     ]
   },
   "ambient_temperature": {

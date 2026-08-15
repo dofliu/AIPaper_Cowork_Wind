@@ -84,6 +84,9 @@ SIGNAL_RULES = {
         # reactive_power_<n> into the match. Require a word boundary and
         # explicitly refuse a preceding "re".
         ("active_power_phrase", lambda d: bool(ACTIVE_POWER_RE.search(d))),
+        # Farm A calls its measured channel simply "Grid power" (kW). Without
+        # this it matched nothing and the capability channel won by default.
+        ("grid_power", lambda d: "grid power" in d and "reactive" not in d),
     ],
     "wind_speed": [
         ("exact_wind_speed", lambda d: re.fullmatch(r"\s*wind speed\s*", d)),
@@ -135,6 +138,18 @@ EXCLUDE_IF_COUNTER = True
 # carries "Active power - generator connected in delta" in Wh. The unit
 # settles it -- energy is not power.
 ENERGY_UNITS = {"wh", "kwh", "mwh", "varh", "kvarh", "mvarh"}
+
+# A modelled capability, not a measurement. "Possible power" is standard wind
+# availability terminology (IEC 61400-26) for the power a turbine COULD have
+# produced at the current wind -- it is a smooth function of wind speed, so a
+# turbine that is underperforming shows NO deviation in it. That is precisely
+# the anomaly the detector exists to find. Farm A's dictionary offers both
+# "Possible grid active power" and "Grid power"; the phrase rule matched the
+# first. Demote these so a measured channel wins, and refuse to resolve
+# silently to one when it is all that is left.
+CAPABILITY_WORDS = ("possible", "potential", "available", "theoretical",
+                    "estimated", "expected", "reference", "setpoint",
+                    "set point", "demanded", "nominal", "rated")
 POWER_SIGNALS_REJECTING_ENERGY = {"active_power"}
 
 CANDIDATE_DELIMITERS = [";", ",", "\t", "|"]
@@ -154,6 +169,57 @@ def sniff_delimiter(path):
     return best
 
 
+# Signatures of text that has been through a wrong encoding at some point.
+# "ï¿½" is U+FFFD's UTF-8 bytes read as Western-8bit: the original character
+# is GONE and cannot be recovered from the file. "Â°"/"Ã…"/"Ã©" are UTF-8 read
+# as cp1252, which is reversible but still means we picked the wrong codec.
+MOJIBAKE_MARKERS = ("ï¿½", "Â°", "Ã‚", "Ã©", "Ã¤", "Ã¶", "Ã¼")
+
+UNIT_UNREADABLE = "UNREADABLE_IN_SOURCE"
+
+# Only ever a SUGGESTION printed next to a destroyed unit, for the operator to
+# confirm. Temperatures are degC and angles are deg; conflating them is how a
+# wrong unit reaches the C0 map.
+LIKELY_UNIT = {
+    "ambient_temperature": "degC",
+    "main_bearing_temperature": "degC",
+    "pitch_angle": "deg",
+    "rotor_speed": "rpm",
+    "wind_speed": "m/s",
+    "active_power": "kW",
+}
+
+
+def has_mojibake(text):
+    return any(marker in text for marker in MOJIBAKE_MARKERS)
+
+
+def entry_label(entry):
+    """A one-line label for a signal map entry, whatever shape it is.
+
+    There are four shapes: a plain column, an average over redundant channels
+    (derived_from, NO column key), an operator override, and a ratified
+    not_available declaration. Code that assumed every entry had a "column"
+    crashed on the second one the moment --average-ties actually averaged
+    something -- which is to say, on Farm B, on the operator's machine, after
+    the tool had already printed Farm A and looked fine."""
+    if entry.get("not_available"):
+        return "NOT AVAILABLE (ratified)"
+    if "derived_from" in entry:
+        return "mean(%s)" % ", ".join(entry["derived_from"])
+    return entry.get("column", "?")
+
+
+def clean_unit(unit):
+    """Return (unit, raw_or_None). A unit whose characters were destroyed in
+    the source file must not be written into the C0 signal map as if it were
+    real -- C0 requires a unit, and 'ï¿½C' is not one. Flag it instead so the
+    operator declares it with --unit-override."""
+    if unit and (has_mojibake(unit) or "�" in unit):
+        return UNIT_UNREADABLE, unit
+    return unit, None
+
+
 def read_dictionary(path):
     """Read feature_description.csv. Encoding is not guaranteed: the degree
     sign in the unit column comes through mangled under UTF-8, so try the
@@ -169,12 +235,21 @@ def read_dictionary(path):
         # A decode can succeed and still be wrong: U+FFFD in the text means the
         # bytes were not this encoding. Keep the result as a fallback but try
         # the next candidate.
+        #
+        # U+FFFD alone is not a sufficient test. CARE v6's Farm A dictionary
+        # has the degree sign ALREADY DESTROYED in the file -- it literally
+        # stores the UTF-8 bytes of U+FFFD (EF BF BD). Decoding those as
+        # cp1252 yields the three ordinary characters "\u00ef\u00bf\u00bd", which contain no
+        # U+FFFD, so the clean-decode test passed and the unit "\u00ef\u00bf\u00bdC" was
+        # written into the C0 signal map as if it were real. Look for the
+        # mojibake signature too.
         blob = "".join(str(v) for r in candidate_rows for v in r.values() if v)
-        if "\ufffd" not in blob:
+        if "\ufffd" not in blob and not has_mojibake(blob):
             rows, encoding_used = candidate_rows, encoding
             break
         if rows is None:
-            rows, encoding_used = candidate_rows, encoding + " (contains U+FFFD)"
+            note = "contains U+FFFD" if "\ufffd" in blob else "contains mojibake"
+            rows, encoding_used = candidate_rows, "%s (%s)" % (encoding, note)
     if rows is None:
         with open(path, newline="", encoding="utf-8", errors="replace") as f:
             rows = list(csv.DictReader(f, delimiter=delimiter))
@@ -232,10 +307,17 @@ def match_signals(entries):
                 except Exception:
                     hit = False
                 if hit:
+                    # A unit destroyed in the source file must not reach the C0
+                    # map looking like a real unit. Flag it here, at the single
+                    # point where dictionary units enter, so the tie comparison
+                    # and every downstream write see the same flagged value.
+                    unit_value, unit_raw = clean_unit(entry.get("unit"))
+                    lowered = (entry.get("description") or "").lower()
                     found[signal].append({
                         "sensor_name": entry.get("sensor_name"),
                         "description": entry.get("description"),
-                        "unit": entry.get("unit"),
+                        "unit": unit_value,
+                        "_unit_raw_in_source": unit_raw,
                         "is_angle": truthy(entry.get("is_angle")),
                         "statistics_type": entry.get("statistics_type"),
                         "columns": column_names_for(
@@ -243,6 +325,8 @@ def match_signals(entries):
                             parse_stats_types(entry.get("statistics_type"))),
                         "matched_rule": rule_name,
                         "rule_priority": priority,
+                        "is_capability_estimate": any(
+                            w in lowered for w in CAPABILITY_WORDS),
                     })
                     break
     for signal in found:
@@ -250,11 +334,68 @@ def match_signals(entries):
     return found
 
 
+def farm_matches(prefix, farm):
+    """Does an operator flag's [FARM:] prefix select this farm?
+
+    This was a substring test, which is wrong in a way that cost real work:
+    the farm names are "Wind Farm A/B/C", and the letter "a" is a substring
+    of "wind farm b" -- the word FARM contains an a. So --header-override
+    "A:wind_speed=..." silently applied to all three farms, overwriting the
+    ratified Farm C pick, and every downstream regime bin for two farms
+    would have been computed from the wrong farm's wind channel. Nothing
+    errored; the summary just quietly said wind_speed_3_avg three times.
+
+    Match the farm's identifier instead: the trailing token of the name
+    ("A"), or the full name."""
+    if prefix is None:
+        return True
+    prefix = prefix.strip().lower()
+    farm = (farm or "").strip().lower()
+    if not prefix:
+        return False
+    if prefix == farm:
+        return True
+    tokens = farm.split()
+    return bool(tokens) and prefix == tokens[-1]
+
+
+def header_candidates(farm_dir, stem):
+    """Column names in this farm's case files starting with `stem`.
+
+    Active power and wind speed carry semantic names in CARE v6
+    (power_<n>_avg, wind_speed_<n>_avg) rather than sensor_<n> dictionary
+    entries, so when the dictionary cannot answer, the case-file header can.
+    Reporting these turns a round trip to the operator into a line of output
+    they can act on immediately."""
+    for pattern in (os.path.join(farm_dir, "datasets", "*.csv"),
+                    os.path.join(farm_dir, "datasets", "*", "*.csv")):
+        files = sorted(glob.glob(pattern))
+        if not files:
+            continue
+        try:
+            delimiter = sniff_delimiter(files[0])
+            with open(files[0], newline="", encoding="utf-8", errors="replace") as f:
+                header = next(csv.reader(f, delimiter=delimiter), []) or []
+        except (OSError, StopIteration):
+            return []
+        return [c for c in header if c.lower().startswith(stem)]
+    return []
+
+
+def excluded_for(exclusions, farm, signal):
+    """Sensor names the operator has ruled out for this farm and signal."""
+    out = set()
+    for (farm_prefix, sig), names in exclusions.items():
+        if sig == signal and farm_matches(farm_prefix, farm):
+            out |= names
+    return out
+
+
 def _pick_for(picks, farm_key, signal):
     for (farm_prefix, sig), sensor in picks.items():
         if sig != signal:
             continue
-        if farm_prefix is None or farm_prefix in farm_key:
+        if farm_matches(farm_prefix, farm_key):
             return sensor
     return None
 
@@ -289,6 +430,23 @@ def choose(candidates, average_ties=False, pick_sensor=None):
                           % (pick_sensor, "; ".join(_describe(c) for c in candidates)))
         chosen[0] = dict(chosen[0], matched_rule=chosen[0]["matched_rule"] + "+operator_pick")
         return chosen[0], None
+
+    # A measured channel always beats a modelled capability, whatever the rule
+    # order says. If capability channels are ALL that matched, do not resolve
+    # silently -- say so, the way a substitute bearing is said.
+    measured = [c for c in candidates if not c.get("is_capability_estimate")]
+    if measured:
+        candidates = measured
+    elif candidates:
+        return None, ("every candidate is a modelled capability, not a measurement "
+                      "(%s). 'Possible/available power' is what the turbine COULD "
+                      "have produced at this wind, so an underperforming turbine "
+                      "shows no deviation in it. Pick a measured channel with "
+                      "--pick, or declare this signal --not-available: %s"
+                      % (", ".join(sorted({w for c in candidates for w in
+                                           CAPABILITY_WORDS
+                                           if w in (c["description"] or "").lower()})),
+                         "; ".join(_describe(c) for c in candidates)))
 
     best = candidates[0]["rule_priority"]
     tied = [c for c in candidates if c["rule_priority"] == best]
@@ -341,9 +499,23 @@ def run(args):
         else:
             picks[(None, key.strip())] = sensor.strip()
 
+    exclusions = {}
+    for spec in (args.exclude_sensor or []):
+        if "=" not in spec:
+            continue
+        key, sensors = spec.split("=", 1)
+        if ":" in key:
+            farm_prefix, signal = key.split(":", 1)
+        else:
+            farm_prefix, signal = None, key
+        names = {n.strip() for n in sensors.split(",") if n.strip()}
+        exclusions.setdefault((farm_prefix and farm_prefix.strip().lower(),
+                               signal.strip()), set()).update(names)
+
     overall = {}
     for path in dict_paths:
         farm = os.path.basename(os.path.dirname(path))
+        farm_dir = os.path.dirname(path)
         farm_key = farm.strip().lower()
         entries, delimiter, encoding_used = read_dictionary(path)
         matched = match_signals(entries)
@@ -351,9 +523,27 @@ def run(args):
         signal_map, report = {}, {}
         for signal in SIGNAL_RULES:
             candidates = matched.get(signal, [])
+            # Drop channels the operator has ruled out. Farm C's rotor speed
+            # matched four channels: sensor_144/145 ("Rotor speed 1/2",
+            # r=1.0000 with each other, median 9.8 -- the real rotor) and
+            # sensor_146/147 ("Rotor speed gearbox main shaft 1/2", median 80,
+            # minimum -55, and correlated with each other at only r=0.21).
+            # Averaging all four moved the median from 9.8 to 46.6. --pick
+            # cannot express "these two, averaged", so exclusion is the tool
+            # that fits: it removes the bad members and lets the good ones
+            # average as ratified.
+            dropped = []
+            ruled_out = excluded_for(exclusions, farm, signal)
+            if ruled_out:
+                dropped = [c for c in candidates if c["sensor_name"] in ruled_out]
+                candidates = [c for c in candidates
+                              if c["sensor_name"] not in ruled_out]
             pick, problem = choose(candidates, args.average_ties,
                                    _pick_for(picks, farm_key, signal))
             report[signal] = {
+                "excluded_by_operator": [
+                    {"sensor_name": c["sensor_name"],
+                     "description": c["description"]} for c in dropped],
                 "n_candidates": len(candidates),
                 "candidates": candidates,
                 "problem": problem,
@@ -411,7 +601,7 @@ def run(args):
             key, column = spec.split("=", 1)
             if ":" in key:
                 farm_prefix, signal = key.split(":", 1)
-                if farm_prefix.strip().lower() not in farm.lower():
+                if not farm_matches(farm_prefix, farm):
                     continue
             else:
                 signal = key
@@ -424,6 +614,57 @@ def run(args):
                 "_source": "operator --header-override (not in feature_description.csv)",
             }
             report.setdefault(signal, {})["overridden_by_operator"] = column.strip()
+
+        # Units whose characters were destroyed in the source file. Fixing
+        # these by hand in the JSON afterwards is error-prone, so accept them
+        # as a declaration on the command line.
+        for spec in (args.unit_override or []):
+            if "=" not in spec:
+                continue
+            key, unit = spec.split("=", 1)
+            if ":" in key:
+                farm_prefix, signal = key.split(":", 1)
+                if not farm_matches(farm_prefix, farm):
+                    continue
+            else:
+                signal = key
+            signal = signal.strip()
+            if signal in signal_map:
+                previous = signal_map[signal].get("unit")
+                signal_map[signal]["unit"] = unit.strip()
+                signal_map[signal]["_unit_source"] = (
+                    "operator --unit-override (was %r)" % previous)
+                report.setdefault(signal, {})["unit_overridden_by_operator"] = unit.strip()
+
+        # A signal this farm genuinely does not carry. C0 FAILs on silent
+        # absence and accepts an explicit ratified declaration, so emit the
+        # declaration here rather than making the operator hand-edit JSON.
+        for spec in (args.not_available or []):
+            if "=" not in spec:
+                continue
+            key, reason = spec.split("=", 1)
+            if ":" in key:
+                farm_prefix, signal = key.split(":", 1)
+                if not farm_matches(farm_prefix, farm):
+                    continue
+            else:
+                signal = key
+            signal = signal.strip()
+            if signal not in SIGNAL_RULES:
+                continue
+            if signal in signal_map and not args.force_not_available:
+                print("  REFUSING to declare %r not available on %s: it resolved to "
+                      "%s. Pass --force-not-available if that is really intended."
+                      % (signal, farm, entry_label(signal_map[signal])))
+                continue
+            signal_map[signal] = {
+                "not_available": True,
+                "reason": reason.strip(),
+                "ratified_by": args.ratified_by,
+                "ratified_on": args.ratified_on,
+                "_source": "operator --not-available",
+            }
+            report.setdefault(signal, {})["declared_not_available"] = reason.strip()
 
         missing = [s for s in SIGNAL_RULES if s not in signal_map]
         safe = re.sub(r"[^A-Za-z0-9_-]+", "_", farm)
@@ -453,16 +694,24 @@ def run(args):
 
         overall[farm] = {
             "n_dictionary_entries": len(entries),
-            "resolved": {s: signal_map[s]["column"] for s in sorted(signal_map)},
+            "resolved": {s: entry_label(signal_map[s]) for s in sorted(signal_map)},
             "unresolved": missing,
             "cross_validation": cross,
         }
 
         print("\n=== %s (%d dictionary entries, %s, %s) ==="
               % (farm, len(entries), delimiter and repr(delimiter), encoding_used))
+        unreadable_units = []
         for signal in SIGNAL_RULES:
             if signal in signal_map:
                 m = signal_map[signal]
+                if m.get("not_available"):
+                    print("  %-26s NOT AVAILABLE (ratified by %s on %s): %s"
+                          % (signal, m.get("ratified_by", "?"),
+                             m.get("ratified_on", "?"), m.get("reason", "")))
+                    continue
+                if m.get("unit") == UNIT_UNREADABLE:
+                    unreadable_units.append(signal)
                 if "derived_from" in m:
                     print("  %-26s mean(%s) %-8s %d redundant channels"
                           % (signal, ", ".join(m["derived_from"]), m["unit"],
@@ -479,13 +728,40 @@ def run(args):
                       % (signal, m.get("column", "?"), m.get("unit", "?"),
                          description, mark))
             else:
-                extra = ""
+                print("  %-26s -- %s" % (signal, report[signal]["problem"]))
+                # Do not just say "take it from the header" -- read the header
+                # and say which columns are actually there, with the exact flag
+                # to paste. The alternative is another round trip to a person
+                # who has already done enough of them.
                 if signal in ("active_power", "wind_speed"):
-                    extra = ("  (this one is usually a named `%s_<n>_avg` column "
-                             "rather than a sensor_<n> entry -- take it from the "
-                             "header, not the dictionary)"
-                             % ("power" if signal == "active_power" else "wind_speed"))
-                print("  %-26s -- %s%s" % (signal, report[signal]["problem"], extra))
+                    stem = "power" if signal == "active_power" else "wind_speed"
+                    found = header_candidates(farm_dir, stem)
+                    avg = [c for c in found if c.lower().endswith("_avg")]
+                    shortlist = avg or found
+                    if shortlist:
+                        print("      case-file header offers: %s"
+                              % ", ".join(shortlist[:8])
+                              + (" (+%d more)" % (len(shortlist) - 8)
+                                 if len(shortlist) > 8 else ""))
+                        print('      --header-override "%s:%s=%s" --override-unit "%s"'
+                              % (farm.split()[-1], signal, shortlist[0],
+                                 "kW" if signal == "active_power" else "m/s"))
+                    else:
+                        print("      no %s* column found in this farm's case files "
+                              "either" % stem)
+
+        # C0 requires a unit, and Phase 5.1's cross-farm consistency check
+        # reads it. A unit destroyed in the source file has to be declared.
+        if unreadable_units:
+            print("      unit unreadable in the source file for: %s"
+                  % ", ".join(unreadable_units))
+            for signal in unreadable_units:
+                # Do NOT suggest degC for everything. Pitch angle is degrees;
+                # suggesting degC here would have put a wrong unit into the C0
+                # map, in the one place whose entire job is recording units.
+                guess = LIKELY_UNIT.get(signal, "CONFIRM")
+                print('      --unit-override "%s:%s=%s"   <- confirm the unit'
+                      % (farm.split()[-1], signal, guess))
 
     with open(os.path.join(args.output_dir, "signal_map_summary.json"),
               "w", encoding="utf-8") as f:
@@ -520,6 +796,24 @@ def main():
                     help="Map a signal the dictionary does not name, e.g. "
                          "'A:wind_speed=wind_speed_3_avg'. Repeatable.")
     ap.add_argument("--override-unit", help="Unit to record for --header-override entries")
+    ap.add_argument("--unit-override", action="append", metavar="[FARM:]SIGNAL=UNIT",
+                    help="Declare the unit for a signal whose dictionary unit is "
+                         "unreadable (CARE v6 Farm A stores a destroyed degree sign). "
+                         "Repeatable.")
+    ap.add_argument("--not-available", action="append", metavar="[FARM:]SIGNAL=REASON",
+                    help="Declare that this farm carries no such signal, emitting the "
+                         "ratified not_available block C0 requires. Repeatable.")
+    ap.add_argument("--exclude-sensor", action="append",
+                    metavar="[FARM:]SIGNAL=SENSOR[,SENSOR...]",
+                    help="Remove named channels from a signal's candidates before "
+                         "choosing, so the remaining ones resolve or average "
+                         "normally. Repeatable.")
+    ap.add_argument("--force-not-available", action="store_true",
+                    help="Allow --not-available to override a signal that did resolve")
+    ap.add_argument("--ratified-by", default="PI",
+                    help="Recorded in --not-available declarations")
+    ap.add_argument("--ratified-on", default="2026-08-15",
+                    help="Recorded in --not-available declarations")
     ap.add_argument("--profiles-dir",
                     help="sensor_profile_out/ from the statistical profiler, to "
                          "cross-validate the dictionary against the guesses")

@@ -72,16 +72,45 @@ import hashlib
 import json
 import math
 import os
+import re
 import sys
+from collections import defaultdict
 from datetime import datetime, timezone
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from physical_ranges import PHYSICAL_RANGE as _PHYSICAL_RANGE  # noqa: E402
+
+PHYSICAL_RANGE = {k: (v[0], v[1]) for k, v in _PHYSICAL_RANGE.items()}
+
 SCORER_NAME = "MD_2022"
-IMPLEMENTATION_VERSION = "md2022-v1.1"
+IMPLEMENTATION_VERSION = "md2022-v1.2"
 
 # Namespace for the per-signal feature columns in the score CSV, so that a
 # signal name can never collide with the canonical timestamp/wind_speed/
 # anomaly_score trio. See the header comment where the row is written.
 SIGNAL_COL_PREFIX = "signal_"
+
+# Every Nth scored row feeds the per-signal range report. 1-in-20 over a farm
+# is tens of thousands of samples -- ample for percentiles, negligible in
+# memory.
+SIGNAL_RANGE_STRIDE = 20
+
+# A reading outside physical possibility is not a measurement, it is a fault
+# code. Farm C's rotor bearing channels sensor_194/195 sit at exactly 850.0
+# for over 1% of rows; averaged with three genuine channels near 46 C that
+# produced a main_bearing_temperature of 363 C, which would have entered the
+# covariance and generated enormous Mahalanobis distances -- false alarms,
+# silently.
+#
+# Filtering is PER CHANNEL and happens before redundant channels are
+# averaged, so one channel's fault code does not discard the other four's
+# good readings. A signal is only missing when EVERY channel behind it is
+# out of range, and then the row is skipped exactly as a missing row is.
+#
+# The bounds live in physical_ranges.py, shared with check_unit_consistency,
+# because two tools disagreeing about what is possible makes the gate
+# unreadable. Override with --range SIGNAL=LO:HI or disable with
+# --no-range-filter; either way the counts are recorded in the summary.
 PAPER = ("Liu, Corbita, Lee, Wang, Applied Sciences 2022, 12(17):8661, "
          "DOI 10.3390/app12178661")
 
@@ -157,14 +186,40 @@ def resolve_columns(signal_map):
     return resolved, unavailable
 
 
-def feature_vector(row, resolved, order):
+def percentile(values, q):
+    if not values:
+        return None
+    s = sorted(values)
+    if len(s) == 1:
+        return s[0]
+    pos = q * (len(s) - 1)
+    low = int(pos)
+    high = min(low + 1, len(s) - 1)
+    return s[low] + (s[high] - s[low]) * (pos - low)
+
+
+def feature_vector(row, resolved, order, ranges=None, rejected=None):
     """One row -> the feature vector, averaging redundant channels. Returns
     None if any required signal is missing: partial vectors would silently
-    distort the covariance."""
+    distort the covariance.
+
+    ranges: signal -> (lo, hi). A channel outside its range is dropped before
+    averaging, so a fault code in one of five redundant channels does not
+    poison the other four. Rejections are counted per channel in `rejected`."""
     vector = []
     for signal in order:
         values = [to_float(row.get(c)) for c in resolved[signal]]
-        present = [v for v in values if v is not None]
+        present = []
+        for column, value in zip(resolved[signal], values):
+            if value is None:
+                continue
+            if ranges and signal in ranges:
+                lo, hi = ranges[signal]
+                if value < lo or value > hi:
+                    if rejected is not None:
+                        rejected[column] = rejected.get(column, 0) + 1
+                    continue
+            present.append(value)
         if not present:
             return None
         vector.append(sum(present) / len(present))
@@ -237,6 +292,14 @@ def run(args):
     with open(args.signal_map, encoding="utf-8") as f:
         signal_map = json.load(f)
     resolved, unavailable = resolve_columns(signal_map)
+    signal_samples = defaultdict(list)
+    rejected = {}
+    ranges = None if args.no_range_filter else dict(PHYSICAL_RANGE)
+    for spec in (args.range or []):
+        name, _, bounds = spec.partition('=')
+        lo, _, hi = bounds.partition(':')
+        ranges = ranges or {}
+        ranges[name.strip()] = (float(lo), float(hi))
     order = [s for s in CORE_SIGNALS if s not in unavailable]
     if len(order) < 2:
         raise SystemExit("fewer than two usable signals; nothing to score")
@@ -264,7 +327,7 @@ def run(args):
             for row in rows:
                 if (row.get(args.split_col) or "").strip().lower() != "train":
                     continue
-                v = feature_vector(row, resolved, order)
+                v = feature_vector(row, resolved, order, ranges, rejected)
                 if v is not None:
                     global_fit_vectors.append(v)
         if len(global_fit_vectors) < len(order) + 2:
@@ -293,7 +356,7 @@ def run(args):
             for row in rows:
                 if (row.get(args.split_col) or "").strip().lower() != "train":
                     continue
-                v = feature_vector(row, resolved, order)
+                v = feature_vector(row, resolved, order, ranges, rejected)
                 if v is not None:
                     fit_vectors.append(v)
             if len(fit_vectors) < len(order) + 2:
@@ -327,7 +390,7 @@ def run(args):
             writer.writerow(["timestamp", "wind_speed", "anomaly_score"]
                             + [SIGNAL_COL_PREFIX + s for s in order])
             for row in rows:
-                v = feature_vector(row, resolved, order)
+                v = feature_vector(row, resolved, order, ranges, rejected)
                 wind_values = [to_float(row.get(c)) for c in wind_columns]
                 wind_present = [x for x in wind_values if x is not None]
                 wind = (sum(wind_present) / len(wind_present)) if wind_present else None
@@ -339,6 +402,16 @@ def run(args):
                     continue
                 score = mahalanobis(v, mean, inverse)
                 n_scored += 1
+                # Reservoir-free sampling for the Phase 5.1 unit check: the
+                # three farms label the same quantities differently (degC vs
+                # Celsius, rpm vs 1/min). Those are the same physical unit if
+                # and only if the VALUES occupy the same range, and a silent
+                # mismatch distorts the covariance without erroring. Collect
+                # it here, in the pass that already reads every row, rather
+                # than making the operator run the archive again.
+                if n_scored % SIGNAL_RANGE_STRIDE == 0:
+                    for name, value in zip(order, v):
+                        signal_samples[name].append(value)
                 writer.writerow([row.get(args.timestamp_col, ""),
                                  "" if wind is None else wind,
                                  "%.10g" % score]
@@ -430,6 +503,25 @@ def run(args):
         "farm": args.farm,
         "signals_used": order,
         "signals_declared_unavailable": unavailable,
+        "range_filter": {
+            "enabled": not args.no_range_filter,
+            "ranges_applied": {k: list(v) for k, v in (ranges or {}).items()},
+            "readings_rejected_per_column": dict(sorted(rejected.items())),
+            "note": ("A reading outside physical possibility is a fault code, not a "
+                     "measurement. Rejected per channel BEFORE redundant channels "
+                     "are averaged, so one bad channel does not discard the rest."),
+        },
+        # Phase 5.1 evidence. Compare these across farms: degC and "Celsius"
+        # are the same unit iff the numbers agree; rpm and "1/min" likewise.
+        "signal_ranges": {
+            name: {"unit_declared": (signal_map.get(name) or {}).get("unit"),
+                   "n_samples": len(values),
+                   "p01": percentile(values, 0.01),
+                   "p50": percentile(values, 0.50),
+                   "p99": percentile(values, 0.99),
+                   "min": min(values) if values else None,
+                   "max": max(values) if values else None}
+            for name, values in sorted(signal_samples.items())},
         "fit_scope": args.fit_scope,
         "ridge": args.ridge,
         "n_cases": len(per_case),
@@ -441,7 +533,13 @@ def run(args):
         "generated_at_utc": stamp,
         "cli_invocation": " ".join(sys.argv),
     }
-    with open(os.path.join(args.output_dir, "scorer_summary.json"),
+    # Per farm, not one shared name. The runbook has all three farms writing
+    # into a single score directory (case_ids are globally unique, so the CSVs
+    # coexist fine) -- but a fixed summary filename meant Farm C silently
+    # overwrote Farm A's and Farm B's, taking the per-case counts and the
+    # Phase 5.1 signal ranges with it. Nothing would have reported the loss.
+    safe_farm = re.sub(r"[^A-Za-z0-9_-]+", "_", args.farm)
+    with open(os.path.join(args.output_dir, "scorer_summary_%s.json" % safe_farm),
               "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
 
@@ -450,6 +548,16 @@ def run(args):
     print("C0-C6 evidence written to %s" % args.evidence_dir)
     if unavailable:
         print("signals declared unavailable and excluded: %s" % unavailable)
+    # Print it rather than burying it in JSON: this feeds C1's non-evaluable
+    # threshold, and an operator should not have to open a file to learn that
+    # 1% of a farm's bearing readings were fault codes.
+    if rejected:
+        total = sum(rejected.values())
+        print("out-of-range readings rejected (fault codes), %d in total:" % total)
+        for column, n in sorted(rejected.items(), key=lambda kv: -kv[1]):
+            print("    %-24s %8d" % (column, n))
+    elif ranges:
+        print("out-of-range readings rejected: none")
     failed = {k: v for k, v in per_case.items() if "error" in v}
     if failed:
         print("\n%d case(s) not scored:" % len(failed))
@@ -468,6 +576,11 @@ def main():
     ap.add_argument("--output-dir", required=True)
     ap.add_argument("--evidence-dir", required=True,
                     help="Where fit_provenance / artifact_manifest / freeze_receipt go")
+    ap.add_argument("--no-range-filter", action="store_true",
+                    help="Accept every numeric value, including fault codes such as "
+                         "Farm C's 850.0 bearing temperature. Recorded in the summary.")
+    ap.add_argument("--range", action="append", metavar="SIGNAL=LO:HI",
+                    help="Override a signal's physical range. Repeatable.")
     ap.add_argument("--split-col", default="train_test")
     ap.add_argument("--timestamp-col", default="time_stamp")
     ap.add_argument("--fit-scope", choices=["case", "global"], default="case",

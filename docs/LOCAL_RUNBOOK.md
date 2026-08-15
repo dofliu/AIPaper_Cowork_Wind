@@ -3,6 +3,9 @@
 給有 CARE v6 資料的本機執行者。雲端協作者無法處理 5.5GB archive，這份手冊把
 每一步的指令寫死，執行者不需要自己組指令。
 
+> **先讀 [`PROJECT_STATUS.md`](./PROJECT_STATUS.md)。** 那份文件說明專案現在
+> 卡在哪、哪些資料事實已經確立、哪些參數已簽核不得更動。這份手冊只講怎麼跑。
+
 **分階段執行，不要一次做完。** 每個 Phase 結束就把指定的檔案回傳，
 確認無誤再進下一個 Phase。Phase 1 失敗的話 Phase 3 做再多都是白做。
 
@@ -42,7 +45,7 @@ python --version
 
 ### 0.3 先跑自我測試（重要）
 
-在碰真實資料之前，先確認**整套**工具在你的環境行為正確。八支測試一次跑完：
+在碰真實資料之前，先確認**整套**工具在你的環境行為正確。九支測試一次跑完：
 
 ```bash
 for t in scripts/selftest_*.py; do echo "== $t"; python3 "$t" | tail -2; done
@@ -53,7 +56,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：八支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 171 checks。
+**預期**：九支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 241 checks。
 
 | 測試 | checks |
 |---|---|
@@ -62,9 +65,10 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_end_to_end.py` | 17 |
 | `selftest_w1_acas.py` | 17 |
 | `selftest_regime_conditional.py` | 16 |
-| `selftest_md2022.py` | 23 |
+| `selftest_md2022.py` | 29 |
 | `selftest_online_baselines.py` | 13 |
-| `selftest_signal_map_builder.py` | 13 |
+| `selftest_signal_map_builder.py` | 48 |
+| `selftest_unit_consistency.py` | 29 |
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。
@@ -259,7 +263,14 @@ python3 scripts/care_v6_signal_map_builder.py \
   --header-override "A:wind_speed=wind_speed_3_avg" \
   --override-unit  "m/s" \
   --pick "C:active_power=power_6" \
-  --pick "C:wind_speed=wind_speed_236"
+  --pick "C:wind_speed=wind_speed_236" \
+  --unit-override "A:ambient_temperature=degC" \
+  --unit-override "A:pitch_angle=deg" \
+  --unit-override "B:main_bearing_temperature=degC" \
+  --exclude-sensor "C:rotor_speed=sensor_146,sensor_147" \
+  --unit-override "active_power=p.u." \
+  --not-available "A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components." \
+  --ratified-by "劉老師" --ratified-on "2026-08-15"
 ```
 
 ```powershell
@@ -270,24 +281,34 @@ python scripts\care_v6_signal_map_builder.py `
   --header-override "A:wind_speed=wind_speed_3_avg" `
   --override-unit  "m/s" `
   --pick "C:active_power=power_6" `
-  --pick "C:wind_speed=wind_speed_236"
+  --pick "C:wind_speed=wind_speed_236" `
+  --unit-override "A:ambient_temperature=degC" `
+  --unit-override "A:pitch_angle=deg" `
+  --unit-override "B:main_bearing_temperature=degC" `
+  --exclude-sensor "C:rotor_speed=sensor_146,sensor_147" `
+  --unit-override "active_power=p.u." `
+  --not-available "A:main_bearing_temperature=Farm A's feature_description.csv names no main or rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components." `
+  --ratified-by "劉老師" --ratified-on "2026-08-15"
 ```
 
-**Farm A 沒有主軸承通道。** 這不是缺陷，是該風場的事實——字典裡只有齒輪箱
-與發電機軸承，工具依設計拒絕拿它們冒充。把下面這段貼進
-`signal_map_out/signal_map_Wind_Farm_A.json`，取代
-`main_bearing_temperature` 那一項：
+**兩件事在這道指令裡一起解決了，不需要再手改 JSON。**
 
-```json
-"main_bearing_temperature": {
-  "not_available": true,
-  "reason": "Wind Farm A's feature_description.csv names no main/rotor bearing channel; only gearbox HSS and generator DE/NDE bearings exist, which are different components.",
-  "ratified_by": "劉老師",
-  "ratified_on": "2026-08-15"
-}
-```
+**（一）Farm A 沒有主軸承通道。** 這不是缺陷，是該風場的事實——字典裡只有
+齒輪箱與發電機軸承（三個），工具依設計拒絕拿它們冒充主軸承。
+`--not-available` 會直接寫出 C0 要的 ratified 宣告區塊。
+C0 gate 接受這個宣告；**靜默缺席仍然會 FAIL**，所以不能省。
+（若該訊號其實有解出來，工具會拒絕覆寫並告訴你，除非加
+`--force-not-available`。）
 
-C0 gate 會接受這個宣告；**靜默缺席仍然會 FAIL**，所以這段不能省。
+**（二）Farm A 字典裡的度數符號是壞的。** 這不是我們讀錯編碼——
+**檔案裡的位元組本身就已經被破壞了**，存的是 U+FFFD 的 UTF-8 位元組。
+用 utf-8 讀會得到 U+FFFD，用 cp1252 讀會得到字面上的 `ï¿½`。原字元
+已經救不回來。所以工具現在會把這種單位標成 `UNREADABLE_IN_SOURCE`
+而**不是**假裝它是真的單位寫進 C0 map，再由 `--unit-override` 明確宣告。
+
+> 若你在輸出看到某個單位是 `UNREADABLE_IN_SOURCE` 而上面指令沒涵蓋，
+> 照樣加一條 `--unit-override "風場:訊號=單位"`。單位是 C0 的必要欄位，
+> 而且 Phase 5.1 的單位一致性檢查靠它。
 
 **接著跑評分器。** 每個風場、每個 run 各一次（run1 / run2 是 C5 要的兩次
 獨立執行，不是複製目錄）：
@@ -335,6 +356,7 @@ Farm A 叫 `wind_speed_3_avg`、Farm B 叫 `wind_speed_61_avg`、Farm C 叫
 > 已修正並以測試釘住（`selftest_md2022.py` T7）。
 
 `--evidence-dir` 裡的四份 C0–C6 佐證是 fit 當下寫的，不用手填。
+每個風場另外寫一份 `scorer_summary_<farm>.json`（含 Phase 5.1 要的訊號範圍）。
 
 ### 3.1 檔案格式要求（給 MainBearing_2026）
 
@@ -524,18 +546,30 @@ $LASTEXITCODE
 
 **C0–C6 未通過之前不要跑 Phase 5。** 閘門存在的意義就是擋在這裡。
 
-### 5.1 單位確認（五分鐘，但別跳過）
+### 5.1 單位確認（一道指令，不用自己比對）
 
-三個風場的單位標示不一致：
+三個風場的單位標示不一致：溫度 Farm A/B 是 `degC`、Farm C 是 `Celsius`；
+轉速 Farm A/B 是 `rpm`、Farm C 是 `1/min`。字面不同，實質**應該**相同。
 
-| 訊號 | Farm A | Farm B | Farm C |
-|---|---|---|---|
-| 溫度 | `°C` | `°C` | `Celsius` |
-| 轉速 | `rpm` | `rpm` | `1/min` |
+但只要有一個其實不同（華氏、rad/s、標么值），Mahalanobis 的共變異數就會被
+靜靜扭曲——不會報錯，只會給出錯的分數，而跨風場的主張就跟著錯。
 
-字面不同、實質應該相同。但**只要有一個其實不同**，Mahalanobis 的共變異數就會被靜靜地扭曲——不會報錯，只會給出錯的分數。
+`base_scorer_md2022.py` 在評分那一趟就已經把每個訊號的 p01/p50/p99 記進
+`scorer_summary_<farm>.json`，所以這一步不必再讀一次 archive：
 
-確認方式：對每個風場的溫度欄取 p01 與 p99，看數值範圍是否落在同一個物理區間（環境溫度 −20~45、主軸承 5~90）。轉速同理。範圍對得上就沒事，記錄下來即可。
+```bash
+python3 scripts/check_unit_consistency.py ./scores_MD_2022_run1
+```
+
+```powershell
+python scripts\check_unit_consistency.py .\scores_MD_2022_run1
+```
+
+exit code 0 表示各風場一致且落在物理合理範圍；1 表示有不一致，輸出會指出
+是哪個訊號、哪兩個風場、差多少。**exit code 不是 0 就不要進 5.2。**
+
+> `active_power` 不做跨風場中位數比較——額定功率本來就隨機型不同，
+> 拿它比會是假警報。它只列出範圍供你看。
 
 ### 5.2 執行實驗（一個設定檔，一道指令）
 
@@ -621,3 +655,18 @@ MD_2022 的三份佐證已自動產生；Phase 3.0 新增 Base Scorer 1 的完�
 佔位符；Phase 5.4 刪去「我們自己的方法還沒實作」——已實作。
 另修正評分器輸出表頭 `wind_speed` 重複的缺陷（md2022-v1.1），並改由評分器
 自動產生 C0 的 signal_map.json。*
+
+*v1.1a（2026-08-15）：修正 signal map builder 在「有訊號取平均」的風場崩潰
+（`KeyError: 'column'`——平均出來的條目帶的是 `derived_from`，沒有 `column`）；
+新增 `--not-available` 與 `--unit-override`，Phase 3.0 不再需要手改 JSON。*
+
+*v1.1b（2026-08-15）：修正 `[FARM:]` 前綴用子字串比對的缺陷——`A` 會命中
+三個風場（`farm` 這個字裡有 a），導致 Farm A 的 `--header-override` 覆蓋掉
+Farm B/C 的風速欄位。未解出的 active_power / wind_speed 現在會直接讀 case
+檔表頭，列出真實欄位與可直接貼上的旗標。*
+
+*v1.1c（2026-08-15）：Farm A 的 `active_power` 原本解到 power_29
+「Possible grid active power」——那是 IEC 61400-24 意義下的**可能發電量**
+（模型值），不是實測。改為實測通道優先，Farm A 轉為 power_30「Grid power」。
+新增 `check_power_channel.py` 供本機核對。修正單位建議對 pitch_angle
+誤建議 degC。*
