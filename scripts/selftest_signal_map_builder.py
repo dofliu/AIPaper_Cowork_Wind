@@ -254,6 +254,78 @@ def main():
                       os.path.join(out, n), encoding="utf-8")), ensure_ascii=False)
                       for n in os.listdir(out) if n.startswith("signal_map_Wind")))
 
+    # ------- T7 a [FARM:] prefix selects ONE farm -------
+    # This was a substring test. The farm names are "Wind Farm A/B/C" and the
+    # word FARM contains an "a", so "A:" matched all three: the operator's
+    # --header-override for Farm A silently overwrote the ratified Farm C
+    # pick, and two farms would have been binned on the wrong farm's wind
+    # channel with nothing reported. Cheap to test, expensive to miss.
+    print("\nT7  a [FARM:] prefix selects exactly one farm")
+    farms = ["Wind Farm A", "Wind Farm B", "Wind Farm C"]
+    check("T7 'A' selects only Farm A",
+          [f for f in farms if B.farm_matches("A", f)] == ["Wind Farm A"],
+          "got %s" % [f for f in farms if B.farm_matches("A", f)])
+    check("T7 'B' and 'C' likewise",
+          [f for f in farms if B.farm_matches("B", f)] == ["Wind Farm B"]
+          and [f for f in farms if B.farm_matches("C", f)] == ["Wind Farm C"])
+    check("T7 the full farm name works too",
+          B.farm_matches("Wind Farm A", "Wind Farm A")
+          and not B.farm_matches("Wind Farm A", "Wind Farm B"))
+    check("T7 a bare word from the name selects nothing",
+          not any(B.farm_matches("farm", f) for f in farms))
+    check("T7 no prefix means every farm",
+          all(B.farm_matches(None, f) for f in farms))
+
+    with tempfile.TemporaryDirectory() as root:
+        for letter in ("A", "B", "C"):
+            d = os.path.join(root, "Wind Farm %s" % letter)
+            os.makedirs(os.path.join(d, "datasets"))
+            with open(os.path.join(d, "feature_description.csv"), "w",
+                      encoding="utf-8", newline="") as f:
+                f.write("sensor_name;statistics_type;description;unit;"
+                        "is_angle;is_counter\n")
+                f.write("sensor_0;average;Ambient temperature;degC;False;False\n")
+                f.write("sensor_1;average;Rotor speed;rpm;False;False\n")
+                f.write("sensor_2;average;Rotor bearing temperature;degC;False;False\n")
+                f.write("sensor_3;average;Pitch angle;deg;True;False\n")
+            # Each farm names its wind channel differently, as the real ones do.
+            with open(os.path.join(d, "datasets", "1.csv"), "w",
+                      encoding="utf-8", newline="") as f:
+                n = {"A": 3, "B": 61, "C": 236}[letter]
+                f.write("time_stamp;wind_speed_%d_avg;power_%d_avg\n" % (n, n))
+                f.write("2023-01-01 00:00:00;8.0;1000\n")
+        out = os.path.join(root, "out")
+        proc = subprocess.run(
+            [sys.executable, BUILDER, "--workdir", root, "--output-dir", out,
+             "--average-ties",
+             "--header-override", "A:wind_speed=wind_speed_3_avg",
+             "--override-unit", "m/s"],
+            capture_output=True, text=True)
+        check("T7 the builder runs on three farms", proc.returncode == 0,
+              (proc.stderr or "")[-400:])
+        if proc.returncode == 0:
+            maps = {}
+            for letter in ("A", "B", "C"):
+                maps[letter] = json.load(open(
+                    os.path.join(out, "signal_map_Wind_Farm_%s.json" % letter),
+                    encoding="utf-8"))
+            check("T7 Farm A got the override",
+                  maps["A"].get("wind_speed", {}).get("column") == "wind_speed_3_avg")
+            check("T7 Farm B did NOT inherit Farm A's column",
+                  maps["B"].get("wind_speed", {}).get("column") != "wind_speed_3_avg",
+                  "Farm B wind_speed = %r"
+                  % maps["B"].get("wind_speed", {}).get("column"))
+            check("T7 Farm C did NOT inherit Farm A's column",
+                  maps["C"].get("wind_speed", {}).get("column") != "wind_speed_3_avg",
+                  "Farm C wind_speed = %r"
+                  % maps["C"].get("wind_speed", {}).get("column"))
+            # And the unresolved-signal path should read the header and say
+            # which columns exist, rather than telling the operator to go look.
+            check("T7 an unresolved wind speed reports the real header columns",
+                  "wind_speed_61_avg" in proc.stdout
+                  and "wind_speed_236_avg" in proc.stdout,
+                  "stdout did not name the per-farm wind columns")
+
     print("\n%d checks, %d failed" % (checks, len(failures)))
     if failures:
         print("FAILED: %s" % ", ".join(failures))

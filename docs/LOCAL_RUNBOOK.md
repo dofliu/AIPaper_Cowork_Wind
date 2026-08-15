@@ -53,7 +53,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：八支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 180 checks。
+**預期**：八支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 190 checks。
 
 | 測試 | checks |
 |---|---|
@@ -64,7 +64,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_regime_conditional.py` | 16 |
 | `selftest_md2022.py` | 23 |
 | `selftest_online_baselines.py` | 13 |
-| `selftest_signal_map_builder.py` | 22 |
+| `selftest_signal_map_builder.py` | 32 |
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。
@@ -636,3 +636,8 @@ MD_2022 的三份佐證已自動產生；Phase 3.0 新增 Base Scorer 1 的完�
 *v1.1a（2026-08-15）：修正 signal map builder 在「有訊號取平均」的風場崩潰
 （`KeyError: 'column'`——平均出來的條目帶的是 `derived_from`，沒有 `column`）；
 新增 `--not-available` 與 `--unit-override`，Phase 3.0 不再需要手改 JSON。*
+
+*v1.1b（2026-08-15）：修正 `[FARM:]` 前綴用子字串比對的缺陷——`A` 會命中
+三個風場（`farm` 這個字裡有 a），導致 Farm A 的 `--header-override` 覆蓋掉
+Farm B/C 的風速欄位。未解出的 active_power / wind_speed 現在會直接讀 case
+檔表頭，列出真實欄位與可直接貼上的旗標。*

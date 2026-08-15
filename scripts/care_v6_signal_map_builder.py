@@ -304,11 +304,59 @@ def match_signals(entries):
     return found
 
 
+def farm_matches(prefix, farm):
+    """Does an operator flag's [FARM:] prefix select this farm?
+
+    This was a substring test, which is wrong in a way that cost real work:
+    the farm names are "Wind Farm A/B/C", and the letter "a" is a substring
+    of "wind farm b" -- the word FARM contains an a. So --header-override
+    "A:wind_speed=..." silently applied to all three farms, overwriting the
+    ratified Farm C pick, and every downstream regime bin for two farms
+    would have been computed from the wrong farm's wind channel. Nothing
+    errored; the summary just quietly said wind_speed_3_avg three times.
+
+    Match the farm's identifier instead: the trailing token of the name
+    ("A"), or the full name."""
+    if prefix is None:
+        return True
+    prefix = prefix.strip().lower()
+    farm = (farm or "").strip().lower()
+    if not prefix:
+        return False
+    if prefix == farm:
+        return True
+    tokens = farm.split()
+    return bool(tokens) and prefix == tokens[-1]
+
+
+def header_candidates(farm_dir, stem):
+    """Column names in this farm's case files starting with `stem`.
+
+    Active power and wind speed carry semantic names in CARE v6
+    (power_<n>_avg, wind_speed_<n>_avg) rather than sensor_<n> dictionary
+    entries, so when the dictionary cannot answer, the case-file header can.
+    Reporting these turns a round trip to the operator into a line of output
+    they can act on immediately."""
+    for pattern in (os.path.join(farm_dir, "datasets", "*.csv"),
+                    os.path.join(farm_dir, "datasets", "*", "*.csv")):
+        files = sorted(glob.glob(pattern))
+        if not files:
+            continue
+        try:
+            delimiter = sniff_delimiter(files[0])
+            with open(files[0], newline="", encoding="utf-8", errors="replace") as f:
+                header = next(csv.reader(f, delimiter=delimiter), []) or []
+        except (OSError, StopIteration):
+            return []
+        return [c for c in header if c.lower().startswith(stem)]
+    return []
+
+
 def _pick_for(picks, farm_key, signal):
     for (farm_prefix, sig), sensor in picks.items():
         if sig != signal:
             continue
-        if farm_prefix is None or farm_prefix in farm_key:
+        if farm_matches(farm_prefix, farm_key):
             return sensor
     return None
 
@@ -398,6 +446,7 @@ def run(args):
     overall = {}
     for path in dict_paths:
         farm = os.path.basename(os.path.dirname(path))
+        farm_dir = os.path.dirname(path)
         farm_key = farm.strip().lower()
         entries, delimiter, encoding_used = read_dictionary(path)
         matched = match_signals(entries)
@@ -465,7 +514,7 @@ def run(args):
             key, column = spec.split("=", 1)
             if ":" in key:
                 farm_prefix, signal = key.split(":", 1)
-                if farm_prefix.strip().lower() not in farm.lower():
+                if not farm_matches(farm_prefix, farm):
                     continue
             else:
                 signal = key
@@ -488,7 +537,7 @@ def run(args):
             key, unit = spec.split("=", 1)
             if ":" in key:
                 farm_prefix, signal = key.split(":", 1)
-                if farm_prefix.strip().lower() not in farm.lower():
+                if not farm_matches(farm_prefix, farm):
                     continue
             else:
                 signal = key
@@ -509,7 +558,7 @@ def run(args):
             key, reason = spec.split("=", 1)
             if ":" in key:
                 farm_prefix, signal = key.split(":", 1)
-                if farm_prefix.strip().lower() not in farm.lower():
+                if not farm_matches(farm_prefix, farm):
                     continue
             else:
                 signal = key
@@ -565,9 +614,17 @@ def run(args):
 
         print("\n=== %s (%d dictionary entries, %s, %s) ==="
               % (farm, len(entries), delimiter and repr(delimiter), encoding_used))
+        unreadable_units = []
         for signal in SIGNAL_RULES:
             if signal in signal_map:
                 m = signal_map[signal]
+                if m.get("not_available"):
+                    print("  %-26s NOT AVAILABLE (ratified by %s on %s): %s"
+                          % (signal, m.get("ratified_by", "?"),
+                             m.get("ratified_on", "?"), m.get("reason", "")))
+                    continue
+                if m.get("unit") == UNIT_UNREADABLE:
+                    unreadable_units.append(signal)
                 if "derived_from" in m:
                     print("  %-26s mean(%s) %-8s %d redundant channels"
                           % (signal, ", ".join(m["derived_from"]), m["unit"],
@@ -584,13 +641,36 @@ def run(args):
                       % (signal, m.get("column", "?"), m.get("unit", "?"),
                          description, mark))
             else:
-                extra = ""
+                print("  %-26s -- %s" % (signal, report[signal]["problem"]))
+                # Do not just say "take it from the header" -- read the header
+                # and say which columns are actually there, with the exact flag
+                # to paste. The alternative is another round trip to a person
+                # who has already done enough of them.
                 if signal in ("active_power", "wind_speed"):
-                    extra = ("  (this one is usually a named `%s_<n>_avg` column "
-                             "rather than a sensor_<n> entry -- take it from the "
-                             "header, not the dictionary)"
-                             % ("power" if signal == "active_power" else "wind_speed"))
-                print("  %-26s -- %s%s" % (signal, report[signal]["problem"], extra))
+                    stem = "power" if signal == "active_power" else "wind_speed"
+                    found = header_candidates(farm_dir, stem)
+                    avg = [c for c in found if c.lower().endswith("_avg")]
+                    shortlist = avg or found
+                    if shortlist:
+                        print("      case-file header offers: %s"
+                              % ", ".join(shortlist[:8])
+                              + (" (+%d more)" % (len(shortlist) - 8)
+                                 if len(shortlist) > 8 else ""))
+                        print('      --header-override "%s:%s=%s" --override-unit "%s"'
+                              % (farm.split()[-1], signal, shortlist[0],
+                                 "kW" if signal == "active_power" else "m/s"))
+                    else:
+                        print("      no %s* column found in this farm's case files "
+                              "either" % stem)
+
+        # C0 requires a unit, and Phase 5.1's cross-farm consistency check
+        # reads it. A unit destroyed in the source file has to be declared.
+        if unreadable_units:
+            print("      unit unreadable in the source file for: %s"
+                  % ", ".join(unreadable_units))
+            for signal in unreadable_units:
+                print('      --unit-override "%s:%s=degC"   <- confirm the unit'
+                      % (farm.split()[-1], signal))
 
     with open(os.path.join(args.output_dir, "signal_map_summary.json"),
               "w", encoding="utf-8") as f:
