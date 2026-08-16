@@ -93,7 +93,15 @@ TEMPLATE = {
         "reference_method": "static",
         "exclude_cases": ["32", "56", "72", "87"],
         "trim_cases": {"93": "2023-08-24T13:00:00"},
-        "_exclude_note": "D1/D6 exclusion plan, 2026-08-15. Case 93 is trimmed, not excluded.",
+        "_d1_d6_note": ("D1/D6 remediation, ratified 2026-08-15. Both halves are "
+                        "applied by the pipeline: exclude_cases is passed as "
+                        "--exclude-cases, trim_cases as --trim-case. Case 93 is "
+                        "trimmed rather than excluded because only its tail "
+                        "overlaps case 33 on the same turbine under the opposite "
+                        "label; dropping it whole would discard 23 usable days. "
+                        "Check evaluation.json trimmed_cases after the run -- it "
+                        "must not be empty. Until 2026-08-16 this was a comment "
+                        "that nothing applied."),
     },
 }
 
