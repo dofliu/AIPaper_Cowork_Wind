@@ -1,0 +1,45 @@
+{
+  "active_power": {
+    "column": "signal_active_power",
+    "unit": "p.u.",
+    "_derived_from_archive_columns": [
+      "power_62_avg"
+    ]
+  },
+  "wind_speed": {
+    "column": "signal_wind_speed",
+    "unit": "m/s",
+    "_derived_from_archive_columns": [
+      "wind_speed_61_avg"
+    ]
+  },
+  "rotor_speed": {
+    "column": "signal_rotor_speed",
+    "unit": "rpm",
+    "_derived_from_archive_columns": [
+      "sensor_25_avg"
+    ]
+  },
+  "main_bearing_temperature": {
+    "column": "signal_main_bearing_temperature",
+    "unit": "degC",
+    "_derived_from_archive_columns": [
+      "sensor_51_avg",
+      "sensor_52_avg"
+    ]
+  },
+  "pitch_angle": {
+    "column": "signal_pitch_angle",
+    "unit": "deg",
+    "_derived_from_archive_columns": [
+      "sensor_10_avg"
+    ]
+  },
+  "ambient_temperature": {
+    "column": "signal_ambient_temperature",
+    "unit": "degC",
+    "_derived_from_archive_columns": [
+      "sensor_8_avg"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "implementation_source": "re-implementation-from-method: Liu, Corbita, Lee, Wang, Applied Sciences 2022, 12(17):8661, DOI 10.3390/app12178661",
+  "version_or_commit": "md2022-v1.2",
+  "parameter_provenance": "Mahalanobis distance is fully specified by mu and Sigma on the fit partition; the only free parameter is the ridge term, recorded here. SCOPE NOTE: this scores the six C0 signals only. The 2022 paper also uses SCADA alarm data and its own feature engineering, which are NOT reproduced. Do not describe this as a reproduction of the published pipeline.",
+  "artifact_sha256": "b35345a53d2ece54e44aa71de8649711f11373f8a18f6307064baf33be6bf967",
+  "config_sha256": "416b1a1215a0724a0d43181d75fb96e0789892752fdc88c9524194c9ec35bd6f",
+  "ridge": 1e-06,
+  "signals_used": [
+    "active_power",
+    "wind_speed",
+    "rotor_speed",
+    "pitch_angle",
+    "ambient_temperature"
+  ],
+  "signals_declared_unavailable": [
+    "main_bearing_temperature"
+  ],
+  "frozen_at": "2026-08-15T18:01:01.487243+00:00"
+}

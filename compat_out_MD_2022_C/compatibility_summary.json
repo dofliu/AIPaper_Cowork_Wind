@@ -3,8 +3,8 @@
   "gate_definitions_ratified": false,
   "gate_definitions_note": "C0-C6 names and thresholds remain a PROPOSAL (R15 + PI directive v1.0 synthesis). Tooling being merged is not gate ratification. gate_status below describes evidence only.",
   "scorer_name": "MD_2022_Wind_Farm_C",
-  "generated_at_utc": "2026-08-15T17:00:50.241586+00:00",
-  "gate_status": "FAIL",
+  "generated_at_utc": "2026-08-16T02:06:07.261587+00:00",
+  "gate_status": "PASS",
   "status_enum": [
     "PASS",
     "FAIL",
@@ -13,7 +13,7 @@
   ],
   "gates": {
     "C0_signal_availability_and_mapping": {
-      "status": "UNVERIFIED",
+      "status": "PASS",
       "detail": "per-case; see per_case_c0_c6.json",
       "declared_unavailable_signals": [],
       "n_cases_failing": 0
@@ -24,77 +24,60 @@
       "n_cases_over_flag_fraction": 0
     },
     "C2_artifact_reproducibility": {
-      "status": "UNVERIFIED",
-      "reason": "No --artifact-manifest supplied. C2 requires a recorded and hashed implementation source, version and parameter provenance; it cannot be inferred from score CSVs.",
-      "required_fields": [
-        "implementation_source",
-        "version_or_commit",
-        "parameter_provenance",
-        "artifact_sha256"
-      ]
+      "status": "PASS",
+      "missing_fields": [],
+      "manifest_receipt": {
+        "path": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\evidence_MD_2022_run1\\artifact_manifest_Wind_Farm_C.json",
+        "sha256": "b224a29ea665ede1c33a683c870054e42c50ed8d5390fec8eb5276046e026c1e"
+      },
+      "implementation_source": "re-implementation-from-method: Liu, Corbita, Lee, Wang, Applied Sciences 2022, 12(17):8661, DOI 10.3390/app12178661",
+      "version_or_commit": "md2022-v1.2",
+      "artifact_sha256": "b35345a53d2ece54e44aa71de8649711f11373f8a18f6307064baf33be6bf967"
     },
     "C3_label_independence": {
-      "status": "UNVERIFIED",
-      "reason": "No --fit-provenance supplied. A score CSV header that lacks a label column is NOT evidence that the fitting step never read labels. C3 requires a fit-time provenance record: which partition the scorer was fitted on, which files the fitting run opened, and their hashes.",
-      "required_fields": [
-        "fit_partition",
-        "files_read_during_fit",
-        "label_columns_excluded",
-        "verification_method",
-        "verified_by",
-        "verified_at"
+      "status": "PASS",
+      "problems": [],
+      "fit_partition": "CARE normal reference partition: rows where train_test == 'train', which precede any event window",
+      "n_files_read_during_fit": 58,
+      "label_columns_excluded": [
+        "status_type_id",
+        "event_label",
+        "label"
       ],
+      "verification_method": "code-path audit: the scorer reads only the mapped signal columns, the timestamp and the split column; no label column is referenced anywhere in the fit",
+      "verified_by": "base_scorer_md2022.py md2022-v1.2",
+      "provenance_receipt": {
+        "path": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\evidence_MD_2022_run1\\fit_provenance_Wind_Farm_C.json",
+        "sha256": "bca4a257e5854a2164998b8a9d7c36bf6b4b4a8f08bea49944ed1131bc6fcbad"
+      },
       "secondary_header_scan_label_like_columns": {
-        "0": "anomaly_score",
         "1": "anomaly_score",
-        "10": "anomaly_score",
         "11": "anomaly_score",
         "12": "anomaly_score",
-        "13": "anomaly_score",
-        "14": "anomaly_score",
         "15": "anomaly_score",
         "16": "anomaly_score",
-        "17": "anomaly_score",
         "18": "anomaly_score",
-        "19": "anomaly_score",
-        "2": "anomaly_score",
         "20": "anomaly_score",
-        "21": "anomaly_score",
-        "22": "anomaly_score",
-        "23": "anomaly_score",
-        "24": "anomaly_score",
-        "25": "anomaly_score",
-        "26": "anomaly_score",
-        "27": "anomaly_score",
         "28": "anomaly_score",
         "29": "anomaly_score",
-        "3": "anomaly_score",
         "30": "anomaly_score",
         "31": "anomaly_score",
         "32": "anomaly_score",
         "33": "anomaly_score",
-        "34": "anomaly_score",
         "35": "anomaly_score",
         "36": "anomaly_score",
         "37": "anomaly_score",
-        "38": "anomaly_score",
         "39": "anomaly_score",
         "4": "anomaly_score",
-        "40": "anomaly_score",
         "41": "anomaly_score",
-        "42": "anomaly_score",
         "43": "anomaly_score",
         "44": "anomaly_score",
-        "45": "anomaly_score",
         "46": "anomaly_score",
         "47": "anomaly_score",
         "48": "anomaly_score",
         "49": "anomaly_score",
         "5": "anomaly_score",
         "50": "anomaly_score",
-        "51": "anomaly_score",
-        "52": "anomaly_score",
-        "53": "anomaly_score",
         "54": "anomaly_score",
         "55": "anomaly_score",
         "56": "anomaly_score",
@@ -110,78 +93,424 @@
         "65": "anomaly_score",
         "66": "anomaly_score",
         "67": "anomaly_score",
-        "68": "anomaly_score",
-        "69": "anomaly_score",
-        "7": "anomaly_score",
         "70": "anomaly_score",
-        "71": "anomaly_score",
-        "72": "anomaly_score",
-        "73": "anomaly_score",
-        "74": "anomaly_score",
         "75": "anomaly_score",
         "76": "anomaly_score",
-        "77": "anomaly_score",
         "78": "anomaly_score",
         "79": "anomaly_score",
         "8": "anomaly_score",
         "80": "anomaly_score",
         "81": "anomaly_score",
-        "82": "anomaly_score",
-        "83": "anomaly_score",
-        "84": "anomaly_score",
         "85": "anomaly_score",
-        "86": "anomaly_score",
-        "87": "anomaly_score",
         "88": "anomaly_score",
         "89": "anomaly_score",
         "9": "anomaly_score",
         "90": "anomaly_score",
         "91": "anomaly_score",
-        "92": "anomaly_score",
         "93": "anomaly_score",
         "94": "anomaly_score"
       }
     },
     "C4_case_coverage": {
       "status": "PASS",
-      "n_expected_case_ids": 95,
-      "n_observed_case_ids": 95,
+      "n_expected_case_ids": 58,
+      "n_observed_case_ids": 58,
       "missing_case_ids": [],
       "unexpected_case_ids": [],
       "duplicate_case_ids_in_g3": [],
       "duplicate_case_ids_in_score_dir": [],
       "coverage_fraction": 1.0,
       "g2_n_detected": 95,
-      "g2_count_consistent_with_g3_rows": true,
+      "g2_count_consistent_with_g3_rows": false,
       "g3_receipt": {
         "path": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\manifest_out\\g3_case_metadata.csv",
-        "sha256": "c58dfd84aca4d9849dd78a18c4b605851769b87a605cb4cc965f9bb44d4c06ed"
-      }
+        "sha256": "c58dfd84aca4d9849dd78a18c4b605851769b87a605cb4cc965f9bb44d4c06ed",
+        "restricted_to_farm": "Wind Farm C",
+        "n_cases_after_farm_filter": 58
+      },
+      "note": "g2_case_inventory.n_detected disagrees with the g3_case_metadata row count; the manifest itself needs adjudication before this gate means anything."
     },
     "C5_determinism_and_freeze": {
-      "status": "UNVERIFIED",
-      "reason": "No --freeze-receipt supplied. C5 also requires the frozen artifact fingerprint (environment, seed, config hash, artifact hash) so downstream calibration comparisons can cite a stable scorer identity.",
-      "required_fields": [
-        "environment",
-        "seed",
-        "config_sha256",
-        "artifact_sha256"
-      ],
-      "declared_mode": "bit_identical"
+      "status": "PASS",
+      "declared_mode": "bit_identical",
+      "tolerance": null,
+      "problems": [],
+      "n_cases_compared": 58,
+      "cases_only_in_run1": [],
+      "cases_only_in_run2": [],
+      "per_case": {
+        "1": {
+          "run1_sha256": "a8035f85f1ba7044475c23717b3fe5effa58d77de7bb02591cfcce78701ae36c",
+          "run2_sha256": "a8035f85f1ba7044475c23717b3fe5effa58d77de7bb02591cfcce78701ae36c",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "11": {
+          "run1_sha256": "d98ea6f40ada865248873cd1a79b44e6b3ea99496ae571465478ea6d6a6192c0",
+          "run2_sha256": "d98ea6f40ada865248873cd1a79b44e6b3ea99496ae571465478ea6d6a6192c0",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "12": {
+          "run1_sha256": "ee0eeecf56944897c51a5805ead6d44bb634f6e66b805f7cc191055a21a18bba",
+          "run2_sha256": "ee0eeecf56944897c51a5805ead6d44bb634f6e66b805f7cc191055a21a18bba",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "15": {
+          "run1_sha256": "073105c19bb93f77aaa887411d816535b2bdf36dc539da1640667b8ebb5faf1c",
+          "run2_sha256": "073105c19bb93f77aaa887411d816535b2bdf36dc539da1640667b8ebb5faf1c",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "16": {
+          "run1_sha256": "47568904ac576e70cb88fa6bfc2d29e7f272e6cf5e668f6d745aba66121c9c67",
+          "run2_sha256": "47568904ac576e70cb88fa6bfc2d29e7f272e6cf5e668f6d745aba66121c9c67",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "18": {
+          "run1_sha256": "fd5177a09776785e7557ec520dcd3cf8550cd1a85dc8670296fb3847527e303a",
+          "run2_sha256": "fd5177a09776785e7557ec520dcd3cf8550cd1a85dc8670296fb3847527e303a",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "20": {
+          "run1_sha256": "7918250419b37e3cad69f7f08c92d8e11072ae78a84939a43b73876ce6a0dab7",
+          "run2_sha256": "7918250419b37e3cad69f7f08c92d8e11072ae78a84939a43b73876ce6a0dab7",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "28": {
+          "run1_sha256": "b661dff4410f927587884db7a2a5e911d309751d761c227df23c8d3abe93c661",
+          "run2_sha256": "b661dff4410f927587884db7a2a5e911d309751d761c227df23c8d3abe93c661",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "29": {
+          "run1_sha256": "81aabbf7f89a4c9ad3daf64e6274550e591880c7e0ecfd5a4f930addcb319c45",
+          "run2_sha256": "81aabbf7f89a4c9ad3daf64e6274550e591880c7e0ecfd5a4f930addcb319c45",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "30": {
+          "run1_sha256": "077552b1091c222c82c599e3ed51fa6028bcce54897f079cf09df6211bb71b0e",
+          "run2_sha256": "077552b1091c222c82c599e3ed51fa6028bcce54897f079cf09df6211bb71b0e",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "31": {
+          "run1_sha256": "706fc18bf7ee50bc059864b766e8d7e0f9d0667aee12cded7a9d723c1f7c5fa5",
+          "run2_sha256": "706fc18bf7ee50bc059864b766e8d7e0f9d0667aee12cded7a9d723c1f7c5fa5",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "32": {
+          "run1_sha256": "566ea37c8a221c66146b2561958730edc31cbfc04b83981a0b90eb3c46ec6d4e",
+          "run2_sha256": "566ea37c8a221c66146b2561958730edc31cbfc04b83981a0b90eb3c46ec6d4e",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "33": {
+          "run1_sha256": "306678fdbf207a203baf6c1d5ac908146e3a85d3e78d7ae95df0322d7b3ebf9b",
+          "run2_sha256": "306678fdbf207a203baf6c1d5ac908146e3a85d3e78d7ae95df0322d7b3ebf9b",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "35": {
+          "run1_sha256": "7792c5a91bfcccb44ba5c624aa2355f1c562d4282faec4f3df7d4552f049c7bc",
+          "run2_sha256": "7792c5a91bfcccb44ba5c624aa2355f1c562d4282faec4f3df7d4552f049c7bc",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "36": {
+          "run1_sha256": "d79b3aa217cbb50b0f79420dbea19449ecb3cd4b0247c1e53da2aeb7ebe06181",
+          "run2_sha256": "d79b3aa217cbb50b0f79420dbea19449ecb3cd4b0247c1e53da2aeb7ebe06181",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "37": {
+          "run1_sha256": "6be94f7d3dcbe692c8f03aba2eaab8e65fe199f03ef8ab4bb84b60fe00adc363",
+          "run2_sha256": "6be94f7d3dcbe692c8f03aba2eaab8e65fe199f03ef8ab4bb84b60fe00adc363",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "39": {
+          "run1_sha256": "598bb84d647132f3d2584938f019bc21164d27e8d9396dcfa361d9bdfe2171f4",
+          "run2_sha256": "598bb84d647132f3d2584938f019bc21164d27e8d9396dcfa361d9bdfe2171f4",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "4": {
+          "run1_sha256": "b6c05bc2d99a3ba162aa9ca26e860eb4a31f4162d6875abb89b750972d3aaeb3",
+          "run2_sha256": "b6c05bc2d99a3ba162aa9ca26e860eb4a31f4162d6875abb89b750972d3aaeb3",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "41": {
+          "run1_sha256": "9f1254963fac9b59dc9692c493edcdfb43c35a8ec1e4a12754140f63bde29f44",
+          "run2_sha256": "9f1254963fac9b59dc9692c493edcdfb43c35a8ec1e4a12754140f63bde29f44",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "43": {
+          "run1_sha256": "7826b6906012469f752a2a77000ff198d4889e565c561fecb9bbce408b2123ec",
+          "run2_sha256": "7826b6906012469f752a2a77000ff198d4889e565c561fecb9bbce408b2123ec",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "44": {
+          "run1_sha256": "33c828621d6dab67eb87c52e67c11870890f5168347bdf9a030a04e7995ede10",
+          "run2_sha256": "33c828621d6dab67eb87c52e67c11870890f5168347bdf9a030a04e7995ede10",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "46": {
+          "run1_sha256": "34344f05baf93932eaee4ed7340044b5462920128942dde71b4f9b2d5a7097c1",
+          "run2_sha256": "34344f05baf93932eaee4ed7340044b5462920128942dde71b4f9b2d5a7097c1",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "47": {
+          "run1_sha256": "06067dd519937c0c353a78f082031108fdce900c853cf7b5560caae8fab8a192",
+          "run2_sha256": "06067dd519937c0c353a78f082031108fdce900c853cf7b5560caae8fab8a192",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "48": {
+          "run1_sha256": "e77fd92cab33b3b3dfac9d8d35fac6b2c3fa213c6db337466a48cfd1298c0060",
+          "run2_sha256": "e77fd92cab33b3b3dfac9d8d35fac6b2c3fa213c6db337466a48cfd1298c0060",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "49": {
+          "run1_sha256": "033e27dcde35d9a53fb742bc62f21338c0acc7462f1971c3065e57791abf9230",
+          "run2_sha256": "033e27dcde35d9a53fb742bc62f21338c0acc7462f1971c3065e57791abf9230",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "5": {
+          "run1_sha256": "40213d10eb37a7a651f9ff658700deae30aed55e7f0f020e9640541a5536e7cc",
+          "run2_sha256": "40213d10eb37a7a651f9ff658700deae30aed55e7f0f020e9640541a5536e7cc",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "50": {
+          "run1_sha256": "9cd1849b87b5ece98bce4523b19259264c64dc9913541ff382f3b0b05bb500b5",
+          "run2_sha256": "9cd1849b87b5ece98bce4523b19259264c64dc9913541ff382f3b0b05bb500b5",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "54": {
+          "run1_sha256": "52bc3f9bcc1687e1ebf38226b213a7e0d20c8ecb04407af0b57f5c6a7834b47b",
+          "run2_sha256": "52bc3f9bcc1687e1ebf38226b213a7e0d20c8ecb04407af0b57f5c6a7834b47b",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "55": {
+          "run1_sha256": "ee19b41a6803eaff7ba87174f3b64f5f7e1e2fed01343568381c5f528f77c7e8",
+          "run2_sha256": "ee19b41a6803eaff7ba87174f3b64f5f7e1e2fed01343568381c5f528f77c7e8",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "56": {
+          "run1_sha256": "9a75b1a602ca4a1582a0e5f66496ff7693647f9948db19b59aa1cfe799ed382d",
+          "run2_sha256": "9a75b1a602ca4a1582a0e5f66496ff7693647f9948db19b59aa1cfe799ed382d",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "57": {
+          "run1_sha256": "aac8f86ff85d33d5aff4bd53ec2adec096be7cf7ee985ade09c42ea7afa97c49",
+          "run2_sha256": "aac8f86ff85d33d5aff4bd53ec2adec096be7cf7ee985ade09c42ea7afa97c49",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "58": {
+          "run1_sha256": "7d3aad51eeeeb46c1087a1f1df4eaef1deaf6aabc032f5b87a08782e8c4e2bad",
+          "run2_sha256": "7d3aad51eeeeb46c1087a1f1df4eaef1deaf6aabc032f5b87a08782e8c4e2bad",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "59": {
+          "run1_sha256": "d2bf17c5953e9a9e1e0102f7237c3020810f94b6f74cc0e67f166f4cba2cdf28",
+          "run2_sha256": "d2bf17c5953e9a9e1e0102f7237c3020810f94b6f74cc0e67f166f4cba2cdf28",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "6": {
+          "run1_sha256": "d164296bbc9d0c3c9c701fc684a10514b414d15f569b4a09eb06f43f4dfacdf5",
+          "run2_sha256": "d164296bbc9d0c3c9c701fc684a10514b414d15f569b4a09eb06f43f4dfacdf5",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "60": {
+          "run1_sha256": "55febca1b23b05cee5d50b4feb58eb589c5158407bd775a3d220f36694da37e1",
+          "run2_sha256": "55febca1b23b05cee5d50b4feb58eb589c5158407bd775a3d220f36694da37e1",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "61": {
+          "run1_sha256": "0c005ee15ba758c541c0c2f2dc17a982081bc843fb1887cd7fe3fa9156205413",
+          "run2_sha256": "0c005ee15ba758c541c0c2f2dc17a982081bc843fb1887cd7fe3fa9156205413",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "62": {
+          "run1_sha256": "1dbd32167b45bb66b832df4b2b4f9e1e79faa4c3623692bb70a83a3b1c4d7a60",
+          "run2_sha256": "1dbd32167b45bb66b832df4b2b4f9e1e79faa4c3623692bb70a83a3b1c4d7a60",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "63": {
+          "run1_sha256": "09854d1ac7fa33345e9f26493028d17a040bf090d4b0e8cc4e05eab9a6a2071a",
+          "run2_sha256": "09854d1ac7fa33345e9f26493028d17a040bf090d4b0e8cc4e05eab9a6a2071a",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "64": {
+          "run1_sha256": "5946b83d61130105d487be65ab8b0447d56891ef8b053e7d6beb02b24b26780d",
+          "run2_sha256": "5946b83d61130105d487be65ab8b0447d56891ef8b053e7d6beb02b24b26780d",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "65": {
+          "run1_sha256": "2964f4e191dbcffefc7e7b20fce96ddfa4ddee870f860e2910c58cea5e1a7247",
+          "run2_sha256": "2964f4e191dbcffefc7e7b20fce96ddfa4ddee870f860e2910c58cea5e1a7247",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "66": {
+          "run1_sha256": "56bed791d94d1eb4a3a084a5a2d075a70a759346251098411738fe00022994b4",
+          "run2_sha256": "56bed791d94d1eb4a3a084a5a2d075a70a759346251098411738fe00022994b4",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "67": {
+          "run1_sha256": "04af01d8d008341999efd95b4b0c84a11dd3fa6f03e015ffbbb6934dbb55c722",
+          "run2_sha256": "04af01d8d008341999efd95b4b0c84a11dd3fa6f03e015ffbbb6934dbb55c722",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "70": {
+          "run1_sha256": "db6b979ef3553728a10805d16ccf1d41d1d0ed58eea29c8063f3f39bd2ed94a2",
+          "run2_sha256": "db6b979ef3553728a10805d16ccf1d41d1d0ed58eea29c8063f3f39bd2ed94a2",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "75": {
+          "run1_sha256": "0aeed6378d57891283d0c41e6fad88ede91dc72fab42e3947ce5734d550dcdbc",
+          "run2_sha256": "0aeed6378d57891283d0c41e6fad88ede91dc72fab42e3947ce5734d550dcdbc",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "76": {
+          "run1_sha256": "7c963041e5ba632c1f83c8d82cb1138c576e9cb4c84b40835fa1660e6c2a0541",
+          "run2_sha256": "7c963041e5ba632c1f83c8d82cb1138c576e9cb4c84b40835fa1660e6c2a0541",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "78": {
+          "run1_sha256": "a30afde3ab649e8682a87d8eaa0d821519e326f023c00ae0df9d90ac9e08789d",
+          "run2_sha256": "a30afde3ab649e8682a87d8eaa0d821519e326f023c00ae0df9d90ac9e08789d",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "79": {
+          "run1_sha256": "27ee5c2818dcfa36907ab6d5659b1a5ca751bfe7b432d514ceaec6ae0fb6a15a",
+          "run2_sha256": "27ee5c2818dcfa36907ab6d5659b1a5ca751bfe7b432d514ceaec6ae0fb6a15a",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "8": {
+          "run1_sha256": "266c9eea6f27949f32d2148c4de3f86a1976b22387e9d7156c89b516268b624a",
+          "run2_sha256": "266c9eea6f27949f32d2148c4de3f86a1976b22387e9d7156c89b516268b624a",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "80": {
+          "run1_sha256": "e63e7f899ff8573a961dace19f582dd22117daa6125a71f90a5b3519d645aa6d",
+          "run2_sha256": "e63e7f899ff8573a961dace19f582dd22117daa6125a71f90a5b3519d645aa6d",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "81": {
+          "run1_sha256": "8c954530babe25fe39751af5ea0b2066610865e8d7733c5f1b6a6b6769a50cce",
+          "run2_sha256": "8c954530babe25fe39751af5ea0b2066610865e8d7733c5f1b6a6b6769a50cce",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "85": {
+          "run1_sha256": "61b911e2eb48f8a3984ac34cbf3d8437042332dd83a11eb12f8b15ef3e30b259",
+          "run2_sha256": "61b911e2eb48f8a3984ac34cbf3d8437042332dd83a11eb12f8b15ef3e30b259",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "88": {
+          "run1_sha256": "3c4389f8544fd354195ab368b91e91279fbe3ee1cdeb9ce74b8815ffd2b3135c",
+          "run2_sha256": "3c4389f8544fd354195ab368b91e91279fbe3ee1cdeb9ce74b8815ffd2b3135c",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "89": {
+          "run1_sha256": "51f44c2d0fe7e80bf20e76b4ccad7e789fcdb729c572c24c81e474c9795ef347",
+          "run2_sha256": "51f44c2d0fe7e80bf20e76b4ccad7e789fcdb729c572c24c81e474c9795ef347",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "9": {
+          "run1_sha256": "e5154adeb9e4f53eb74bd19bda5f3b1ab491bf16308e442f8bfeb2aac80f7a56",
+          "run2_sha256": "e5154adeb9e4f53eb74bd19bda5f3b1ab491bf16308e442f8bfeb2aac80f7a56",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "90": {
+          "run1_sha256": "e20a31f76633e025c4e73cc6eb2769e2f3d1a2cc24ccc46bfc399842034154b5",
+          "run2_sha256": "e20a31f76633e025c4e73cc6eb2769e2f3d1a2cc24ccc46bfc399842034154b5",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "91": {
+          "run1_sha256": "78121cc62b4fb7c4333277a16d379def91e809285b9ae0ec0f9bf8e92bc08320",
+          "run2_sha256": "78121cc62b4fb7c4333277a16d379def91e809285b9ae0ec0f9bf8e92bc08320",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "93": {
+          "run1_sha256": "b445597a4a48f1d324c9f5c6e78348ccacc3e0e80e421b34ade8510be36ef1ed",
+          "run2_sha256": "b445597a4a48f1d324c9f5c6e78348ccacc3e0e80e421b34ade8510be36ef1ed",
+          "bit_identical_file": true,
+          "agrees": true
+        },
+        "94": {
+          "run1_sha256": "040a02f31d76147b4dabade6cee24d89783ef8e09ad53843ab3e94d6311e61dc",
+          "run2_sha256": "040a02f31d76147b4dabade6cee24d89783ef8e09ad53843ab3e94d6311e61dc",
+          "bit_identical_file": true,
+          "agrees": true
+        }
+      },
+      "freeze_receipt": {
+        "environment": {
+          "python": "3.12.5",
+          "os": "win32",
+          "note": "set OMP_NUM_THREADS=1 etc before both runs per the C5 protocol"
+        },
+        "seed": "not applicable - closed-form estimator, no randomness",
+        "config_sha256": "2186dce1c654e7574550d54d77ae336e27a4fd6a51d7c5c0112d0062b6822e7c",
+        "artifact_sha256": "b35345a53d2ece54e44aa71de8649711f11373f8a18f6307064baf33be6bf967",
+        "receipt_file": {
+          "path": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\evidence_MD_2022_run1\\freeze_receipt_Wind_Farm_C.json",
+          "sha256": "ae01fe92e71b29c87c395607322aac752b18a18f1995d3fc968ccdadcd32e053"
+        }
+      }
     },
     "C6_score_sanity": {
-      "status": "FAIL",
+      "status": "PASS",
       "detail": "per-case; finiteness checked on evaluable timestamps only",
-      "n_cases_failing": 34
+      "n_cases_failing": 0
     }
   },
-  "n_cases_audited": 95,
-  "errors": [
-    "--signal-map not found: .\\evidence_MD_2022_run1\\signal_map_Wind_Farm_C.json",
-    "--artifact-manifest not found: .\\evidence_MD_2022_run1\\artifact_manifest_Wind_Farm_C.json",
-    "--fit-provenance not found: .\\evidence_MD_2022_run1\\fit_provenance_Wind_Farm_C.json",
-    "--freeze-receipt not found: .\\evidence_MD_2022_run1\\freeze_receipt_Wind_Farm_C.json"
-  ],
+  "n_cases_audited": 58,
+  "errors": [],
   "workdir": {
     "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare",
     "status": "PASS",
@@ -194,112 +523,89 @@
     },
     "g3_case_metadata": {
       "path": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\manifest_out\\g3_case_metadata.csv",
-      "sha256": "c58dfd84aca4d9849dd78a18c4b605851769b87a605cb4cc965f9bb44d4c06ed"
+      "sha256": "c58dfd84aca4d9849dd78a18c4b605851769b87a605cb4cc965f9bb44d4c06ed",
+      "restricted_to_farm": "Wind Farm C",
+      "n_cases_after_farm_filter": 58
     },
-    "signal_map": null,
-    "artifact_manifest": null,
-    "fit_provenance": null,
-    "freeze_receipt": null,
+    "signal_map": {
+      "path": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\evidence_MD_2022_run1\\signal_map_Wind_Farm_C.json",
+      "sha256": "70200b295164a691150dc64df2b9b9852fabc44a6a7a3d7de47fc4a39eae6c01"
+    },
+    "artifact_manifest": {
+      "path": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\evidence_MD_2022_run1\\artifact_manifest_Wind_Farm_C.json",
+      "sha256": "b224a29ea665ede1c33a683c870054e42c50ed8d5390fec8eb5276046e026c1e"
+    },
+    "fit_provenance": {
+      "path": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\evidence_MD_2022_run1\\fit_provenance_Wind_Farm_C.json",
+      "sha256": "bca4a257e5854a2164998b8a9d7c36bf6b4b4a8f08bea49944ed1131bc6fcbad"
+    },
+    "freeze_receipt": {
+      "path": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\evidence_MD_2022_run1\\freeze_receipt_Wind_Farm_C.json",
+      "sha256": "ae01fe92e71b29c87c395607322aac752b18a18f1995d3fc968ccdadcd32e053"
+    },
     "score_dir": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\scores_MD_2022_run1",
     "score_dir_run2": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\scores_MD_2022_run2",
     "score_glob": "*.csv",
     "per_case_input_sha256": {
-      "0": "3499951fb8fcc5439e8573c6e0ceab108c6c33085a8f426c60d031b48abf7f9d",
-      "1": "a0475d595a9921837f697cb28488cb4cb93e4345ea9f833070bb2064ef1cb655",
-      "10": "fce81e982aef3ee9d959938d8f9b20fe4928e94deefd15359744c86a11d8b9be",
-      "11": "d8df38e8376fe739c472991fd1b0ef027d3d7c48da001a7f92bce57123002655",
-      "12": "28f59b49f8d48e48ee2bc35592fc93dda4fe7251bd87714267b72ed8e69ef369",
-      "13": "f002768bfd54d07aae417a10ceaf8322afe00375d70e4f99028b95c0ec01218f",
-      "14": "27f0379775523b9fa5d14d3369b09fbe701dd55e5f8fe561eee25ba3ed2b0bb1",
-      "15": "47b3d69baf3ef5bbcab323171d0ea9a89a49ffc1be287944e6d204404456d7c9",
-      "16": "f3c818ec91b105f9cae73c9a1e9d78b227dc4e6e745fb576817f07f3546bd22c",
-      "17": "11bad8490485967e2b81f020d25b21e6604bdc301865ec917b420528fac7c42f",
+      "1": "a8035f85f1ba7044475c23717b3fe5effa58d77de7bb02591cfcce78701ae36c",
+      "11": "d98ea6f40ada865248873cd1a79b44e6b3ea99496ae571465478ea6d6a6192c0",
+      "12": "ee0eeecf56944897c51a5805ead6d44bb634f6e66b805f7cc191055a21a18bba",
+      "15": "073105c19bb93f77aaa887411d816535b2bdf36dc539da1640667b8ebb5faf1c",
+      "16": "47568904ac576e70cb88fa6bfc2d29e7f272e6cf5e668f6d745aba66121c9c67",
       "18": "fd5177a09776785e7557ec520dcd3cf8550cd1a85dc8670296fb3847527e303a",
-      "19": "7e914653bd7c96f73aa0946fd9cd9418af303db8ddcec3d166d7c061bf5b5701",
-      "2": "c8f81177f6c0b3955206c7a4a70ec1b76739415ec88e7f2d206f12c222890b19",
-      "20": "772f77592e66004a7fa31107be776db9382b1e0c43af9b4022c8782ce2901eb2",
-      "21": "5cf3a0fa49b63706a66dd4160ee61d89ca3f4429175c79aa5072486ebb3ea5b3",
-      "22": "35846916965942520f8cf1daa21da4d914eef293c7ab348cd82e55f73dc3e786",
-      "23": "eceeb7e4732bd6cb44486fec0ef848d94167c19a1b9410f90a7e2b94daa6c54d",
-      "24": "eb6da4ac2389253d6fe2caa1805fb77381a1c06f5d7916917d2871b15f2096f1",
-      "25": "6234e18a5cc797552b22a50550ed1373be9c458cbe70de731be391ec7b1ee345",
-      "26": "a2aa3d0f7c0ff98331d81a7f5b9dfb46bc4fbb9b2927fe0fb9c5f02c8e1ca97b",
-      "27": "116edbfb8a97ff44ce89984c561d341e86abba979bdc89fe08331c470e6af0cf",
-      "28": "51bac10007ca9abe09678c371cc1470a8ef41f986dd120499f2e2803d72e8eed",
-      "29": "ace8921b369f8e2c7adf44fc22e3d7e59a6878e8907ca4618a2b74eaf8b8abbd",
-      "3": "730dc541efcdd01b41cbd364d5aa5c6b874ec442d5e90d95cdf5fcf9897c2c07",
+      "20": "7918250419b37e3cad69f7f08c92d8e11072ae78a84939a43b73876ce6a0dab7",
+      "28": "b661dff4410f927587884db7a2a5e911d309751d761c227df23c8d3abe93c661",
+      "29": "81aabbf7f89a4c9ad3daf64e6274550e591880c7e0ecfd5a4f930addcb319c45",
       "30": "077552b1091c222c82c599e3ed51fa6028bcce54897f079cf09df6211bb71b0e",
       "31": "706fc18bf7ee50bc059864b766e8d7e0f9d0667aee12cded7a9d723c1f7c5fa5",
       "32": "566ea37c8a221c66146b2561958730edc31cbfc04b83981a0b90eb3c46ec6d4e",
-      "33": "cb257ebc4e0abd48ebf03626def9f1278103c4df248f252765fa953735a56315",
-      "34": "5e9f57d8dee2fa743722555194336124e38c4dce55af8be56e0a2c654295d6a8",
-      "35": "ac140f4820972a3744685b891d51cf457f1bc7aeeb65812b1df40593fe10b063",
-      "36": "cc6363064404c3da2918d854f236a1e75f125b811ba5cd1bb1ee913627253afe",
-      "37": "2b5d489279b10a1550909402ed807d252135e82f3fead16ef8884e087bb13783",
-      "38": "68b2d9266ae505232c3e0ab68b51bd1e5410169bf9f69cd229fdee25f869ba4b",
+      "33": "306678fdbf207a203baf6c1d5ac908146e3a85d3e78d7ae95df0322d7b3ebf9b",
+      "35": "7792c5a91bfcccb44ba5c624aa2355f1c562d4282faec4f3df7d4552f049c7bc",
+      "36": "d79b3aa217cbb50b0f79420dbea19449ecb3cd4b0247c1e53da2aeb7ebe06181",
+      "37": "6be94f7d3dcbe692c8f03aba2eaab8e65fe199f03ef8ab4bb84b60fe00adc363",
       "39": "598bb84d647132f3d2584938f019bc21164d27e8d9396dcfa361d9bdfe2171f4",
       "4": "b6c05bc2d99a3ba162aa9ca26e860eb4a31f4162d6875abb89b750972d3aaeb3",
-      "40": "711bdd39cacf9c7483bf8ef3992b18326642bf1c401a531cac497e3600bafc47",
-      "41": "be96027ae68045ccfd074237051ed9fd49807be295096acae8134a68afa0f455",
-      "42": "5ab8e97ca66d784da8748a780659789c8b454043700c63fef0f77e04547fb31c",
-      "43": "747c5249a8a4c88833edeedcacbbef735011ab75c02bd273b3bf91b26d16512d",
+      "41": "9f1254963fac9b59dc9692c493edcdfb43c35a8ec1e4a12754140f63bde29f44",
+      "43": "7826b6906012469f752a2a77000ff198d4889e565c561fecb9bbce408b2123ec",
       "44": "33c828621d6dab67eb87c52e67c11870890f5168347bdf9a030a04e7995ede10",
-      "45": "1820b654630b1afd854ac528c7c1634a505569e7259c9c133ab66b10a2405e5f",
       "46": "34344f05baf93932eaee4ed7340044b5462920128942dde71b4f9b2d5a7097c1",
-      "47": "04b6834a6fd07df7afb88d67c693bec095619d3bf76c6dec974eae9bb37661c6",
+      "47": "06067dd519937c0c353a78f082031108fdce900c853cf7b5560caae8fab8a192",
       "48": "e77fd92cab33b3b3dfac9d8d35fac6b2c3fa213c6db337466a48cfd1298c0060",
-      "49": "ca03f6de1cd7b784b818b003134da266baf951a39c843befc039755f079d0508",
-      "5": "e0ff43a523a6de28aaec976cf77c2b6bca865ea6e01a79025bcb29c53e01ee44",
-      "50": "ab76708e958a2cde350c764a330056e6c9ea3da26d51006ea847cccd5245c84e",
-      "51": "d5031bcd7ca9d5d7c64ca6f3f343e5f4da301cb0aadd3316b9eb59d9f33c5a7c",
-      "52": "788d9152719363d711fa49439885476a268995f0a0199fe8f9fd4b433de0a74b",
-      "53": "831e497e26b92edea67ea5fd081ab70764f0b63ace26194872eeef696c30ed5c",
-      "54": "8d5b8f2e95dde06f9540d8f82374d13a0f912f24b38964bb4c9fdc2707a0f78b",
+      "49": "033e27dcde35d9a53fb742bc62f21338c0acc7462f1971c3065e57791abf9230",
+      "5": "40213d10eb37a7a651f9ff658700deae30aed55e7f0f020e9640541a5536e7cc",
+      "50": "9cd1849b87b5ece98bce4523b19259264c64dc9913541ff382f3b0b05bb500b5",
+      "54": "52bc3f9bcc1687e1ebf38226b213a7e0d20c8ecb04407af0b57f5c6a7834b47b",
       "55": "ee19b41a6803eaff7ba87174f3b64f5f7e1e2fed01343568381c5f528f77c7e8",
       "56": "9a75b1a602ca4a1582a0e5f66496ff7693647f9948db19b59aa1cfe799ed382d",
       "57": "aac8f86ff85d33d5aff4bd53ec2adec096be7cf7ee985ade09c42ea7afa97c49",
       "58": "7d3aad51eeeeb46c1087a1f1df4eaef1deaf6aabc032f5b87a08782e8c4e2bad",
-      "59": "ce3ba2eb4607880e330a2ac6d4cd6a22329a87a5d2d619688f94f5d66b5b2970",
+      "59": "d2bf17c5953e9a9e1e0102f7237c3020810f94b6f74cc0e67f166f4cba2cdf28",
       "6": "d164296bbc9d0c3c9c701fc684a10514b414d15f569b4a09eb06f43f4dfacdf5",
-      "60": "2f67f99a08ddbc0c5572105064fa9aaa92f4923e317116e01a47bb9f0f86f21d",
-      "61": "4f9a974b98b30e07fec67c7a8c215cabe187e501cbbceae8cecb179b6484a17e",
-      "62": "220be8f5ea9787e895afef806daa0d1da3247cec4dbfa951d94b34d6342a4732",
+      "60": "55febca1b23b05cee5d50b4feb58eb589c5158407bd775a3d220f36694da37e1",
+      "61": "0c005ee15ba758c541c0c2f2dc17a982081bc843fb1887cd7fe3fa9156205413",
+      "62": "1dbd32167b45bb66b832df4b2b4f9e1e79faa4c3623692bb70a83a3b1c4d7a60",
       "63": "09854d1ac7fa33345e9f26493028d17a040bf090d4b0e8cc4e05eab9a6a2071a",
-      "64": "606bb611a61f9ab526f09c433e4193f5d6b45b53602e97dec4216aecc13ad7d6",
-      "65": "88729862b9d0b922bc86b8c8a672ea63288f36ad1cf40587a37034501b596cde",
-      "66": "36f32c43f615eb5c3bcee28736fd9958fea6ce956deec4a4bdec3390c3411d63",
+      "64": "5946b83d61130105d487be65ab8b0447d56891ef8b053e7d6beb02b24b26780d",
+      "65": "2964f4e191dbcffefc7e7b20fce96ddfa4ddee870f860e2910c58cea5e1a7247",
+      "66": "56bed791d94d1eb4a3a084a5a2d075a70a759346251098411738fe00022994b4",
       "67": "04af01d8d008341999efd95b4b0c84a11dd3fa6f03e015ffbbb6934dbb55c722",
-      "68": "adcccd786569946eab128e5c3181ff3e4071bb9b19f555fbf2ebacf2a8c902b2",
-      "69": "7e7281aed5daf6d8956f062c2be3e441fe4485bad93349981dade04e2e788e18",
-      "7": "8b9d6d89f201a9f5f574a46aa054609ff0ab95af610399b556d811d2386b8d01",
       "70": "db6b979ef3553728a10805d16ccf1d41d1d0ed58eea29c8063f3f39bd2ed94a2",
-      "71": "638651f45291c8106c9c694cf15b02b9b05762e3f5313d889e93740c28be187a",
-      "72": "b4eb318e8b4752844d7dca4d2f7ebc0eeadf8a6b3e627fa4ddf43bef8eb761dc",
-      "73": "01a969779c3dc6c7a64d35c87894bab7c4dc1d89c716460b3980402cdf9b75ad",
-      "74": "f4b1f1af957c6234b22bc6962cf932726dd6e38e689089d7ac18ac29a1ac5c41",
       "75": "0aeed6378d57891283d0c41e6fad88ede91dc72fab42e3947ce5734d550dcdbc",
-      "76": "0e023a58d88ab6de7730e21484b09ed0163e3c934062d0ed5bb9eb887bf4be04",
-      "77": "fbb5eab588d7541fb8d6a7cca72ea5d0596176efab33091e3aa0e312ad872d2a",
+      "76": "7c963041e5ba632c1f83c8d82cb1138c576e9cb4c84b40835fa1660e6c2a0541",
       "78": "a30afde3ab649e8682a87d8eaa0d821519e326f023c00ae0df9d90ac9e08789d",
       "79": "27ee5c2818dcfa36907ab6d5659b1a5ca751bfe7b432d514ceaec6ae0fb6a15a",
       "8": "266c9eea6f27949f32d2148c4de3f86a1976b22387e9d7156c89b516268b624a",
       "80": "e63e7f899ff8573a961dace19f582dd22117daa6125a71f90a5b3519d645aa6d",
       "81": "8c954530babe25fe39751af5ea0b2066610865e8d7733c5f1b6a6b6769a50cce",
-      "82": "b2c3ad7b30e764d8e7ebdcc811912993384adf766c374fd6a4d8ace427a9579f",
-      "83": "7a2a191679d241dfc5346710d56b998894bf36881bb5f230b6fce3504bd37052",
-      "84": "2f2f1742accf2d79207e214c2bd6127c9ec6c375e4c96303e950701ef5800474",
-      "85": "d96ae6a5609d421de6ac47e61a17d0ba2f6b72c0e4bca3be0507beefaf37870e",
-      "86": "2c84a21da6a3ab42743d50b8341a13b00fcf29ef85cc5cde10cca3cec0a9cf09",
-      "87": "d8e99262f09ba5581978b92d9139420c0df92d9aea9f9cd5eb253496852fbe31",
+      "85": "61b911e2eb48f8a3984ac34cbf3d8437042332dd83a11eb12f8b15ef3e30b259",
       "88": "3c4389f8544fd354195ab368b91e91279fbe3ee1cdeb9ce74b8815ffd2b3135c",
-      "89": "459637bfc819ed495edd817d55c4ecc97530caefec51292c77cbe92cc5685446",
+      "89": "51f44c2d0fe7e80bf20e76b4ccad7e789fcdb729c572c24c81e474c9795ef347",
       "9": "e5154adeb9e4f53eb74bd19bda5f3b1ab491bf16308e442f8bfeb2aac80f7a56",
       "90": "e20a31f76633e025c4e73cc6eb2769e2f3d1a2cc24ccc46bfc399842034154b5",
       "91": "78121cc62b4fb7c4333277a16d379def91e809285b9ae0ec0f9bf8e92bc08320",
-      "92": "78856e6f95ae88cfbcc2d76eb8cbc86728b6abc8a753b24ca4750f07a077f9b4",
-      "93": "e905cecda52fd3013943a9c5594587e9401775634660e33ad4dbc12de6e83367",
+      "93": "b445597a4a48f1d324c9f5c6e78348ccacc3e0e80e421b34ade8510be36ef1ed",
       "94": "040a02f31d76147b4dabade6cee24d89783ef8e09ad53843ab3e94d6311e61dc"
     }
   },
-  "cli_invocation": "scripts\\base_scorer_compatibility_check.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare --g2-inventory .\\manifest_out\\g2_case_inventory.json --g3-case-metadata .\\manifest_out\\g3_case_metadata.csv --score-dir .\\scores_MD_2022_run1 --score-dir-run2 .\\scores_MD_2022_run2 --scorer-name MD_2022_Wind_Farm_C --output-dir .\\compat_out_MD_2022_C --timestamp-col timestamp --score-col anomaly_score --signal-map .\\evidence_MD_2022_run1\\signal_map_Wind_Farm_C.json --artifact-manifest .\\evidence_MD_2022_run1\\artifact_manifest_Wind_Farm_C.json --fit-provenance .\\evidence_MD_2022_run1\\fit_provenance_Wind_Farm_C.json --freeze-receipt .\\evidence_MD_2022_run1\\freeze_receipt_Wind_Farm_C.json --determinism-mode bit_identical"
+  "cli_invocation": "scripts\\base_scorer_compatibility_check.py --workdir D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare --g2-inventory .\\manifest_out\\g2_case_inventory.json --g3-case-metadata .\\manifest_out\\g3_case_metadata.csv --farm Wind Farm C --score-dir .\\scores_MD_2022_run1 --score-dir-run2 .\\scores_MD_2022_run2 --scorer-name MD_2022_Wind_Farm_C --output-dir .\\compat_out_MD_2022_C --timestamp-col timestamp --score-col anomaly_score --signal-map .\\evidence_MD_2022_run1\\signal_map_Wind_Farm_C.json --artifact-manifest .\\evidence_MD_2022_run1\\artifact_manifest_Wind_Farm_C.json --fit-provenance .\\evidence_MD_2022_run1\\fit_provenance_Wind_Farm_C.json --freeze-receipt .\\evidence_MD_2022_run1\\freeze_receipt_Wind_Farm_C.json --determinism-mode bit_identical"
 }
