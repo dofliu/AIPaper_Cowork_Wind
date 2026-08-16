@@ -7,11 +7,11 @@
 
 分支：**`main`**。所有工作分支（#6–#9）皆已併入並清理。
 　　　**請從 `main` 取用，不要再從個別工作分支接手。**
-自我測試：10 支、266 checks、全過（`docs/LOCAL_RUNBOOK.md` Phase 0.3 有一鍵指令）
+自我測試：10 支、**285 checks**、全過（`docs/LOCAL_RUNBOOK.md` Phase 0.3 有一鍵指令）
 
-> 266 這個數字是 PR #7 與 #8 合併後**實跑**得到的，不是兩邊相加。
-> 兩個 session 當時同時在改 `evaluate_experiment.py` 與
-> `selftest_end_to_end.py`，合併後有實際驗證過沒有互相破壞。
+> 這個數字是各分支合併**後實跑**得到的，不是把各分支的數字相加。
+> 曾有兩個 session 同時在改 `evaluate_experiment.py` 與
+> `selftest_end_to_end.py`，所以合併後一律重跑驗證，不假設互不干擾。
 
 ---
 
