@@ -341,6 +341,19 @@ def run(args):
 
     excluded = set(x.strip() for x in (args.exclude_cases or "").split(",") if x.strip())
 
+    trims = {}
+    for spec in (args.trim_case or []):
+        if "=" not in spec:
+            print("bad --trim-case %r; expected CASE_ID=TIMESTAMP" % spec, file=sys.stderr)
+            return 3
+        cid, raw = spec.split("=", 1)
+        cut = parse_ts(raw.strip())
+        if cut is None:
+            print("bad timestamp in --trim-case %r" % spec, file=sys.stderr)
+            return 3
+        trims[cid.strip()] = cut
+    trim_applied = {}
+
     per_method = {}
     for name, (directory, column, mode) in methods.items():
         series = read_method(directory, column, mode, args.alpha)
@@ -356,6 +369,33 @@ def run(args):
                 per_case[case_id] = {"error": "column %r missing" % column}
                 continue
             n = min(len(exceeds), len(ref["timestamps"]))
+
+            # D1/D6 remediation, ratified 2026-08-15. Four cases are excluded
+            # outright; case 93 is TRIMMED instead, because only its tail
+            # overlaps another case on the same turbine. Case 93 (normal) and
+            # case 33 (anomaly) are both turbine 43 on Farm C, and 33's eval
+            # window opens at 2023-08-24T13:00:00 while 93's runs to
+            # 2023-08-24T15:50:00 -- 0.12 days of the same asset, in the same
+            # period, under opposite labels.
+            #
+            # Until now this trim existed only as a sentence in the emitted
+            # config. Nothing applied it, and nothing would have errored:
+            # case 93 would simply have been evaluated whole, carrying the
+            # overlap into the false-alarm figures on the normal side.
+            cut = trims.get(case_id)
+            if cut is not None:
+                kept = n
+                for i in range(n):
+                    ts = ref["timestamps"][i]
+                    if ts is not None and ts >= cut:
+                        kept = i
+                        break
+                trim_applied[case_id] = {"cut_at": cut.isoformat(),
+                                         "n_rows_before": n,
+                                         "n_rows_kept": kept,
+                                         "n_rows_dropped": n - kept}
+                n = kept
+
             per_case[case_id] = evaluate_case(
                 exceeds[:n], ref["timestamps"][:n], ref["winds"][:n],
                 args.alpha, args.window, events.get(case_id),
@@ -475,6 +515,12 @@ def run(args):
             "an alarm earlier than this many days before event_start is a false "
             "alarm, not a detection"),
         "excluded_cases": sorted(excluded),
+        "trimmed_cases": trim_applied,
+        "trim_note": (
+            "rows at or after the cut timestamp are dropped before any metric "
+            "is computed. D1/D6 remediation ratified 2026-08-15: case 93 "
+            "overlaps case 33 on turbine 43 of Farm C under opposite labels."
+            if trim_applied else "no case was trimmed in this run"),
         "missing_metrics": MISSING_METRICS,
         "comparison": comparison,
         "per_method": per_method,
@@ -556,6 +602,11 @@ def main():
                          "alarms. Unset = unbounded (previous behaviour), which "
                          "credits pre-onset alarms as early warning. Not "
                          "defaulted on purpose: this is a ratifiable parameter.")
+    ap.add_argument("--trim-case", action="append",
+                    help="CASE_ID=TIMESTAMP. Drop rows at or after TIMESTAMP "
+                         "for that case before computing any metric. Repeatable. "
+                         "The D1/D6 plan trims case 93 at 2023-08-24T13:00:00; "
+                         "excluding it outright would throw away 23 usable days.")
     ap.add_argument("--exclude-cases",
                     help="Comma-separated case_ids to drop (D1/D6 exclusion plan)")
     ap.add_argument("--output-dir", required=True)

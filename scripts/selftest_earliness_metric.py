@@ -147,7 +147,8 @@ def build(root, patterns):
     return scores_dir, care_root, manifest, method_dirs
 
 
-def evaluate(root, scores_dir, care_root, manifest, method_dirs, horizon, tag):
+def evaluate(root, scores_dir, care_root, manifest, method_dirs, horizon, tag,
+             extra=None):
     out_dir = os.path.join(root, "eval_" + tag)
     cmd = [sys.executable, os.path.join(HERE, "evaluate_experiment.py"),
            "--scores-dir", scores_dir, "--wind-col", WIND_COL,
@@ -161,6 +162,7 @@ def evaluate(root, scores_dir, care_root, manifest, method_dirs, horizon, tag):
         cmd += ["--method", "%s=%s:alarm:alarm" % (name, d)]
     if horizon is not None:
         cmd += ["--detection-horizon-days", str(horizon)]
+    cmd += list(extra or [])
 
     proc = subprocess.run(cmd, capture_output=True, text=True)
     if proc.returncode != 0:
@@ -314,6 +316,41 @@ def main():
                      "n/a" if bd[m]["median_lead_days"] is None
                      else "%.3f" % bd[m]["median_lead_days"],
                      bd[m]["n_cases_with_lead"], bd[m]["n_anomaly_cases_total"]))
+
+        # ---- T6  --trim-case actually drops rows -------------------------
+        # The D1/D6 plan trims case 93 rather than excluding it. Until this
+        # test existed the trim was a sentence in the emitted config that
+        # nothing applied, and nothing would have errored -- the overlapping
+        # tail would simply have been evaluated.
+        print("\nT6  --trim-case drops rows at or after the cut")
+        cut = (START + timedelta(minutes=INTERVAL_MIN * 200)).strftime("%Y-%m-%d %H:%M:%S")
+        trimmed = evaluate(root, scores_dir, care_root, manifest, method_dirs,
+                           None, "trimmed", extra=["--trim-case", "a1=" + cut])
+        if trimmed is None:
+            check("T6 the trimmed run completed", False)
+        else:
+            rec = (trimmed.get("trimmed_cases") or {}).get("a1")
+            check("T6 the trim is recorded, not silently applied", rec is not None,
+                  "trimmed_cases = %s" % trimmed.get("trimmed_cases"))
+            if rec:
+                check("T6 rows before the cut are kept", rec["n_rows_kept"] == 200,
+                      "kept %s" % rec["n_rows_kept"])
+                check("T6 rows at or after the cut are dropped",
+                      rec["n_rows_dropped"] == N_ROWS - 200,
+                      "dropped %s" % rec["n_rows_dropped"])
+            check("T6 only the named case is trimmed",
+                  set((trimmed.get("trimmed_cases") or {})) == {"a1"},
+                  "got %s" % sorted(trimmed.get("trimmed_cases") or {}))
+            # REVERSE: the untrimmed run must show no trim at all, or T6
+            # would pass even if --trim-case did nothing.
+            check("T6 REVERSE: the untrimmed run records no trim",
+                  not (unbounded.get("trimmed_cases") or {}),
+                  "got %s" % unbounded.get("trimmed_cases"))
+            check("T6 REVERSE: trimming changed a1's detection outcome",
+                  (trimmed["comparison"]["timely"]["n_cases_with_lead"]
+                   != unbounded["comparison"]["timely"]["n_cases_with_lead"]),
+                  "both %s -- the cut landed where nothing depended on it"
+                  % trimmed["comparison"]["timely"]["n_cases_with_lead"])
 
     print("\n%d checks, %d failed" % (checks[0], len(failures)))
     if failures:

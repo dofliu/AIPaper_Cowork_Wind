@@ -92,6 +92,7 @@ TEMPLATE = {
         "min_bin_samples": 500,
         "reference_method": "static",
         "exclude_cases": ["32", "56", "72", "87"],
+        "trim_cases": {"93": "2023-08-24T13:00:00"},
         "_exclude_note": "D1/D6 exclusion plan, 2026-08-15. Case 93 is trimmed, not excluded.",
     },
 }
@@ -216,6 +217,13 @@ def run(config, config_path):
     scorers = [s for s in config["scorers"]
                if s.get("score_dir") and "FILL_ME" not in str(s["score_dir"])]
     exclude = ",".join(experiment.get("exclude_cases", []))
+    # The trim is half of the ratified D1/D6 remediation and used to live
+    # only as a sentence in the emitted config, applied by nothing. Case 93
+    # overlaps case 33 on the same turbine under the opposite label; dropping
+    # 93 entirely would discard 23 usable days, so it is trimmed instead.
+    trim_args = []
+    for case_id, cut in (experiment.get("trim_cases") or {}).items():
+        trim_args += ["--trim-case", "%s=%s" % (case_id, cut)]
     log, produced = [], []
 
     for scorer in scorers:
@@ -277,6 +285,7 @@ def run(config, config_path):
                    "--output-dir", eval_dir]
             if exclude:
                 cmd += ["--exclude-cases", exclude]
+            cmd += trim_args
             if run_step(cmd, "evaluation", log):
                 produced.append({"scorer": name, "alpha": alpha,
                                  "comparison_md": os.path.join(eval_dir, "comparison.md"),

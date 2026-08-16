@@ -56,7 +56,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：十支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 285 checks。
+**預期**：十支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 291 checks。
 
 | 測試 | checks |
 |---|---|
@@ -69,7 +69,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_online_baselines.py` | 13 |
 | `selftest_signal_map_builder.py` | 48 |
 | `selftest_unit_consistency.py` | 29 |
-| `selftest_earliness_metric.py` | 22 |
+| `selftest_earliness_metric.py` | 28 |
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。
@@ -627,6 +627,36 @@ python scripts\run_pipeline.py --emit-config pipeline_config.json
 
 `scorers[0].score_dir` 填 `./scores_MD_2022_run1`。
 `MainBearing_2026` 若尚未就緒，把整個項目留著 `FILL_ME` 即可，會被跳過。
+
+**`experiment` 區塊不要動**，已簽核值都預先填好了，包含 D1/D6 的兩項處置：
+
+```json
+"exclude_cases": ["32", "56", "72", "87"],
+"trim_cases":    {"93": "2023-08-24T13:00:00"}
+```
+
+> **裁切為什麼不能省。** case 93（normal）與 case 33（anomaly）是 Farm C
+> 同一台機組 43，兩者評估視窗重疊 0.12 天——**同一台機、同一段期間、
+> 相反標籤**。case 33 的視窗自 `2023-08-24T13:00:00` 開啟，所以 93 從那一刻
+> 起的列必須丟棄。整案排除會白白丟掉 23 天可用資料，所以裁切而非排除。
+>
+> 這個裁切先前**只是設定檔裡的一句註解，沒有任何程式套用它**，而且不會
+> 報錯——case 93 會被完整評估，把重疊帶進正常案例那側的誤報統計。
+> 2026-08-16 已實作為 `--trim-case`，並記錄在 `evaluation.json` 的
+> `trimmed_cases`（含丟棄列數）。跑完請確認那個欄位不是空的。
+
+### 5.3 先預檢，再實跑
+
+```powershell
+python scripts\run_pipeline.py --config pipeline_config.json --preflight-only
+```
+
+看到 `preflight OK -- the pipeline would run` 才往下跑。預檢會擋掉路徑錯誤、
+欄名對不上、`FILL_ME` 沒填完這類問題，不必等跑到一半才發現。
+
+```powershell
+python scripts\run_pipeline.py --config pipeline_config.json
+```
 
 **先做預檢**（幾秒鐘，會逐一核對每個路徑與每個欄名是否真的在 CSV 裡）：
 
