@@ -19,12 +19,12 @@ Windows 使用者請用 PowerShell，不要用 CMD（換行接續符號不同）
 ### 0.1 取得程式
 
 ```bash
-git clone -b claude/practical-sagan-thkia5 https://github.com/dofliu/AIPaper_Cowork_Wind.git
+git clone https://github.com/dofliu/AIPaper_Cowork_Wind.git
 cd AIPaper_Cowork_Wind
 ```
 
 ```powershell
-git clone -b claude/practical-sagan-thkia5 https://github.com/dofliu/AIPaper_Cowork_Wind.git
+git clone https://github.com/dofliu/AIPaper_Cowork_Wind.git
 cd AIPaper_Cowork_Wind
 ```
 
