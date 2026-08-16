@@ -658,6 +658,23 @@ python scripts\run_pipeline.py --config pipeline_config.json --preflight-only
 python scripts\run_pipeline.py --config pipeline_config.json
 ```
 
+### 5.4 這一步要跑多久（重要，否則會以為當機）
+
+實測（一個 case 約 5.4 萬列，95 案）：
+
+| 步驟 | 單一 case | 95 案 | 說明 |
+|---|---|---|---|
+| **W1-ACAS** | **約 51 秒** | **約 80 分鐘** | **瓶頸**，但與 α 無關，整個 scorer 只跑一次 |
+| 本方法 RCC | 2.7 秒 | 約 4 分鐘 | 每個 α 各一次 |
+| static/ACI/DtACI | 1.4 秒 | 約 2 分鐘 | 每個 α 各一次 |
+
+所以整體約 **1.5～2 小時**，而且**跑三個 α 只比跑一個多約 15 分鐘**
+——因為八成的時間花在只跑一次的 W1-ACAS 上。沒有理由為了省時間只跑一個 α。
+
+> W1-ACAS 每處理完一個 case 就會印一行進度。若你看不到那些行，代表你的
+> 版本早於 2026-08-16：當時 `run_pipeline` 用 `capture_output=True` 把子程序
+> 輸出全吞掉，長步驟因此一小時毫無動靜，與當機無法分辨。已改為即時串流。
+
 **先做預檢**（幾秒鐘，會逐一核對每個路徑與每個欄名是否真的在 CSV 裡）：
 
 ```bash

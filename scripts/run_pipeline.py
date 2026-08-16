@@ -45,6 +45,7 @@ import glob
 import json
 import os
 import subprocess
+from collections import deque
 import sys
 from datetime import datetime, timezone
 
@@ -195,13 +196,29 @@ def preflight(config):
 
 
 def run_step(cmd, label, log):
+    """Run a child step, echoing its output live.
+
+    This used to capture_output=True, which swallowed everything the child
+    printed. W1-ACAS takes about 50 seconds per case, so on the real archive
+    it sits for well over an hour on one line with no sign of life -- and it
+    already prints per-case progress, which nobody could see. An operator
+    reasonably read that as a hang. A long step with no output is
+    indistinguishable from a hung one, so the output is streamed now and only
+    the tail is kept for the log."""
     print("    %s ..." % label, flush=True)
-    proc = subprocess.run(cmd, capture_output=True, text=True)
+    tail = deque(maxlen=40)
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT, text=True, bufsize=1)
+    for line in proc.stdout:
+        line = line.rstrip()
+        tail.append(line)
+        if line:
+            print("      %s" % line, flush=True)
+    proc.wait()
     log.append({"step": label, "returncode": proc.returncode,
-                "cmd": cmd, "stderr_tail": proc.stderr[-800:]})
+                "cmd": cmd, "output_tail": "\n".join(tail)})
     if proc.returncode != 0:
         print("      FAILED rc=%d" % proc.returncode)
-        print("      %s" % proc.stderr.strip()[-600:])
         return False
     return True
 

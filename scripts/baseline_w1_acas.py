@@ -313,8 +313,11 @@ def main():
         out_path, diagnostics = process_file(path, args)
         case_id = os.path.splitext(os.path.basename(path))[0]
         report[case_id] = diagnostics
-        if i % 5 == 0 or i == len(paths):
-            print("  %d/%d cases" % (i, len(paths)), flush=True)
+        # Every case, not every fifth. On the real archive a case takes
+        # about 50 seconds, so a stride of 5 means four minutes of silence
+        # between lines -- long enough to read as a hang, which is exactly
+        # what happened on 2026-08-16.
+        print("  %d/%d cases" % (i, len(paths)), flush=True)
 
     errors = [d["calibration_error"] for d in report.values()
               if d.get("calibration_error") is not None]
