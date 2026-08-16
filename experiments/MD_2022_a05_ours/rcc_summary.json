@@ -1,0 +1,4679 @@
+{
+  "method_version": "rcc-v1.0",
+  "generated_at_utc": "2026-08-16T11:50:47.705639+00:00",
+  "parameters": {
+    "alpha": 0.05,
+    "window_W": 1440,
+    "min_bin_samples": 500,
+    "regime_bins": [
+      "bin1_lt_4",
+      "bin2_4_8",
+      "bin3_8_12",
+      "bin4_ge_12"
+    ],
+    "work_order_rule": "6 of last 18",
+    "freeze_on_alert": true
+  },
+  "parameter_source": "【已簽核】參數凍結協定 v1.0, 劉老師 2026-08-11",
+  "n_cases": 95,
+  "mean_worst_bin_deviation": 0.21833860147072778,
+  "mean_marginal_deviation": 0.1541410815876907,
+  "per_case": {
+    "0": {
+      "diagnostics": {
+        "n_rows": 54986,
+        "n_calibrated": 52957,
+        "n_uncalibrated_warmup": 2029,
+        "n_frozen_steps": 11438,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 17239,
+            "far": 0.18695980045246244,
+            "deviation": 0.13695980045246242
+          },
+          "bin2_4_8": {
+            "n": 19599,
+            "far": 0.21853155773253738,
+            "deviation": 0.16853155773253736
+          },
+          "bin3_8_12": {
+            "n": 10502,
+            "far": 0.14311559702913731,
+            "deviation": 0.09311559702913731
+          },
+          "bin4_ge_12": {
+            "n": 5617,
+            "far": 0.12177318853480505,
+            "deviation": 0.07177318853480505
+          }
+        },
+        "marginal_far": 0.18303529278471212,
+        "marginal_deviation": 0.1330352927847121,
+        "worst_bin_deviation": 0.16853155773253736,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51518,
+        "max_deviation": 0.6020833333333333,
+        "window": 1440
+      }
+    },
+    "1": {
+      "diagnostics": {
+        "n_rows": 53569,
+        "n_calibrated": 51566,
+        "n_uncalibrated_warmup": 2000,
+        "n_frozen_steps": 11552,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9788,
+            "far": 0.2587862689006947,
+            "deviation": 0.20878626890069474
+          },
+          "bin2_4_8": {
+            "n": 23675,
+            "far": 0.2021964097148891,
+            "deviation": 0.15219640971488912
+          },
+          "bin3_8_12": {
+            "n": 10512,
+            "far": 0.1660958904109589,
+            "deviation": 0.1160958904109589
+          },
+          "bin4_ge_12": {
+            "n": 7591,
+            "far": 0.13160321433276248,
+            "deviation": 0.08160321433276248
+          }
+        },
+        "marginal_far": 0.19518675095993485,
+        "marginal_deviation": 0.14518675095993483,
+        "worst_bin_deviation": 0.20878626890069474,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50127,
+        "max_deviation": 0.8374999999999999,
+        "window": 1440
+      }
+    },
+    "10": {
+      "diagnostics": {
+        "n_rows": 53592,
+        "n_calibrated": 51449,
+        "n_uncalibrated_warmup": 2143,
+        "n_frozen_steps": 11960,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 17897,
+            "far": 0.21986925182991562,
+            "deviation": 0.16986925182991564
+          },
+          "bin2_4_8": {
+            "n": 19456,
+            "far": 0.23946340460526316,
+            "deviation": 0.18946340460526317
+          },
+          "bin3_8_12": {
+            "n": 11279,
+            "far": 0.11242131394627183,
+            "deviation": 0.06242131394627183
+          },
+          "bin4_ge_12": {
+            "n": 2817,
+            "far": 0.12424565140220092,
+            "deviation": 0.07424565140220092
+          }
+        },
+        "marginal_far": 0.19848782289257322,
+        "marginal_deviation": 0.14848782289257323,
+        "worst_bin_deviation": 0.18946340460526317,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50010,
+        "max_deviation": 0.8784722222222222,
+        "window": 1440
+      }
+    },
+    "11": {
+      "diagnostics": {
+        "n_rows": 56437,
+        "n_calibrated": 53790,
+        "n_uncalibrated_warmup": 2645,
+        "n_frozen_steps": 15147,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9593,
+            "far": 0.27176065881371836,
+            "deviation": 0.22176065881371837
+          },
+          "bin2_4_8": {
+            "n": 24059,
+            "far": 0.20798869445945384,
+            "deviation": 0.15798869445945385
+          },
+          "bin3_8_12": {
+            "n": 12020,
+            "far": 0.18826955074875207,
+            "deviation": 0.13826955074875208
+          },
+          "bin4_ge_12": {
+            "n": 8118,
+            "far": 0.3531658043853166,
+            "deviation": 0.3031658043853166
+          }
+        },
+        "marginal_far": 0.23686558839933072,
+        "marginal_deviation": 0.1868655883993307,
+        "worst_bin_deviation": 0.3031658043853166,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52351,
+        "max_deviation": 0.8999999999999999,
+        "window": 1440
+      }
+    },
+    "12": {
+      "diagnostics": {
+        "n_rows": 56107,
+        "n_calibrated": 52784,
+        "n_uncalibrated_warmup": 3313,
+        "n_frozen_steps": 12611,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7121,
+            "far": 0.2187894958573234,
+            "deviation": 0.1687894958573234
+          },
+          "bin2_4_8": {
+            "n": 23914,
+            "far": 0.16166262440411475,
+            "deviation": 0.11166262440411474
+          },
+          "bin3_8_12": {
+            "n": 13929,
+            "far": 0.18077392490487473,
+            "deviation": 0.13077392490487472
+          },
+          "bin4_ge_12": {
+            "n": 7820,
+            "far": 0.26138107416879797,
+            "deviation": 0.21138107416879798
+          }
+        },
+        "marginal_far": 0.1891861170051531,
+        "marginal_deviation": 0.1391861170051531,
+        "worst_bin_deviation": 0.21138107416879798,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51345,
+        "max_deviation": 0.6513888888888888,
+        "window": 1440
+      }
+    },
+    "13": {
+      "diagnostics": {
+        "n_rows": 54010,
+        "n_calibrated": 51819,
+        "n_uncalibrated_warmup": 2191,
+        "n_frozen_steps": 11826,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 17992,
+            "far": 0.1710760337927968,
+            "deviation": 0.12107603379279679
+          },
+          "bin2_4_8": {
+            "n": 19128,
+            "far": 0.22574236721037222,
+            "deviation": 0.17574236721037223
+          },
+          "bin3_8_12": {
+            "n": 9486,
+            "far": 0.15243516761543327,
+            "deviation": 0.10243516761543327
+          },
+          "bin4_ge_12": {
+            "n": 5213,
+            "far": 0.19911759063878764,
+            "deviation": 0.14911759063878766
+          }
+        },
+        "marginal_far": 0.19066365618788475,
+        "marginal_deviation": 0.14066365618788473,
+        "worst_bin_deviation": 0.17574236721037223,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50380,
+        "max_deviation": 0.5972222222222222,
+        "window": 1440
+      }
+    },
+    "14": {
+      "diagnostics": {
+        "n_rows": 54197,
+        "n_calibrated": 52148,
+        "n_uncalibrated_warmup": 2049,
+        "n_frozen_steps": 7434,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18024,
+            "far": 0.11284953395472704,
+            "deviation": 0.06284953395472703
+          },
+          "bin2_4_8": {
+            "n": 21398,
+            "far": 0.16366015515468735,
+            "deviation": 0.11366015515468735
+          },
+          "bin3_8_12": {
+            "n": 10556,
+            "far": 0.08071239105721864,
+            "deviation": 0.030712391057218638
+          },
+          "bin4_ge_12": {
+            "n": 2170,
+            "far": 0.0663594470046083,
+            "deviation": 0.0163594470046083
+          }
+        },
+        "marginal_far": 0.1252588785763596,
+        "marginal_deviation": 0.07525887857635959,
+        "worst_bin_deviation": 0.11366015515468735,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50709,
+        "max_deviation": 0.40625,
+        "window": 1440
+      }
+    },
+    "15": {
+      "diagnostics": {
+        "n_rows": 54433,
+        "n_calibrated": 51823,
+        "n_uncalibrated_warmup": 2183,
+        "n_frozen_steps": 12639,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9448,
+            "far": 0.2039585097375106,
+            "deviation": 0.15395850973751057
+          },
+          "bin2_4_8": {
+            "n": 21956,
+            "far": 0.17302787392967753,
+            "deviation": 0.12302787392967753
+          },
+          "bin3_8_12": {
+            "n": 11117,
+            "far": 0.17639650984977961,
+            "deviation": 0.12639650984977963
+          },
+          "bin4_ge_12": {
+            "n": 9302,
+            "far": 0.3298215437540314,
+            "deviation": 0.2798215437540314
+          }
+        },
+        "marginal_far": 0.20753333461976342,
+        "marginal_deviation": 0.15753333461976343,
+        "worst_bin_deviation": 0.2798215437540314,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50384,
+        "max_deviation": 0.8166666666666667,
+        "window": 1440
+      }
+    },
+    "16": {
+      "diagnostics": {
+        "n_rows": 53568,
+        "n_calibrated": 51482,
+        "n_uncalibrated_warmup": 2083,
+        "n_frozen_steps": 12300,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9306,
+            "far": 0.243391360412637,
+            "deviation": 0.193391360412637
+          },
+          "bin2_4_8": {
+            "n": 23483,
+            "far": 0.19018013030703063,
+            "deviation": 0.14018013030703064
+          },
+          "bin3_8_12": {
+            "n": 10014,
+            "far": 0.16417016177351706,
+            "deviation": 0.11417016177351706
+          },
+          "bin4_ge_12": {
+            "n": 8679,
+            "far": 0.2894342666205784,
+            "deviation": 0.23943426662057843
+          }
+        },
+        "marginal_far": 0.21147197078590577,
+        "marginal_deviation": 0.16147197078590575,
+        "worst_bin_deviation": 0.23943426662057843,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50043,
+        "max_deviation": 0.88125,
+        "window": 1440
+      }
+    },
+    "17": {
+      "diagnostics": {
+        "n_rows": 55090,
+        "n_calibrated": 52944,
+        "n_uncalibrated_warmup": 2146,
+        "n_frozen_steps": 11305,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18541,
+            "far": 0.20128364165902593,
+            "deviation": 0.1512836416590259
+          },
+          "bin2_4_8": {
+            "n": 20037,
+            "far": 0.22188950441682886,
+            "deviation": 0.17188950441682888
+          },
+          "bin3_8_12": {
+            "n": 11763,
+            "far": 0.10558530986993114,
+            "deviation": 0.05558530986993114
+          },
+          "bin4_ge_12": {
+            "n": 2603,
+            "far": 0.11294660007683442,
+            "deviation": 0.06294660007683442
+          }
+        },
+        "marginal_far": 0.1834768812330009,
+        "marginal_deviation": 0.1334768812330009,
+        "worst_bin_deviation": 0.17188950441682888,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51505,
+        "max_deviation": 0.8708333333333332,
+        "window": 1440
+      }
+    },
+    "18": {
+      "diagnostics": {
+        "n_rows": 52848,
+        "n_calibrated": 50586,
+        "n_uncalibrated_warmup": 2262,
+        "n_frozen_steps": 13712,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8583,
+            "far": 0.2878946755213795,
+            "deviation": 0.2378946755213795
+          },
+          "bin2_4_8": {
+            "n": 22148,
+            "far": 0.19162001083619287,
+            "deviation": 0.14162001083619286
+          },
+          "bin3_8_12": {
+            "n": 12166,
+            "far": 0.1614335032056551,
+            "deviation": 0.11143350320565511
+          },
+          "bin4_ge_12": {
+            "n": 7689,
+            "far": 0.36402653140850566,
+            "deviation": 0.31402653140850567
+          }
+        },
+        "marginal_far": 0.2269007235203416,
+        "marginal_deviation": 0.17690072352034159,
+        "worst_bin_deviation": 0.31402653140850567,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49147,
+        "max_deviation": 0.7743055555555555,
+        "window": 1440
+      }
+    },
+    "19": {
+      "diagnostics": {
+        "n_rows": 56274,
+        "n_calibrated": 53938,
+        "n_uncalibrated_warmup": 2336,
+        "n_frozen_steps": 16900,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7459,
+            "far": 0.30660946507574743,
+            "deviation": 0.25660946507574744
+          },
+          "bin2_4_8": {
+            "n": 18160,
+            "far": 0.2784691629955947,
+            "deviation": 0.22846916299559472
+          },
+          "bin3_8_12": {
+            "n": 16591,
+            "far": 0.22355493942498944,
+            "deviation": 0.17355493942498945
+          },
+          "bin4_ge_12": {
+            "n": 11728,
+            "far": 0.2649215552523875,
+            "deviation": 0.2149215552523875
+          }
+        },
+        "marginal_far": 0.2625236382513256,
+        "marginal_deviation": 0.2125236382513256,
+        "worst_bin_deviation": 0.25660946507574744,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52499,
+        "max_deviation": 0.6548611111111111,
+        "window": 1440
+      }
+    },
+    "2": {
+      "diagnostics": {
+        "n_rows": 54774,
+        "n_calibrated": 52709,
+        "n_uncalibrated_warmup": 2065,
+        "n_frozen_steps": 14811,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8674,
+            "far": 0.27438321420336637,
+            "deviation": 0.22438321420336638
+          },
+          "bin2_4_8": {
+            "n": 18607,
+            "far": 0.28000214972859677,
+            "deviation": 0.23000214972859678
+          },
+          "bin3_8_12": {
+            "n": 15582,
+            "far": 0.19516108330124501,
+            "deviation": 0.145161083301245
+          },
+          "bin4_ge_12": {
+            "n": 9846,
+            "far": 0.2400975015234613,
+            "deviation": 0.19009750152346128
+          }
+        },
+        "marginal_far": 0.24654233622341534,
+        "marginal_deviation": 0.19654233622341533,
+        "worst_bin_deviation": 0.23000214972859678,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51270,
+        "max_deviation": 0.7138888888888888,
+        "window": 1440
+      }
+    },
+    "20": {
+      "diagnostics": {
+        "n_rows": 54001,
+        "n_calibrated": 51906,
+        "n_uncalibrated_warmup": 2092,
+        "n_frozen_steps": 10864,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 10499,
+            "far": 0.27802647871225833,
+            "deviation": 0.22802647871225834
+          },
+          "bin2_4_8": {
+            "n": 23457,
+            "far": 0.16762586861064926,
+            "deviation": 0.11762586861064926
+          },
+          "bin3_8_12": {
+            "n": 10597,
+            "far": 0.1423987921109748,
+            "deviation": 0.0923987921109748
+          },
+          "bin4_ge_12": {
+            "n": 7353,
+            "far": 0.15272677818577451,
+            "deviation": 0.10272677818577451
+          }
+        },
+        "marginal_far": 0.182695642122298,
+        "marginal_deviation": 0.132695642122298,
+        "worst_bin_deviation": 0.22802647871225834,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50467,
+        "max_deviation": 0.7277777777777777,
+        "window": 1440
+      }
+    },
+    "21": {
+      "diagnostics": {
+        "n_rows": 53514,
+        "n_calibrated": 51402,
+        "n_uncalibrated_warmup": 2112,
+        "n_frozen_steps": 14168,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8367,
+            "far": 0.19875702163260428,
+            "deviation": 0.1487570216326043
+          },
+          "bin2_4_8": {
+            "n": 16899,
+            "far": 0.2691283507899876,
+            "deviation": 0.2191283507899876
+          },
+          "bin3_8_12": {
+            "n": 15100,
+            "far": 0.20933774834437086,
+            "deviation": 0.15933774834437087
+          },
+          "bin4_ge_12": {
+            "n": 11036,
+            "far": 0.2626857557085901,
+            "deviation": 0.2126857557085901
+          }
+        },
+        "marginal_far": 0.238726119606241,
+        "marginal_deviation": 0.18872611960624097,
+        "worst_bin_deviation": 0.2191283507899876,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49963,
+        "max_deviation": 0.6347222222222222,
+        "window": 1440
+      }
+    },
+    "22": {
+      "diagnostics": {
+        "n_rows": 53036,
+        "n_calibrated": 50159,
+        "n_uncalibrated_warmup": 2877,
+        "n_frozen_steps": 12342,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18032,
+            "far": 0.20324977817213843,
+            "deviation": 0.15324977817213842
+          },
+          "bin2_4_8": {
+            "n": 18005,
+            "far": 0.232324354346015,
+            "deviation": 0.18232435434601502
+          },
+          "bin3_8_12": {
+            "n": 9047,
+            "far": 0.12125566486127998,
+            "deviation": 0.07125566486127997
+          },
+          "bin4_ge_12": {
+            "n": 5075,
+            "far": 0.1696551724137931,
+            "deviation": 0.1196551724137931
+          }
+        },
+        "marginal_far": 0.19549831535716422,
+        "marginal_deviation": 0.14549831535716423,
+        "worst_bin_deviation": 0.18232435434601502,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 48720,
+        "max_deviation": 0.617361111111111,
+        "window": 1440
+      }
+    },
+    "23": {
+      "diagnostics": {
+        "n_rows": 54542,
+        "n_calibrated": 52325,
+        "n_uncalibrated_warmup": 2217,
+        "n_frozen_steps": 16097,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7122,
+            "far": 0.27983712440325753,
+            "deviation": 0.22983712440325754
+          },
+          "bin2_4_8": {
+            "n": 16891,
+            "far": 0.29329228583269196,
+            "deviation": 0.24329228583269197
+          },
+          "bin3_8_12": {
+            "n": 16878,
+            "far": 0.19463206541059366,
+            "deviation": 0.14463206541059365
+          },
+          "bin4_ge_12": {
+            "n": 11434,
+            "far": 0.3422249431520028,
+            "deviation": 0.2922249431520028
+          }
+        },
+        "marginal_far": 0.2703296703296703,
+        "marginal_deviation": 0.22032967032967032,
+        "worst_bin_deviation": 0.2922249431520028,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50886,
+        "max_deviation": 0.95,
+        "window": 1440
+      }
+    },
+    "24": {
+      "diagnostics": {
+        "n_rows": 55003,
+        "n_calibrated": 52968,
+        "n_uncalibrated_warmup": 2035,
+        "n_frozen_steps": 10960,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 16884,
+            "far": 0.14250177683013504,
+            "deviation": 0.09250177683013504
+          },
+          "bin2_4_8": {
+            "n": 20247,
+            "far": 0.206499728354818,
+            "deviation": 0.156499728354818
+          },
+          "bin3_8_12": {
+            "n": 10351,
+            "far": 0.1270408656168486,
+            "deviation": 0.0770408656168486
+          },
+          "bin4_ge_12": {
+            "n": 5486,
+            "far": 0.23022238425082028,
+            "deviation": 0.18022238425082027
+          }
+        },
+        "marginal_far": 0.1730289986406887,
+        "marginal_deviation": 0.12302899864068871,
+        "worst_bin_deviation": 0.18022238425082027,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51529,
+        "max_deviation": 0.5847222222222221,
+        "window": 1440
+      }
+    },
+    "25": {
+      "diagnostics": {
+        "n_rows": 54712,
+        "n_calibrated": 52506,
+        "n_uncalibrated_warmup": 2206,
+        "n_frozen_steps": 11454,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18253,
+            "far": 0.17635457185120254,
+            "deviation": 0.12635457185120252
+          },
+          "bin2_4_8": {
+            "n": 19460,
+            "far": 0.23355601233299075,
+            "deviation": 0.18355601233299074
+          },
+          "bin3_8_12": {
+            "n": 9602,
+            "far": 0.1065403041033118,
+            "deviation": 0.0565403041033118
+          },
+          "bin4_ge_12": {
+            "n": 5191,
+            "far": 0.1092275091504527,
+            "deviation": 0.059227509150452703
+          }
+        },
+        "marginal_far": 0.17815106844932008,
+        "marginal_deviation": 0.12815106844932006,
+        "worst_bin_deviation": 0.18355601233299074,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51067,
+        "max_deviation": 0.5763888888888888,
+        "window": 1440
+      }
+    },
+    "26": {
+      "diagnostics": {
+        "n_rows": 53702,
+        "n_calibrated": 51501,
+        "n_uncalibrated_warmup": 2201,
+        "n_frozen_steps": 12365,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 16641,
+            "far": 0.20749954930593115,
+            "deviation": 0.15749954930593113
+          },
+          "bin2_4_8": {
+            "n": 20260,
+            "far": 0.24338598223099703,
+            "deviation": 0.193385982230997
+          },
+          "bin3_8_12": {
+            "n": 10358,
+            "far": 0.1370921027225333,
+            "deviation": 0.0870921027225333
+          },
+          "bin4_ge_12": {
+            "n": 4242,
+            "far": 0.12352663837812353,
+            "deviation": 0.07352663837812352
+          }
+        },
+        "marginal_far": 0.20053979534377972,
+        "marginal_deviation": 0.1505397953437797,
+        "worst_bin_deviation": 0.193385982230997,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50062,
+        "max_deviation": 0.8854166666666666,
+        "window": 1440
+      }
+    },
+    "27": {
+      "diagnostics": {
+        "n_rows": 62268,
+        "n_calibrated": 59914,
+        "n_uncalibrated_warmup": 2354,
+        "n_frozen_steps": 17441,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8944,
+            "far": 0.2028175313059034,
+            "deviation": 0.15281753130590342
+          },
+          "bin2_4_8": {
+            "n": 20764,
+            "far": 0.2744172606434213,
+            "deviation": 0.22441726064342132
+          },
+          "bin3_8_12": {
+            "n": 18348,
+            "far": 0.21402877697841727,
+            "deviation": 0.16402877697841728
+          },
+          "bin4_ge_12": {
+            "n": 11858,
+            "far": 0.30359251138471915,
+            "deviation": 0.25359251138471917
+          }
+        },
+        "marginal_far": 0.25100978068564944,
+        "marginal_deviation": 0.20100978068564945,
+        "worst_bin_deviation": 0.25359251138471917,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 58475,
+        "max_deviation": 0.95,
+        "window": 1440
+      }
+    },
+    "28": {
+      "diagnostics": {
+        "n_rows": 55918,
+        "n_calibrated": 53908,
+        "n_uncalibrated_warmup": 2007,
+        "n_frozen_steps": 10370,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7480,
+            "far": 0.18101604278074868,
+            "deviation": 0.1310160427807487
+          },
+          "bin2_4_8": {
+            "n": 24067,
+            "far": 0.16300328250301244,
+            "deviation": 0.11300328250301243
+          },
+          "bin3_8_12": {
+            "n": 13796,
+            "far": 0.1346042331110467,
+            "deviation": 0.08460423311104669
+          },
+          "bin4_ge_12": {
+            "n": 8565,
+            "far": 0.23782837127845885,
+            "deviation": 0.18782837127845886
+          }
+        },
+        "marginal_far": 0.17012317281294057,
+        "marginal_deviation": 0.12012317281294056,
+        "worst_bin_deviation": 0.18782837127845886,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52469,
+        "max_deviation": 0.6381944444444444,
+        "window": 1440
+      }
+    },
+    "29": {
+      "diagnostics": {
+        "n_rows": 54865,
+        "n_calibrated": 52765,
+        "n_uncalibrated_warmup": 2098,
+        "n_frozen_steps": 15569,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9920,
+            "far": 0.27631048387096774,
+            "deviation": 0.22631048387096775
+          },
+          "bin2_4_8": {
+            "n": 23675,
+            "far": 0.2522492080253432,
+            "deviation": 0.20224920802534319
+          },
+          "bin3_8_12": {
+            "n": 11116,
+            "far": 0.2294890248290752,
+            "deviation": 0.1794890248290752
+          },
+          "bin4_ge_12": {
+            "n": 8054,
+            "far": 0.2736528433076732,
+            "deviation": 0.2236528433076732
+          }
+        },
+        "marginal_far": 0.25524495404150477,
+        "marginal_deviation": 0.20524495404150478,
+        "worst_bin_deviation": 0.22631048387096775,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51326,
+        "max_deviation": 0.95,
+        "window": 1440
+      }
+    },
+    "3": {
+      "diagnostics": {
+        "n_rows": 55487,
+        "n_calibrated": 53434,
+        "n_uncalibrated_warmup": 2053,
+        "n_frozen_steps": 11862,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18159,
+            "far": 0.22644418745525635,
+            "deviation": 0.17644418745525636
+          },
+          "bin2_4_8": {
+            "n": 19548,
+            "far": 0.2193063228974831,
+            "deviation": 0.1693063228974831
+          },
+          "bin3_8_12": {
+            "n": 11805,
+            "far": 0.10283778060144007,
+            "deviation": 0.052837780601440065
+          },
+          "bin4_ge_12": {
+            "n": 3922,
+            "far": 0.09918408975012749,
+            "deviation": 0.04918408975012749
+          }
+        },
+        "marginal_far": 0.18718418984167384,
+        "marginal_deviation": 0.13718418984167385,
+        "worst_bin_deviation": 0.17644418745525636,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51995,
+        "max_deviation": 0.8847222222222222,
+        "window": 1440
+      }
+    },
+    "30": {
+      "diagnostics": {
+        "n_rows": 56111,
+        "n_calibrated": 54111,
+        "n_uncalibrated_warmup": 2000,
+        "n_frozen_steps": 12337,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9604,
+            "far": 0.21428571428571427,
+            "deviation": 0.16428571428571426
+          },
+          "bin2_4_8": {
+            "n": 23669,
+            "far": 0.17934851493514725,
+            "deviation": 0.12934851493514726
+          },
+          "bin3_8_12": {
+            "n": 11806,
+            "far": 0.19718787057428427,
+            "deviation": 0.14718787057428429
+          },
+          "bin4_ge_12": {
+            "n": 9032,
+            "far": 0.2857617360496014,
+            "deviation": 0.23576173604960143
+          }
+        },
+        "marginal_far": 0.20720371089057676,
+        "marginal_deviation": 0.15720371089057678,
+        "worst_bin_deviation": 0.23576173604960143,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52672,
+        "max_deviation": 0.95,
+        "window": 1440
+      }
+    },
+    "31": {
+      "diagnostics": {
+        "n_rows": 54589,
+        "n_calibrated": 52048,
+        "n_uncalibrated_warmup": 2541,
+        "n_frozen_steps": 15136,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8400,
+            "far": 0.28464285714285714,
+            "deviation": 0.23464285714285715
+          },
+          "bin2_4_8": {
+            "n": 23306,
+            "far": 0.24045310220544067,
+            "deviation": 0.19045310220544065
+          },
+          "bin3_8_12": {
+            "n": 11291,
+            "far": 0.1463112213267204,
+            "deviation": 0.09631122132672039
+          },
+          "bin4_ge_12": {
+            "n": 9051,
+            "far": 0.3368688542702464,
+            "deviation": 0.2868688542702464
+          }
+        },
+        "marginal_far": 0.24392868121733785,
+        "marginal_deviation": 0.19392868121733786,
+        "worst_bin_deviation": 0.2868688542702464,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50609,
+        "max_deviation": 0.8243055555555555,
+        "window": 1440
+      }
+    },
+    "32": {
+      "diagnostics": {
+        "n_rows": 55009,
+        "n_calibrated": 52336,
+        "n_uncalibrated_warmup": 2673,
+        "n_frozen_steps": 14227,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8344,
+            "far": 0.2456855225311601,
+            "deviation": 0.19568552253116012
+          },
+          "bin2_4_8": {
+            "n": 24616,
+            "far": 0.19897627559311018,
+            "deviation": 0.14897627559311016
+          },
+          "bin3_8_12": {
+            "n": 11862,
+            "far": 0.17568706794806946,
+            "deviation": 0.12568706794806944
+          },
+          "bin4_ge_12": {
+            "n": 7514,
+            "far": 0.38301836571732767,
+            "deviation": 0.3330183657173277
+          }
+        },
+        "marginal_far": 0.22756802201161724,
+        "marginal_deviation": 0.17756802201161725,
+        "worst_bin_deviation": 0.3330183657173277,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50897,
+        "max_deviation": 0.6951388888888889,
+        "window": 1440
+      }
+    },
+    "33": {
+      "diagnostics": {
+        "n_rows": 55873,
+        "n_calibrated": 53771,
+        "n_uncalibrated_warmup": 2100,
+        "n_frozen_steps": 11588,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9294,
+            "far": 0.19367333763718528,
+            "deviation": 0.14367333763718526
+          },
+          "bin2_4_8": {
+            "n": 24607,
+            "far": 0.18762953631080587,
+            "deviation": 0.13762953631080588
+          },
+          "bin3_8_12": {
+            "n": 11969,
+            "far": 0.15398111788787702,
+            "deviation": 0.10398111788787702
+          },
+          "bin4_ge_12": {
+            "n": 7901,
+            "far": 0.23148968485001897,
+            "deviation": 0.18148968485001898
+          }
+        },
+        "marginal_far": 0.187629019359878,
+        "marginal_deviation": 0.13762901935987798,
+        "worst_bin_deviation": 0.18148968485001898,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52332,
+        "max_deviation": 0.679861111111111,
+        "window": 1440
+      }
+    },
+    "34": {
+      "diagnostics": {
+        "n_rows": 56564,
+        "n_calibrated": 54374,
+        "n_uncalibrated_warmup": 2189,
+        "n_frozen_steps": 17718,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8191,
+            "far": 0.22976437553412282,
+            "deviation": 0.17976437553412283
+          },
+          "bin2_4_8": {
+            "n": 18784,
+            "far": 0.34098168654173766,
+            "deviation": 0.29098168654173767
+          },
+          "bin3_8_12": {
+            "n": 16936,
+            "far": 0.19071799716580065,
+            "deviation": 0.14071799716580063
+          },
+          "bin4_ge_12": {
+            "n": 10463,
+            "far": 0.3398642836662525,
+            "deviation": 0.2898642836662525
+          }
+        },
+        "marginal_far": 0.27720969581049765,
+        "marginal_deviation": 0.22720969581049766,
+        "worst_bin_deviation": 0.29098168654173767,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52935,
+        "max_deviation": 0.8458333333333333,
+        "window": 1440
+      }
+    },
+    "35": {
+      "diagnostics": {
+        "n_rows": 52615,
+        "n_calibrated": 50612,
+        "n_uncalibrated_warmup": 2000,
+        "n_frozen_steps": 11510,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9877,
+            "far": 0.2695150349296345,
+            "deviation": 0.21951503492963453
+          },
+          "bin2_4_8": {
+            "n": 23171,
+            "far": 0.2060334038237452,
+            "deviation": 0.1560334038237452
+          },
+          "bin3_8_12": {
+            "n": 10129,
+            "far": 0.16803238226873335,
+            "deviation": 0.11803238226873335
+          },
+          "bin4_ge_12": {
+            "n": 7435,
+            "far": 0.13705447209145932,
+            "deviation": 0.08705447209145932
+          }
+        },
+        "marginal_far": 0.2006836323401565,
+        "marginal_deviation": 0.15068363234015647,
+        "worst_bin_deviation": 0.21951503492963453,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49173,
+        "max_deviation": 0.85625,
+        "window": 1440
+      }
+    },
+    "36": {
+      "diagnostics": {
+        "n_rows": 55448,
+        "n_calibrated": 52771,
+        "n_uncalibrated_warmup": 2379,
+        "n_frozen_steps": 10631,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7502,
+            "far": 0.2687283391095708,
+            "deviation": 0.2187283391095708
+          },
+          "bin2_4_8": {
+            "n": 23482,
+            "far": 0.13589132101183884,
+            "deviation": 0.08589132101183884
+          },
+          "bin3_8_12": {
+            "n": 13249,
+            "far": 0.1335195109064835,
+            "deviation": 0.0835195109064835
+          },
+          "bin4_ge_12": {
+            "n": 8538,
+            "far": 0.2515811665495432,
+            "deviation": 0.20158116654954322
+          }
+        },
+        "marginal_far": 0.17289799321597088,
+        "marginal_deviation": 0.12289799321597088,
+        "worst_bin_deviation": 0.2187283391095708,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51332,
+        "max_deviation": 0.6499999999999999,
+        "window": 1440
+      }
+    },
+    "37": {
+      "diagnostics": {
+        "n_rows": 53713,
+        "n_calibrated": 51651,
+        "n_uncalibrated_warmup": 2061,
+        "n_frozen_steps": 16591,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9880,
+            "far": 0.3402834008097166,
+            "deviation": 0.2902834008097166
+          },
+          "bin2_4_8": {
+            "n": 23835,
+            "far": 0.2883574575204531,
+            "deviation": 0.23835745752045312
+          },
+          "bin3_8_12": {
+            "n": 10623,
+            "far": 0.16134801845053187,
+            "deviation": 0.11134801845053187
+          },
+          "bin4_ge_12": {
+            "n": 7313,
+            "far": 0.3023383016545877,
+            "deviation": 0.2523383016545877
+          }
+        },
+        "marginal_far": 0.2741476447697044,
+        "marginal_deviation": 0.2241476447697044,
+        "worst_bin_deviation": 0.2902834008097166,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50212,
+        "max_deviation": 0.8131944444444444,
+        "window": 1440
+      }
+    },
+    "38": {
+      "diagnostics": {
+        "n_rows": 54835,
+        "n_calibrated": 52832,
+        "n_uncalibrated_warmup": 2003,
+        "n_frozen_steps": 7834,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 16436,
+            "far": 0.12515210513506936,
+            "deviation": 0.07515210513506936
+          },
+          "bin2_4_8": {
+            "n": 20828,
+            "far": 0.16079316304974073,
+            "deviation": 0.11079316304974073
+          },
+          "bin3_8_12": {
+            "n": 12285,
+            "far": 0.08302808302808302,
+            "deviation": 0.03302808302808302
+          },
+          "bin4_ge_12": {
+            "n": 3283,
+            "far": 0.1139201949436491,
+            "deviation": 0.0639201949436491
+          }
+        },
+        "marginal_far": 0.128709872804361,
+        "marginal_deviation": 0.078709872804361,
+        "worst_bin_deviation": 0.11079316304974073,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51393,
+        "max_deviation": 0.43194444444444446,
+        "window": 1440
+      }
+    },
+    "39": {
+      "diagnostics": {
+        "n_rows": 53727,
+        "n_calibrated": 51688,
+        "n_uncalibrated_warmup": 2039,
+        "n_frozen_steps": 13428,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8039,
+            "far": 0.2688145291702948,
+            "deviation": 0.2188145291702948
+          },
+          "bin2_4_8": {
+            "n": 22718,
+            "far": 0.19222642838278017,
+            "deviation": 0.14222642838278016
+          },
+          "bin3_8_12": {
+            "n": 12922,
+            "far": 0.19029561987308466,
+            "deviation": 0.14029561987308464
+          },
+          "bin4_ge_12": {
+            "n": 8009,
+            "far": 0.37320514421276063,
+            "deviation": 0.32320514421276064
+          }
+        },
+        "marginal_far": 0.23169787958520352,
+        "marginal_deviation": 0.1816978795852035,
+        "worst_bin_deviation": 0.32320514421276064,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50249,
+        "max_deviation": 0.8652777777777777,
+        "window": 1440
+      }
+    },
+    "4": {
+      "diagnostics": {
+        "n_rows": 56449,
+        "n_calibrated": 54024,
+        "n_uncalibrated_warmup": 2425,
+        "n_frozen_steps": 12829,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7573,
+            "far": 0.1875082530040935,
+            "deviation": 0.13750825300409347
+          },
+          "bin2_4_8": {
+            "n": 24128,
+            "far": 0.2032907824933687,
+            "deviation": 0.1532907824933687
+          },
+          "bin3_8_12": {
+            "n": 13596,
+            "far": 0.1631362165342748,
+            "deviation": 0.11313621653427479
+          },
+          "bin4_ge_12": {
+            "n": 8727,
+            "far": 0.25323708032542686,
+            "deviation": 0.20323708032542687
+          }
+        },
+        "marginal_far": 0.19904116688879017,
+        "marginal_deviation": 0.14904116688879016,
+        "worst_bin_deviation": 0.20323708032542687,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52585,
+        "max_deviation": 0.84375,
+        "window": 1440
+      }
+    },
+    "40": {
+      "diagnostics": {
+        "n_rows": 56158,
+        "n_calibrated": 53869,
+        "n_uncalibrated_warmup": 2289,
+        "n_frozen_steps": 12253,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 20513,
+            "far": 0.17666845415102617,
+            "deviation": 0.12666845415102618
+          },
+          "bin2_4_8": {
+            "n": 20223,
+            "far": 0.23863917321861247,
+            "deviation": 0.18863917321861245
+          },
+          "bin3_8_12": {
+            "n": 10590,
+            "far": 0.14551463644948065,
+            "deviation": 0.09551463644948065
+          },
+          "bin4_ge_12": {
+            "n": 2543,
+            "far": 0.07550137632717263,
+            "deviation": 0.02550137632717263
+          }
+        },
+        "marginal_far": 0.1890326532885333,
+        "marginal_deviation": 0.13903265328853331,
+        "worst_bin_deviation": 0.18863917321861245,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52430,
+        "max_deviation": 0.8645833333333333,
+        "window": 1440
+      }
+    },
+    "41": {
+      "diagnostics": {
+        "n_rows": 55666,
+        "n_calibrated": 53438,
+        "n_uncalibrated_warmup": 2226,
+        "n_frozen_steps": 14141,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9886,
+            "far": 0.30416750960954886,
+            "deviation": 0.25416750960954887
+          },
+          "bin2_4_8": {
+            "n": 22250,
+            "far": 0.18049438202247192,
+            "deviation": 0.13049438202247193
+          },
+          "bin3_8_12": {
+            "n": 11410,
+            "far": 0.16345311130587203,
+            "deviation": 0.11345311130587203
+          },
+          "bin4_ge_12": {
+            "n": 9892,
+            "far": 0.31975333602911443,
+            "deviation": 0.26975333602911444
+          }
+        },
+        "marginal_far": 0.22551367940416933,
+        "marginal_deviation": 0.17551367940416934,
+        "worst_bin_deviation": 0.26975333602911444,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51999,
+        "max_deviation": 0.95,
+        "window": 1440
+      }
+    },
+    "42": {
+      "diagnostics": {
+        "n_rows": 53886,
+        "n_calibrated": 51814,
+        "n_uncalibrated_warmup": 2072,
+        "n_frozen_steps": 12388,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18665,
+            "far": 0.2297883739619609,
+            "deviation": 0.1797883739619609
+          },
+          "bin2_4_8": {
+            "n": 19390,
+            "far": 0.24605466735430634,
+            "deviation": 0.19605466735430632
+          },
+          "bin3_8_12": {
+            "n": 10787,
+            "far": 0.1114304255121906,
+            "deviation": 0.06143042551219059
+          },
+          "bin4_ge_12": {
+            "n": 2972,
+            "far": 0.11507402422611036,
+            "deviation": 0.06507402422611036
+          }
+        },
+        "marginal_far": 0.20465511251785232,
+        "marginal_deviation": 0.1546551125178523,
+        "worst_bin_deviation": 0.19605466735430632,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50375,
+        "max_deviation": 0.8833333333333333,
+        "window": 1440
+      }
+    },
+    "43": {
+      "diagnostics": {
+        "n_rows": 55153,
+        "n_calibrated": 52516,
+        "n_uncalibrated_warmup": 2634,
+        "n_frozen_steps": 14492,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7569,
+            "far": 0.3330690976350905,
+            "deviation": 0.2830690976350905
+          },
+          "bin2_4_8": {
+            "n": 23625,
+            "far": 0.19767195767195767,
+            "deviation": 0.14767195767195768
+          },
+          "bin3_8_12": {
+            "n": 12966,
+            "far": 0.17962363103501466,
+            "deviation": 0.12962363103501467
+          },
+          "bin4_ge_12": {
+            "n": 8356,
+            "far": 0.34430349449497366,
+            "deviation": 0.29430349449497367
+          }
+        },
+        "marginal_far": 0.23606139081422806,
+        "marginal_deviation": 0.18606139081422807,
+        "worst_bin_deviation": 0.29430349449497367,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51077,
+        "max_deviation": 0.9020833333333332,
+        "window": 1440
+      }
+    },
+    "44": {
+      "diagnostics": {
+        "n_rows": 63003,
+        "n_calibrated": 60941,
+        "n_uncalibrated_warmup": 2062,
+        "n_frozen_steps": 16416,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 10267,
+            "far": 0.24836855946235512,
+            "deviation": 0.1983685594623551
+          },
+          "bin2_4_8": {
+            "n": 28346,
+            "far": 0.22511112679037606,
+            "deviation": 0.17511112679037605
+          },
+          "bin3_8_12": {
+            "n": 13491,
+            "far": 0.20969535245719367,
+            "deviation": 0.15969535245719368
+          },
+          "bin4_ge_12": {
+            "n": 8837,
+            "far": 0.2759986420731017,
+            "deviation": 0.22599864207310172
+          }
+        },
+        "marginal_far": 0.23299584844357657,
+        "marginal_deviation": 0.18299584844357658,
+        "worst_bin_deviation": 0.22599864207310172,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 59502,
+        "max_deviation": 0.8805555555555555,
+        "window": 1440
+      }
+    },
+    "45": {
+      "diagnostics": {
+        "n_rows": 53739,
+        "n_calibrated": 51700,
+        "n_uncalibrated_warmup": 2039,
+        "n_frozen_steps": 7901,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 16473,
+            "far": 0.12165361500637406,
+            "deviation": 0.07165361500637406
+          },
+          "bin2_4_8": {
+            "n": 20755,
+            "far": 0.17239219465189112,
+            "deviation": 0.12239219465189112
+          },
+          "bin3_8_12": {
+            "n": 11513,
+            "far": 0.08503430904195257,
+            "deviation": 0.035034309041952566
+          },
+          "bin4_ge_12": {
+            "n": 2959,
+            "far": 0.13112538019601216,
+            "deviation": 0.08112538019601216
+          }
+        },
+        "marginal_far": 0.1344100580270793,
+        "marginal_deviation": 0.08441005802707931,
+        "worst_bin_deviation": 0.12239219465189112,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50261,
+        "max_deviation": 0.40694444444444444,
+        "window": 1440
+      }
+    },
+    "46": {
+      "diagnostics": {
+        "n_rows": 55133,
+        "n_calibrated": 51877,
+        "n_uncalibrated_warmup": 3256,
+        "n_frozen_steps": 12208,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7017,
+            "far": 0.182129115006413,
+            "deviation": 0.132129115006413
+          },
+          "bin2_4_8": {
+            "n": 24610,
+            "far": 0.2040633888663145,
+            "deviation": 0.1540633888663145
+          },
+          "bin3_8_12": {
+            "n": 12700,
+            "far": 0.1178740157480315,
+            "deviation": 0.0678740157480315
+          },
+          "bin4_ge_12": {
+            "n": 7550,
+            "far": 0.20066225165562915,
+            "deviation": 0.15066225165562913
+          }
+        },
+        "marginal_far": 0.179501513194672,
+        "marginal_deviation": 0.129501513194672,
+        "worst_bin_deviation": 0.1540633888663145,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50438,
+        "max_deviation": 0.4763888888888889,
+        "window": 1440
+      }
+    },
+    "47": {
+      "diagnostics": {
+        "n_rows": 53993,
+        "n_calibrated": 51503,
+        "n_uncalibrated_warmup": 2489,
+        "n_frozen_steps": 11511,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7041,
+            "far": 0.269990058230365,
+            "deviation": 0.219990058230365
+          },
+          "bin2_4_8": {
+            "n": 21835,
+            "far": 0.16665903366155255,
+            "deviation": 0.11665903366155254
+          },
+          "bin3_8_12": {
+            "n": 13445,
+            "far": 0.15961323912235031,
+            "deviation": 0.10961323912235031
+          },
+          "bin4_ge_12": {
+            "n": 9182,
+            "far": 0.21694619908516663,
+            "deviation": 0.1669461990851666
+          }
+        },
+        "marginal_far": 0.18791138380288527,
+        "marginal_deviation": 0.13791138380288526,
+        "worst_bin_deviation": 0.219990058230365,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50064,
+        "max_deviation": 0.95,
+        "window": 1440
+      }
+    },
+    "48": {
+      "diagnostics": {
+        "n_rows": 55297,
+        "n_calibrated": 52693,
+        "n_uncalibrated_warmup": 2604,
+        "n_frozen_steps": 13968,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9023,
+            "far": 0.24891942812811704,
+            "deviation": 0.19891942812811703
+          },
+          "bin2_4_8": {
+            "n": 24159,
+            "far": 0.21929715633925245,
+            "deviation": 0.16929715633925246
+          },
+          "bin3_8_12": {
+            "n": 11748,
+            "far": 0.13040517534899557,
+            "deviation": 0.08040517534899556
+          },
+          "bin4_ge_12": {
+            "n": 7763,
+            "far": 0.2748937266520675,
+            "deviation": 0.22489372665206753
+          }
+        },
+        "marginal_far": 0.21274173040062247,
+        "marginal_deviation": 0.16274173040062245,
+        "worst_bin_deviation": 0.22489372665206753,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51254,
+        "max_deviation": 0.7395833333333333,
+        "window": 1440
+      }
+    },
+    "49": {
+      "diagnostics": {
+        "n_rows": 53014,
+        "n_calibrated": 49615,
+        "n_uncalibrated_warmup": 3397,
+        "n_frozen_steps": 12037,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8855,
+            "far": 0.23094297007340486,
+            "deviation": 0.18094297007340487
+          },
+          "bin2_4_8": {
+            "n": 21280,
+            "far": 0.1768796992481203,
+            "deviation": 0.12687969924812031
+          },
+          "bin3_8_12": {
+            "n": 11243,
+            "far": 0.12727919594414303,
+            "deviation": 0.07727919594414302
+          },
+          "bin4_ge_12": {
+            "n": 8237,
+            "far": 0.20929950224596333,
+            "deviation": 0.15929950224596334
+          }
+        },
+        "marginal_far": 0.18067116799355035,
+        "marginal_deviation": 0.13067116799355033,
+        "worst_bin_deviation": 0.18094297007340487,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 48176,
+        "max_deviation": 0.4972222222222223,
+        "window": 1440
+      }
+    },
+    "5": {
+      "diagnostics": {
+        "n_rows": 52795,
+        "n_calibrated": 50726,
+        "n_uncalibrated_warmup": 2066,
+        "n_frozen_steps": 13652,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9550,
+            "far": 0.2510994764397906,
+            "deviation": 0.2010994764397906
+          },
+          "bin2_4_8": {
+            "n": 22571,
+            "far": 0.1940100128483452,
+            "deviation": 0.1440100128483452
+          },
+          "bin3_8_12": {
+            "n": 10252,
+            "far": 0.20834959032383926,
+            "deviation": 0.15834959032383927
+          },
+          "bin4_ge_12": {
+            "n": 8353,
+            "far": 0.32503292230336406,
+            "deviation": 0.27503292230336407
+          }
+        },
+        "marginal_far": 0.22923155778101958,
+        "marginal_deviation": 0.17923155778101957,
+        "worst_bin_deviation": 0.27503292230336407,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49287,
+        "max_deviation": 0.625,
+        "window": 1440
+      }
+    },
+    "50": {
+      "diagnostics": {
+        "n_rows": 55153,
+        "n_calibrated": 52562,
+        "n_uncalibrated_warmup": 2084,
+        "n_frozen_steps": 10876,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9657,
+            "far": 0.22595008801905353,
+            "deviation": 0.17595008801905354
+          },
+          "bin2_4_8": {
+            "n": 22603,
+            "far": 0.16081936026191213,
+            "deviation": 0.11081936026191212
+          },
+          "bin3_8_12": {
+            "n": 12074,
+            "far": 0.15661752526089118,
+            "deviation": 0.10661752526089117
+          },
+          "bin4_ge_12": {
+            "n": 8228,
+            "far": 0.1916626154594069,
+            "deviation": 0.1416626154594069
+          }
+        },
+        "marginal_far": 0.17664852935580838,
+        "marginal_deviation": 0.1266485293558084,
+        "worst_bin_deviation": 0.17595008801905354,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51123,
+        "max_deviation": 0.6875,
+        "window": 1440
+      }
+    },
+    "51": {
+      "diagnostics": {
+        "n_rows": 54436,
+        "n_calibrated": 52176,
+        "n_uncalibrated_warmup": 2260,
+        "n_frozen_steps": 11681,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18456,
+            "far": 0.20112700476809708,
+            "deviation": 0.1511270047680971
+          },
+          "bin2_4_8": {
+            "n": 19724,
+            "far": 0.2432569458527682,
+            "deviation": 0.1932569458527682
+          },
+          "bin3_8_12": {
+            "n": 9600,
+            "far": 0.07239583333333334,
+            "deviation": 0.022395833333333337
+          },
+          "bin4_ge_12": {
+            "n": 4396,
+            "far": 0.11123748862602366,
+            "deviation": 0.061237488626023656
+          }
+        },
+        "marginal_far": 0.1857942348972708,
+        "marginal_deviation": 0.13579423489727077,
+        "worst_bin_deviation": 0.1932569458527682,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50737,
+        "max_deviation": 0.5618055555555556,
+        "window": 1440
+      }
+    },
+    "52": {
+      "diagnostics": {
+        "n_rows": 55268,
+        "n_calibrated": 52892,
+        "n_uncalibrated_warmup": 2375,
+        "n_frozen_steps": 16355,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7935,
+            "far": 0.2792690611216131,
+            "deviation": 0.2292690611216131
+          },
+          "bin2_4_8": {
+            "n": 18202,
+            "far": 0.28639709921986595,
+            "deviation": 0.23639709921986596
+          },
+          "bin3_8_12": {
+            "n": 16665,
+            "far": 0.19087908790879088,
+            "deviation": 0.1408790879087909
+          },
+          "bin4_ge_12": {
+            "n": 10090,
+            "far": 0.3294350842418236,
+            "deviation": 0.2794350842418236
+          }
+        },
+        "marginal_far": 0.2634424865764199,
+        "marginal_deviation": 0.2134424865764199,
+        "worst_bin_deviation": 0.2794350842418236,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51453,
+        "max_deviation": 0.8763888888888889,
+        "window": 1440
+      }
+    },
+    "53": {
+      "diagnostics": {
+        "n_rows": 58607,
+        "n_calibrated": 56517,
+        "n_uncalibrated_warmup": 2090,
+        "n_frozen_steps": 17386,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 6737,
+            "far": 0.22101825738459255,
+            "deviation": 0.17101825738459253
+          },
+          "bin2_4_8": {
+            "n": 17623,
+            "far": 0.3082335584179765,
+            "deviation": 0.2582335584179765
+          },
+          "bin3_8_12": {
+            "n": 18009,
+            "far": 0.19762341051696375,
+            "deviation": 0.14762341051696376
+          },
+          "bin4_ge_12": {
+            "n": 14148,
+            "far": 0.30908962397512013,
+            "deviation": 0.25908962397512014
+          }
+        },
+        "marginal_far": 0.26280588141621103,
+        "marginal_deviation": 0.21280588141621104,
+        "worst_bin_deviation": 0.25908962397512014,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 55078,
+        "max_deviation": 0.95,
+        "window": 1440
+      }
+    },
+    "54": {
+      "diagnostics": {
+        "n_rows": 55585,
+        "n_calibrated": 53262,
+        "n_uncalibrated_warmup": 2320,
+        "n_frozen_steps": 13723,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 5726,
+            "far": 0.2128885784142508,
+            "deviation": 0.1628885784142508
+          },
+          "bin2_4_8": {
+            "n": 23799,
+            "far": 0.2635404848943233,
+            "deviation": 0.2135404848943233
+          },
+          "bin3_8_12": {
+            "n": 14555,
+            "far": 0.17464788732394365,
+            "deviation": 0.12464788732394365
+          },
+          "bin4_ge_12": {
+            "n": 9182,
+            "far": 0.16292746678283598,
+            "deviation": 0.11292746678283598
+          }
+        },
+        "marginal_far": 0.21645826292666442,
+        "marginal_deviation": 0.16645826292666444,
+        "worst_bin_deviation": 0.2135404848943233,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51823,
+        "max_deviation": 0.6770833333333333,
+        "window": 1440
+      }
+    },
+    "55": {
+      "diagnostics": {
+        "n_rows": 55753,
+        "n_calibrated": 53300,
+        "n_uncalibrated_warmup": 2453,
+        "n_frozen_steps": 12158,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 6773,
+            "far": 0.15296028347851764,
+            "deviation": 0.10296028347851764
+          },
+          "bin2_4_8": {
+            "n": 21221,
+            "far": 0.16907780029216343,
+            "deviation": 0.11907780029216343
+          },
+          "bin3_8_12": {
+            "n": 15754,
+            "far": 0.14643899961914433,
+            "deviation": 0.09643899961914433
+          },
+          "bin4_ge_12": {
+            "n": 9552,
+            "far": 0.3465242881072027,
+            "deviation": 0.2965242881072027
+          }
+        },
+        "marginal_far": 0.1921388367729831,
+        "marginal_deviation": 0.1421388367729831,
+        "worst_bin_deviation": 0.2965242881072027,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51861,
+        "max_deviation": 0.5583333333333332,
+        "window": 1440
+      }
+    },
+    "56": {
+      "diagnostics": {
+        "n_rows": 53416,
+        "n_calibrated": 51376,
+        "n_uncalibrated_warmup": 2040,
+        "n_frozen_steps": 11926,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8904,
+            "far": 0.2433737646001797,
+            "deviation": 0.1933737646001797
+          },
+          "bin2_4_8": {
+            "n": 22028,
+            "far": 0.20192482295260578,
+            "deviation": 0.1519248229526058
+          },
+          "bin3_8_12": {
+            "n": 12751,
+            "far": 0.14351815543878912,
+            "deviation": 0.09351815543878912
+          },
+          "bin4_ge_12": {
+            "n": 7693,
+            "far": 0.24268815806577407,
+            "deviation": 0.19268815806577405
+          }
+        },
+        "marginal_far": 0.20071628776082218,
+        "marginal_deviation": 0.1507162877608222,
+        "worst_bin_deviation": 0.1933737646001797,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49937,
+        "max_deviation": 0.7791666666666667,
+        "window": 1440
+      }
+    },
+    "57": {
+      "diagnostics": {
+        "n_rows": 55009,
+        "n_calibrated": 52873,
+        "n_uncalibrated_warmup": 2136,
+        "n_frozen_steps": 12214,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9658,
+            "far": 0.16380202940567407,
+            "deviation": 0.11380202940567406
+          },
+          "bin2_4_8": {
+            "n": 24991,
+            "far": 0.19414989396182625,
+            "deviation": 0.14414989396182626
+          },
+          "bin3_8_12": {
+            "n": 11226,
+            "far": 0.14698022447888828,
+            "deviation": 0.09698022447888828
+          },
+          "bin4_ge_12": {
+            "n": 6998,
+            "far": 0.26779079737067735,
+            "deviation": 0.21779079737067736
+          }
+        },
+        "marginal_far": 0.1883380931666446,
+        "marginal_deviation": 0.13833809316664458,
+        "worst_bin_deviation": 0.21779079737067736,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51434,
+        "max_deviation": 0.7645833333333333,
+        "window": 1440
+      }
+    },
+    "58": {
+      "diagnostics": {
+        "n_rows": 54433,
+        "n_calibrated": 51466,
+        "n_uncalibrated_warmup": 2967,
+        "n_frozen_steps": 12014,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 4903,
+            "far": 0.19804201509280034,
+            "deviation": 0.14804201509280035
+          },
+          "bin2_4_8": {
+            "n": 25115,
+            "far": 0.1879753135576349,
+            "deviation": 0.13797531355763487
+          },
+          "bin3_8_12": {
+            "n": 14042,
+            "far": 0.1897877795185871,
+            "deviation": 0.13978777951858712
+          },
+          "bin4_ge_12": {
+            "n": 7406,
+            "far": 0.1471779638131245,
+            "deviation": 0.0971779638131245
+          }
+        },
+        "marginal_far": 0.18355807717716552,
+        "marginal_deviation": 0.1335580771771655,
+        "worst_bin_deviation": 0.14804201509280035,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50027,
+        "max_deviation": 0.8256944444444444,
+        "window": 1440
+      }
+    },
+    "59": {
+      "diagnostics": {
+        "n_rows": 54865,
+        "n_calibrated": 52852,
+        "n_uncalibrated_warmup": 2010,
+        "n_frozen_steps": 13831,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 10606,
+            "far": 0.24693569677541014,
+            "deviation": 0.19693569677541012
+          },
+          "bin2_4_8": {
+            "n": 24034,
+            "far": 0.21819089623034035,
+            "deviation": 0.16819089623034034
+          },
+          "bin3_8_12": {
+            "n": 10379,
+            "far": 0.1784372290201368,
+            "deviation": 0.12843722902013682
+          },
+          "bin4_ge_12": {
+            "n": 7833,
+            "far": 0.21843482701391548,
+            "deviation": 0.1684348270139155
+          }
+        },
+        "marginal_far": 0.21618860213426172,
+        "marginal_deviation": 0.16618860213426173,
+        "worst_bin_deviation": 0.19693569677541012,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51413,
+        "max_deviation": 0.5027777777777778,
+        "window": 1440
+      }
+    },
+    "6": {
+      "diagnostics": {
+        "n_rows": 54865,
+        "n_calibrated": 52560,
+        "n_uncalibrated_warmup": 2305,
+        "n_frozen_steps": 10477,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7233,
+            "far": 0.23517212774782248,
+            "deviation": 0.1851721277478225
+          },
+          "bin2_4_8": {
+            "n": 22648,
+            "far": 0.14411868597668667,
+            "deviation": 0.09411868597668667
+          },
+          "bin3_8_12": {
+            "n": 13909,
+            "far": 0.11316413832770149,
+            "deviation": 0.06316413832770149
+          },
+          "bin4_ge_12": {
+            "n": 8770,
+            "far": 0.22291904218928163,
+            "deviation": 0.1729190421892816
+          }
+        },
+        "marginal_far": 0.16160578386605784,
+        "marginal_deviation": 0.11160578386605784,
+        "worst_bin_deviation": 0.1851721277478225,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51121,
+        "max_deviation": 0.6284722222222222,
+        "window": 1440
+      }
+    },
+    "60": {
+      "diagnostics": {
+        "n_rows": 54433,
+        "n_calibrated": 52408,
+        "n_uncalibrated_warmup": 2024,
+        "n_frozen_steps": 10176,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 11034,
+            "far": 0.17962660866412905,
+            "deviation": 0.12962660866412906
+          },
+          "bin2_4_8": {
+            "n": 21887,
+            "far": 0.15767350482021292,
+            "deviation": 0.10767350482021291
+          },
+          "bin3_8_12": {
+            "n": 11312,
+            "far": 0.11607142857142858,
+            "deviation": 0.06607142857142857
+          },
+          "bin4_ge_12": {
+            "n": 8175,
+            "far": 0.2148012232415902,
+            "deviation": 0.1648012232415902
+          }
+        },
+        "marginal_far": 0.16222714089451992,
+        "marginal_deviation": 0.11222714089451992,
+        "worst_bin_deviation": 0.1648012232415902,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50969,
+        "max_deviation": 0.4972222222222223,
+        "window": 1440
+      }
+    },
+    "61": {
+      "diagnostics": {
+        "n_rows": 55585,
+        "n_calibrated": 53094,
+        "n_uncalibrated_warmup": 2489,
+        "n_frozen_steps": 12832,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7965,
+            "far": 0.2551161330822348,
+            "deviation": 0.2051161330822348
+          },
+          "bin2_4_8": {
+            "n": 25129,
+            "far": 0.2181941183493175,
+            "deviation": 0.16819411834931752
+          },
+          "bin3_8_12": {
+            "n": 12418,
+            "far": 0.1339185053953938,
+            "deviation": 0.08391850539539379
+          },
+          "bin4_ge_12": {
+            "n": 7582,
+            "far": 0.21247691901872856,
+            "deviation": 0.16247691901872857
+          }
+        },
+        "marginal_far": 0.2032056352883565,
+        "marginal_deviation": 0.1532056352883565,
+        "worst_bin_deviation": 0.2051161330822348,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51655,
+        "max_deviation": 0.8430555555555556,
+        "window": 1440
+      }
+    },
+    "62": {
+      "diagnostics": {
+        "n_rows": 53448,
+        "n_calibrated": 51293,
+        "n_uncalibrated_warmup": 2154,
+        "n_frozen_steps": 10314,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7663,
+            "far": 0.2256296489625473,
+            "deviation": 0.1756296489625473
+          },
+          "bin2_4_8": {
+            "n": 21568,
+            "far": 0.17053041543026706,
+            "deviation": 0.12053041543026706
+          },
+          "bin3_8_12": {
+            "n": 13518,
+            "far": 0.15046604527296936,
+            "deviation": 0.10046604527296936
+          },
+          "bin4_ge_12": {
+            "n": 8544,
+            "far": 0.19241573033707865,
+            "deviation": 0.14241573033707866
+          }
+        },
+        "marginal_far": 0.17711968494726377,
+        "marginal_deviation": 0.12711968494726378,
+        "worst_bin_deviation": 0.1756296489625473,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49854,
+        "max_deviation": 0.95,
+        "window": 1440
+      }
+    },
+    "63": {
+      "diagnostics": {
+        "n_rows": 54865,
+        "n_calibrated": 50691,
+        "n_uncalibrated_warmup": 4174,
+        "n_frozen_steps": 14561,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7739,
+            "far": 0.22018348623853212,
+            "deviation": 0.17018348623853213
+          },
+          "bin2_4_8": {
+            "n": 24698,
+            "far": 0.2267390072070613,
+            "deviation": 0.17673900720706132
+          },
+          "bin3_8_12": {
+            "n": 11210,
+            "far": 0.14763603925066904,
+            "deviation": 0.09763603925066903
+          },
+          "bin4_ge_12": {
+            "n": 7044,
+            "far": 0.30167518455423054,
+            "deviation": 0.25167518455423055
+          }
+        },
+        "marginal_far": 0.21865814444378687,
+        "marginal_deviation": 0.16865814444378685,
+        "worst_bin_deviation": 0.25167518455423055,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49252,
+        "max_deviation": 0.7999999999999999,
+        "window": 1440
+      }
+    },
+    "64": {
+      "diagnostics": {
+        "n_rows": 54433,
+        "n_calibrated": 52324,
+        "n_uncalibrated_warmup": 2108,
+        "n_frozen_steps": 10173,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9015,
+            "far": 0.2232945091514143,
+            "deviation": 0.1732945091514143
+          },
+          "bin2_4_8": {
+            "n": 23871,
+            "far": 0.1435633195090277,
+            "deviation": 0.0935633195090277
+          },
+          "bin3_8_12": {
+            "n": 11978,
+            "far": 0.1334112539656036,
+            "deviation": 0.0834112539656036
+          },
+          "bin4_ge_12": {
+            "n": 7460,
+            "far": 0.18351206434316353,
+            "deviation": 0.13351206434316354
+          }
+        },
+        "marginal_far": 0.1606719669750019,
+        "marginal_deviation": 0.11067196697500191,
+        "worst_bin_deviation": 0.1732945091514143,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50885,
+        "max_deviation": 0.5020833333333333,
+        "window": 1440
+      }
+    },
+    "65": {
+      "diagnostics": {
+        "n_rows": 55918,
+        "n_calibrated": 53842,
+        "n_uncalibrated_warmup": 2075,
+        "n_frozen_steps": 9214,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9893,
+            "far": 0.17537652885878904,
+            "deviation": 0.12537652885878903
+          },
+          "bin2_4_8": {
+            "n": 23948,
+            "far": 0.14890596291965927,
+            "deviation": 0.09890596291965927
+          },
+          "bin3_8_12": {
+            "n": 11927,
+            "far": 0.13641318017942483,
+            "deviation": 0.08641318017942483
+          },
+          "bin4_ge_12": {
+            "n": 8074,
+            "far": 0.1395838493931137,
+            "deviation": 0.08958384939311369
+          }
+        },
+        "marginal_far": 0.14960439805356412,
+        "marginal_deviation": 0.09960439805356412,
+        "worst_bin_deviation": 0.12537652885878903,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52403,
+        "max_deviation": 0.7298611111111111,
+        "window": 1440
+      }
+    },
+    "66": {
+      "diagnostics": {
+        "n_rows": 53503,
+        "n_calibrated": 50874,
+        "n_uncalibrated_warmup": 2194,
+        "n_frozen_steps": 13648,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8767,
+            "far": 0.24295654157636593,
+            "deviation": 0.19295654157636594
+          },
+          "bin2_4_8": {
+            "n": 21647,
+            "far": 0.18335104171478728,
+            "deviation": 0.1333510417147873
+          },
+          "bin3_8_12": {
+            "n": 11315,
+            "far": 0.19098541758727353,
+            "deviation": 0.1409854175872735
+          },
+          "bin4_ge_12": {
+            "n": 9145,
+            "far": 0.38676872607982504,
+            "deviation": 0.33676872607982505
+          }
+        },
+        "marginal_far": 0.23188662185006093,
+        "marginal_deviation": 0.18188662185006094,
+        "worst_bin_deviation": 0.33676872607982505,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49435,
+        "max_deviation": 0.9326388888888888,
+        "window": 1440
+      }
+    },
+    "67": {
+      "diagnostics": {
+        "n_rows": 61489,
+        "n_calibrated": 59352,
+        "n_uncalibrated_warmup": 2137,
+        "n_frozen_steps": 14384,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 10014,
+            "far": 0.24246055522268822,
+            "deviation": 0.19246055522268823
+          },
+          "bin2_4_8": {
+            "n": 25905,
+            "far": 0.2067554526153252,
+            "deviation": 0.1567554526153252
+          },
+          "bin3_8_12": {
+            "n": 12761,
+            "far": 0.12749784499647362,
+            "deviation": 0.07749784499647362
+          },
+          "bin4_ge_12": {
+            "n": 10672,
+            "far": 0.24672038980509745,
+            "deviation": 0.19672038980509743
+          }
+        },
+        "marginal_far": 0.2029249224962933,
+        "marginal_deviation": 0.1529249224962933,
+        "worst_bin_deviation": 0.19672038980509743,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 57913,
+        "max_deviation": 0.7069444444444444,
+        "window": 1440
+      }
+    },
+    "68": {
+      "diagnostics": {
+        "n_rows": 54358,
+        "n_calibrated": 52358,
+        "n_uncalibrated_warmup": 2000,
+        "n_frozen_steps": 10516,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18626,
+            "far": 0.1915064962955009,
+            "deviation": 0.14150649629550088
+          },
+          "bin2_4_8": {
+            "n": 19100,
+            "far": 0.20722513089005234,
+            "deviation": 0.15722513089005236
+          },
+          "bin3_8_12": {
+            "n": 9624,
+            "far": 0.08395677472984206,
+            "deviation": 0.03395677472984206
+          },
+          "bin4_ge_12": {
+            "n": 5008,
+            "far": 0.13538338658146964,
+            "deviation": 0.08538338658146964
+          }
+        },
+        "marginal_far": 0.1721035944841285,
+        "marginal_deviation": 0.12210359448412851,
+        "worst_bin_deviation": 0.15722513089005236,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50919,
+        "max_deviation": 0.5902777777777777,
+        "window": 1440
+      }
+    },
+    "69": {
+      "diagnostics": {
+        "n_rows": 54813,
+        "n_calibrated": 52811,
+        "n_uncalibrated_warmup": 2002,
+        "n_frozen_steps": 11048,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 19073,
+            "far": 0.18434436113878258,
+            "deviation": 0.13434436113878256
+          },
+          "bin2_4_8": {
+            "n": 20179,
+            "far": 0.22211209673422866,
+            "deviation": 0.17211209673422867
+          },
+          "bin3_8_12": {
+            "n": 9472,
+            "far": 0.08720439189189189,
+            "deviation": 0.03720439189189188
+          },
+          "bin4_ge_12": {
+            "n": 4087,
+            "far": 0.15365793980915096,
+            "deviation": 0.10365793980915096
+          }
+        },
+        "marginal_far": 0.17897786446005567,
+        "marginal_deviation": 0.12897786446005566,
+        "worst_bin_deviation": 0.17211209673422867,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51372,
+        "max_deviation": 0.5743055555555555,
+        "window": 1440
+      }
+    },
+    "7": {
+      "diagnostics": {
+        "n_rows": 57888,
+        "n_calibrated": 55813,
+        "n_uncalibrated_warmup": 2075,
+        "n_frozen_steps": 13971,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9517,
+            "far": 0.23463276242513398,
+            "deviation": 0.184632762425134
+          },
+          "bin2_4_8": {
+            "n": 19737,
+            "far": 0.2254141966864265,
+            "deviation": 0.1754141966864265
+          },
+          "bin3_8_12": {
+            "n": 16321,
+            "far": 0.18742724097788127,
+            "deviation": 0.13742724097788128
+          },
+          "bin4_ge_12": {
+            "n": 10238,
+            "far": 0.24086735690564565,
+            "deviation": 0.19086735690564566
+          }
+        },
+        "marginal_far": 0.21871248633830828,
+        "marginal_deviation": 0.16871248633830827,
+        "worst_bin_deviation": 0.19086735690564566,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 54374,
+        "max_deviation": 0.7159722222222222,
+        "window": 1440
+      }
+    },
+    "70": {
+      "diagnostics": {
+        "n_rows": 56038,
+        "n_calibrated": 53602,
+        "n_uncalibrated_warmup": 2436,
+        "n_frozen_steps": 14839,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8489,
+            "far": 0.17693485687360114,
+            "deviation": 0.12693485687360112
+          },
+          "bin2_4_8": {
+            "n": 24031,
+            "far": 0.2511339519786942,
+            "deviation": 0.20113395197869421
+          },
+          "bin3_8_12": {
+            "n": 13035,
+            "far": 0.18741848868431146,
+            "deviation": 0.13741848868431145
+          },
+          "bin4_ge_12": {
+            "n": 8047,
+            "far": 0.35280228656642226,
+            "deviation": 0.3028022865664223
+          }
+        },
+        "marginal_far": 0.23915152419685834,
+        "marginal_deviation": 0.18915152419685832,
+        "worst_bin_deviation": 0.3028022865664223,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52163,
+        "max_deviation": 0.6888888888888889,
+        "window": 1440
+      }
+    },
+    "71": {
+      "diagnostics": {
+        "n_rows": 54744,
+        "n_calibrated": 52537,
+        "n_uncalibrated_warmup": 2207,
+        "n_frozen_steps": 12010,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18729,
+            "far": 0.13871536120454908,
+            "deviation": 0.08871536120454908
+          },
+          "bin2_4_8": {
+            "n": 20549,
+            "far": 0.23280938245170082,
+            "deviation": 0.1828093824517008
+          },
+          "bin3_8_12": {
+            "n": 9416,
+            "far": 0.15749787595581988,
+            "deviation": 0.10749787595581987
+          },
+          "bin4_ge_12": {
+            "n": 3843,
+            "far": 0.25214676034348166,
+            "deviation": 0.20214676034348167
+          }
+        },
+        "marginal_far": 0.18718236671298324,
+        "marginal_deviation": 0.13718236671298323,
+        "worst_bin_deviation": 0.20214676034348167,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51098,
+        "max_deviation": 0.5270833333333332,
+        "window": 1440
+      }
+    },
+    "72": {
+      "diagnostics": {
+        "n_rows": 54082,
+        "n_calibrated": 51813,
+        "n_uncalibrated_warmup": 2269,
+        "n_frozen_steps": 11766,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18433,
+            "far": 0.20262572560082462,
+            "deviation": 0.1526257256008246
+          },
+          "bin2_4_8": {
+            "n": 19582,
+            "far": 0.2462976202635073,
+            "deviation": 0.19629762026350728
+          },
+          "bin3_8_12": {
+            "n": 9417,
+            "far": 0.07401507911224381,
+            "deviation": 0.024015079112243806
+          },
+          "bin4_ge_12": {
+            "n": 4381,
+            "far": 0.1111618351974435,
+            "deviation": 0.061161835197443504
+          }
+        },
+        "marginal_far": 0.18802231100303013,
+        "marginal_deviation": 0.13802231100303014,
+        "worst_bin_deviation": 0.19629762026350728,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50374,
+        "max_deviation": 0.5618055555555556,
+        "window": 1440
+      }
+    },
+    "73": {
+      "diagnostics": {
+        "n_rows": 54042,
+        "n_calibrated": 51936,
+        "n_uncalibrated_warmup": 2106,
+        "n_frozen_steps": 9931,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 16536,
+            "far": 0.14290033865505564,
+            "deviation": 0.09290033865505563
+          },
+          "bin2_4_8": {
+            "n": 18989,
+            "far": 0.16883458844594237,
+            "deviation": 0.11883458844594237
+          },
+          "bin3_8_12": {
+            "n": 10469,
+            "far": 0.1426115197249021,
+            "deviation": 0.0926115197249021
+          },
+          "bin4_ge_12": {
+            "n": 5942,
+            "far": 0.17536183103332212,
+            "deviation": 0.1253618310333221
+          }
+        },
+        "marginal_far": 0.15603820086260012,
+        "marginal_deviation": 0.10603820086260012,
+        "worst_bin_deviation": 0.1253618310333221,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50497,
+        "max_deviation": 0.5833333333333333,
+        "window": 1440
+      }
+    },
+    "74": {
+      "diagnostics": {
+        "n_rows": 55602,
+        "n_calibrated": 53521,
+        "n_uncalibrated_warmup": 2081,
+        "n_frozen_steps": 16669,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 6884,
+            "far": 0.2940151074956421,
+            "deviation": 0.2440151074956421
+          },
+          "bin2_4_8": {
+            "n": 17727,
+            "far": 0.27297343036046706,
+            "deviation": 0.22297343036046707
+          },
+          "bin3_8_12": {
+            "n": 16856,
+            "far": 0.23000711912672045,
+            "deviation": 0.18000711912672046
+          },
+          "bin4_ge_12": {
+            "n": 12054,
+            "far": 0.29342956694873074,
+            "deviation": 0.24342956694873075
+          }
+        },
+        "marginal_far": 0.2667551054726182,
+        "marginal_deviation": 0.21675510547261823,
+        "worst_bin_deviation": 0.2440151074956421,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52082,
+        "max_deviation": 0.6743055555555555,
+        "window": 1440
+      }
+    },
+    "75": {
+      "diagnostics": {
+        "n_rows": 56161,
+        "n_calibrated": 53318,
+        "n_uncalibrated_warmup": 2843,
+        "n_frozen_steps": 12239,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7857,
+            "far": 0.18467608501972763,
+            "deviation": 0.1346760850197276
+          },
+          "bin2_4_8": {
+            "n": 25648,
+            "far": 0.169369931378665,
+            "deviation": 0.11936993137866499
+          },
+          "bin3_8_12": {
+            "n": 12637,
+            "far": 0.19909788715676188,
+            "deviation": 0.14909788715676187
+          },
+          "bin4_ge_12": {
+            "n": 7176,
+            "far": 0.21237458193979933,
+            "deviation": 0.1623745819397993
+          }
+        },
+        "marginal_far": 0.18445928204358752,
+        "marginal_deviation": 0.13445928204358754,
+        "worst_bin_deviation": 0.1623745819397993,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51879,
+        "max_deviation": 0.49791666666666673,
+        "window": 1440
+      }
+    },
+    "76": {
+      "diagnostics": {
+        "n_rows": 52086,
+        "n_calibrated": 49949,
+        "n_uncalibrated_warmup": 2134,
+        "n_frozen_steps": 12010,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 9135,
+            "far": 0.24455391351943076,
+            "deviation": 0.19455391351943074
+          },
+          "bin2_4_8": {
+            "n": 22916,
+            "far": 0.18868912550183278,
+            "deviation": 0.13868912550183277
+          },
+          "bin3_8_12": {
+            "n": 9673,
+            "far": 0.13553189289775663,
+            "deviation": 0.08553189289775663
+          },
+          "bin4_ge_12": {
+            "n": 8225,
+            "far": 0.2806079027355623,
+            "deviation": 0.2306079027355623
+          }
+        },
+        "marginal_far": 0.2037478227792348,
+        "marginal_deviation": 0.15374782277923482,
+        "worst_bin_deviation": 0.2306079027355623,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 48510,
+        "max_deviation": 0.7791666666666667,
+        "window": 1440
+      }
+    },
+    "77": {
+      "diagnostics": {
+        "n_rows": 61776,
+        "n_calibrated": 59236,
+        "n_uncalibrated_warmup": 2540,
+        "n_frozen_steps": 17982,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8395,
+            "far": 0.31983323406789754,
+            "deviation": 0.26983323406789755
+          },
+          "bin2_4_8": {
+            "n": 20696,
+            "far": 0.29102241979126403,
+            "deviation": 0.24102241979126404
+          },
+          "bin3_8_12": {
+            "n": 18584,
+            "far": 0.17897115798536375,
+            "deviation": 0.12897115798536374
+          },
+          "bin4_ge_12": {
+            "n": 11561,
+            "far": 0.2501513709886688,
+            "deviation": 0.2001513709886688
+          }
+        },
+        "marginal_far": 0.2519751502464717,
+        "marginal_deviation": 0.20197515024647172,
+        "worst_bin_deviation": 0.26983323406789755,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 57797,
+        "max_deviation": 0.6277777777777778,
+        "window": 1440
+      }
+    },
+    "78": {
+      "diagnostics": {
+        "n_rows": 53146,
+        "n_calibrated": 50778,
+        "n_uncalibrated_warmup": 2366,
+        "n_frozen_steps": 11969,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 6699,
+            "far": 0.2270488132557098,
+            "deviation": 0.1770488132557098
+          },
+          "bin2_4_8": {
+            "n": 22274,
+            "far": 0.20229864415910928,
+            "deviation": 0.15229864415910926
+          },
+          "bin3_8_12": {
+            "n": 13157,
+            "far": 0.16721137037318537,
+            "deviation": 0.11721137037318537
+          },
+          "bin4_ge_12": {
+            "n": 8648,
+            "far": 0.2215541165587419,
+            "deviation": 0.17155411655874192
+          }
+        },
+        "marginal_far": 0.19975186104218362,
+        "marginal_deviation": 0.14975186104218363,
+        "worst_bin_deviation": 0.1770488132557098,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49339,
+        "max_deviation": 0.8229166666666666,
+        "window": 1440
+      }
+    },
+    "79": {
+      "diagnostics": {
+        "n_rows": 53281,
+        "n_calibrated": 51279,
+        "n_uncalibrated_warmup": 2002,
+        "n_frozen_steps": 9585,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7894,
+            "far": 0.10146947048391183,
+            "deviation": 0.05146947048391183
+          },
+          "bin2_4_8": {
+            "n": 22693,
+            "far": 0.1755607456043714,
+            "deviation": 0.12556074560437142
+          },
+          "bin3_8_12": {
+            "n": 12714,
+            "far": 0.15384615384615385,
+            "deviation": 0.10384615384615385
+          },
+          "bin4_ge_12": {
+            "n": 7978,
+            "far": 0.2138380546502883,
+            "deviation": 0.16383805465028828
+          }
+        },
+        "marginal_far": 0.1647263012149223,
+        "marginal_deviation": 0.11472630121492229,
+        "worst_bin_deviation": 0.16383805465028828,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49840,
+        "max_deviation": 0.4340277777777778,
+        "window": 1440
+      }
+    },
+    "8": {
+      "diagnostics": {
+        "n_rows": 54802,
+        "n_calibrated": 52765,
+        "n_uncalibrated_warmup": 2037,
+        "n_frozen_steps": 11631,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 6722,
+            "far": 0.17807200238024398,
+            "deviation": 0.12807200238024397
+          },
+          "bin2_4_8": {
+            "n": 21945,
+            "far": 0.18719526087947141,
+            "deviation": 0.13719526087947143
+          },
+          "bin3_8_12": {
+            "n": 15039,
+            "far": 0.1637076933306736,
+            "deviation": 0.11370769333067358
+          },
+          "bin4_ge_12": {
+            "n": 9059,
+            "far": 0.2719947014019207,
+            "deviation": 0.22199470140192074
+          }
+        },
+        "marginal_far": 0.1938974699137686,
+        "marginal_deviation": 0.14389746991376862,
+        "worst_bin_deviation": 0.22199470140192074,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51326,
+        "max_deviation": 0.6354166666666666,
+        "window": 1440
+      }
+    },
+    "80": {
+      "diagnostics": {
+        "n_rows": 54913,
+        "n_calibrated": 52484,
+        "n_uncalibrated_warmup": 2429,
+        "n_frozen_steps": 14488,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8747,
+            "far": 0.19949697038984796,
+            "deviation": 0.14949697038984794
+          },
+          "bin2_4_8": {
+            "n": 24486,
+            "far": 0.23768684146042637,
+            "deviation": 0.18768684146042636
+          },
+          "bin3_8_12": {
+            "n": 12011,
+            "far": 0.18982599283989676,
+            "deviation": 0.13982599283989677
+          },
+          "bin4_ge_12": {
+            "n": 7240,
+            "far": 0.34668508287292815,
+            "deviation": 0.29668508287292816
+          }
+        },
+        "marginal_far": 0.2354050758326347,
+        "marginal_deviation": 0.1854050758326347,
+        "worst_bin_deviation": 0.29668508287292816,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51045,
+        "max_deviation": 0.6965277777777777,
+        "window": 1440
+      }
+    },
+    "81": {
+      "diagnostics": {
+        "n_rows": 53932,
+        "n_calibrated": 50878,
+        "n_uncalibrated_warmup": 3054,
+        "n_frozen_steps": 11643,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7120,
+            "far": 0.23286516853932585,
+            "deviation": 0.18286516853932583
+          },
+          "bin2_4_8": {
+            "n": 21520,
+            "far": 0.15278810408921933,
+            "deviation": 0.10278810408921933
+          },
+          "bin3_8_12": {
+            "n": 13495,
+            "far": 0.12826972952945537,
+            "deviation": 0.07826972952945536
+          },
+          "bin4_ge_12": {
+            "n": 8743,
+            "far": 0.2602081665332266,
+            "deviation": 0.2102081665332266
+          }
+        },
+        "marginal_far": 0.1759503125122843,
+        "marginal_deviation": 0.12595031251228428,
+        "worst_bin_deviation": 0.2102081665332266,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 49439,
+        "max_deviation": 0.6201388888888888,
+        "window": 1440
+      }
+    },
+    "82": {
+      "diagnostics": {
+        "n_rows": 54992,
+        "n_calibrated": 52517,
+        "n_uncalibrated_warmup": 2246,
+        "n_frozen_steps": 13442,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7759,
+            "far": 0.22296687717489366,
+            "deviation": 0.17296687717489367
+          },
+          "bin2_4_8": {
+            "n": 18020,
+            "far": 0.23129855715871253,
+            "deviation": 0.18129855715871251
+          },
+          "bin3_8_12": {
+            "n": 15567,
+            "far": 0.19393589002376824,
+            "deviation": 0.14393589002376822
+          },
+          "bin4_ge_12": {
+            "n": 11171,
+            "far": 0.2316712917375347,
+            "deviation": 0.1816712917375347
+          }
+        },
+        "marginal_far": 0.21907191956890149,
+        "marginal_deviation": 0.1690719195689015,
+        "worst_bin_deviation": 0.1816712917375347,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51078,
+        "max_deviation": 0.6340277777777777,
+        "window": 1440
+      }
+    },
+    "83": {
+      "diagnostics": {
+        "n_rows": 66154,
+        "n_calibrated": 64151,
+        "n_uncalibrated_warmup": 2003,
+        "n_frozen_steps": 19568,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 11241,
+            "far": 0.2514011208967174,
+            "deviation": 0.2014011208967174
+          },
+          "bin2_4_8": {
+            "n": 22330,
+            "far": 0.2942230183609494,
+            "deviation": 0.2442230183609494
+          },
+          "bin3_8_12": {
+            "n": 17560,
+            "far": 0.19151480637813212,
+            "deviation": 0.14151480637813213
+          },
+          "bin4_ge_12": {
+            "n": 13020,
+            "far": 0.32695852534562214,
+            "deviation": 0.27695852534562215
+          }
+        },
+        "marginal_far": 0.2652491777213138,
+        "marginal_deviation": 0.2152491777213138,
+        "worst_bin_deviation": 0.27695852534562215,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 62712,
+        "max_deviation": 0.95,
+        "window": 1440
+      }
+    },
+    "84": {
+      "diagnostics": {
+        "n_rows": 53772,
+        "n_calibrated": 51750,
+        "n_uncalibrated_warmup": 2022,
+        "n_frozen_steps": 8815,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 16879,
+            "far": 0.13342022631672493,
+            "deviation": 0.08342022631672492
+          },
+          "bin2_4_8": {
+            "n": 21389,
+            "far": 0.19042498480527373,
+            "deviation": 0.1404249848052737
+          },
+          "bin3_8_12": {
+            "n": 11238,
+            "far": 0.08284392240612208,
+            "deviation": 0.03284392240612208
+          },
+          "bin4_ge_12": {
+            "n": 2244,
+            "far": 0.12254901960784313,
+            "deviation": 0.07254901960784313
+          }
+        },
+        "marginal_far": 0.14552657004830918,
+        "marginal_deviation": 0.09552657004830918,
+        "worst_bin_deviation": 0.1404249848052737,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50311,
+        "max_deviation": 0.42569444444444443,
+        "window": 1440
+      }
+    },
+    "85": {
+      "diagnostics": {
+        "n_rows": 52417,
+        "n_calibrated": 50137,
+        "n_uncalibrated_warmup": 2273,
+        "n_frozen_steps": 14216,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8221,
+            "far": 0.40700644690426957,
+            "deviation": 0.3570064469042696
+          },
+          "bin2_4_8": {
+            "n": 19328,
+            "far": 0.16763245033112584,
+            "deviation": 0.11763245033112583
+          },
+          "bin3_8_12": {
+            "n": 13331,
+            "far": 0.18453229315130149,
+            "deviation": 0.1345322931513015
+          },
+          "bin4_ge_12": {
+            "n": 9257,
+            "far": 0.3190018364480933,
+            "deviation": 0.26900183644809333
+          }
+        },
+        "marginal_far": 0.23932425155075093,
+        "marginal_deviation": 0.18932425155075094,
+        "worst_bin_deviation": 0.3570064469042696,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 48698,
+        "max_deviation": 0.8784722222222222,
+        "window": 1440
+      }
+    },
+    "86": {
+      "diagnostics": {
+        "n_rows": 55486,
+        "n_calibrated": 53483,
+        "n_uncalibrated_warmup": 2003,
+        "n_frozen_steps": 13835,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 7902,
+            "far": 0.1654011642622121,
+            "deviation": 0.1154011642622121
+          },
+          "bin2_4_8": {
+            "n": 18003,
+            "far": 0.2585680164417042,
+            "deviation": 0.2085680164417042
+          },
+          "bin3_8_12": {
+            "n": 16324,
+            "far": 0.18616760597892673,
+            "deviation": 0.13616760597892674
+          },
+          "bin4_ge_12": {
+            "n": 11254,
+            "far": 0.24213612937622178,
+            "deviation": 0.19213612937622176
+          }
+        },
+        "marginal_far": 0.21924723743993418,
+        "marginal_deviation": 0.1692472374399342,
+        "worst_bin_deviation": 0.2085680164417042,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52044,
+        "max_deviation": 0.5847222222222221,
+        "window": 1440
+      }
+    },
+    "87": {
+      "diagnostics": {
+        "n_rows": 55356,
+        "n_calibrated": 53356,
+        "n_uncalibrated_warmup": 2000,
+        "n_frozen_steps": 14473,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8380,
+            "far": 0.20835322195704056,
+            "deviation": 0.15835322195704055
+          },
+          "bin2_4_8": {
+            "n": 18114,
+            "far": 0.2676382908247764,
+            "deviation": 0.21763829082477643
+          },
+          "bin3_8_12": {
+            "n": 16198,
+            "far": 0.18730707494752438,
+            "deviation": 0.13730707494752437
+          },
+          "bin4_ge_12": {
+            "n": 10664,
+            "far": 0.2831020255063766,
+            "deviation": 0.2331020255063766
+          }
+        },
+        "marginal_far": 0.23703051203238623,
+        "marginal_deviation": 0.18703051203238624,
+        "worst_bin_deviation": 0.2331020255063766,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51917,
+        "max_deviation": 0.95,
+        "window": 1440
+      }
+    },
+    "88": {
+      "diagnostics": {
+        "n_rows": 55441,
+        "n_calibrated": 51815,
+        "n_uncalibrated_warmup": 3626,
+        "n_frozen_steps": 13327,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 6809,
+            "far": 0.12997503304449992,
+            "deviation": 0.07997503304449992
+          },
+          "bin2_4_8": {
+            "n": 24546,
+            "far": 0.20928053450664058,
+            "deviation": 0.1592805345066406
+          },
+          "bin3_8_12": {
+            "n": 12607,
+            "far": 0.16649480447370507,
+            "deviation": 0.11649480447370507
+          },
+          "bin4_ge_12": {
+            "n": 7853,
+            "far": 0.2844772698331848,
+            "deviation": 0.2344772698331848
+          }
+        },
+        "marginal_far": 0.19984560455466563,
+        "marginal_deviation": 0.1498456045546656,
+        "worst_bin_deviation": 0.2344772698331848,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50376,
+        "max_deviation": 0.7777777777777777,
+        "window": 1440
+      }
+    },
+    "89": {
+      "diagnostics": {
+        "n_rows": 54577,
+        "n_calibrated": 52141,
+        "n_uncalibrated_warmup": 2429,
+        "n_frozen_steps": 13749,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 10301,
+            "far": 0.27880788272983204,
+            "deviation": 0.22880788272983205
+          },
+          "bin2_4_8": {
+            "n": 24412,
+            "far": 0.1974438800589874,
+            "deviation": 0.1474438800589874
+          },
+          "bin3_8_12": {
+            "n": 10407,
+            "far": 0.19237051984241377,
+            "deviation": 0.14237051984241378
+          },
+          "bin4_ge_12": {
+            "n": 7021,
+            "far": 0.2341546788206808,
+            "deviation": 0.18415467882068082
+          }
+        },
+        "marginal_far": 0.21744884064363937,
+        "marginal_deviation": 0.16744884064363935,
+        "worst_bin_deviation": 0.22880788272983205,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50702,
+        "max_deviation": 0.5951388888888889,
+        "window": 1440
+      }
+    },
+    "9": {
+      "diagnostics": {
+        "n_rows": 56029,
+        "n_calibrated": 53879,
+        "n_uncalibrated_warmup": 2150,
+        "n_frozen_steps": 11099,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8305,
+            "far": 0.22010836845273932,
+            "deviation": 0.1701083684527393
+          },
+          "bin2_4_8": {
+            "n": 24969,
+            "far": 0.17173294885658216,
+            "deviation": 0.12173294885658216
+          },
+          "bin3_8_12": {
+            "n": 12516,
+            "far": 0.13279002876318313,
+            "deviation": 0.08279002876318313
+          },
+          "bin4_ge_12": {
+            "n": 8089,
+            "far": 0.22202991717146742,
+            "deviation": 0.17202991717146743
+          }
+        },
+        "marginal_far": 0.17769446352010987,
+        "marginal_deviation": 0.12769446352010988,
+        "worst_bin_deviation": 0.17202991717146743,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52440,
+        "max_deviation": 0.5812499999999999,
+        "window": 1440
+      }
+    },
+    "90": {
+      "diagnostics": {
+        "n_rows": 54880,
+        "n_calibrated": 52219,
+        "n_uncalibrated_warmup": 2661,
+        "n_frozen_steps": 14143,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8473,
+            "far": 0.28455092647232383,
+            "deviation": 0.23455092647232384
+          },
+          "bin2_4_8": {
+            "n": 24522,
+            "far": 0.2329336921947639,
+            "deviation": 0.1829336921947639
+          },
+          "bin3_8_12": {
+            "n": 11718,
+            "far": 0.16018091824543437,
+            "deviation": 0.11018091824543437
+          },
+          "bin4_ge_12": {
+            "n": 7506,
+            "far": 0.2665867306155076,
+            "deviation": 0.2165867306155076
+          }
+        },
+        "marginal_far": 0.2298205633964649,
+        "marginal_deviation": 0.1798205633964649,
+        "worst_bin_deviation": 0.23455092647232384,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50780,
+        "max_deviation": 0.7944444444444444,
+        "window": 1440
+      }
+    },
+    "91": {
+      "diagnostics": {
+        "n_rows": 56608,
+        "n_calibrated": 53975,
+        "n_uncalibrated_warmup": 2633,
+        "n_frozen_steps": 14296,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8440,
+            "far": 0.23755924170616113,
+            "deviation": 0.18755924170616112
+          },
+          "bin2_4_8": {
+            "n": 24929,
+            "far": 0.19439207348870793,
+            "deviation": 0.14439207348870792
+          },
+          "bin3_8_12": {
+            "n": 12414,
+            "far": 0.1650555824069599,
+            "deviation": 0.11505558240695989
+          },
+          "bin4_ge_12": {
+            "n": 8192,
+            "far": 0.3814697265625,
+            "deviation": 0.3314697265625
+          }
+        },
+        "marginal_far": 0.22278832792959705,
+        "marginal_deviation": 0.17278832792959703,
+        "worst_bin_deviation": 0.3314697265625,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52536,
+        "max_deviation": 0.6930555555555555,
+        "window": 1440
+      }
+    },
+    "92": {
+      "diagnostics": {
+        "n_rows": 54067,
+        "n_calibrated": 52067,
+        "n_uncalibrated_warmup": 2000,
+        "n_frozen_steps": 10882,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 18833,
+            "far": 0.1667817129506717,
+            "deviation": 0.1167817129506717
+          },
+          "bin2_4_8": {
+            "n": 19520,
+            "far": 0.21644467213114754,
+            "deviation": 0.16644467213114755
+          },
+          "bin3_8_12": {
+            "n": 9292,
+            "far": 0.10869565217391304,
+            "deviation": 0.05869565217391304
+          },
+          "bin4_ge_12": {
+            "n": 4422,
+            "far": 0.16960651289009498,
+            "deviation": 0.11960651289009498
+          }
+        },
+        "marginal_far": 0.17527416597845083,
+        "marginal_deviation": 0.1252741659784508,
+        "worst_bin_deviation": 0.16644467213114755,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 50628,
+        "max_deviation": 0.5645833333333333,
+        "window": 1440
+      }
+    },
+    "93": {
+      "diagnostics": {
+        "n_rows": 55873,
+        "n_calibrated": 53532,
+        "n_uncalibrated_warmup": 2339,
+        "n_frozen_steps": 11198,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8862,
+            "far": 0.2075152335815843,
+            "deviation": 0.1575152335815843
+          },
+          "bin2_4_8": {
+            "n": 24811,
+            "far": 0.17447906170650115,
+            "deviation": 0.12447906170650115
+          },
+          "bin3_8_12": {
+            "n": 11787,
+            "far": 0.11919911767201154,
+            "deviation": 0.06919911767201153
+          },
+          "bin4_ge_12": {
+            "n": 8072,
+            "far": 0.2232408325074331,
+            "deviation": 0.1732408325074331
+          }
+        },
+        "marginal_far": 0.17512889486662184,
+        "marginal_deviation": 0.12512889486662182,
+        "worst_bin_deviation": 0.1732408325074331,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 52093,
+        "max_deviation": 0.66875,
+        "window": 1440
+      }
+    },
+    "94": {
+      "diagnostics": {
+        "n_rows": 54865,
+        "n_calibrated": 52803,
+        "n_uncalibrated_warmup": 2062,
+        "n_frozen_steps": 11041,
+        "final_bin_sizes": {
+          "bin1_lt_4": 1440,
+          "bin2_4_8": 1440,
+          "bin3_8_12": 1440,
+          "bin4_ge_12": 1440
+        }
+      },
+      "false_alarm_rates": {
+        "alpha": 0.05,
+        "per_bin": {
+          "bin1_lt_4": {
+            "n": 8204,
+            "far": 0.16004388103364212,
+            "deviation": 0.11004388103364211
+          },
+          "bin2_4_8": {
+            "n": 23862,
+            "far": 0.15463917525773196,
+            "deviation": 0.10463917525773196
+          },
+          "bin3_8_12": {
+            "n": 12995,
+            "far": 0.14544055405925355,
+            "deviation": 0.09544055405925354
+          },
+          "bin4_ge_12": {
+            "n": 7742,
+            "far": 0.30999741668819425,
+            "deviation": 0.25999741668819426
+          }
+        },
+        "marginal_far": 0.17599378823172926,
+        "marginal_deviation": 0.12599378823172924,
+        "worst_bin_deviation": 0.25999741668819426,
+        "n_bins_evaluable": 4,
+        "primary_metric_note": "worst_bin_deviation is the paper's primary metric. marginal_deviation is what a non-conditional method optimises; the gap between them is the quantity this method exists to close."
+      },
+      "rolling_window": {
+        "n_windows": 51364,
+        "max_deviation": 0.5416666666666666,
+        "window": 1440
+      }
+    }
+  },
+  "cli_invocation": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\scripts\\regime_conditional_calibration.py --score-dir ./scores_MD_2022_run1 --output-dir ./experiments\\MD_2022_a05_ours --score-col anomaly_score --wind-col wind_speed --timestamp-col timestamp --alpha 0.05 --window 1440 --min-bin-samples 500"
+}

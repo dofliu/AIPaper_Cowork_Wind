@@ -1,0 +1,3070 @@
+{
+  "implementation_version": "online-baselines-v1.0",
+  "is_author_code": false,
+  "generated_at_utc": "2026-08-16T11:26:47.033659+00:00",
+  "target_alpha": 0.01,
+  "parameters": {
+    "n_cal": 1440,
+    "window": 1440,
+    "aci_gamma": 0.005,
+    "dtaci_gammas": [
+      0.001,
+      0.005,
+      0.02,
+      0.1
+    ],
+    "dtaci_eta": 0.1
+  },
+  "methods_run": "static_split_conformal,aci,dtaci",
+  "missing_baselines": {
+    "care_adaptive_threshold": {
+      "status": "NOT_IMPLEMENTED",
+      "reason": "The definition lives in the CARE To Compare paper, which has not been read in this project. The archive's README.txt may carry it; nobody has extracted it yet.",
+      "blocking": "listed in the evaluation contract's baseline set",
+      "how_to_unblock": "Extract the adaptive-threshold definition from the CARE paper or the archive README, record it verbatim in a Drive doc, then implement against that text."
+    }
+  },
+  "per_case": {
+    "0": {
+      "static_split_conformal": {
+        "fixed_threshold": 8.584292665,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0014499999999999995,
+        "realised_alarm_rate": 0.01051432413252157,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.08159999999999969
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          1.2185,
+          0.7641,
+          0.8743,
+          1.1431
+        ],
+        "final_alpha_t": 0.002520099064708674,
+        "realised_alarm_rate": 0.012755387890785492
+      }
+    },
+    "1": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.774934127,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.040450000000001256,
+        "realised_alarm_rate": 0.01018685492844262,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.13264999999999247
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7984,
+          0.9522,
+          0.9783,
+          1.2711
+        ],
+        "final_alpha_t": 0.0573700658166592,
+        "realised_alarm_rate": 0.011817519088362814
+      }
+    },
+    "10": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.749508324,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.04415000000000075,
+        "realised_alarm_rate": 0.010181776346065348,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09029999999999891
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.4113,
+          0.6297,
+          2.3732,
+          0.5858
+        ],
+        "final_alpha_t": 0.06995779553679586,
+        "realised_alarm_rate": 0.012060898910875901
+      }
+    },
+    "11": {
+      "static_split_conformal": {
+        "fixed_threshold": 6.09180404,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.061100000000001625,
+        "realised_alarm_rate": 0.01007364305845986,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.1121999999999954
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.6846,
+          0.9959,
+          1.2002,
+          1.1193
+        ],
+        "final_alpha_t": 0.06148309309653891,
+        "realised_alarm_rate": 0.010873715792344758
+      }
+    },
+    "12": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.76292208,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.018199999999999984,
+        "realised_alarm_rate": 0.01019082642662422,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09279999999999906
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7678,
+          0.8067,
+          1.021,
+          1.4044
+        ],
+        "final_alpha_t": 0.09021880465671496,
+        "realised_alarm_rate": 0.011727683553799148
+      }
+    },
+    "13": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.499326917,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.025900000000000305,
+        "realised_alarm_rate": 0.010272018261365798,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.08604999999999814
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.5602,
+          0.8061,
+          1.441,
+          1.1926
+        ],
+        "final_alpha_t": 0.03623239416121093,
+        "realised_alarm_rate": 0.01221228837740156
+      }
+    },
+    "14": {
+      "static_split_conformal": {
+        "fixed_threshold": 9.075866446,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.005049999999999997,
+        "realised_alarm_rate": 0.010406202020584947,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07284999999999973
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.4109,
+          0.4505,
+          0.9691,
+          2.1696
+        ],
+        "final_alpha_t": 0.027772158162972654,
+        "realised_alarm_rate": 0.013647478059783535
+      }
+    },
+    "15": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.464199653,
+        "n_calibration": 1439
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.03325000000000044,
+        "realised_alarm_rate": 0.010291627827344151,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.12594999999999268
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.4633,
+          0.6592,
+          0.9105,
+          1.9671
+        ],
+        "final_alpha_t": 0.252849409061096,
+        "realised_alarm_rate": 0.012308102041204558
+      }
+    },
+    "16": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.590649796,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.02925000000000051,
+        "realised_alarm_rate": 0.010225419664268586,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.13259999999999247
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.4818,
+          0.5152,
+          0.6553,
+          2.3478
+        ],
+        "final_alpha_t": 0.23254428143345218,
+        "realised_alarm_rate": 0.012412470023980816
+      }
+    },
+    "17": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.682727673,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.02740000000000083,
+        "realised_alarm_rate": 0.01027027027027027,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09029999999999891
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.4818,
+          1.3601,
+          1.4985,
+          0.6596
+        ],
+        "final_alpha_t": 0.030860501729385977,
+        "realised_alarm_rate": 0.012208760484622553
+      }
+    },
+    "18": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.044910648,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.03920000000000158,
+        "realised_alarm_rate": 0.010348583877995643,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09219999999999819
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.5506,
+          0.6426,
+          0.953,
+          1.8537
+        ],
+        "final_alpha_t": 0.13210988785348474,
+        "realised_alarm_rate": 0.012040927482103952
+      }
+    },
+    "19": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.520245352,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.04155000000000124,
+        "realised_alarm_rate": 0.010303826093299778,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.11044999999999713
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7074,
+          0.827,
+          0.9015,
+          1.5642
+        ],
+        "final_alpha_t": 0.14116259376338663,
+        "realised_alarm_rate": 0.01088740562424773
+      }
+    },
+    "2": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.711755232,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.021850000000005112,
+        "realised_alarm_rate": 0.010443619454756815,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.11119999999999591
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          1.0568,
+          1.1406,
+          0.9449,
+          0.8577
+        ],
+        "final_alpha_t": 0.017863116214534503,
+        "realised_alarm_rate": 0.01070611617354783
+      }
+    },
+    "20": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.717001642,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0695000000000005,
+        "realised_alarm_rate": 0.010217283762700254,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.14269999999999244
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.4748,
+          0.7667,
+          1.5813,
+          1.1773
+        ],
+        "final_alpha_t": 0.15251906850738228,
+        "realised_alarm_rate": 0.01210091708208075
+      }
+    },
+    "21": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.067697238,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.049250000000001196,
+        "realised_alarm_rate": 0.010293044513576833,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09994999999999715
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.71,
+          0.9345,
+          0.9561,
+          1.3994
+        ],
+        "final_alpha_t": 0.06996084928649648,
+        "realised_alarm_rate": 0.011368437223950532
+      }
+    },
+    "22": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.884841277,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.007099999999999985,
+        "realised_alarm_rate": 0.010349639506938523,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09074999999999883
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.2706,
+          0.2837,
+          0.3197,
+          3.1259
+        ],
+        "final_alpha_t": 0.11153467655174452,
+        "realised_alarm_rate": 0.012307155593456857
+      }
+    },
+    "23": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.681716582,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.02250000000000013,
+        "realised_alarm_rate": 0.010282098602689164,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.11589999999999553
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7458,
+          0.7735,
+          0.8632,
+          1.6175
+        ],
+        "final_alpha_t": 0.07087981281943188,
+        "realised_alarm_rate": 0.010526910474181764
+      }
+    },
+    "24": {
+      "static_split_conformal": {
+        "fixed_threshold": 8.120332578,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.02475000000000388,
+        "realised_alarm_rate": 0.01030562141776973,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07620000000000138
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          1.0262,
+          1.0272,
+          0.9672,
+          0.9794
+        ],
+        "final_alpha_t": 0.021300086829521822,
+        "realised_alarm_rate": 0.012228590631592704
+      }
+    },
+    "25": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.661706633,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.005150000000002511,
+        "realised_alarm_rate": 0.010211743505030785,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07790000000000293
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3611,
+          0.371,
+          0.6634,
+          2.6046
+        ],
+        "final_alpha_t": 0.044869290247786166,
+        "realised_alarm_rate": 0.012257846523502028
+      }
+    },
+    "26": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.982092074,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.02180000000000011,
+        "realised_alarm_rate": 0.010428227010064675,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.08839999999999884
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3702,
+          1.1173,
+          1.5,
+          1.0124
+        ],
+        "final_alpha_t": 0.03124130449725128,
+        "realised_alarm_rate": 0.012150319543836823
+      }
+    },
+    "27": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.396334648,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0001,
+        "realised_alarm_rate": 0.010505030578023279,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09979999999999717
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.9188,
+          0.9293,
+          0.9833,
+          1.1686
+        ],
+        "final_alpha_t": 0.001024012994943757,
+        "realised_alarm_rate": 0.011606497007956861
+      }
+    },
+    "28": {
+      "static_split_conformal": {
+        "fixed_threshold": 8.625560913,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.017399999999999985,
+        "realised_alarm_rate": 0.010555300596603947,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09539999999999765
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7075,
+          0.788,
+          0.9322,
+          1.5723
+        ],
+        "final_alpha_t": 0.07426986267190296,
+        "realised_alarm_rate": 0.01187700780174392
+      }
+    },
+    "29": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.613042581,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.047150000000003196,
+        "realised_alarm_rate": 0.010239035621361586,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10679999999999663
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7084,
+          1.4179,
+          1.1636,
+          0.7101
+        ],
+        "final_alpha_t": 0.03279287157276773,
+        "realised_alarm_rate": 0.011399584448645715
+      }
+    },
+    "3": {
+      "static_split_conformal": {
+        "fixed_threshold": 8.36558111,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.024750000000000195,
+        "realised_alarm_rate": 0.010250337669065813,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09474999999999828
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7619,
+          0.9979,
+          1.1464,
+          1.0938
+        ],
+        "final_alpha_t": 0.04806762578803997,
+        "realised_alarm_rate": 0.011564009103187965
+      }
+    },
+    "30": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.292050828,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.031050000000000494,
+        "realised_alarm_rate": 0.010352837884801815,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10094999999999654
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3512,
+          0.4082,
+          0.4984,
+          2.7423
+        ],
+        "final_alpha_t": 0.32954125975931714,
+        "realised_alarm_rate": 0.012090505020943462
+      }
+    },
+    "31": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.706937399,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.053700000000001025,
+        "realised_alarm_rate": 0.010348266195036595,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09869999999999783
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3773,
+          0.4504,
+          0.6487,
+          2.5236
+        ],
+        "final_alpha_t": 0.29961558217181194,
+        "realised_alarm_rate": 0.012248584169034224
+      }
+    },
+    "32": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.509630742,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.02280000000000043,
+        "realised_alarm_rate": 0.010304467135843492,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10299999999999714
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.9153,
+          0.963,
+          1.0391,
+          1.0826
+        ],
+        "final_alpha_t": 0.047394539954756135,
+        "realised_alarm_rate": 0.011293845320987884
+      }
+    },
+    "33": {
+      "static_split_conformal": {
+        "fixed_threshold": 6.493262566,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0354000000000048,
+        "realised_alarm_rate": 0.010306626738439493,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.1121999999999954
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7672,
+          0.9027,
+          1.1237,
+          1.2063
+        ],
+        "final_alpha_t": 0.07377263704046724,
+        "realised_alarm_rate": 0.012033583803347358
+      }
+    },
+    "34": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.351605239,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.024350000000000184,
+        "realised_alarm_rate": 0.010340511220361736,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09619999999999757
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.5521,
+          0.9908,
+          1.2025,
+          1.2545
+        ],
+        "final_alpha_t": 0.03633908708732946,
+        "realised_alarm_rate": 0.01102987863505252
+      }
+    },
+    "35": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.489812634,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0410500000000018,
+        "realised_alarm_rate": 0.01022043304932385,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.13264999999999247
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8923,
+          0.9655,
+          0.9856,
+          1.1567
+        ],
+        "final_alpha_t": 0.068544705846889,
+        "realised_alarm_rate": 0.011842413820057844
+      }
+    },
+    "36": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.028136357,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.025000000000005212,
+        "realised_alarm_rate": 0.01016570471048222,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09279999999999906
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.2341,
+          0.7647,
+          0.9478,
+          2.0534
+        ],
+        "final_alpha_t": 0.07970623672222081,
+        "realised_alarm_rate": 0.011785514801712903
+      }
+    },
+    "37": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.776920995,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.017649999999999992,
+        "realised_alarm_rate": 0.010273186409550047,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.11524999999999525
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3858,
+          0.4192,
+          1.238,
+          1.957
+        ],
+        "final_alpha_t": 0.07402799649473389,
+        "realised_alarm_rate": 0.01195668809305173
+      }
+    },
+    "38": {
+      "static_split_conformal": {
+        "fixed_threshold": 8.499177472,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.030350000000001032,
+        "realised_alarm_rate": 0.010356774978930611,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07784999999999904
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7258,
+          0.8665,
+          1.1898,
+          1.218
+        ],
+        "final_alpha_t": 0.0687418236505692,
+        "realised_alarm_rate": 0.013259668508287293
+      }
+    },
+    "39": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.629808061,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.011599999999999907,
+        "realised_alarm_rate": 0.010270239256411727,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09649999999999753
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.4944,
+          0.6562,
+          0.8699,
+          1.9795
+        ],
+        "final_alpha_t": 0.08357978667838784,
+        "realised_alarm_rate": 0.011838506703387075
+      }
+    },
+    "4": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.258846502,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.012400000000002107,
+        "realised_alarm_rate": 0.010289225399480085,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.1382999999999927
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8704,
+          0.9628,
+          1.0965,
+          1.0703
+        ],
+        "final_alpha_t": 0.012042112708881487,
+        "realised_alarm_rate": 0.011398134850660801
+      }
+    },
+    "40": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.943758631,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.013250000000000199,
+        "realised_alarm_rate": 0.010234292189041996,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.0748000000000007
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7768,
+          0.9166,
+          0.9638,
+          1.3429
+        ],
+        "final_alpha_t": 0.03993639130872046,
+        "realised_alarm_rate": 0.012335977192148836
+      }
+    },
+    "41": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.309032778,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.035900000000000445,
+        "realised_alarm_rate": 0.010235320153437592,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10509999999999659
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8886,
+          1.0264,
+          0.9539,
+          1.1311
+        ],
+        "final_alpha_t": 0.03855849569911024,
+        "realised_alarm_rate": 0.011434051342578931
+      }
+    },
+    "42": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.594702922,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.05110000000000095,
+        "realised_alarm_rate": 0.010181901384280975,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09029999999999891
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3204,
+          0.5584,
+          1.5758,
+          1.5454
+        ],
+        "final_alpha_t": 0.10812138826229616,
+        "realised_alarm_rate": 0.011917019410441215
+      }
+    },
+    "43": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.436057885,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.06970000000000205,
+        "realised_alarm_rate": 0.010221560230869484,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09469999999999773
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7645,
+          0.822,
+          1.043,
+          1.3706
+        ],
+        "final_alpha_t": 0.15942626236317517,
+        "realised_alarm_rate": 0.011599329733755354
+      }
+    },
+    "44": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.075921776,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.033100000000000435,
+        "realised_alarm_rate": 0.010184688855318941,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.1087499999999951
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.474,
+          0.7911,
+          1.1754,
+          1.5594
+        ],
+        "final_alpha_t": 0.09160793179569476,
+        "realised_alarm_rate": 0.010801942725338272
+      }
+    },
+    "45": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.858564043,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.03195000000000052,
+        "realised_alarm_rate": 0.010344366049064036,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07284999999999973
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.4776,
+          1.0771,
+          1.211,
+          1.2343
+        ],
+        "final_alpha_t": 0.03479313306547547,
+        "realised_alarm_rate": 0.013881718579705157
+      }
+    },
+    "46": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.528722459,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.04235000000000098,
+        "realised_alarm_rate": 0.010411040545322481,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09684999999999715
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7886,
+          0.8835,
+          0.9821,
+          1.3458
+        ],
+        "final_alpha_t": 0.08782296640938686,
+        "realised_alarm_rate": 0.011305011826495074
+      }
+    },
+    "47": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.859679895,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.012049999999999955,
+        "realised_alarm_rate": 0.010389709240371442,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.1563999999999909
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.5001,
+          0.743,
+          1.2229,
+          1.534
+        ],
+        "final_alpha_t": 0.04615764435333613,
+        "realised_alarm_rate": 0.011835895874562338
+      }
+    },
+    "48": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.324362462,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.024749999999999966,
+        "realised_alarm_rate": 0.010230796368160128,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09109999999999749
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8088,
+          0.9217,
+          0.9746,
+          1.2949
+        ],
+        "final_alpha_t": 0.03719889832600143,
+        "realised_alarm_rate": 0.01229180979259892
+      }
+    },
+    "49": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.320895094,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.038500000000001346,
+        "realised_alarm_rate": 0.010296284805708524,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10659999999999722
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7661,
+          0.9626,
+          1.0234,
+          1.2479
+        ],
+        "final_alpha_t": 0.06276837462621156,
+        "realised_alarm_rate": 0.011692391220041884
+      }
+    },
+    "5": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.52444504,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.012650000000003143,
+        "realised_alarm_rate": 0.010437762891416109,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09959999999999719
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.2779,
+          0.6979,
+          1.6886,
+          1.3356
+        ],
+        "final_alpha_t": 0.022133818782755162,
+        "realised_alarm_rate": 0.012813522355507088
+      }
+    },
+    "50": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.129055049,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.05775000000000128,
+        "realised_alarm_rate": 0.010374769762808706,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.13539999999999272
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3256,
+          0.7934,
+          0.8329,
+          2.048
+        ],
+        "final_alpha_t": 0.11914361339665552,
+        "realised_alarm_rate": 0.012085103183851446
+      }
+    },
+    "51": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.77791156,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.015099999999999936,
+        "realised_alarm_rate": 0.010302664352026567,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.0957499999999976
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3728,
+          0.3874,
+          1.161,
+          2.0789
+        ],
+        "final_alpha_t": 0.12598704834926724,
+        "realised_alarm_rate": 0.011982036380104158
+      }
+    },
+    "52": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.00204639,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0867999999999986,
+        "realised_alarm_rate": 0.010106452152265591,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09119999999999757
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8588,
+          1.0292,
+          1.0892,
+          1.0228
+        ],
+        "final_alpha_t": 0.0781511590895365,
+        "realised_alarm_rate": 0.011425492782432609
+      }
+    },
+    "53": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.191820339,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.029750000000003336,
+        "realised_alarm_rate": 0.01026816170168104,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.11589999999999553
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8984,
+          0.9971,
+          1.2684,
+          0.8361
+        ],
+        "final_alpha_t": 0.02793731746262732,
+        "realised_alarm_rate": 0.011020343904700265
+      }
+    },
+    "54": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.689277058,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.06435000000000163,
+        "realised_alarm_rate": 0.010564811052417716,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09789999999999738
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.4006,
+          0.486,
+          0.8785,
+          2.2348
+        ],
+        "final_alpha_t": 0.23463494093715287,
+        "realised_alarm_rate": 0.011506778471426988
+      }
+    },
+    "55": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.961626761,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.025749999999999173,
+        "realised_alarm_rate": 0.01023695984386795,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.0937499999999973
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.6128,
+          0.7106,
+          1.1942,
+          1.4824
+        ],
+        "final_alpha_t": 0.08122173130867034,
+        "realised_alarm_rate": 0.011415314933809585
+      }
+    },
+    "56": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.602201903,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.026900000000000257,
+        "realised_alarm_rate": 0.010389410497152533,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09524999999999785
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.6148,
+          0.6824,
+          1.1674,
+          1.5354
+        ],
+        "final_alpha_t": 0.11420508499536149,
+        "realised_alarm_rate": 0.011736185931968601
+      }
+    },
+    "57": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.768660606,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.030249999999997786,
+        "realised_alarm_rate": 0.010397804700479756,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.0977499999999974
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.9242,
+          0.9416,
+          1.0286,
+          1.1056
+        ],
+        "final_alpha_t": 0.05112319809942584,
+        "realised_alarm_rate": 0.012283223506132278
+      }
+    },
+    "58": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.336936441,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.032450000000002394,
+        "realised_alarm_rate": 0.010435340516672014,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09524999999999767
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7664,
+          0.9964,
+          1.4388,
+          0.7984
+        ],
+        "final_alpha_t": 0.030505376851329615,
+        "realised_alarm_rate": 0.011001453022097258
+      }
+    },
+    "59": {
+      "static_split_conformal": {
+        "fixed_threshold": 7.519647233,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.02525000000000141,
+        "realised_alarm_rate": 0.010314102804088203,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07840000000000305
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.9712,
+          1.023,
+          0.9615,
+          1.0443
+        ],
+        "final_alpha_t": 0.023993296325178742,
+        "realised_alarm_rate": 0.012410617348657857
+      }
+    },
+    "6": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.399494847,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.002249999999996707,
+        "realised_alarm_rate": 0.010294805802526907,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09984999999999716
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.9868,
+          0.9083,
+          0.9628,
+          1.1421
+        ],
+        "final_alpha_t": 0.00950329781791548,
+        "realised_alarm_rate": 0.011773514272344408
+      }
+    },
+    "60": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.765305089,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.08934999999999832,
+        "realised_alarm_rate": 0.010039251207729468,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.14564999999999104
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.6082,
+          0.9469,
+          1.3052,
+          1.1397
+        ],
+        "final_alpha_t": 0.13255497937090188,
+        "realised_alarm_rate": 0.01164326690821256
+      }
+    },
+    "61": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.129278129,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.00465000000000032,
+        "realised_alarm_rate": 0.010398389450159763,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.1121999999999954
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.9553,
+          1.038,
+          0.8781,
+          1.1286
+        ],
+        "final_alpha_t": 0.004691857545671023,
+        "realised_alarm_rate": 0.0121530022348226
+      }
+    },
+    "62": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.15218763,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.01350000000000152,
+        "realised_alarm_rate": 0.010306304920491472,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.1563999999999909
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7171,
+          0.7303,
+          1.1075,
+          1.4451
+        ],
+        "final_alpha_t": 0.056178819507361394,
+        "realised_alarm_rate": 0.011690733939661968
+      }
+    },
+    "63": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.695623238,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.015049999999999937,
+        "realised_alarm_rate": 0.010313523631258774,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.0894499999999984
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7508,
+          0.8394,
+          0.9357,
+          1.4742
+        ],
+        "final_alpha_t": 0.10939046171675512,
+        "realised_alarm_rate": 0.011399157697707066
+      }
+    },
+    "64": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.712141277,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.022800000000000282,
+        "realised_alarm_rate": 0.010341183574879228,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.08939999999999831
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.9127,
+          1.008,
+          1.024,
+          1.0552
+        ],
+        "final_alpha_t": 0.025451020326347627,
+        "realised_alarm_rate": 0.012209390096618358
+      }
+    },
+    "65": {
+      "static_split_conformal": {
+        "fixed_threshold": 7.063977877,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.058900000000001174,
+        "realised_alarm_rate": 0.010077647447546672,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10179999999999695
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3516,
+          1.2022,
+          2.0583,
+          0.3878
+        ],
+        "final_alpha_t": 0.05646869836617809,
+        "realised_alarm_rate": 0.01224369917579896
+      }
+    },
+    "66": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.688038037,
+        "n_calibration": 1432
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.07180000000000084,
+        "realised_alarm_rate": 0.010147958788442173,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.13289999999999189
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.6211,
+          0.7899,
+          1.017,
+          1.572
+        ],
+        "final_alpha_t": 0.22411455366062005,
+        "realised_alarm_rate": 0.011716631807266249
+      }
+    },
+    "67": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.763240985,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.030150000000000492,
+        "realised_alarm_rate": 0.010291595197255575,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10369999999999646
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.6159,
+          0.9829,
+          1.0531,
+          1.3481
+        ],
+        "final_alpha_t": 0.05043077838542577,
+        "realised_alarm_rate": 0.012156738663424869
+      }
+    },
+    "68": {
+      "static_split_conformal": {
+        "fixed_threshold": 7.714844772,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.02055000000000318,
+        "realised_alarm_rate": 0.010242261612305832,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07285000000000014
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8543,
+          0.9688,
+          1.0136,
+          1.1633
+        ],
+        "final_alpha_t": 0.01983542787733878,
+        "realised_alarm_rate": 0.01230205223175479
+      }
+    },
+    "69": {
+      "static_split_conformal": {
+        "fixed_threshold": 8.095182325,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.04750000000000112,
+        "realised_alarm_rate": 0.010211155453131733,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07279999999999909
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.6985,
+          0.9145,
+          1.2152,
+          1.1717
+        ],
+        "final_alpha_t": 0.08831252343772865,
+        "realised_alarm_rate": 0.01260937177973882
+      }
+    },
+    "7": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.375963191,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.015950000000001536,
+        "realised_alarm_rate": 0.010505243764172336,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.11119999999999591
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7103,
+          0.763,
+          0.9858,
+          1.5409
+        ],
+        "final_alpha_t": 0.04026395859214042,
+        "realised_alarm_rate": 0.010983560090702948
+      }
+    },
+    "70": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.858871736,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.010000000000000274,
+        "realised_alarm_rate": 0.010183523205978241,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09639999999999754
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7351,
+          0.8737,
+          1.2376,
+          1.1536
+        ],
+        "final_alpha_t": 0.026196603406288915,
+        "realised_alarm_rate": 0.011465621451335214
+      }
+    },
+    "71": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.631792388,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.008899999999999955,
+        "realised_alarm_rate": 0.010243133723547952,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07455000000000117
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8103,
+          0.9159,
+          1.0355,
+          1.2383
+        ],
+        "final_alpha_t": 0.035812635604658076,
+        "realised_alarm_rate": 0.011743959177547652
+      }
+    },
+    "72": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.560736905,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.02005000000000006,
+        "realised_alarm_rate": 0.01029596139964287,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.0957499999999976
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3868,
+          0.4104,
+          1.3025,
+          1.9003
+        ],
+        "final_alpha_t": 0.07173716173407149,
+        "realised_alarm_rate": 0.012024619125413168
+      }
+    },
+    "73": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.890310201,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0156499999999999,
+        "realised_alarm_rate": 0.010360822782403712,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07504999999999998
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3055,
+          0.3795,
+          0.44,
+          2.875
+        ],
+        "final_alpha_t": 0.10121612318462402,
+        "realised_alarm_rate": 0.012851222386981484
+      }
+    },
+    "74": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.574460155,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0563500000000011,
+        "realised_alarm_rate": 0.010265499796905579,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.11044999999999713
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.5127,
+          0.7431,
+          0.8354,
+          1.9089
+        ],
+        "final_alpha_t": 0.19158937639662096,
+        "realised_alarm_rate": 0.01117019312433071
+      }
+    },
+    "75": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.075048012,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.021000000000000088,
+        "realised_alarm_rate": 0.01025200562855211,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.1087499999999951
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.5242,
+          0.6274,
+          0.731,
+          2.1174
+        ],
+        "final_alpha_t": 0.193281584145497,
+        "realised_alarm_rate": 0.011092633541053708
+      }
+    },
+    "76": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.867413222,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.005099999999999997,
+        "realised_alarm_rate": 0.010287700175739984,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.13759999999999245
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7882,
+          0.81,
+          0.9636,
+          1.4382
+        ],
+        "final_alpha_t": 0.03901797132142742,
+        "realised_alarm_rate": 0.012716466244100864
+      }
+    },
+    "77": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.033870677,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0173500000000039,
+        "realised_alarm_rate": 0.010391805887032618,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09959999999999775
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.78,
+          0.7741,
+          0.9085,
+          1.5374
+        ],
+        "final_alpha_t": 0.08297887535442723,
+        "realised_alarm_rate": 0.011734287987271282
+      }
+    },
+    "78": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.323874808,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.008299999999999978,
+        "realised_alarm_rate": 0.010192634999226366,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.1012499999999966
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.6779,
+          0.6932,
+          1.0123,
+          1.6166
+        ],
+        "final_alpha_t": 0.04635409675552457,
+        "realised_alarm_rate": 0.011004951261024291
+      }
+    },
+    "79": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.734364068,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.01970000000000005,
+        "realised_alarm_rate": 0.010377886229046507,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10184999999999714
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.1705,
+          0.1728,
+          1.1112,
+          2.5456
+        ],
+        "final_alpha_t": 0.10335281020656574,
+        "realised_alarm_rate": 0.01203680484558554
+      }
+    },
+    "8": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.21690024,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.055450000000000804,
+        "realised_alarm_rate": 0.010194520445260672,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10074999999999555
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8462,
+          1.0387,
+          0.8557,
+          1.2594
+        ],
+        "final_alpha_t": 0.05269379159932415,
+        "realised_alarm_rate": 0.011375135864472845
+      }
+    },
+    "80": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.856680904,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0049999999999999975,
+        "realised_alarm_rate": 0.010210760570755335,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09639999999999754
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3061,
+          0.5498,
+          1.2703,
+          1.8738
+        ],
+        "final_alpha_t": 0.05331933341612793,
+        "realised_alarm_rate": 0.012006059132646383
+      }
+    },
+    "81": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.755993737,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.054050000000001035,
+        "realised_alarm_rate": 0.01013487769564886,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09984999999999716
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.447,
+          1.0318,
+          1.3175,
+          1.2036
+        ],
+        "final_alpha_t": 0.06253371812906533,
+        "realised_alarm_rate": 0.011601767888440143
+      }
+    },
+    "82": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.374405289,
+        "n_calibration": 1367
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0433000000000028,
+        "realised_alarm_rate": 0.010188029065847629,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09349999999999786
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.5722,
+          0.8529,
+          1.0636,
+          1.5113
+        ],
+        "final_alpha_t": 0.1452008719998241,
+        "realised_alarm_rate": 0.010955876844707469
+      }
+    },
+    "83": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.986594872,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.014149999999999942,
+        "realised_alarm_rate": 0.010337793985845412,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09709999999999587
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.5989,
+          0.7296,
+          1.2908,
+          1.3808
+        ],
+        "final_alpha_t": 0.0481622072240844,
+        "realised_alarm_rate": 0.011434929072534537
+      }
+    },
+    "84": {
+      "static_split_conformal": {
+        "fixed_threshold": 9.298887212,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.010949999999999944,
+        "realised_alarm_rate": 0.010509821906290606,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07784999999999904
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.5606,
+          0.6911,
+          0.8575,
+          1.8908
+        ],
+        "final_alpha_t": 0.032175102033277045,
+        "realised_alarm_rate": 0.013471680807154322
+      }
+    },
+    "85": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.799706618,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.03850000000000073,
+        "realised_alarm_rate": 0.010260937806552874,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10759999999999385
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3019,
+          0.4086,
+          1.2256,
+          2.0639
+        ],
+        "final_alpha_t": 0.08788072983219271,
+        "realised_alarm_rate": 0.011006474396703943
+      }
+    },
+    "86": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.368247694,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.019450000000001952,
+        "realised_alarm_rate": 0.010306035599304297,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09459999999999924
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7716,
+          0.8478,
+          1.2275,
+          1.1531
+        ],
+        "final_alpha_t": 0.028251018444997913,
+        "realised_alarm_rate": 0.011545720312326537
+      }
+    },
+    "87": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.834431749,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.0030000000000000014,
+        "realised_alarm_rate": 0.010497811410342013,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.09979999999999717
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.648,
+          0.5744,
+          0.8832,
+          1.8944
+        ],
+        "final_alpha_t": 0.03212990522625908,
+        "realised_alarm_rate": 0.01149936938942058
+      }
+    },
+    "88": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.837837034,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.06525000000000146,
+        "realised_alarm_rate": 0.010110923871780152,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.110349999999996
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.7495,
+          1.0766,
+          1.1045,
+          1.0693
+        ],
+        "final_alpha_t": 0.061129047987901336,
+        "realised_alarm_rate": 0.011555341567748746
+      }
+    },
+    "89": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.638534278,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.019050000000001836,
+        "realised_alarm_rate": 0.010333145115753811,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10904999999999769
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8023,
+          0.8306,
+          0.9016,
+          1.4656
+        ],
+        "final_alpha_t": 0.04792751085976098,
+        "realised_alarm_rate": 0.012497647280255975
+      }
+    },
+    "9": {
+      "static_split_conformal": {
+        "fixed_threshold": 6.262716173,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.012650000000001767,
+        "realised_alarm_rate": 0.01025847698254227,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10314999999999673
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.8613,
+          0.901,
+          0.9711,
+          1.2666
+        ],
+        "final_alpha_t": 0.02832213734793859,
+        "realised_alarm_rate": 0.011650698858744436
+      }
+    },
+    "90": {
+      "static_split_conformal": {
+        "fixed_threshold": 5.402419278,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.010199999999999966,
+        "realised_alarm_rate": 0.010273203592814372,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.0894499999999984
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3404,
+          0.5127,
+          0.787,
+          2.3599
+        ],
+        "final_alpha_t": 0.1230408306943149,
+        "realised_alarm_rate": 0.010815868263473053
+      }
+    },
+    "91": {
+      "static_split_conformal": {
+        "fixed_threshold": 3.874201569,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.038400000000000586,
+        "realised_alarm_rate": 0.010223317865429234,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.10604999999999727
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.3916,
+          0.904,
+          1.8085,
+          0.896
+        ],
+        "final_alpha_t": 0.061016572630783056,
+        "realised_alarm_rate": 0.01136528422273782
+      }
+    },
+    "92": {
+      "static_split_conformal": {
+        "fixed_threshold": 2.838750435,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.01920000000000019,
+        "realised_alarm_rate": 0.010127881125657932,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.07785000000000293
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.6031,
+          0.7222,
+          0.9747,
+          1.7
+        ],
+        "final_alpha_t": 0.11460315642909066,
+        "realised_alarm_rate": 0.01168601668345146
+      }
+    },
+    "93": {
+      "static_split_conformal": {
+        "fixed_threshold": 4.655399643,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.014650000000001186,
+        "realised_alarm_rate": 0.010398486156785656,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.11199999999999542
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.5198,
+          0.6519,
+          1.0113,
+          1.817
+        ],
+        "final_alpha_t": 0.07281068986538827,
+        "realised_alarm_rate": 0.012051955687016589
+      }
+    },
+    "94": {
+      "static_split_conformal": {
+        "fixed_threshold": 9.621809796,
+        "n_calibration": 1440
+      },
+      "aci": {
+        "gamma": 0.005,
+        "final_alpha_t": 0.038300000000002214,
+        "realised_alarm_rate": 0.010238652316331306,
+        "alpha_t_min": 0.0,
+        "alpha_t_max": 0.11194999999999683
+      },
+      "dtaci": {
+        "gammas": [
+          0.001,
+          0.005,
+          0.02,
+          0.1
+        ],
+        "eta": 0.1,
+        "sigma": 0.125,
+        "eta_sigma_note": "fixed defaults, NOT the paper's data-dependent formula; record as C2 parameter provenance",
+        "final_expert_weights": [
+          0.6578,
+          0.7678,
+          0.8442,
+          1.7302
+        ],
+        "final_alpha_t": 0.1797192501807666,
+        "realised_alarm_rate": 0.012035563874590547
+      }
+    }
+  },
+  "cli_invocation": "D:\\Project_CodingSimulation\\researchTopic\\AI_Paper\\AIPaper_Cowork_Wind\\scripts\\baselines_online_calibration.py --score-dir ./scores_MD_2022_run1 --output-dir ./experiments\\MD_2022_a01_baselines --score-col anomaly_score --timestamp-col timestamp --alpha 0.01 --n-cal 1440 --window 1440"
+}
