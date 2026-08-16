@@ -6,6 +6,6 @@
   },
   "seed": "not applicable - closed-form estimator, no randomness",
   "config_sha256": "2186dce1c654e7574550d54d77ae336e27a4fd6a51d7c5c0112d0062b6822e7c",
-  "artifact_sha256": "df8125a0e3791cf5b4edc8c85f89242d902a4d05345a0c9c43876c81700c8a06",
-  "run_started_at": "2026-08-15T14:54:25.431589+00:00"
+  "artifact_sha256": "b35345a53d2ece54e44aa71de8649711f11373f8a18f6307064baf33be6bf967",
+  "run_started_at": "2026-08-15T18:04:37.190406+00:00"
 }

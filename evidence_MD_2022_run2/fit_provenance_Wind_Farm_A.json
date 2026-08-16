@@ -1,0 +1,102 @@
+{
+  "fit_partition": "CARE normal reference partition: rows where train_test == 'train', which precede any event window",
+  "fit_scope": "case",
+  "files_read_during_fit": [
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\0.csv",
+      "sha256": "f0a8365b2b60845b9ad78cf4deb167a2da500abef66199a55c381e8fff2bb26b"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\10.csv",
+      "sha256": "16a5bdaaf9afb5ce9b02e456c60e8ed7a6b6943c5e517d4866d7eedf31568914"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\13.csv",
+      "sha256": "fb3c996efd634e0422d95876a28dc6c777470a07816cc5f5894a3d18ccc32dbd"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\14.csv",
+      "sha256": "93bee35d6a6fa0b6d01961cd0980a53561184da36a80118b964750294be0f6ce"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\17.csv",
+      "sha256": "54237f22c32ff0b5dcedb8d3eb5dc452424baad2cdc4d599ca3215605eab6c8f"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\22.csv",
+      "sha256": "06b0745cc1b5ed3ec9bd0e34a81b1074bc23c4f76f854c8b395ea625237a76a3"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\24.csv",
+      "sha256": "310c27badde12582045627ae22a29d79d642b58f1379e2676bd3f21f46ac697e"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\25.csv",
+      "sha256": "f09afa3bfea796bb2bb52058830981554734a2a2b6085e3415f20d67b91defc6"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\26.csv",
+      "sha256": "6bf52430a8102d198c9bea3986e4bf81a120f7e86c8acc859ca1b606a3f08d35"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\3.csv",
+      "sha256": "af3e8a8b9907183edecb763f60b1a5a79bb437228cbaa158be0a6dde24e93910"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\38.csv",
+      "sha256": "085324d3dffe3fa12d37a2d95b71d439d8ba7085839dca644192b2b4ee360775"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\40.csv",
+      "sha256": "59a051d79baac85548922248013e1136407514d8bd7a2f374670865e6a6cf2ef"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\42.csv",
+      "sha256": "22af8df47d9d9844f15506980847ed27dca3b8148167073ee6e85e6faada5b4a"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\45.csv",
+      "sha256": "cc51aeabe485286e2fee4df23f39caf77c19ce5fdc34f1e16b01097209f4aa1b"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\51.csv",
+      "sha256": "cc4eaa53400424e1044f68379da070215d311d92f940b7050affbf2f289d0ebc"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\68.csv",
+      "sha256": "ab1db0f9a261c525572e09067def2c2876b2002335ec9d5c9c268246573bbcc3"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\69.csv",
+      "sha256": "fa66f3fc0e9af250cbc23b409a78b3d76e5b9a8526a0f138ee5efaf7b9508d9b"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\71.csv",
+      "sha256": "540b1b258c234ef898b087af4626aa46a86f08dc539f30836c2417f95a83533e"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\72.csv",
+      "sha256": "18964bc4ff606b77e7313427df81080d5651dfd6a9dd619be7657947ab42600f"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\73.csv",
+      "sha256": "d6071fe582077dd0ee1900597548497e17344f61c2ab4a784ecdd57529881db0"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\84.csv",
+      "sha256": "ac88e2141ec5c87c38bb3cee2c0fc084310b238f59464f1d9380cca0537c025a"
+    },
+    {
+      "path": "D:\\Dropbox\\Project_Academic\\Paper&Patent\\01.國際期刊(發表年月)\\Submitted\\12.Physics-Informed(Gemini)\\Experiments\\agentskill_care_v6\\CARE_To_Compare\\Wind Farm A\\datasets\\92.csv",
+      "sha256": "a979ae914688dd4f4f5f3e3abd0d3ea2d607343363bca39292ad8e2de1c0a01d"
+    }
+  ],
+  "label_columns_excluded": [
+    "status_type_id",
+    "event_label",
+    "label"
+  ],
+  "verification_method": "code-path audit: the scorer reads only the mapped signal columns, the timestamp and the split column; no label column is referenced anywhere in the fit",
+  "verified_by": "base_scorer_md2022.py md2022-v1.2",
+  "verified_at": "2026-08-15T18:01:01.487243+00:00"
+}

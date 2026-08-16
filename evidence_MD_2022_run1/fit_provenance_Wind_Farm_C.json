@@ -242,5 +242,5 @@
   ],
   "verification_method": "code-path audit: the scorer reads only the mapped signal columns, the timestamp and the split column; no label column is referenced anywhere in the fit",
   "verified_by": "base_scorer_md2022.py md2022-v1.2",
-  "verified_at": "2026-08-15T15:51:10.335910+00:00"
+  "verified_at": "2026-08-15T18:58:10.175307+00:00"
 }
