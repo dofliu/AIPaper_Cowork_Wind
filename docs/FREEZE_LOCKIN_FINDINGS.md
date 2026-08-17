@@ -263,5 +263,5 @@ python3 scripts/selftest_absorption_policies.py
 python3 scripts/selftest_freeze_lockin_diagnostic.py
 ```
 
-自我測試現況：**12 支、344 checks、0 failed**
-（原 291 + 吸收政策 26 + 診斷工具 27）。
+自我測試現況：**12 支、370 checks、0 failed**
+（原 291 + 吸收政策 26 + 診斷工具 27 + R24 三數字呈報 26）。

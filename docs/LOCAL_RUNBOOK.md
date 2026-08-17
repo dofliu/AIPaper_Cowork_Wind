@@ -56,15 +56,15 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：十二支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **344 checks**。
+**預期**：十二支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **370 checks**。
 
 | 測試 | checks |
 |---|---|
 | `selftest_c0_c6_gate.py` | 59 |
 | `selftest_sensor_identification.py` | 21 |
-| `selftest_end_to_end.py` | 20 |
+| `selftest_end_to_end.py` | 33 |
 | `selftest_w1_acas.py` | 17 |
-| `selftest_regime_conditional.py` | 16 |
+| `selftest_regime_conditional.py` | 29 |
 | `selftest_md2022.py` | 40 |
 | `selftest_online_baselines.py` | 13 |
 | `selftest_signal_map_builder.py` | 48 |
@@ -72,6 +72,9 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_earliness_metric.py` | 28 |
 | `selftest_absorption_policies.py` | 26 |
 | `selftest_freeze_lockin_diagnostic.py` | 27 |
+
+> 2026-08-17：`selftest_end_to_end.py` 20→33、`selftest_regime_conditional.py`
+> 16→29，共 +26，來自 R24 三數字誤報率呈報的釘樁（各 T6／T7）。
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。
@@ -710,6 +713,32 @@ static / ACI / DtACI，以及共同評估尺規，三個 α（0.01 主要、0.05
 - 各 α 的 `comparison_*.json`
 - `w1acas_*/w1acas_summary.json`、`baselines_*/baselines_summary.json`
 - **不要**回傳每案的逐列 CSV，那會很大；需要時再針對特定 case 要
+
+### 5.3a 怎麼讀誤報率——三個數字，不是一個（R24，2026-08-17 簽核）
+
+`comparison.md` 的誤報率欄從單一 pooled 值改成**三欄並列**：
+
+| 欄 | 是什麼 | α=0.01 本方法（2026-08-16 那輪） |
+|---|---|---|
+| `worst-bin dev (unfrozen)` | 條件覆蓋率主張本體，只算未凍結點 | 0.0036（case-mean） |
+| `frozen %` | 凍結佔比，方法的代價，必須第一級呈現 | 4.9% |
+| `FAR frozen` | 凍結點的誤報率，讓讀者自行還原 pooled | 0.6819 |
+
+**為什麼不能只報一個 pooled 數字**：本方法在自己的工單告警期間**刻意停止校準**
+以保住偵測，所以被凍結的那群點正好是依「超越率」挑出來的（6-of-18 的進入條件
+就是局部超越率 ≥ 1/3）。在暫停校準的期間報一個校準保證，量到的是警報政策，
+不是校準層。中間那欄是護欄——沒有它，第一欄會變成自利定義。
+
+- **凍結佔比是真的被量出來的**，不是假設。程式從本方法自己輸出的 `frozen`
+  欄讀，逐點計。沒有凍結機制的基線（static/ACI/DtACI/W1-ACAS）該欄印 `—`
+  而**不是 0%**——0% 會讓人誤以為「有機制但沒觸發」，`—` 才是「根本沒這機制」。
+- pooled 值仍記在 `evaluation.json`，且 `false_alarm_report.pooled_reconstruction`
+  用三個數字重算 pooled 並記錄殘差（實測 ~7e-18），證明三數字的切分是窮盡的、
+  可反算的。**跑完請確認 `exhaustive: true`。**
+- `--freeze-state-column` 預設 `frozen`，一般不用改。
+
+> 稿件的 Results 與 Limitations 要連同**停滯剖面**與 **α 不變性**兩張表一起寫
+> （見 `docs/FREEZE_LOCKIN_FINDINGS.md` 2.2、2.3）。審稿人會盯凍結佔比這一點。
 
 ### 5.4 一件尚未就緒的事（誠實記錄）
 

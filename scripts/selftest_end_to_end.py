@@ -23,6 +23,13 @@ evaluator cannot read -- is one round trip they do not have to spend.
       credit for alarming on a single point.
   T5  Excluded cases stay excluded, as the D1/D6 plan requires.
 
+  T6  The three-number false-alarm report survives the pipeline (R24,
+      ratified 2026-08-17). The evaluator reads our freeze state out of our
+      own output, reports the unfrozen deviation, the frozen fraction and
+      the frozen rate as one block, and rebuilds the pooled rate from them.
+      Baselines have no freeze mechanism and must say so rather than
+      report a measured-looking 0% frozen.
+
     python3 scripts/selftest_end_to_end.py
 
 Exit code: 0 if the pipeline holds together and the claim survives it.
@@ -264,6 +271,82 @@ def main():
 
         check("T5 missing CARE metrics still declared missing",
               ev["missing_metrics"]["care_score"]["status"] == "NOT_IMPLEMENTED")
+
+        # ---------------- T6 the three-number report ----------------
+        # A pooled false-alarm rate is not a ruler for a calibrator that
+        # gates its own updates on its own alarm state: the 6-of-18 entry
+        # condition selects the frozen points BY their exceedance rate. So
+        # the evaluator reports three numbers, and the middle one -- what
+        # the freeze costs -- is what keeps the first from being a
+        # self-serving definition. It is checked here as one block for
+        # that reason: an unfrozen deviation reachable without the frozen
+        # fraction beside it is the failure this protocol exists to stop.
+        print("\nT6  false-alarm figures reported as three numbers")
+        far_ours = comparison["ours"]["false_alarm_report"]
+        print("      ours: unfrozen dev %s | frozen %s | frozen FAR %s | pooled %s"
+              % (far_ours["mean_worst_bin_deviation_unfrozen"],
+                 far_ours["frozen_point_fraction"],
+                 far_ours["far_frozen_points"],
+                 far_ours["far_pooled_points"]))
+
+        check("T6 protocol recorded in the summary",
+              ev.get("false_alarm_protocol", {}).get("version") is not None,
+              "keys: %s" % sorted(ev))
+        check("T6 every method carries a false-alarm report block",
+              all("false_alarm_report" in e for e in comparison.values()),
+              "missing on: %s" % [k for k, e in comparison.items()
+                                  if "false_alarm_report" not in e])
+        check("T6 the three numbers are present together for our method",
+              all(k in far_ours for k in ("mean_worst_bin_deviation_unfrozen",
+                                          "frozen_point_fraction",
+                                          "far_frozen_points")),
+              "keys: %s" % sorted(far_ours))
+        check("T6 our freeze state was read from our own output",
+              far_ours["freeze_state_available"] is True)
+        check("T6 our frozen fraction is measured, not assumed",
+              far_ours["frozen_point_fraction"] is not None
+              and far_ours["n_calibrated_points"] > 0,
+              "got %s over %s points" % (far_ours["frozen_point_fraction"],
+                                         far_ours["n_calibrated_points"]))
+        check("T6 the pooled rate rebuilds from the three, for every method",
+              all(e["false_alarm_report"]["pooled_reconstruction"]["exhaustive"]
+                  for e in comparison.values()),
+              "residuals: %s" % {k: e["false_alarm_report"]
+                                 ["pooled_reconstruction"]["abs_residual"]
+                                 for k, e in comparison.items()})
+        # Freeze-on-Alert is on by default, and the fixture faults two of
+        # the four cases -- but the false-alarm figures are computed on the
+        # NORMAL cases only, where a freeze means a genuine false alarm ran
+        # long enough to raise a work order. Assert the plumbing carries
+        # whatever fraction that is, not that it is non-zero.
+        check("T6 baselines declare no freeze mechanism rather than 0% frozen",
+              all(comparison[m]["false_alarm_report"]["freeze_state_available"]
+                  is False for m in ("aci", "dtaci", "static", "w1acas")),
+              "got %s" % {m: comparison[m]["false_alarm_report"]
+                          ["freeze_state_available"]
+                          for m in ("aci", "dtaci", "static", "w1acas")})
+        check("T6 and say why in words, so the reader is not left to infer it",
+              all("structural" in comparison[m]["false_alarm_report"]["reporting_rule"]
+                  for m in ("aci", "dtaci", "static")))
+        check("T6 a baseline's unfrozen figure equals its pooled figure",
+              all(comparison[m]["false_alarm_report"]["far_unfrozen_points"]
+                  == comparison[m]["false_alarm_report"]["far_pooled_points"]
+                  for m in ("aci", "dtaci", "static")))
+
+        with open(os.path.join(eval_dir, "comparison.md"), encoding="utf-8") as f:
+            md = f.read()
+        check("T6 the rendered table names the unfrozen column",
+              "worst-bin dev (unfrozen)" in md)
+        check("T6 and prints the frozen fraction next to it, not elsewhere",
+              "worst-bin dev (unfrozen) | frozen % |" in md,
+              "header: %s" % md.split("\n")[2][:120])
+        check("T6 and explains the protocol under the table",
+              "three numbers, not one" in md)
+        check("T6 a method with no freeze mechanism renders as em dash, not 0%",
+              any(line.startswith("| static |") and "| — | — |" in line
+                  for line in md.split("\n")),
+              "static row: %s" % [l for l in md.split("\n")
+                                  if l.startswith("| static |")])
 
     print("\n%d checks, %d failed" % (checks, len(failures)))
     if failures:

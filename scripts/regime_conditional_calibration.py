@@ -54,6 +54,13 @@ alarm state, and whether the calibrator was frozen. Plus per-bin
 false-alarm rates and the worst-bin deviation, which is the paper's primary
 metric.
 
+False-alarm figures are reported as THREE numbers, not one -- the unfrozen
+worst-bin deviation, the frozen point fraction, and the frozen false-alarm
+rate. Mechanism 3 below stops calibration while an alarm stands, so the
+frozen points are selected by the very quantity a pooled rate measures.
+Ratified 2026-08-17 (R24); the reasoning is in per_bin_false_alarm_rates
+and the measurements in docs/FREEZE_LOCKIN_FINDINGS.md.
+
 USAGE
 -----
     python3 regime_conditional_calibration.py \\
@@ -79,6 +86,11 @@ from collections import deque
 from datetime import datetime, timezone
 
 METHOD_VERSION = "rcc-v1.0"
+
+# Evaluation protocol for false-alarm figures, ratified 2026-08-17 (R24).
+# The pooled rate is still emitted, but never as the headline number on its
+# own; see per_bin_false_alarm_rates for why one number cannot carry it.
+FAR_REPORT_PROTOCOL = "three-number-far-v1.0"
 
 # Parameter protocol v1.0 section 3, signed off 2026-08-11.
 REGIME_BINS = [
@@ -314,25 +326,99 @@ def run_stream(scores, winds, alpha, window, min_bin_samples,
     return records, diagnostics
 
 
+def _far_of(points):
+    """Exceedance rate over already-filtered calibrated points."""
+    if not points:
+        return None
+    return sum(r["exceed"] for r in points) / len(points)
+
+
 def per_bin_false_alarm_rates(records, alpha):
     """False-alarm rate inside each regime bin, plus the worst-bin deviation.
 
     Only calibrated points count. A bin that never reached the minimum
     sample count reports None rather than 0, because "no alarms because we
-    could not judge" is not the same as "no alarms because none were due"."""
+    could not judge" is not the same as "no alarms because none were due".
+
+    THE THREE-NUMBER REPORT -- R24, ratified 2026-08-17
+    ---------------------------------------------------
+    A single pooled false-alarm rate is not an honest ruler for a calibrator
+    that gates its own updates on its own alarm state. While an alarm stands
+    the method deliberately stops calibrating in order to keep the
+    detection, so the frozen points are selected BY the quantity being
+    measured: the 6-of-18 entry condition is "at least 6 of the last 18
+    points exceeded", i.e. a local exceedance rate >= 1/3. An exceedance
+    rate measured on a sub-population chosen by its exceedance rate cannot
+    come out at alpha, and does not -- 0.68 to 0.77 across a 50x sweep of
+    alpha, while the frozen fraction moves 47x. That is conditioning on the
+    outcome, not a calibration failure, and no absorption rule reaches it:
+    six were falsified in docs/FREEZE_LOCKIN_FINDINGS.md section 3.
+
+    So the report is three numbers, never one:
+
+      worst_bin_deviation_unfrozen   the conditional-coverage claim itself
+      frozen_point_fraction          what the method costs, first-class
+      far_frozen                     lets the reader rebuild the pooled rate
+
+    The second number is the guardrail that stops the first from becoming a
+    self-serving definition. It is therefore computed in the same block as
+    the first and returned with it; there is no path through this function
+    that yields the unfrozen figure without the fraction beside it.
+    `pooled_reconstruction` re-derives the pooled rate from the three and
+    records the residual, so the partition can be checked rather than
+    trusted.
+
+    Records with no `frozen` key are treated as never frozen, which is the
+    truth for any method that has no freeze mechanism at all. That case
+    reports freeze_state_available: false, so a 0% frozen fraction meaning
+    "no such mechanism" is never read as a measured "mechanism that never
+    fired".
+    """
+    calibrated = [r for r in records if r["exceed"] is not None]
+    has_state = any("frozen" in r for r in records)
+    frozen = [r for r in calibrated if r.get("frozen")]
+    unfrozen = [r for r in calibrated if not r.get("frozen")]
+
     rates = {}
+    rates_unfrozen = {}
     for name in BIN_NAMES:
-        points = [r for r in records if r["regime_bin"] == name and r["exceed"] is not None]
+        points = [r for r in calibrated if r["regime_bin"] == name]
         if not points:
             rates[name] = {"n": 0, "far": None,
                            "note": "bin never reached the minimum sample count"}
-            continue
-        far = sum(r["exceed"] for r in points) / len(points)
-        rates[name] = {"n": len(points), "far": far, "deviation": abs(far - alpha)}
+        else:
+            far = _far_of(points)
+            rates[name] = {"n": len(points), "far": far,
+                           "deviation": abs(far - alpha)}
+
+        free = [r for r in points if not r.get("frozen")]
+        if not free:
+            rates_unfrozen[name] = {
+                "n": 0, "far": None,
+                "note": "no calibrated point in this bin was outside a freeze"}
+        else:
+            far_u = _far_of(free)
+            rates_unfrozen[name] = {"n": len(free), "far": far_u,
+                                    "deviation": abs(far_u - alpha)}
 
     observed = [v["deviation"] for v in rates.values() if v.get("deviation") is not None]
-    all_points = [r for r in records if r["exceed"] is not None]
-    marginal = (sum(r["exceed"] for r in all_points) / len(all_points)) if all_points else None
+    observed_u = [v["deviation"] for v in rates_unfrozen.values()
+                  if v.get("deviation") is not None]
+
+    marginal = _far_of(calibrated)
+    far_frozen = _far_of(frozen)
+    far_unfrozen = _far_of(unfrozen)
+    fraction = (len(frozen) / len(calibrated)) if calibrated else None
+
+    # Rebuild the pooled rate from the three reported numbers. If this ever
+    # stops matching, the partition is not exhaustive and the three numbers
+    # no longer stand in for the pooled one -- which is the entire premise
+    # of reporting them instead of it.
+    rebuilt = None
+    if fraction is not None and far_unfrozen is not None:
+        rebuilt = (1.0 - fraction) * far_unfrozen + fraction * (far_frozen or 0.0)
+    residual = (abs(rebuilt - marginal)
+                if rebuilt is not None and marginal is not None else None)
 
     return {
         "alpha": alpha,
@@ -345,6 +431,35 @@ def per_bin_false_alarm_rates(records, alpha):
             "worst_bin_deviation is the paper's primary metric. marginal_deviation "
             "is what a non-conditional method optimises; the gap between them is the "
             "quantity this method exists to close."),
+        "three_number_report": {
+            "protocol": FAR_REPORT_PROTOCOL,
+            "freeze_state_available": has_state,
+            "worst_bin_deviation_unfrozen": max(observed_u) if observed_u else None,
+            "frozen_point_fraction": fraction,
+            "far_frozen": far_frozen,
+            "far_unfrozen": far_unfrozen,
+            "far_pooled": marginal,
+            "per_bin_unfrozen": rates_unfrozen,
+            "n_calibrated_points": len(calibrated),
+            "n_frozen_points": len(frozen),
+            "n_exceed_frozen": sum(r["exceed"] for r in frozen),
+            "n_exceed_unfrozen": sum(r["exceed"] for r in unfrozen),
+            "n_bins_evaluable_unfrozen": len(observed_u),
+            "pooled_reconstruction": {
+                "from_three_numbers": rebuilt,
+                "measured": marginal,
+                "abs_residual": residual,
+                "exhaustive": (residual is not None and residual <= 1e-9),
+            },
+            "note": (
+                "report all three or none. The frozen fraction is the cost of "
+                "the freeze and the guardrail on the unfrozen figure; without "
+                "it the unfrozen rate is a self-serving definition."
+                if has_state else
+                "this method has no freeze mechanism, so every calibrated point "
+                "is unfrozen and the three numbers collapse onto the pooled "
+                "one. The 0.0 fraction is structural, not measured."),
+        },
     }
 
 

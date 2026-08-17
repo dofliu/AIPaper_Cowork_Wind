@@ -32,6 +32,14 @@ that it fails where it should.
 
   T6  Determinism, as C5 requires.
 
+  T7  The three-number false-alarm report (R24, ratified 2026-08-17). On
+      records whose freeze partition is constructed, the unfrozen rate, the
+      frozen fraction and the frozen rate come back exactly as built, and
+      the pooled rate is reconstructible from them. The fixture is built so
+      that an implementation which ignored freeze state entirely -- the
+      obvious way to get this wrong -- returns 0.109 where 0.050 is due,
+      which every assertion here would catch.
+
     python3 scripts/selftest_regime_conditional.py
 
 Exit code: 0 if every property holds, 1 otherwise.
@@ -234,6 +242,73 @@ def main():
     a, _ = R.run_stream(scores[:8000], winds[:8000], ALPHA, WINDOW, MIN_BIN)
     b, _ = R.run_stream(scores[:8000], winds[:8000], ALPHA, WINDOW, MIN_BIN)
     check("T6 deterministic", a == b)
+
+    # ---------------- T7 the three-number report ----------------
+    # Constructed, not sampled: 1000 unfrozen points with exactly 50
+    # exceedances (0.0500, i.e. alpha on the nose) and 100 frozen points
+    # with exactly 70 (0.7000). Pooling gives 120/1100 = 0.1091, so an
+    # implementation that ignored the freeze partition would report a
+    # deviation of 0.0591 where the calibration layer's own is 0.0000 --
+    # a 0.059 gap, far outside any tolerance below.
+    print("\nT7  false-alarm figures split by freeze state (R24)")
+    built = []
+    for i in range(1000):
+        built.append({"regime_bin": "bin2_4_8", "exceed": 1 if i < 50 else 0,
+                      "frozen": False})
+    for i in range(100):
+        built.append({"regime_bin": "bin2_4_8", "exceed": 1 if i < 70 else 0,
+                      "frozen": True})
+    rep = R.per_bin_false_alarm_rates(built, ALPHA)["three_number_report"]
+    print("      unfrozen %.4f | frozen %.1f%% | frozen FAR %.4f | pooled %.4f"
+          % (rep["far_unfrozen"], 100.0 * rep["frozen_point_fraction"],
+             rep["far_frozen"], rep["far_pooled"]))
+
+    check("T7 the three numbers travel in one block",
+          {"worst_bin_deviation_unfrozen", "frozen_point_fraction",
+           "far_frozen"} <= set(rep),
+          "keys: %s" % sorted(rep))
+    check("T7 unfrozen rate is the constructed 0.0500",
+          abs(rep["far_unfrozen"] - 0.05) < 1e-12,
+          "got %s" % rep["far_unfrozen"])
+    check("T7 frozen fraction is the constructed 100/1100",
+          abs(rep["frozen_point_fraction"] - 100.0 / 1100.0) < 1e-12,
+          "got %s" % rep["frozen_point_fraction"])
+    check("T7 frozen rate is the constructed 0.7000",
+          abs(rep["far_frozen"] - 0.70) < 1e-12, "got %s" % rep["far_frozen"])
+    check("T7 unfrozen worst-bin deviation is zero, pooled is not",
+          rep["worst_bin_deviation_unfrozen"] < 1e-12
+          and abs(rep["far_pooled"] - 0.05) > 0.05,
+          "unfrozen dev %s, pooled %s" % (rep["worst_bin_deviation_unfrozen"],
+                                          rep["far_pooled"]))
+    check("T7 the pooled rate rebuilds from the three numbers",
+          rep["pooled_reconstruction"]["exhaustive"],
+          "residual %s" % rep["pooled_reconstruction"]["abs_residual"])
+    check("T7 freeze state is declared available", rep["freeze_state_available"])
+
+    # No freeze mechanism at all: the three collapse onto one, and that is
+    # said out loud rather than shown as a measured 0% frozen.
+    plain = [{"regime_bin": "bin2_4_8", "exceed": 1 if i < 50 else 0}
+             for i in range(1000)]
+    rep2 = R.per_bin_false_alarm_rates(plain, ALPHA)["three_number_report"]
+    check("T7 a method with no freeze column says so",
+          rep2["freeze_state_available"] is False)
+    check("T7 and its unfrozen rate equals its pooled rate",
+          rep2["far_unfrozen"] == rep2["far_pooled"] == 0.05,
+          "unfrozen %s pooled %s" % (rep2["far_unfrozen"], rep2["far_pooled"]))
+    check("T7 with no frozen rate to report", rep2["far_frozen"] is None)
+    check("T7 and 'structural' stated, so zero is not read as measured",
+          "structural" in rep2["note"])
+
+    # And on the real path: Freeze-on-Alert running over the faulted stream
+    # from T3 must produce a non-empty frozen population that still
+    # reconstructs the pooled rate.
+    live = R.per_bin_false_alarm_rates(frozen_rec, ALPHA)["three_number_report"]
+    check("T7 Freeze-on-Alert produces a measurable frozen fraction",
+          live["frozen_point_fraction"] > 0.0,
+          "got %s" % live["frozen_point_fraction"])
+    check("T7 and the identity still holds on a real run",
+          live["pooled_reconstruction"]["exhaustive"],
+          "residual %s" % live["pooled_reconstruction"]["abs_residual"])
 
     print("\n%d checks, %d failed" % (checks, len(failures)))
     if failures:
