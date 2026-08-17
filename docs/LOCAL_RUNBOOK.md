@@ -45,7 +45,7 @@ python --version
 
 ### 0.3 先跑自我測試（重要）
 
-在碰真實資料之前，先確認**整套**工具在你的環境行為正確。十支測試一次跑完：
+在碰真實資料之前，先確認**整套**工具在你的環境行為正確。十二支測試一次跑完：
 
 ```bash
 for t in scripts/selftest_*.py; do echo "== $t"; python3 "$t" | tail -2; done
@@ -56,7 +56,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：十支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 291 checks。
+**預期**：十二支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **344 checks**。
 
 | 測試 | checks |
 |---|---|
@@ -70,6 +70,8 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_signal_map_builder.py` | 48 |
 | `selftest_unit_consistency.py` | 29 |
 | `selftest_earliness_metric.py` | 28 |
+| `selftest_absorption_policies.py` | 26 |
+| `selftest_freeze_lockin_diagnostic.py` | 27 |
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。
