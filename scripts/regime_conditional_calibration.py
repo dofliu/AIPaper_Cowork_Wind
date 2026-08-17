@@ -70,6 +70,7 @@ No third-party dependencies beyond the Python 3 standard library.
 import argparse
 import csv
 import fnmatch
+import heapq
 import json
 import math
 import os
@@ -138,17 +139,97 @@ def conformal_p_value(buffer_scores, score):
     return (above + 1.0) / (n + 1.0)
 
 
+ABSORPTION_POLICIES = ("freeze", "none", "bin_local", "gated",
+                       "winsor_alpha", "winsor_max")
+
+# The ratified policy. Everything else on this list is an opt-in ablation and
+# must be named explicitly; nothing here changes what a default run does.
+RATIFIED_ABSORPTION = "freeze"
+
+
+def winsorising_cap(buffer_scores, alpha):
+    """Largest value in the buffer that would not itself be an exceedance.
+
+    Exceedance is (above + 1) / (n + 1) <= alpha, so a point with `above`
+    strictly-greater neighbours exceeds iff above <= alpha*(n+1) - 1. The
+    j-th largest element has above = j - 1, so the largest NON-exceeding
+    element is the (k + 2)-th largest, with k = floor(alpha*(n+1) - 1).
+
+    Returns None when the buffer is too small for that element to exist, in
+    which case the caller must not winsorise -- capping against a threshold
+    the buffer cannot express would silently invent one.
+    """
+    n = len(buffer_scores)
+    if n == 0:
+        return None
+    k = int(math.floor(alpha * (n + 1.0) - 1.0))
+    idx = k + 1                      # 0-based index of the (k+2)-th largest
+    if idx < 0 or idx >= n:
+        return None
+    return heapq.nlargest(idx + 1, buffer_scores)[idx]
+
+
 def run_stream(scores, winds, alpha, window, min_bin_samples,
-               freeze_on_alert=True, alarm_of=ALARM_OF, alarm_window=ALARM_WINDOW):
+               freeze_on_alert=True, alarm_of=ALARM_OF, alarm_window=ALARM_WINDOW,
+               absorption=None):
     """The method, over one case. Returns (records, diagnostics).
 
     Each record is a dict per timestamp. Points whose bin is not yet
-    calibratable carry p_value None and take no part in any rate."""
+    calibratable carry p_value None and take no part in any rate.
+
+    `absorption` selects what happens to the reference buffers while a work
+    order alarm stands. It defaults to the ratified Freeze-on-Alert, and
+    `freeze_on_alert=False` keeps meaning the existing "none" ablation, so
+    every existing caller behaves exactly as before.
+
+      freeze      ratified: no bin absorbs anything while an alarm stands.
+      none        ablation: absorb regardless. Measures self-masking.
+      bin_local   ablation: withhold absorption only in bins that fed an
+                  exceedance into the window that raised the alarm. Tests
+                  whether the alarm is freezing bins that never saw it.
+      gated       ablation: absorb only points that did not themselves
+                  exceed. The "partial absorption" direction, in its most
+                  literal reading.
+      winsor_alpha
+                  ablation: absorb every point, but cap an exceeding point at
+                  the bin's current non-exceeding maximum, i.e. the alpha
+                  threshold itself. No free parameter -- the cap is the alpha
+                  the protocol already fixes. Predicted to lock in anyway:
+                  once the buffer fills with capped values the threshold is
+                  its own fixed point. Included because that prediction is
+                  worth measuring rather than asserting.
+
+      winsor_max  ablation: same, but cap at the bin's running MAXIMUM instead
+                  of its alpha threshold. The difference is the recovery
+                  envelope. A benign operating shift usually stays inside the
+                  historical envelope, so its points enter unmodified and the
+                  buffer recalibrates; a developing fault leaves the envelope,
+                  so its magnitude is clipped and can never lift the
+                  threshold onto itself. The discriminator is physical --
+                  has the machine gone somewhere it has never been -- and it
+                  costs no new parameter.
+
+    Only the alarm-time behaviour differs. Outside an alarm every policy
+    absorbs the raw score, which is what makes this a drop-in comparison
+    against the ratified one rather than five different methods.
+    """
+    if absorption is None:
+        absorption = RATIFIED_ABSORPTION if freeze_on_alert else "none"
+    if absorption not in ABSORPTION_POLICIES:
+        raise ValueError("unknown absorption policy %r; expected one of %s"
+                         % (absorption, ", ".join(ABSORPTION_POLICIES)))
+
     buffers = {name: deque(maxlen=window) for name in BIN_NAMES}
     exceed_history = deque(maxlen=alarm_window)
+    # Which bin each exceedance in the alarm window came from. Only bin_local
+    # reads it, but it is maintained unconditionally so the two policies see
+    # identical state up to the branch below.
+    bin_history = deque(maxlen=alarm_window)
     records = []
     alarm_active = False
     n_frozen_steps = 0
+    n_winsorised = 0
+    n_gated_out = 0
 
     for score, wind in zip(scores, winds):
         bin_name = regime_of(wind)
@@ -163,6 +244,7 @@ def run_stream(scores, winds, alpha, window, min_bin_samples,
 
         buffer_scores = buffers[bin_name]
         record["bin_n"] = len(buffer_scores)
+        exceed = None
 
         if len(buffer_scores) >= min_bin_samples:
             p = conformal_p_value(buffer_scores, score)
@@ -170,16 +252,48 @@ def run_stream(scores, winds, alpha, window, min_bin_samples,
             exceed = 1 if p <= alpha else 0
             record["exceed"] = exceed
             exceed_history.append(exceed)
+            bin_history.append(bin_name)
             if len(exceed_history) == alarm_window:
                 alarm_active = sum(exceed_history) >= alarm_of
             record["work_order_alarm"] = alarm_active
 
-        # Freeze-on-Alert: hold the reference while an alarm stands, so a
-        # progressive fault cannot be absorbed as the new normal.
-        frozen = freeze_on_alert and alarm_active
+        # While an alarm stands the reference is protected, so that a
+        # progressive fault cannot be absorbed as the new normal. What
+        # "protected" means is the policy under test.
+        admitted = score
+        if not alarm_active:
+            frozen = False
+        elif absorption == "freeze":
+            frozen = True
+        elif absorption == "none":
+            frozen = False
+        elif absorption == "bin_local":
+            trigger_bins = set(b for b, e in zip(bin_history, exceed_history) if e == 1)
+            frozen = bin_name in trigger_bins
+        elif absorption == "gated":
+            frozen = exceed == 1
+            if frozen:
+                n_gated_out += 1
+        else:   # winsor_alpha | winsor_max
+            # Only a point the calibrator itself judged to be an exceedance is
+            # ever clipped. A bin still below the minimum sample count has no
+            # verdict to act on, so its points enter untouched -- clipping
+            # against a threshold that bin cannot yet express would be the
+            # calibrator guessing, which rule D4 exists to forbid.
+            if exceed != 1:
+                cap = None
+            elif absorption == "winsor_alpha":
+                cap = winsorising_cap(buffer_scores, alpha)
+            else:
+                cap = max(buffer_scores) if buffer_scores else None
+            if cap is not None and score > cap:
+                admitted = cap
+                n_winsorised += 1
+            frozen = False
+
         record["frozen"] = frozen
         if not frozen:
-            buffer_scores.append(score)
+            buffer_scores.append(admitted)
         else:
             n_frozen_steps += 1
 
@@ -192,6 +306,9 @@ def run_stream(scores, winds, alpha, window, min_bin_samples,
             1 for r in records
             if r["p_value"] is None and r["regime_bin"] is not None and r["score"] is not None),
         "n_frozen_steps": n_frozen_steps,
+        "absorption_policy": absorption,
+        "n_winsorised_admissions": n_winsorised,
+        "n_gated_out": n_gated_out,
         "final_bin_sizes": {name: len(buffers[name]) for name in BIN_NAMES},
     }
     return records, diagnostics
@@ -273,7 +390,8 @@ def process_dir(args):
         winds = [to_float(r.get(args.wind_col)) for r in rows]
         records, diagnostics = run_stream(
             scores, winds, args.alpha, args.window, args.min_bin_samples,
-            freeze_on_alert=not args.no_freeze_on_alert)
+            freeze_on_alert=not args.no_freeze_on_alert,
+            absorption=args.absorption)
 
         case_id = os.path.splitext(os.path.basename(path))[0]
         out_path = os.path.join(args.output_dir, case_id + ".csv")
@@ -315,6 +433,12 @@ def process_dir(args):
             "regime_bins": BIN_NAMES,
             "work_order_rule": "%d of last %d" % (ALARM_OF, ALARM_WINDOW),
             "freeze_on_alert": not args.no_freeze_on_alert,
+            "absorption_policy": (args.absorption if args.absorption is not None
+                                  else (RATIFIED_ABSORPTION
+                                        if not args.no_freeze_on_alert else "none")),
+            "absorption_policy_is_ratified": (
+                args.absorption in (None, RATIFIED_ABSORPTION)
+                and not args.no_freeze_on_alert),
         },
         "parameter_source": "【已簽核】參數凍結協定 v1.0, 劉老師 2026-08-11",
         "n_cases": len(report),
@@ -347,7 +471,17 @@ def main():
     ap.add_argument("--min-bin-samples", type=int, default=DEFAULT_MIN_BIN_SAMPLES)
     ap.add_argument("--no-freeze-on-alert", action="store_true",
                     help="Ablation: disable Freeze-on-Alert to measure self-masking")
+    ap.add_argument("--absorption", choices=ABSORPTION_POLICIES, default=None,
+                    help=("Ablation: what the reference buffers do while an alarm "
+                          "stands. Unset means the ratified '%s'. Any other value "
+                          "is an unratified experiment and is recorded as such in "
+                          "rcc_summary.json." % RATIFIED_ABSORPTION))
     args = ap.parse_args()
+    if args.absorption is not None and args.no_freeze_on_alert:
+        print("--absorption and --no-freeze-on-alert both set; they name the same "
+              "knob and would contradict each other. Use --absorption none.",
+              file=sys.stderr)
+        return 2
     if not os.path.isdir(args.score_dir):
         print("score dir not found: %s" % args.score_dir, file=sys.stderr)
         return 3
