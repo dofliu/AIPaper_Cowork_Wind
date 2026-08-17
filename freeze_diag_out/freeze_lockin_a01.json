@@ -1,0 +1,1075 @@
+{
+  "diagnostic_version": "freeze-lockin-diag-v1.0",
+  "generated_at_utc": "2026-08-17T09:36:39.495432+00:00",
+  "alpha": 0.01,
+  "source_dir": "./experiments/MD_2022_a01_ours",
+  "excluded_cases": [
+    "32",
+    "56",
+    "72",
+    "87"
+  ],
+  "trimmed_cases": {
+    "93": "2023-08-24T13:00:00"
+  },
+  "trim_rows_dropped": {
+    "93": 18
+  },
+  "n_cases_normal": 47,
+  "n_cases_anomaly": 44,
+  "skipped": {
+    "excluded": [
+      "32",
+      "56",
+      "72",
+      "87"
+    ],
+    "unlabelled": [],
+    "not_a_case": []
+  },
+  "normal": {
+    "alpha": 0.01,
+    "n_calibrated": 2490340,
+    "far_pooled": 0.044456981777588604,
+    "far_unfrozen": 0.011337220967881605,
+    "far_frozen": 0.6818747205398155,
+    "frozen_share_of_calibrated": 0.04939285398780889,
+    "n_frozen_calibrated": 123005,
+    "n_unfrozen_calibrated": 2367335,
+    "collateral": {
+      "n_collateral": 35417,
+      "n_attributed": 87588,
+      "collateral_share_of_frozen": 0.2879313849030527,
+      "far_collateral": 0.6284834966259141,
+      "far_attributed": 0.7034639448326254,
+      "note": "collateral = frozen calibrated points in a bin that fed no exceedance into the 6-of-18 window that started the freeze"
+    },
+    "staleness": {
+      "0-18": {
+        "n": 46563,
+        "far": 0.5894164894873613
+      },
+      "18-36": {
+        "n": 22524,
+        "far": 0.6062422305096785
+      },
+      "36-144": {
+        "n": 32865,
+        "far": 0.7144682793245094
+      },
+      "144-288": {
+        "n": 9327,
+        "far": 0.8929988206282835
+      },
+      "288-576": {
+        "n": 6880,
+        "far": 0.9280523255813954
+      },
+      "576-inf": {
+        "n": 4846,
+        "far": 0.944903012794057
+      }
+    },
+    "horizons": {
+      "36": {
+        "runs_longer_than_d": 882,
+        "frozen_rows_beyond_d": 55708,
+        "share_of_frozen_rows_released": 0.4436445300989894
+      },
+      "144": {
+        "runs_longer_than_d": 114,
+        "frozen_rows_beyond_d": 21550,
+        "share_of_frozen_rows_released": 0.17161879126217458
+      },
+      "288": {
+        "runs_longer_than_d": 44,
+        "frozen_rows_beyond_d": 11877,
+        "share_of_frozen_rows_released": 0.09458544704505092
+      },
+      "576": {
+        "runs_longer_than_d": 14,
+        "frozen_rows_beyond_d": 4851,
+        "share_of_frozen_rows_released": 0.03863214646927188
+      },
+      "1152": {
+        "runs_longer_than_d": 3,
+        "frozen_rows_beyond_d": 963,
+        "share_of_frozen_rows_released": 0.0076690903009500756
+      },
+      "4320": {
+        "runs_longer_than_d": 0,
+        "frozen_rows_beyond_d": 0,
+        "share_of_frozen_rows_released": 0.0
+      }
+    },
+    "horizon_caveat": "static counterfactual over the observed trajectory; cutting a freeze changes every later buffer, p-value and alarm, so these are an upper bound on what a circuit breaker could release, not a prediction",
+    "per_bin": {
+      "bin1_lt_4": {
+        "n": 501412,
+        "far": 0.048650610675452524,
+        "n_frozen": 29339,
+        "frozen_share": 0.05851275996585642,
+        "far_frozen": 0.6588159105627323,
+        "far_unfrozen": 0.01072927280314697
+      },
+      "bin2_4_8": {
+        "n": 1033686,
+        "far": 0.04378118693684543,
+        "n_frozen": 45880,
+        "frozen_share": 0.044384851879584325,
+        "far_frozen": 0.7367480383609416,
+        "far_unfrozen": 0.011595394237330001
+      },
+      "bin3_8_12": {
+        "n": 590160,
+        "far": 0.037252609461840856,
+        "n_frozen": 23317,
+        "frozen_share": 0.03950962450860784,
+        "far_frozen": 0.6671098340266758,
+        "far_unfrozen": 0.011343528984216087
+      },
+      "bin4_ge_12": {
+        "n": 365082,
+        "far": 0.05225675327734591,
+        "n_frozen": 24469,
+        "frozen_share": 0.06702329887532116,
+        "far_frozen": 0.6207037475990028,
+        "far_unfrozen": 0.011420585826142866
+      }
+    }
+  },
+  "anomaly_geometry_only": {
+    "n_freeze_runs": 2979,
+    "run_length_quantiles": {
+      "0.5": 22,
+      "0.9": 80,
+      "0.95": 128,
+      "0.99": 356,
+      "1.0": 2164
+    },
+    "frozen_share_of_calibrated": 0.053724590915931375,
+    "note": "rates on anomaly cases are omitted on purpose: an exceedance there can be a true positive"
+  },
+  "run_length_quantiles_normal": {
+    "0.5": 22,
+    "0.9": 76,
+    "0.95": 123,
+    "0.99": 370,
+    "1.0": 1712
+  },
+  "mean_run_length_normal": 41.510413223140496,
+  "per_case": {
+    "0": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 52986,
+      "n_frozen_rows": 2932,
+      "n_freeze_runs": 70,
+      "max_run_length": 534,
+      "far_frozen": 0.6862210095497954,
+      "far_unfrozen": 0.011947097135094098
+    },
+    "1": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51566,
+      "n_frozen_rows": 2928,
+      "n_freeze_runs": 62,
+      "max_run_length": 458,
+      "far_frozen": 0.7312820512820513,
+      "far_unfrozen": 0.011348450895335212
+    },
+    "10": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 51578,
+      "n_frozen_rows": 3441,
+      "n_freeze_runs": 87,
+      "max_run_length": 723,
+      "far_frozen": 0.7073241902538664,
+      "far_unfrozen": 0.0152437124877988
+    },
+    "11": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53887,
+      "n_frozen_rows": 3376,
+      "n_freeze_runs": 59,
+      "max_run_length": 578,
+      "far_frozen": 0.7311637778563849,
+      "far_unfrozen": 0.01135918527222875
+    },
+    "12": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 54077,
+      "n_frozen_rows": 2541,
+      "n_freeze_runs": 49,
+      "max_run_length": 739,
+      "far_frozen": 0.7761847869374751,
+      "far_unfrozen": 0.010142341853159058
+    },
+    "13": {
+      "label": "normal",
+      "farm": "Wind Farm A",
+      "n_calibrated": 51974,
+      "n_frozen_rows": 2916,
+      "n_freeze_runs": 67,
+      "max_run_length": 866,
+      "far_frozen": 0.6777777777777778,
+      "far_unfrozen": 0.012608465392919705
+    },
+    "14": {
+      "label": "normal",
+      "farm": "Wind Farm A",
+      "n_calibrated": 52194,
+      "n_frozen_rows": 1175,
+      "n_freeze_runs": 36,
+      "max_run_length": 183,
+      "far_frozen": 0.6083617747440273,
+      "far_unfrozen": 0.010426874681509936
+    },
+    "15": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51976,
+      "n_frozen_rows": 2685,
+      "n_freeze_runs": 60,
+      "max_run_length": 541,
+      "far_frozen": 0.7024886877828054,
+      "far_unfrozen": 0.010441164544643581
+    },
+    "16": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51565,
+      "n_frozen_rows": 3257,
+      "n_freeze_runs": 74,
+      "max_run_length": 356,
+      "far_frozen": 0.7098955132145052,
+      "far_unfrozen": 0.01277141851752189
+    },
+    "17": {
+      "label": "normal",
+      "farm": "Wind Farm A",
+      "n_calibrated": 53076,
+      "n_frozen_rows": 3451,
+      "n_freeze_runs": 81,
+      "max_run_length": 723,
+      "far_frozen": 0.7096304917078848,
+      "far_unfrozen": 0.014524869558210278
+    },
+    "18": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 50848,
+      "n_frozen_rows": 2708,
+      "n_freeze_runs": 69,
+      "max_run_length": 344,
+      "far_frozen": 0.6809453471196455,
+      "far_unfrozen": 0.012463647694225177
+    },
+    "19": {
+      "label": "anomaly",
+      "farm": "Wind Farm B",
+      "n_calibrated": 53973,
+      "n_frozen_rows": 2631,
+      "n_freeze_runs": 64,
+      "max_run_length": 585,
+      "far_frozen": 0.6253218884120172,
+      "far_unfrozen": 0.01006912843947873
+    },
+    "2": {
+      "label": "normal",
+      "farm": "Wind Farm B",
+      "n_calibrated": 52719,
+      "n_frozen_rows": 4445,
+      "n_freeze_runs": 78,
+      "max_run_length": 370,
+      "far_frozen": 0.7387243735763098,
+      "far_unfrozen": 0.012352831633180905
+    },
+    "20": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51976,
+      "n_frozen_rows": 3042,
+      "n_freeze_runs": 57,
+      "max_run_length": 490,
+      "far_frozen": 0.7633410672853829,
+      "far_unfrozen": 0.010314753160808023
+    },
+    "21": {
+      "label": "normal",
+      "farm": "Wind Farm B",
+      "n_calibrated": 51508,
+      "n_frozen_rows": 4179,
+      "n_freeze_runs": 87,
+      "max_run_length": 389,
+      "far_frozen": 0.7114785526000479,
+      "far_unfrozen": 0.011893947396218444
+    },
+    "22": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 50376,
+      "n_frozen_rows": 3077,
+      "n_freeze_runs": 69,
+      "max_run_length": 676,
+      "far_frozen": 0.6193628465039305,
+      "far_unfrozen": 0.013323880814862694
+    },
+    "23": {
+      "label": "normal",
+      "farm": "Wind Farm B",
+      "n_calibrated": 52427,
+      "n_frozen_rows": 2599,
+      "n_freeze_runs": 85,
+      "max_run_length": 166,
+      "far_frozen": 0.572463768115942,
+      "far_unfrozen": 0.012654426045692089
+    },
+    "24": {
+      "label": "normal",
+      "farm": "Wind Farm A",
+      "n_calibrated": 53003,
+      "n_frozen_rows": 1810,
+      "n_freeze_runs": 59,
+      "max_run_length": 146,
+      "far_frozen": 0.5966850828729282,
+      "far_unfrozen": 0.011134334772332154
+    },
+    "25": {
+      "label": "normal",
+      "farm": "Wind Farm A",
+      "n_calibrated": 52672,
+      "n_frozen_rows": 1584,
+      "n_freeze_runs": 51,
+      "max_run_length": 145,
+      "far_frozen": 0.5686528497409327,
+      "far_unfrozen": 0.011754811453606634
+    },
+    "26": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 51702,
+      "n_frozen_rows": 3910,
+      "n_freeze_runs": 74,
+      "max_run_length": 472,
+      "far_frozen": 0.7140664961636829,
+      "far_unfrozen": 0.012366086374288585
+    },
+    "27": {
+      "label": "anomaly",
+      "farm": "Wind Farm B",
+      "n_calibrated": 60038,
+      "n_frozen_rows": 5625,
+      "n_freeze_runs": 110,
+      "max_run_length": 1747,
+      "far_frozen": 0.7254865616311399,
+      "far_unfrozen": 0.012115001006533316
+    },
+    "28": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53915,
+      "n_frozen_rows": 2914,
+      "n_freeze_runs": 60,
+      "max_run_length": 340,
+      "far_frozen": 0.7192862045298559,
+      "far_unfrozen": 0.009235113036999275
+    },
+    "29": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52863,
+      "n_frozen_rows": 3085,
+      "n_freeze_runs": 71,
+      "max_run_length": 850,
+      "far_frozen": 0.6758508914100486,
+      "far_unfrozen": 0.012877174655470287
+    },
+    "3": {
+      "label": "normal",
+      "farm": "Wind Farm A",
+      "n_calibrated": 53485,
+      "n_frozen_rows": 3501,
+      "n_freeze_runs": 68,
+      "max_run_length": 722,
+      "far_frozen": 0.7210631609031152,
+      "far_unfrozen": 0.01194334413635818
+    },
+    "30": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 54111,
+      "n_frozen_rows": 4621,
+      "n_freeze_runs": 56,
+      "max_run_length": 2164,
+      "far_frozen": 0.8372646613287167,
+      "far_unfrozen": 0.011214386744796929
+    },
+    "31": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52589,
+      "n_frozen_rows": 3257,
+      "n_freeze_runs": 56,
+      "max_run_length": 746,
+      "far_frozen": 0.776788455634019,
+      "far_unfrozen": 0.010966512608448878
+    },
+    "33": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53869,
+      "n_frozen_rows": 2133,
+      "n_freeze_runs": 63,
+      "max_run_length": 287,
+      "far_frozen": 0.6507042253521127,
+      "far_unfrozen": 0.010147084404414464
+    },
+    "34": {
+      "label": "anomaly",
+      "farm": "Wind Farm B",
+      "n_calibrated": 54550,
+      "n_frozen_rows": 2496,
+      "n_freeze_runs": 78,
+      "max_run_length": 148,
+      "far_frozen": 0.5842062852538276,
+      "far_unfrozen": 0.010716755012675732
+    },
+    "35": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 50612,
+      "n_frozen_rows": 3086,
+      "n_freeze_runs": 64,
+      "max_run_length": 458,
+      "far_frozen": 0.7382419721050925,
+      "far_unfrozen": 0.011803320078268004
+    },
+    "36": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52903,
+      "n_frozen_rows": 3062,
+      "n_freeze_runs": 59,
+      "max_run_length": 544,
+      "far_frozen": 0.7181510710259301,
+      "far_unfrozen": 0.010548943115321842
+    },
+    "37": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51696,
+      "n_frozen_rows": 2439,
+      "n_freeze_runs": 77,
+      "max_run_length": 198,
+      "far_frozen": 0.5910028889806026,
+      "far_unfrozen": 0.014389219247863941
+    },
+    "38": {
+      "label": "normal",
+      "farm": "Wind Farm A",
+      "n_calibrated": 52835,
+      "n_frozen_rows": 1607,
+      "n_freeze_runs": 54,
+      "max_run_length": 176,
+      "far_frozen": 0.6191661481020535,
+      "far_unfrozen": 0.011575700788631217
+    },
+    "39": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51716,
+      "n_frozen_rows": 2707,
+      "n_freeze_runs": 65,
+      "max_run_length": 306,
+      "far_frozen": 0.69473293768546,
+      "far_unfrozen": 0.01105671154630763
+    },
+    "4": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 54403,
+      "n_frozen_rows": 3118,
+      "n_freeze_runs": 80,
+      "max_run_length": 287,
+      "far_frozen": 0.642578125,
+      "far_unfrozen": 0.012468099199314254
+    },
+    "40": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 54152,
+      "n_frozen_rows": 3271,
+      "n_freeze_runs": 66,
+      "max_run_length": 723,
+      "far_frozen": 0.7301684532924961,
+      "far_unfrozen": 0.01416864818126437
+    },
+    "41": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53664,
+      "n_frozen_rows": 2797,
+      "n_freeze_runs": 58,
+      "max_run_length": 977,
+      "far_frozen": 0.7602862254025045,
+      "far_unfrozen": 0.010890719298590498
+    },
+    "42": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 51817,
+      "n_frozen_rows": 3653,
+      "n_freeze_runs": 83,
+      "max_run_length": 723,
+      "far_frozen": 0.7101004464285714,
+      "far_unfrozen": 0.01509340078369581
+    },
+    "43": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52783,
+      "n_frozen_rows": 3726,
+      "n_freeze_runs": 84,
+      "max_run_length": 398,
+      "far_frozen": 0.6569386539606908,
+      "far_unfrozen": 0.012827516439049065
+    },
+    "44": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 61003,
+      "n_frozen_rows": 3188,
+      "n_freeze_runs": 83,
+      "max_run_length": 443,
+      "far_frozen": 0.6609159347553325,
+      "far_unfrozen": 0.011329239816656577
+    },
+    "45": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 51726,
+      "n_frozen_rows": 1329,
+      "n_freeze_runs": 49,
+      "max_run_length": 183,
+      "far_frozen": 0.5949848024316109,
+      "far_unfrozen": 0.011585002975600079
+    },
+    "46": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53032,
+      "n_frozen_rows": 2581,
+      "n_freeze_runs": 49,
+      "max_run_length": 465,
+      "far_frozen": 0.757258064516129,
+      "far_unfrozen": 0.009890805507200506
+    },
+    "47": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51969,
+      "n_frozen_rows": 3306,
+      "n_freeze_runs": 57,
+      "max_run_length": 1708,
+      "far_frozen": 0.7772699573430835,
+      "far_unfrozen": 0.01031076057263746
+    },
+    "48": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53293,
+      "n_frozen_rows": 2994,
+      "n_freeze_runs": 72,
+      "max_run_length": 508,
+      "far_frozen": 0.7100334448160535,
+      "far_unfrozen": 0.012027115678985349
+    },
+    "49": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 50994,
+      "n_frozen_rows": 1552,
+      "n_freeze_runs": 48,
+      "max_run_length": 170,
+      "far_frozen": 0.6340508806262231,
+      "far_unfrozen": 0.010028102949798832
+    },
+    "5": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 50792,
+      "n_frozen_rows": 2404,
+      "n_freeze_runs": 69,
+      "max_run_length": 200,
+      "far_frozen": 0.6232306411323897,
+      "far_unfrozen": 0.012481917751601571
+    },
+    "50": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52646,
+      "n_frozen_rows": 2807,
+      "n_freeze_runs": 58,
+      "max_run_length": 377,
+      "far_frozen": 0.7203757225433526,
+      "far_unfrozen": 0.01068607402061029
+    },
+    "51": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 52185,
+      "n_frozen_rows": 2693,
+      "n_freeze_runs": 68,
+      "max_run_length": 611,
+      "far_frozen": 0.6588861588861589,
+      "far_unfrozen": 0.011559415395130973
+    },
+    "52": {
+      "label": "normal",
+      "farm": "Wind Farm B",
+      "n_calibrated": 53185,
+      "n_frozen_rows": 2420,
+      "n_freeze_runs": 74,
+      "max_run_length": 178,
+      "far_frozen": 0.599058622165169,
+      "far_unfrozen": 0.010855884203901826
+    },
+    "53": {
+      "label": "anomaly",
+      "farm": "Wind Farm B",
+      "n_calibrated": 56578,
+      "n_frozen_rows": 2587,
+      "n_freeze_runs": 81,
+      "max_run_length": 207,
+      "far_frozen": 0.6262705238467553,
+      "far_unfrozen": 0.011366160681229174
+    },
+    "54": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53459,
+      "n_frozen_rows": 2744,
+      "n_freeze_runs": 67,
+      "max_run_length": 597,
+      "far_frozen": 0.6814193056085464,
+      "far_unfrozen": 0.011487470002753845
+    },
+    "55": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53645,
+      "n_frozen_rows": 3097,
+      "n_freeze_runs": 64,
+      "max_run_length": 201,
+      "far_frozen": 0.7246570759451322,
+      "far_unfrozen": 0.01028506001263424
+    },
+    "57": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53009,
+      "n_frozen_rows": 2168,
+      "n_freeze_runs": 55,
+      "max_run_length": 743,
+      "far_frozen": 0.7029520295202952,
+      "far_unfrozen": 0.011132747192226747
+    },
+    "58": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52343,
+      "n_frozen_rows": 3426,
+      "n_freeze_runs": 68,
+      "max_run_length": 982,
+      "far_frozen": 0.7137290167865707,
+      "far_unfrozen": 0.010651539575978941
+    },
+    "59": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52862,
+      "n_frozen_rows": 2391,
+      "n_freeze_runs": 67,
+      "max_run_length": 213,
+      "far_frozen": 0.6107157806613646,
+      "far_unfrozen": 0.012580983892378102
+    },
+    "6": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52865,
+      "n_frozen_rows": 1827,
+      "n_freeze_runs": 49,
+      "max_run_length": 619,
+      "far_frozen": 0.6704980842911877,
+      "far_unfrozen": 0.009835808613190172
+    },
+    "60": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52432,
+      "n_frozen_rows": 2400,
+      "n_freeze_runs": 70,
+      "max_run_length": 392,
+      "far_frozen": 0.6665277198832847,
+      "far_unfrozen": 0.012451781823996163
+    },
+    "61": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53568,
+      "n_frozen_rows": 2337,
+      "n_freeze_runs": 73,
+      "max_run_length": 432,
+      "far_frozen": 0.6311934510986643,
+      "far_unfrozen": 0.010732335551349347
+    },
+    "62": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51416,
+      "n_frozen_rows": 3222,
+      "n_freeze_runs": 52,
+      "max_run_length": 1712,
+      "far_frozen": 0.7884012539184952,
+      "far_unfrozen": 0.010492265582880604
+    },
+    "63": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52533,
+      "n_frozen_rows": 3573,
+      "n_freeze_runs": 71,
+      "max_run_length": 388,
+      "far_frozen": 0.7053378586855908,
+      "far_unfrozen": 0.01162460439827964
+    },
+    "64": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52432,
+      "n_frozen_rows": 2309,
+      "n_freeze_runs": 63,
+      "max_run_length": 251,
+      "far_frozen": 0.6530965786054569,
+      "far_unfrozen": 0.010414380623665781
+    },
+    "65": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53917,
+      "n_frozen_rows": 1554,
+      "n_freeze_runs": 54,
+      "max_run_length": 147,
+      "far_frozen": 0.5958815958815958,
+      "far_unfrozen": 0.009510532246051601
+    },
+    "66": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51031,
+      "n_frozen_rows": 2946,
+      "n_freeze_runs": 71,
+      "max_run_length": 577,
+      "far_frozen": 0.7074431426602343,
+      "far_unfrozen": 0.012154833883936919
+    },
+    "67": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 59489,
+      "n_frozen_rows": 2801,
+      "n_freeze_runs": 73,
+      "max_run_length": 506,
+      "far_frozen": 0.6801142449125313,
+      "far_unfrozen": 0.01121930567315834
+    },
+    "68": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 52358,
+      "n_frozen_rows": 1653,
+      "n_freeze_runs": 54,
+      "max_run_length": 144,
+      "far_frozen": 0.603750756200847,
+      "far_unfrozen": 0.011379548368011045
+    },
+    "69": {
+      "label": "normal",
+      "farm": "Wind Farm A",
+      "n_calibrated": 52813,
+      "n_frozen_rows": 1655,
+      "n_freeze_runs": 52,
+      "max_run_length": 144,
+      "far_frozen": 0.6036253776435045,
+      "far_unfrozen": 0.010966026818874859
+    },
+    "7": {
+      "label": "anomaly",
+      "farm": "Wind Farm B",
+      "n_calibrated": 55866,
+      "n_frozen_rows": 4526,
+      "n_freeze_runs": 87,
+      "max_run_length": 370,
+      "far_frozen": 0.7271314387211367,
+      "far_unfrozen": 0.01199330244149371
+    },
+    "70": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 54038,
+      "n_frozen_rows": 3340,
+      "n_freeze_runs": 71,
+      "max_run_length": 812,
+      "far_frozen": 0.7056886227544911,
+      "far_unfrozen": 0.01185451102607598
+    },
+    "71": {
+      "label": "normal",
+      "farm": "Wind Farm A",
+      "n_calibrated": 52686,
+      "n_frozen_rows": 1880,
+      "n_freeze_runs": 64,
+      "max_run_length": 142,
+      "far_frozen": 0.5504939626783754,
+      "far_unfrozen": 0.013074079899339414
+    },
+    "73": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 52000,
+      "n_frozen_rows": 2183,
+      "n_freeze_runs": 69,
+      "max_run_length": 155,
+      "far_frozen": 0.6020551144325081,
+      "far_unfrozen": 0.011933652901181332
+    },
+    "74": {
+      "label": "normal",
+      "farm": "Wind Farm B",
+      "n_calibrated": 53554,
+      "n_frozen_rows": 2896,
+      "n_freeze_runs": 73,
+      "max_run_length": 610,
+      "far_frozen": 0.6544943820224719,
+      "far_unfrozen": 0.01080739951879462
+    },
+    "75": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53847,
+      "n_frozen_rows": 3404,
+      "n_freeze_runs": 80,
+      "max_run_length": 339,
+      "far_frozen": 0.6686084142394823,
+      "far_unfrozen": 0.012195362216049018
+    },
+    "76": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 50083,
+      "n_frozen_rows": 2672,
+      "n_freeze_runs": 61,
+      "max_run_length": 355,
+      "far_frozen": 0.7047583364556014,
+      "far_unfrozen": 0.01219049225967014
+    },
+    "77": {
+      "label": "anomaly",
+      "farm": "Wind Farm B",
+      "n_calibrated": 59739,
+      "n_frozen_rows": 3885,
+      "n_freeze_runs": 99,
+      "max_run_length": 388,
+      "far_frozen": 0.6515072765072765,
+      "far_unfrozen": 0.012094970567712153
+    },
+    "78": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51144,
+      "n_frozen_rows": 2620,
+      "n_freeze_runs": 59,
+      "max_run_length": 325,
+      "far_frozen": 0.7062643239113827,
+      "far_unfrozen": 0.010818942422618803
+    },
+    "79": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51281,
+      "n_frozen_rows": 2625,
+      "n_freeze_runs": 48,
+      "max_run_length": 341,
+      "far_frozen": 0.7573333333333333,
+      "far_unfrozen": 0.009618546530746465
+    },
+    "8": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52802,
+      "n_frozen_rows": 2604,
+      "n_freeze_runs": 59,
+      "max_run_length": 322,
+      "far_frozen": 0.7115975422427036,
+      "far_unfrozen": 0.010060161759432647
+    },
+    "80": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52865,
+      "n_frozen_rows": 2848,
+      "n_freeze_runs": 51,
+      "max_run_length": 807,
+      "far_frozen": 0.7128571428571429,
+      "far_unfrozen": 0.01082592629581544
+    },
+    "81": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 51799,
+      "n_frozen_rows": 2106,
+      "n_freeze_runs": 50,
+      "max_run_length": 620,
+      "far_frozen": 0.6827166751140396,
+      "far_unfrozen": 0.00951310560751415
+    },
+    "82": {
+      "label": "normal",
+      "farm": "Wind Farm B",
+      "n_calibrated": 52763,
+      "n_frozen_rows": 2221,
+      "n_freeze_runs": 72,
+      "max_run_length": 135,
+      "far_frozen": 0.5929761368752814,
+      "far_unfrozen": 0.01066439792647699
+    },
+    "83": {
+      "label": "normal",
+      "farm": "Wind Farm B",
+      "n_calibrated": 64154,
+      "n_frozen_rows": 3690,
+      "n_freeze_runs": 79,
+      "max_run_length": 1504,
+      "far_frozen": 0.7268292682926829,
+      "far_unfrozen": 0.009410558348769516
+    },
+    "84": {
+      "label": "anomaly",
+      "farm": "Wind Farm A",
+      "n_calibrated": 51772,
+      "n_frozen_rows": 1613,
+      "n_freeze_runs": 59,
+      "max_run_length": 176,
+      "far_frozen": 0.6236825790452573,
+      "far_unfrozen": 0.011842341354492714
+    },
+    "85": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 50410,
+      "n_frozen_rows": 2881,
+      "n_freeze_runs": 47,
+      "max_run_length": 1203,
+      "far_frozen": 0.8006263048016702,
+      "far_unfrozen": 0.010960114439582632
+    },
+    "86": {
+      "label": "normal",
+      "farm": "Wind Farm B",
+      "n_calibrated": 53483,
+      "n_frozen_rows": 2909,
+      "n_freeze_runs": 85,
+      "max_run_length": 217,
+      "far_frozen": 0.6180316586373021,
+      "far_unfrozen": 0.011289716669632441
+    },
+    "88": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53282,
+      "n_frozen_rows": 2957,
+      "n_freeze_runs": 69,
+      "max_run_length": 224,
+      "far_frozen": 0.6554681915654038,
+      "far_unfrozen": 0.01115204817367879
+    },
+    "89": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52570,
+      "n_frozen_rows": 2547,
+      "n_freeze_runs": 57,
+      "max_run_length": 303,
+      "far_frozen": 0.7019685039370078,
+      "far_unfrozen": 0.010853487907255646
+    },
+    "9": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 54029,
+      "n_frozen_rows": 2117,
+      "n_freeze_runs": 57,
+      "max_run_length": 189,
+      "far_frozen": 0.6343882853094001,
+      "far_unfrozen": 0.009631684388965943
+    },
+    "90": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52815,
+      "n_frozen_rows": 3167,
+      "n_freeze_runs": 74,
+      "max_run_length": 192,
+      "far_frozen": 0.6901998710509348,
+      "far_unfrozen": 0.011727314786876672
+    },
+    "91": {
+      "label": "anomaly",
+      "farm": "Wind Farm C",
+      "n_calibrated": 54591,
+      "n_frozen_rows": 2954,
+      "n_freeze_runs": 72,
+      "max_run_length": 281,
+      "far_frozen": 0.6496424923391215,
+      "far_unfrozen": 0.011964223487048438
+    },
+    "92": {
+      "label": "normal",
+      "farm": "Wind Farm A",
+      "n_calibrated": 52067,
+      "n_frozen_rows": 1380,
+      "n_freeze_runs": 50,
+      "max_run_length": 105,
+      "far_frozen": 0.5340579710144927,
+      "far_unfrozen": 0.011758439047487522
+    },
+    "93": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 53846,
+      "n_frozen_rows": 2238,
+      "n_freeze_runs": 64,
+      "max_run_length": 325,
+      "far_frozen": 0.6560538116591929,
+      "far_unfrozen": 0.010248760074395536
+    },
+    "94": {
+      "label": "normal",
+      "farm": "Wind Farm C",
+      "n_calibrated": 52862,
+      "n_frozen_rows": 2360,
+      "n_freeze_runs": 47,
+      "max_run_length": 487,
+      "far_frozen": 0.7195587611370386,
+      "far_unfrozen": 0.010830610830610831
+    }
+  },
+  "text_report": "\n========================================================================\nFreeze-on-Alert lock-in geometry  (alpha=0.01)\n========================================================================\n\nQ1  Freeze run lengths (steps of 10 min), normal cases\n    runs=3025  mean=41.5  p50=22  p90=76  p95=123  p99=370  max=1712\n    anomaly cases for comparison: runs=2979  max=2164\n\nQ0  False-alarm decomposition, normal cases only\n    pooled    FAR=0.0445   n=2490340\n    unfrozen  FAR=0.0113   n=2367335  (95.1% of calibrated)\n    frozen    FAR=0.6819   n=123005  (4.9% of calibrated)\n\nQ2  Collateral freeze: frozen points in bins that fed no exceedance\n    collateral n=35417 (0.2879 of frozen)   FAR=0.6285\n    attributed n=87588                  FAR=0.7035\n\nQ3  Staleness profile inside a freeze (steps since it began)\n    bucket                n        FAR\n    0-18              46563     0.5894\n    18-36             22524     0.6062\n    36-144            32865     0.7145\n    144-288            9327     0.8930\n    288-576            6880     0.9281\n    576-inf            4846     0.9449\n\nQ4  Bounded-freeze counterfactual (upper bound, see caveat)\n    D_max            runs>D      frozen rows>D     released\n    36                  882              55708       0.4436\n    144                 114              21550       0.1716\n    288                  44              11877       0.0946\n    576                  14               4851       0.0386\n    1152                  3                963       0.0077\n    4320                  0                  0       0.0000\n\nPer-bin, normal cases\n    bin                   n       FAR frz share   FAR|frz FAR|unfrz\n    bin1_lt_4        501412    0.0487    0.0585    0.6588    0.0107\n    bin2_4_8        1033686    0.0438    0.0444    0.7367    0.0116\n    bin3_8_12        590160    0.0373    0.0395    0.6671    0.0113\n    bin4_ge_12       365082    0.0523    0.0670    0.6207    0.0114\n",
+  "cli_invocation": "scripts/diagnose_freeze_lockin.py --ours-dir ./experiments/MD_2022_a01_ours --case-metadata ./manifest_out/g3_case_metadata.csv --alpha 0.01 --exclude-cases 32,56,72,87 --trim-case 93=2023-08-24T13:00:00 --output ./freeze_diag_out/freeze_lockin_a01.json"
+}

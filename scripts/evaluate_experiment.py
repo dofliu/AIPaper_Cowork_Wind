@@ -31,6 +31,8 @@ worst_bin_deviation   max over regime bins of |FAR - alpha|, on NORMAL cases
                       detection rather than a false alarm.
 marginal_deviation    |FAR - alpha| pooled. What a marginal method
                       optimises. Reported alongside so the gap is visible.
+false_alarm_report    the three numbers a freezing calibrator has to be
+                      reported with -- see below.
 rolling_deviation     max |FAR - alpha| over rolling windows of W points.
 median_lead_days      median detection lead time on ANOMALY cases only,
                       measured from the first work-order alarm to
@@ -49,6 +51,35 @@ median_lead_missed_0  same median with a missed detection scored as zero
                       computed over a denominator common to every method.
 non_inferiority       lead-time loss against a reference method, checked
                       against the signed-off margin of 2 days.
+
+THE THREE-NUMBER FALSE-ALARM REPORT (R24, ratified 2026-08-17)
+--------------------------------------------------------------
+Our method freezes its calibration buffers while a work order stands, so
+the points it is frozen on are selected by exactly the quantity a pooled
+false-alarm rate measures: the 6-of-18 entry condition IS "at least a third
+of the last 18 points exceeded". Pooling the two populations therefore
+reports the alarm policy under the name of the calibration layer. On the
+2026-08-16 real run at alpha = 0.01 the split is 0.0113 on 95.1% of points
+against 0.6819 on the 4.9% that are frozen, pooling to 0.0445 -- and the
+frozen figure barely moves when alpha moves 50x, which is what identifies
+it as selection rather than staleness.
+
+So every false-alarm figure is emitted as three numbers together:
+
+  worst_bin_deviation_unfrozen  the conditional-coverage claim itself
+  frozen_point_fraction         the cost of the freeze, first-class
+  far_frozen                    so the reader can rebuild the pooled rate
+
+The middle number is the guardrail: it is what stops the first from being a
+self-serving definition, so the evaluator computes and emits the three in
+one block and never the unfrozen figure alone. The pooled rate is still
+recorded, plus a reconstruction residual proving the partition exhaustive.
+
+Freeze state is read from the method's own output (--freeze-state-column,
+default `frozen`). A method that has no such column has no freeze
+mechanism, reports freeze_state_available: false, and its three numbers
+collapse onto the pooled one -- which is the honest comparison, since a
+baseline pays no freeze cost and ours does.
 
 THE DETECTION HORIZON, AND WHY IT IS NOT DEFAULTED
 --------------------------------------------------
@@ -232,19 +263,28 @@ def read_reference(scores_dir, wind_col, timestamp_col, score_glob):
     return reference
 
 
-def read_method(directory, column, mode, alpha):
-    """Point exceedances per case for one method."""
+def read_method(directory, column, mode, alpha, freeze_column=None):
+    """Point exceedances per case for one method, with freeze state.
+
+    Returns {case_id: {"exceeds": [...], "frozen": [...] or None}}. `frozen`
+    is None when the method emits no such column, which is how a method
+    without a freeze mechanism is distinguished from one whose freeze never
+    fired -- the two look identical in every downstream figure otherwise,
+    and only one of them owes the reader a frozen fraction."""
     out = {}
     for path in sorted(glob.glob(os.path.join(directory, "*.csv"))):
         case_id = os.path.splitext(os.path.basename(path))[0]
         with open(path, newline="", encoding="utf-8", errors="replace") as f:
             reader = csv.DictReader(f)
-            if column not in (reader.fieldnames or []):
+            header = reader.fieldnames or []
+            if column not in header:
                 out[case_id] = None
                 continue
-            values = [r.get(column) for r in reader]
-        exceeds = []
-        for v in values:
+            has_freeze = bool(freeze_column) and freeze_column in header
+            rows = [(r.get(column), r.get(freeze_column) if has_freeze else None)
+                    for r in reader]
+        exceeds, frozen = [], ([] if has_freeze else None)
+        for v, fz in rows:
             f = to_float(v)
             if f is None:
                 exceeds.append(None)
@@ -252,23 +292,32 @@ def read_method(directory, column, mode, alpha):
                 exceeds.append(1 if f <= alpha else 0)
             else:
                 exceeds.append(1 if f >= 0.5 else 0)
-        out[case_id] = exceeds
+            if frozen is not None:
+                frozen.append((fz or "").strip() in ("1", "true", "True"))
+        out[case_id] = {"exceeds": exceeds, "frozen": frozen}
     return out
 
 
 def evaluate_case(exceeds, timestamps, winds, alpha, window, event,
-                  detection_horizon_days=None):
+                  detection_horizon_days=None, frozen=None):
     """Metrics for one case under one method.
 
     detection_horizon_days bounds how early an alarm may be and still count
     as a detection. Unset means unbounded, which is the historical
     behaviour and lets an alarm raised long before the fault be scored as
-    early warning -- see the module docstring."""
+    early warning -- see the module docstring.
+
+    frozen is the method's own freeze state per point, or None if it has no
+    freeze mechanism. It partitions the false-alarm figures into the three
+    numbers the protocol requires."""
     alarms = work_order_alarms(exceeds)
 
     records = []
-    for e, w in zip(exceeds, winds):
-        records.append({"regime_bin": R.regime_of(w), "exceed": e})
+    for i, (e, w) in enumerate(zip(exceeds, winds)):
+        rec = {"regime_bin": R.regime_of(w), "exceed": e}
+        if frozen is not None:
+            rec["frozen"] = bool(frozen[i]) if i < len(frozen) else False
+        records.append(rec)
     far = R.per_bin_false_alarm_rates(records, alpha)
     rolling = R.rolling_window_deviation(records, alpha, window)
 
@@ -304,6 +353,9 @@ def evaluate_case(exceeds, timestamps, winds, alpha, window, event,
         "worst_bin_deviation": far["worst_bin_deviation"],
         "marginal_deviation": far["marginal_deviation"],
         "per_bin_far": {k: v.get("far") for k, v in far["per_bin"].items()},
+        # Kept as one block on purpose: the unfrozen deviation must not be
+        # separable from the frozen fraction that qualifies it.
+        "false_alarm_report": far["three_number_report"],
         "rolling_max_deviation": rolling.get("max_deviation"),
         "n_work_order_alarm_points": sum(1 for a in alarms if a),
         "first_alarm": first_alarm.isoformat() if first_alarm else None,
@@ -311,6 +363,92 @@ def evaluate_case(exceeds, timestamps, winds, alpha, window, event,
         "alarm_before_detection_horizon": pre_window_alarm,
         "has_event_window": has_event_window,
         "lead_days": lead_days,
+    }
+
+
+def aggregate_false_alarm_report(cases, alpha):
+    """Roll the per-case three-number reports up over the NORMAL cases.
+
+    Point-pooled, not case-averaged, because the three numbers only stand
+    in for the pooled rate if they share its denominator -- a case-mean of
+    fractions would not reconstruct anything. The case-mean of the unfrozen
+    worst-bin deviation is reported too, since that is the convention the
+    existing comparison table already uses for the pooled figure and the
+    two columns have to be readable side by side.
+
+    Emitted as one block. Splitting the unfrozen deviation out from the
+    frozen fraction is the failure mode the protocol exists to prevent, so
+    there is no accessor here that returns one without the other."""
+    blocks = [c["false_alarm_report"] for c in cases
+              if isinstance(c, dict) and c.get("false_alarm_report")]
+    has_state = any(b.get("freeze_state_available") for b in blocks)
+
+    n_cal = sum(b["n_calibrated_points"] for b in blocks)
+    n_frozen = sum(b["n_frozen_points"] for b in blocks)
+    n_exc_frozen = sum(b["n_exceed_frozen"] for b in blocks)
+    n_exc_unfrozen = sum(b["n_exceed_unfrozen"] for b in blocks)
+    n_unfrozen = n_cal - n_frozen
+
+    fraction = (n_frozen / n_cal) if n_cal else None
+    far_frozen = (n_exc_frozen / n_frozen) if n_frozen else None
+    far_unfrozen = (n_exc_unfrozen / n_unfrozen) if n_unfrozen else None
+    far_pooled = ((n_exc_frozen + n_exc_unfrozen) / n_cal) if n_cal else None
+
+    # Per-bin, pooled over cases, on unfrozen points only.
+    pooled_bins = {}
+    for name in R.BIN_NAMES:
+        n = sum(b["per_bin_unfrozen"][name]["n"] for b in blocks)
+        exc = sum(b["per_bin_unfrozen"][name]["n"]
+                  * b["per_bin_unfrozen"][name]["far"]
+                  for b in blocks if b["per_bin_unfrozen"][name]["far"] is not None)
+        pooled_bins[name] = {
+            "n": n,
+            "far": (exc / n) if n else None,
+            "deviation": abs(exc / n - alpha) if n else None,
+        }
+    devs = [v["deviation"] for v in pooled_bins.values() if v["deviation"] is not None]
+
+    per_case_worst = [b["worst_bin_deviation_unfrozen"] for b in blocks
+                      if b["worst_bin_deviation_unfrozen"] is not None]
+
+    rebuilt = None
+    if fraction is not None and far_unfrozen is not None:
+        rebuilt = (1.0 - fraction) * far_unfrozen + fraction * (far_frozen or 0.0)
+    residual = (abs(rebuilt - far_pooled)
+                if rebuilt is not None and far_pooled is not None else None)
+
+    return {
+        "protocol": R.FAR_REPORT_PROTOCOL,
+        "ratified": "2026-08-17 (R24)",
+        "freeze_state_available": has_state,
+        "mean_worst_bin_deviation_unfrozen": (
+            sum(per_case_worst) / len(per_case_worst) if per_case_worst else None),
+        "frozen_point_fraction": fraction,
+        "far_frozen_points": far_frozen,
+        "far_unfrozen_points": far_unfrozen,
+        "far_pooled_points": far_pooled,
+        "pooled_worst_bin_deviation_unfrozen": max(devs) if devs else None,
+        "per_bin_unfrozen_pooled": pooled_bins,
+        "n_normal_cases": len(blocks),
+        "n_calibrated_points": n_cal,
+        "n_frozen_points": n_frozen,
+        "pooled_reconstruction": {
+            "from_three_numbers": rebuilt,
+            "measured": far_pooled,
+            "abs_residual": residual,
+            "exhaustive": (residual is not None and residual <= 1e-9),
+        },
+        "reporting_rule": (
+            "report the unfrozen deviation, the frozen fraction and the frozen "
+            "rate together. The freeze is a deliberate suspension of calibration "
+            "to protect detection, so a coverage guarantee quoted over frozen "
+            "points measures the alarm policy, not the calibration layer; and the "
+            "unfrozen figure without the fraction beside it is a self-serving "
+            "definition. Pooling remains derivable from the three."
+            if has_state else
+            "this method has no freeze mechanism: every calibrated point is "
+            "unfrozen, so the three numbers collapse onto the pooled rate. The "
+            "0.0 fraction is structural, not a measured absence of freezing."),
     }
 
 
@@ -356,18 +494,20 @@ def run(args):
 
     per_method = {}
     for name, (directory, column, mode) in methods.items():
-        series = read_method(directory, column, mode, args.alpha)
+        series = read_method(directory, column, mode, args.alpha,
+                             freeze_column=args.freeze_state_column)
         per_case = {}
-        for case_id, exceeds in series.items():
+        for case_id, block in series.items():
             if case_id in excluded:
                 continue
             ref = reference.get(case_id)
             if not ref or "error" in ref:
                 per_case[case_id] = {"error": "no reference stream"}
                 continue
-            if exceeds is None:
+            if block is None:
                 per_case[case_id] = {"error": "column %r missing" % column}
                 continue
+            exceeds, frozen = block["exceeds"], block["frozen"]
             n = min(len(exceeds), len(ref["timestamps"]))
 
             # D1/D6 remediation, ratified 2026-08-15. Four cases are excluded
@@ -399,7 +539,8 @@ def run(args):
             per_case[case_id] = evaluate_case(
                 exceeds[:n], ref["timestamps"][:n], ref["winds"][:n],
                 args.alpha, args.window, events.get(case_id),
-                detection_horizon_days=args.detection_horizon_days)
+                detection_horizon_days=args.detection_horizon_days,
+                frozen=(frozen[:n] if frozen is not None else None))
             per_case[case_id]["label"] = labels.get(case_id)
 
         # The research question is explicit about which cases each metric
@@ -415,6 +556,10 @@ def run(args):
 
         worst = _far_pool("worst_bin_deviation")
         marg = _far_pool("marginal_deviation")
+        normal_cases = [v for v in per_case.values()
+                        if isinstance(v, dict) and "error" not in v
+                        and (v.get("label") == "normal" or not labels)]
+        far_report = aggregate_false_alarm_report(normal_cases, args.alpha)
         # Every anomaly case with an event window is a case this method was
         # asked to detect, whether or not it managed to. Keeping the two
         # counts apart is the whole point: median_lead_days is a median over
@@ -453,6 +598,7 @@ def run(args):
                 "comparable with a lower median over all of them."),
             "mean_worst_bin_deviation": (sum(worst) / len(worst)) if worst else None,
             "mean_marginal_deviation": (sum(marg) / len(marg)) if marg else None,
+            "false_alarm_report": far_report,
             "median_lead_days": statistics.median(leads) if leads else None,
             "median_lead_days_missed_as_zero": (
                 statistics.median(leads_missed_zero) if leads_missed_zero else None),
@@ -471,6 +617,7 @@ def run(args):
         entry = {
             "mean_worst_bin_deviation": block["mean_worst_bin_deviation"],
             "mean_marginal_deviation": block["mean_marginal_deviation"],
+            "false_alarm_report": block["false_alarm_report"],
             "median_lead_days": block["median_lead_days"],
             "median_lead_days_missed_as_zero": block["median_lead_days_missed_as_zero"],
             "detection_rate": block["detection_rate"],
@@ -506,6 +653,22 @@ def run(args):
         "work_order_rule": "%d of last %d, applied identically to every method"
                            % (R.ALARM_OF, R.ALARM_WINDOW),
         "reference_method": ref_name,
+        "false_alarm_protocol": {
+            "version": R.FAR_REPORT_PROTOCOL,
+            "ratified": "2026-08-17 (R24)",
+            "freeze_state_column": args.freeze_state_column,
+            "methods_with_freeze_state": sorted(
+                n for n, b in per_method.items()
+                if b["false_alarm_report"]["freeze_state_available"]),
+            "note": (
+                "false-alarm figures are reported as three numbers -- unfrozen "
+                "worst-bin deviation, frozen point fraction, frozen false-alarm "
+                "rate -- because this method suspends calibration while its own "
+                "alarm stands, which selects the frozen points by the quantity a "
+                "pooled rate measures. The pooled rate is still recorded and is "
+                "reconstructible from the three; see per_method[*]"
+                ".false_alarm_report.pooled_reconstruction."),
+        },
         "detection_horizon_days": args.detection_horizon_days,
         "detection_horizon_note": (
             "UNSET: lead time is unbounded and an alarm raised before the fault "
@@ -529,26 +692,63 @@ def run(args):
     with open(os.path.join(args.output_dir, "evaluation.json"), "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
 
-    lines = ["| method | worst-bin dev | marginal dev | detected | "
-             "median lead (d) | lead, miss=0 (d) | lead lost | non-inferior |",
-             "|---|---|---|---|---|---|---|---|"]
-    for name, e in sorted(comparison.items(),
-                          key=lambda kv: (kv[1]["mean_worst_bin_deviation"] is None,
-                                          kv[1]["mean_worst_bin_deviation"])):
+    def _num(value, fmt="%.4f"):
+        return "n/a" if value is None else fmt % value
+
+    # The three false-alarm columns are adjacent and always printed
+    # together. A frozen fraction two columns away from the deviation it
+    # qualifies is the same omission the protocol forbids, just spatial.
+    lines = ["| method | worst-bin dev (unfrozen) | frozen % | FAR frozen | "
+             "pooled dev | detected | median lead (d) | lead, miss=0 (d) | "
+             "lead lost | non-inferior |",
+             "|---|---|---|---|---|---|---|---|---|---|"]
+
+    def _sort_key(kv):
+        far = kv[1]["false_alarm_report"]
+        primary = far["mean_worst_bin_deviation_unfrozen"]
+        return (primary is None, primary if primary is not None else 0.0)
+
+    for name, e in sorted(comparison.items(), key=_sort_key):
+        far = e["false_alarm_report"]
         detected = ("n/a" if e.get("n_anomaly_cases_total") in (None, 0)
                     else "%d/%d (%.0f%%)" % (e["n_cases_with_lead"],
                                              e["n_anomaly_cases_total"],
                                              100.0 * e["detection_rate"]))
-        lines.append("| %s | %s | %s | %s | %s | %s | %s | %s |" % (
+        if far["freeze_state_available"]:
+            frozen_pct = _num(100.0 * far["frozen_point_fraction"], "%.1f%%") \
+                if far["frozen_point_fraction"] is not None else "n/a"
+            far_frozen = _num(far["far_frozen_points"])
+        else:
+            # Not 0.0%: this method has no freeze mechanism, and printing a
+            # measured-looking zero would invite the reader to compare it
+            # against ours as though both had been measured.
+            frozen_pct, far_frozen = "—", "—"
+        lines.append("| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
             name,
-            "n/a" if e["mean_worst_bin_deviation"] is None else "%.4f" % e["mean_worst_bin_deviation"],
-            "n/a" if e["mean_marginal_deviation"] is None else "%.4f" % e["mean_marginal_deviation"],
+            _num(far["mean_worst_bin_deviation_unfrozen"]),
+            frozen_pct,
+            far_frozen,
+            _num(e["mean_marginal_deviation"]),
             detected,
-            "n/a" if e["median_lead_days"] is None else "%.2f" % e["median_lead_days"],
-            "n/a" if e["median_lead_days_missed_as_zero"] is None else "%.2f" % e["median_lead_days_missed_as_zero"],
-            "n/a" if e.get("lead_days_lost_vs_reference") is None else "%.2f" % e["lead_days_lost_vs_reference"],
+            _num(e["median_lead_days"], "%.2f"),
+            _num(e["median_lead_days_missed_as_zero"], "%.2f"),
+            _num(e.get("lead_days_lost_vs_reference"), "%.2f"),
             "" if e.get("non_inferior") is None else ("yes" if e["non_inferior"] else "NO")))
     table = "\n".join(lines)
+
+    far_note = (
+        "**False-alarm figures are three numbers, not one** (protocol %s, "
+        "ratified 2026-08-17). `worst-bin dev (unfrozen)` is the "
+        "conditional-coverage claim; `frozen %%` is what the freeze costs and "
+        "must be read with it; `FAR frozen` lets you rebuild the pooled rate. "
+        "This method suspends calibration while its own work order stands, and "
+        "the 6-of-18 entry condition means the frozen points are selected by a "
+        "local exceedance rate of at least 1/3 -- so a pooled rate over both "
+        "populations reports the alarm policy under the name of the calibration "
+        "layer. A method with no freeze mechanism shows `—`, not 0%%, because "
+        "nothing was measured there. See "
+        "per_method[*].false_alarm_report.pooled_reconstruction for the "
+        "identity check.\n" % R.FAR_REPORT_PROTOCOL)
 
     if args.detection_horizon_days is None:
         horizon_note = (
@@ -567,11 +767,13 @@ def run(args):
         f.write("# Comparison (alpha = %s)\n\n%s\n\n"
                 "Work-order rule %d-of-%d applied identically to every method.\n\n"
                 "%s\n"
+                "%s\n"
                 "`median lead (d)` is a median over DETECTED cases only; read it "
                 "with the `detected` column. `lead, miss=0` scores a missed fault "
                 "as zero days of warning, over one denominator for every method.\n\n"
                 "CARE score and Reliability are not implemented; see missing_metrics.\n"
-                % (args.alpha, table, R.ALARM_OF, R.ALARM_WINDOW, horizon_note))
+                % (args.alpha, table, R.ALARM_OF, R.ALARM_WINDOW, far_note,
+                   horizon_note))
 
     print("\n" + table)
     print("\nWrote %s" % args.output_dir, file=sys.stderr)
@@ -602,6 +804,11 @@ def main():
                          "alarms. Unset = unbounded (previous behaviour), which "
                          "credits pre-onset alarms as early warning. Not "
                          "defaulted on purpose: this is a ratifiable parameter.")
+    ap.add_argument("--freeze-state-column", default="frozen",
+                    help="column in each method's own output carrying its "
+                         "per-point freeze state (default: frozen). Methods "
+                         "that do not emit it have no freeze mechanism and are "
+                         "recorded as such rather than as 0%% frozen.")
     ap.add_argument("--trim-case", action="append",
                     help="CASE_ID=TIMESTAMP. Drop rows at or after TIMESTAMP "
                          "for that case before computing any metric. Repeatable. "
