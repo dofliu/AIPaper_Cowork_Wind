@@ -71,6 +71,34 @@ best.
 The pooled figure is reported alongside the per-regime one specifically so
 that the gap between them is visible rather than argued.
 
+**Three numbers, not one.** The proposed layer suspends its own calibration
+updates while a work order it raised is still open, so a single pooled
+false-alarm rate would average two populations that the method treats
+differently by design. Worse, the two are not independent: a point enters the
+frozen population only when six of the last eighteen points exceeded, so the
+frozen population is selected by the very quantity a false-alarm rate measures.
+A pooled rate over both therefore reports the alarm policy under the name of
+the calibration layer.
+
+The protocol (`three-number-far-v1.0`) is to report, always adjacent and never
+one without the others:
+
+| Number | What it is |
+|---|---|
+| worst-bin deviation on **unfrozen** points | the conditional-coverage claim itself |
+| **fraction of points frozen** | what the freeze costs, in first-class position |
+| FAR on **frozen** points | lets the reader rebuild the pooled rate |
+
+The third number exists to keep the first from becoming a self-serving
+definition: the pooled rate is exactly reconstructible from the three, and the
+evaluator records the reconstruction residual rather than asserting the
+identity. A method with no freeze mechanism reports a dash in the second and
+third columns, not a zero — nothing was measured there, which is not the same
+as a measured zero.
+
+Placing the frozen fraction anywhere but next to the deviation would hide a
+denominator, which is the failure mode this protocol exists to prevent.
+
 **Early detection** — measured on **anomaly cases only**, from the first
 work-order alarm to `event_start`.
 
@@ -154,5 +182,7 @@ that we would be unable to defend.
 1. The value of *H* (Section 4) is undecided.
 2. The CARE metrics and baseline (Section 6) remain unimplemented pending
    full-text acquisition of the source publication.
-3. All reported numbers are from the synthetic fixture; the CARE results
-   section is not yet written.
+3. ~~All reported numbers are from the synthetic fixture; the CARE results
+   section is not yet written.~~ **Resolved 2026-08-18**: the CARE results are
+   in `03_results.md` and the limitations in `04_limitations.md`. The fixture
+   numbers in Section 5 remain fixture numbers and are labelled as such.
