@@ -2,11 +2,25 @@
 """
 Regime-conditional online calibration — this project's proposed method.
 
-Everything else in scripts/ is scaffolding or a baseline. This is the
-contribution.
+Everything else in scripts/ is scaffolding or a baseline. This file is the
+method under study.
 
-THE CLAIM
----------
+WHAT THIS FILE IS, AND IS NOT, IN THE PAPER'S CLAIMS
+----------------------------------------------------
+It is the object of study, not the paper's novelty claim. R25 (ratified
+2026-08-18) repositioned the contribution from "algorithm" to a wind-turbine
+O&M protocol-and-evidence contribution, because generic group-conditional
+online conformal prediction is held by Bharti et al. 2026
+(arXiv:2606.00419v4). The paper therefore claims the evaluation protocol,
+the empirical characterisation, and the falsifications -- not this
+algorithm's originality, and no coverage theorem.
+
+Before writing any claim sentence, read the firewall in
+docs/manuscript/README.md (boundary four) and
+docs/manuscript/00_contribution_statement.md.
+
+WHAT THE METHOD DOES
+--------------------
 A calibration layer wrapped around a frozen anomaly score, using no event
 labels, that holds the false-alarm rate inside each wind-speed operating
 regime rather than only on average, and does so without giving up early
