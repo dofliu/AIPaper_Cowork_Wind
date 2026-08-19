@@ -15,7 +15,9 @@
 | 檔案 | 對應稿件章節 | 狀態 |
 |---|---|---|
 | `01_dataset_and_preprocessing.md` | Section: Dataset and preprocessing | 草稿，數字齊備 |
-| `02_evaluation_protocol.md` | Section: Evaluation protocol | 草稿，**待 H 裁決**才能定稿 |
+| `02_evaluation_protocol.md` | Section: Evaluation protocol | 草稿，**待 H 裁決**才能定稿；2026-08-18 補入 R24 三數字協定 |
+| `03_results.md` | Section: Results | **2026-08-18 新增**，CARE v6 真實數字，兩處 `[PENDING]` |
+| `04_limitations.md` | Section: Limitations | **2026-08-18 新增** |
 
 ---
 
@@ -44,12 +46,25 @@ framework` 皆已被既有文獻佔據（見《研究方向與方法論筆記 v4
 
 ## 還沒寫的段落，以及為什麼
 
-- **Results**：等 Phase 5 的真實數字。現有的非劣性結論只建立在合成資料上
-  （`scripts/diagnose_earliness_gap.py` 的 12 案 fixture），不是 CARE 的結果。
+- ~~**Results**：等 Phase 5 的真實數字。~~ **2026-08-18 已寫**，見
+  `03_results.md` 與 `04_limitations.md`。誤報率欄位取自
+  `experiments/three_number_recheck_2026-08-18/`（以 R24 三數字協定重算），
+  lead-time 欄位仍取自 `experiments/MD_2022_a*_evaluation/`（唯一算得出來的那輪）。
+  **兩個來源必須寫在表註裡**，理由見該重算目錄的 README 第四、五節。
+  兩處 `[PENDING]`（偵測門檻 H、Base Scorer 2）在文中已標示，不是遺漏。
 - **Related work**：CARE 原始論文尚未取得全文（見
   `docs/literature/CARE_PAPER_ACQUISITION.md`），且有一篇 2026-05 的新文獻
   待重疊查核（見同目錄的紅旗文件）。在全文核對完成前寫 related work，
   等於用二手摘要描述別人的方法，這正是 R17 已經禁止的做法。
+
+  **2026-08-18 追加一項，且這一項比前兩項更嚴重**：例行掃描撈到
+  arXiv 2606.00419 *Parameter-Free and Group Conditional Online Conformal
+  Prediction*（2026-06）。前兩項擋住的是 related work，這一項可能擋住
+  **contribution statement**——「group-conditional online conformal
+  prediction」幾乎就是本方法的一句話定義。詳見
+  `docs/literature/LITERATURE_SCAN_2026-08-18.md` 第二節。
+  **在它結案之前，abstract 與 introduction 的貢獻句也不要定稿**，
+  Results 與 Limitations 不受影響（那兩節寫的是量測，不是貢獻主張）。
 
 ---
 
