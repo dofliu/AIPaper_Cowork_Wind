@@ -1,4 +1,4 @@
-# 專案現況與交接 — 2026-08-18
+# 專案現況與交接 — 2026-08-19
 
 **這份文件的用途**：讓任何協作者（含未來的我）不必讀對話紀錄就能接手。
 對話會變長、會被壓縮、會遺失；這份文件在版本控制裡。
@@ -517,6 +517,13 @@ adaptive threshold 用於 **Wind Farm A 與 B**，作法是以神經網路回歸
 - 【2026-08-16 新增】新穎性語彙限制增列第四條：
   `conditional conformal prediction for wind turbines` 不得單獨作為主詞，
   必須寫明條件化的對象（見 **6.6**）
+  → **2026-08-18 的 R25 裁決已訂下更嚴格的 claim firewall**（見 6.7），
+  這一條被涵蓋在內。仍列在此處是因為它本身**尚未被個別追認**，
+  而 R25 firewall 管的是演算法新穎性主張，兩者範圍不完全相同。
+- ~~【2026-08-18】R25 貢獻定位~~
+  **✅ 已裁決 2026-08-18 21:52（改為 protocol-and-evidence，見 6.7）**
+- 【2026-08-19 新增】`docs/method/POGO_COMPATIBILITY_GATE.md` 的執行 owner
+  尚未指派（6.8）。這不是裁決題，是排程題，但沒人認領就不會動。
 
 ### 6.5 【2026-08-17 已裁決並實作】誤報率改為三數字呈報（R24）
 
@@ -612,13 +619,69 @@ arXiv:2606.00419（2026-06）
 **若差異成立，本論文的貢獻應重新定位為「協定與實證」而非「演算法」。**
 這會動到 abstract 的第一句，不只是一段 related work。
 
-**建議列為 R25 裁決請求**，依 R17 程序取得全文後填 Mandatory Overlap Check
-四欄。全文雲端取不到（arXiv 封鎖，本輪已重新實測），**本機約一分鐘可下載**。
-詳見 `docs/literature/LITERATURE_SCAN_2026-08-18.md` 第二節。
+~~**建議列為 R25 裁決請求**~~
+**【2026-08-18 已結案並裁決】重疊成立，貢獻定位已改。**
+
+依 R17 程序取得 arXiv:2606.00419**v4** 全文（另一 session 於 2026-08-18 21:14
+完成，雲端這側的 arXiv 封鎖至 2026-08-19 仍在，見
+`docs/method/POGO_COMPATIBILITY_GATE.md` 第 3 節的實測），填完 Mandatory
+Overlap Check 四欄，劉老師於 **2026-08-18 21:52 正式裁決**：
+
+> 批准 R25 改定位，並建立 POGO compatibility gate。
+
+**R25 狀態：`OVERLAP_CHECK_COMPLETED / CONTRIBUTION_REPOSITIONING_APPROVED`。**
+
+**新的貢獻定位（這是本專案主張邊界的變更，不是措辭調整）：**
+
+| | 舊 | 新 |
+|---|---|---|
+| 貢獻型態 | 演算法 | **wind-turbine O&M protocol-and-evidence contribution** |
+| abstract 第一句落在 | 「我們提出一個 group-conditional 的線上保形校準器」 | 三項協定與實證（見下） |
+
+可守的三項主張是 6.5 的三數字協定、`FREEZE_LOCKIN_FINDINGS` 的鎖死幾何
+（選擇效應）、以及六個吸收政策的否證——都是「協定與實證」而非「演算法」。
+
+**Claim firewall（禁止寫入稿件，已寫進 `docs/manuscript/README.md` 界線四）：**
+first／new group-conditional OCP、parameter-free 最佳化、任何 group-conditional
+coverage guarantee、`regime-aware`／`regime-dependent` 作為主詞、
+以及任何形式的「我們優於／不需要 POGO」（gate 未跑，**反向結論同樣未經檢查**）。
+
+**貢獻句已解凍**（裁決明文允許在 firewall 下起草），
+初稿見 `docs/manuscript/00_contribution_statement.md`（2026-08-19 交付）。
+**Related Work 仍凍結**（6.6 未結案 + POGO gate 未執行）。
 
 同輪另有兩項只需監看、不需裁決：arXiv 2606.20115（開場論證撞車）與一篇
 digital twin 用水預測研究使用 `regime-aware calibration` 一詞（詞彙撞車）。
 兩者都支持**維持** `operating-regime-conditional` 這個主詞、不要簡寫。
+**2026-08-19 掃描再添兩筆 `regime-*` 用法**（CALIBURN 的
+`regime-dependent conformal risk control`、VaR 的 `regime-weighted conformal
+calibration`），三筆獨立用法使這條規範從建議升級為禁止項，
+見 `docs/literature/LITERATURE_SCAN_2026-08-19.md` 第二節。
+
+### 6.8 【2026-08-18 建立】R26 — POGO 相容性 gate（尚未執行）
+
+R25 裁決的第二半：在把 POGO 當成基線比較**之前**，先證明兩個方法的輸入語義、
+group 定義、時間狀態、輸出介面與 O&M 決策語義是同義的。
+**規格正本在 Drive（R26 v1.0），版控版本與可執行部分在
+`docs/method/POGO_COMPATIBILITY_GATE.md`。**
+
+| Gate | 狀態（2026-08-19） |
+|---|---|
+| G0 source/version receipt | **`BLOCKED_IMPLEMENTATION`（雲端）** — 論文全文 arXiv `000`；作者程式端點可達但第三方 repo 不在本 session 授權範圍，未讀取 |
+| G1 輸入語義、G2 group、G4 輸出介面 | **本研究這一欄已填**（出自 `regime_conditional_calibration.py`）；POGO 那一欄 NOT RUN |
+| G3 狀態／重置／時間 | 本研究側已述；待對照 |
+| G5–G8 | NOT RUN |
+
+**已預告的紅旗（標記，不是結案）**：POGO 以 `Y_t` 與 prediction set 為中心，
+本研究**沒有 `Y_t`**（校準層不使用事件標籤）。若必須虛構 `Y_t` 才能讓 POGO
+產出同義的 alarm event，依 stop rule 應判 `NOT_COMPARABLE`。
+**判定要有全文與程式為據**，所以這裡只記「預期會撞到哪裡」。
+
+**下一個可執行動作**：本機取得全文與作者程式完成 G0 → 填 POGO 那一欄 →
+mapping 成立才寫 adapter。**先填表再寫 adapter**：mapping 不成立的話
+adapter 是白工，而且寫完之後人會捨不得丟。
+
+**執行 owner：TBD**（R26 第 8 節，截至 2026-08-19 未指派）。
 
 ---
 
@@ -670,10 +733,23 @@ digital twin 用水預測研究使用 `regime-aware calibration` 一詞（詞彙
    跑完請確認 `evaluation.json` 有 `false_alarm_protocol` 欄位，
    且 `comparison.md` 表頭含 `frozen %` 與 `FAR frozen`。
 
-8. **【2026-08-18 新增】下載三份全文**（雲端全部封鎖，本機各約一分鐘）：
-   · arXiv 2606.00419（6.7 的紅旗，最優先）
+8. **【2026-08-18 新增，2026-08-19 更新】下載全文與程式**
+   （雲端全部封鎖，2026-08-19 已重新實測，見
+   `docs/method/POGO_COMPATIBILITY_GATE.md` 第 3 節）：
+   · ~~arXiv 2606.00419（6.7 的紅旗，最優先）~~ **✅ 全文已於 2026-08-18
+     由另一 session 取得並完成四欄核對；但 repo 內無副本，且
+     R26 的 source lock 仍需要它，所以下載這件事沒有取消**
+   · **【新】POGO 作者程式 `github.com/beepulbharti/pogo`** — R26 G0 的
+     source receipt（commit SHA、license、dependency lock、SHA-256）。
+     **雲端不做這件事的原因是授權範圍，不是網路**，兩者不要混記。
    · arXiv 2606.20115（監看）
    · CARE 論文期刊版（6.3，步驟見 `CARE_PAPER_ACQUISITION.md` 第四節）
+
+9. **【2026-08-19 新增】CARE v6 的被引用清單掃描。**
+   引用索引 API（crossref／openalex／semanticscholar）雲端全部不可達，
+   兩輪文獻掃描都卡在這一軸。**在它完成之前，稿件不得寫
+   「first on CARE v6」或任何等價的資料集層新穎性主張**——
+   沒掃過，就不知道有沒有人做過。
 
 ### 雲端
 
@@ -716,6 +792,22 @@ digital twin 用水預測研究使用 `regime-aware calibration` 一詞（詞彙
   **✅ 2026-08-18 第一次執行**，記錄在
   `docs/literature/LITERATURE_SCAN_2026-08-18.md`，含已用過的關鍵詞與
   下一輪建議的三個新軸。**這次有新發現**（見 6.7）。
+  **✅ 2026-08-19 第二次執行**，`LITERATURE_SCAN_2026-08-19.md`：
+  無新紅旗；`regime-*` 語彙撞車累積到三筆，該規範升級為禁止項（見 6.7 末）。
+  **三個軸只做到兩個**——CARE v6 被引用清單需引用索引 API，雲端不可達，
+  已移入本機清單。**因此稿件不得寫「first on CARE v6」之類的話。**
+
+- ~~abstract／introduction 的貢獻句凍結~~
+  **✅ 2026-08-19 已解凍並交付初稿**（R25 裁決明文允許在 claim firewall
+  下起草）：`docs/manuscript/00_contribution_statement.md`。
+  三項可守主張、五條禁止寫法、四句 abstract／introduction 草稿，
+  以及五項阻擋定稿的未決事項（H、Base Scorer 2、Phase 5 重跑、
+  C0–C6 追認、Related Work）。**Related Work 仍凍結。**
+
+- **【新】R26 POGO 相容性 gate 的 POGO 那一欄**（見 6.8）。
+  本研究這一欄已填完，等本機取得全文與作者程式。
+  在 G8 回報之前，稿件不得出現任何形式的「我們優於／不需要 POGO」，
+  **也不得出現「POGO 不適用於本問題」**。
 
 ---
 
@@ -729,8 +821,10 @@ digital twin 用水預測研究使用 `regime-aware calibration` 一詞（詞彙
 | 凍結鎖死的量測與候選政策否證 | `docs/FREEZE_LOCKIN_FINDINGS.md`（2026-08-17） |
 | 開發日誌 | Google Drive，`風能運維論文協作開發日誌 v*`（逐次記錄「做了什麼」） |
 | 研究方向與方法論筆記 | Google Drive，v4（待確認是否正式取代 v3） |
-| **手稿英文草稿** | `docs/manuscript/`（2026-08-16 新增，先讀該目錄的 README；2026-08-18 補 Results 與 Limitations） |
-| **文獻取得與新穎性監看** | `docs/literature/`（2026-08-16 新增；2026-08-18 加入例行掃描記錄） |
+| **手稿英文草稿** | `docs/manuscript/`（2026-08-16 新增，先讀該目錄的 README；2026-08-18 補 Results 與 Limitations；2026-08-19 補貢獻句與界線四） |
+| **貢獻定位與 claim firewall** | `docs/manuscript/00_contribution_statement.md` + 該目錄 README 界線四（2026-08-19，依 R25 裁決） |
+| **POGO 相容性 gate** | `docs/method/POGO_COMPATIBILITY_GATE.md`（2026-08-19 進版控；規格正本在 Drive R26） |
+| **文獻取得與新穎性監看** | `docs/literature/`（2026-08-16 新增；2026-08-18 起每次排程記錄一份掃描） |
 | **R24 三數字協定對既有輸出的重算** | `experiments/three_number_recheck_2026-08-18/`（2026-08-18，見 1.0） |
 | **給 Drive 這側的入口說明** | Google Drive，`【必讀】GitHub 專案入口與雙軌分工 v1.0`（2026-08-17） |
 | 程式 | `scripts/`，30 支（實數；先前記的 26 已過期） |
@@ -806,4 +900,4 @@ v3.0 三份，v3.9 兩份。最嚴重的一次是 v4.0 已存在後又出現一�
 
 ---
 
-*最後更新：2026-08-18（Asia/Taipei）。狀態有變動時請更新本文件，不要只寫在對話裡。*
+*最後更新：2026-08-19（Asia/Taipei）。狀態有變動時請更新本文件，不要只寫在對話裡。*

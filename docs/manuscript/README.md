@@ -14,6 +14,7 @@
 
 | 檔案 | 對應稿件章節 | 狀態 |
 |---|---|---|
+| `00_contribution_statement.md` | Abstract／Introduction 的貢獻句 | **2026-08-19 新增**，依 R25 新定位起草 |
 | `01_dataset_and_preprocessing.md` | Section: Dataset and preprocessing | 草稿，數字齊備 |
 | `02_evaluation_protocol.md` | Section: Evaluation protocol | 草稿，**待 H 裁決**才能定稿；2026-08-18 補入 R24 三數字協定 |
 | `03_results.md` | Section: Results | **2026-08-18 新增**，CARE v6 真實數字，兩處 `[PENDING]` |
@@ -21,9 +22,9 @@
 
 ---
 
-## 寫作時必須遵守的三條界線
+## 寫作時必須遵守的四條界線
 
-這三條不是文體偏好，是本專案已經發生過的錯誤所訂下的。
+這四條不是文體偏好，是本專案已經發生過的錯誤（與已經被別人佔走的語彙）所訂下的。
 
 **一、不得寫「C0–C6 通過」。**
 Base Scorer 1 在三個風場都 `gate_status=PASS` 是事實，但
@@ -41,6 +42,27 @@ Farm A 沒有主軸承測點，Base Scorer 2 的範圍只有 Farm B/C。
 anomaly scores`、`SCADA fault detection framework`、`early fault warning
 framework` 皆已被既有文獻佔據（見《研究方向與方法論筆記 v4》第四節）。
 可用的主詞是 `operating-regime-conditional ...` 這一類。
+
+**四、【2026-08-18 劉老師裁決 R25】本文不得主張演算法新穎性。**
+
+貢獻定位已正式由「演算法」改為
+**wind-turbine O&M protocol-and-evidence contribution**。
+這條界線與前三條不同：前三條管的是**怎麼寫**，這一條管的是**能不能寫**。
+
+以下寫法一律禁止，理由是 arXiv:2606.00419v4 的全文核對（R25 四欄）已確認
+該領土屬於既有文獻：
+
+| 禁止 | 說明 |
+|---|---|
+| first／new **group-conditional online conformal prediction** | 已被 Bharti et al. 2026 佔據 |
+| **parameter-free** 線上最佳化（任何變體） | 同上 |
+| 任何形式的 **group-conditional coverage guarantee**（有限樣本或漸近） | 同上；且本文不證明任何定理 |
+| `regime-aware`／`regime-weighted`／`regime-dependent` 作為本文主詞 | 2026 年已有三篇獨立使用 `regime-*` + conformal calibration，見 `docs/literature/LITERATURE_SCAN_2026-08-19.md` |
+| 「我們優於／相當於／不需要 POGO」 | 相容性 gate 尚未執行；**「POGO 不適用於本問題」同樣是未經檢查的結論** |
+
+可以主張的三件事寫在 `00_contribution_statement.md` 第 1 節，
+每一條都有量測支撐。**貢獻句已解凍**（R25 裁決明文允許在此 claim firewall
+下起草），但 Related Work 仍凍結（R23／6.6 未結案）。
 
 ---
 
@@ -63,8 +85,12 @@ framework` 皆已被既有文獻佔據（見《研究方向與方法論筆記 v4
   **contribution statement**——「group-conditional online conformal
   prediction」幾乎就是本方法的一句話定義。詳見
   `docs/literature/LITERATURE_SCAN_2026-08-18.md` 第二節。
-  **在它結案之前，abstract 與 introduction 的貢獻句也不要定稿**，
-  Results 與 Limitations 不受影響（那兩節寫的是量測，不是貢獻主張）。
+
+  **2026-08-19 更新：這一項已結案，結果是「重疊成立」。**
+  R25 依全文完成 Mandatory Overlap Check 四欄，劉老師 2026-08-18 21:52
+  批准改定位。**貢獻句因此解凍，但解凍後能寫的東西變了**——
+  見上方界線四與 `00_contribution_statement.md`。
+  Related Work 仍凍結（R23／6.6 未結案，且 POGO 相容性 gate 未執行）。
 
 ---
 

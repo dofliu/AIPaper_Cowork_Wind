@@ -6,8 +6,10 @@
 
 ## 1. What is being compared, and on what ruler
 
-The contribution is a calibration layer applied on top of a **frozen,
-already-published anomaly detector**. The comparison is therefore between
+The object of study is a calibration layer applied on top of a **frozen,
+already-published anomaly detector**; what this paper contributes is the
+protocol below and the evidence it produces, not the layer's originality
+(see `00_contribution_statement.md`). The comparison is therefore between
 calibration strategies applied to the same score stream, not between
 detectors. The methods compared are:
 
