@@ -45,7 +45,7 @@ python --version
 
 ### 0.3 先跑自我測試（重要）
 
-在碰真實資料之前，先確認**整套**工具在你的環境行為正確。十四支測試一次跑完：
+在碰真實資料之前，先確認**整套**工具在你的環境行為正確。十六支測試一次跑完：
 
 ```bash
 for t in scripts/selftest_*.py; do echo "== $t"; python3 "$t" | tail -2; done
@@ -56,7 +56,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：十四支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **435 checks**。
+**預期**：十六支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **480 checks**。
 
 | 測試 | checks |
 |---|---|
@@ -74,6 +74,8 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_freeze_lockin_diagnostic.py` | 27 |
 | `selftest_alarm_selection_floor.py` | 28 |
 | `selftest_pogo_bound_scale_check.py` | 23 |
+| `selftest_phase5_evaluation.py` | 25 |
+| `selftest_verify_phase5_output.py` | 20 |
 
 > 2026-08-17：`selftest_end_to_end.py` 20→33、`selftest_regime_conditional.py`
 > 16→29，共 +26，來自 R24 三數字誤報率呈報的釘樁（各 T6／T7）。
@@ -84,6 +86,9 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 > 2026-08-20（同日第三次）：`selftest_earliness_metric.py` 28→42，
 > 來自 R27 偵測門檻協定的釘樁（T7 協定常數與單一定義、T8 偵測數對 H 的單調性），
 > 421→435。
+> 2026-08-20（同日第四次）：新增 `selftest_phase5_evaluation.py` 25 checks 與
+> `selftest_verify_phase5_output.py` 20 checks（Phase 5 批次執行器與驗收程式），
+> 435→480。
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。
@@ -572,6 +577,11 @@ $LASTEXITCODE
 ---
 
 ## Phase 5 — 產生實驗數字
+
+> **【2026-08-20】要交給執行者的話，請改用 [`PHASE5_RUNBOOK.md`](./PHASE5_RUNBOOK.md)。**
+> 那份是自足的單頁手冊，且已納入 R27 的偵測門檻協定（主要 14 天 + 宣告掃描）。
+> 本節保留完整流程（含分數器與校準層）供需要從頭重跑時參考，
+> **但目前缺的只有 lead time，不需要重跑那些**——見該手冊第零節。
 
 前四個 Phase 產出的是**閘門證據**，不是實驗結果。這個 Phase 才開始有數字。
 

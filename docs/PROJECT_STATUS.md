@@ -7,7 +7,7 @@
 
 分支：**`main`**。所有工作分支（#6–#9）皆已併入並清理。
 　　　**請從 `main` 取用，不要再從個別工作分支接手。**
-自我測試：**14 支、435 checks**、全過（`docs/LOCAL_RUNBOOK.md` Phase 0.3 有一鍵指令）
+自我測試：**16 支、480 checks**、全過（`docs/LOCAL_RUNBOOK.md` Phase 0.3 有一鍵指令）
 
 > 這個數字是各分支合併**後實跑**得到的，不是把各分支的數字相加。
 > 曾有兩個 session 同時在改 `evaluate_experiment.py` 與
@@ -419,7 +419,7 @@ sensor_146/147  "Rotor speed gearbox main shaft 1/2"   p50=80     彼此 r=0.207
 
 ---
 
-## 4. 工具清單（34 支腳本）
+## 4. 工具清單（38 支腳本）
 
 ### 產生數字的
 
@@ -1007,6 +1007,7 @@ R26 原本的目的是「檢查 POGO 能不能當基線」。G1 PASS 之後有�
 | 內容 | 在哪 |
 |---|---|
 | **入口／三十秒導覽** | `README.md`（repo 根目錄，2026-08-17 新增） |
+| **Phase 5 執行手冊（交給執行者用）** | `docs/PHASE5_RUNBOOK.md`（2026-08-20，自足單頁，含 R27 協定） |
 | 本機執行手冊 | `docs/LOCAL_RUNBOOK.md`（v1.1） |
 | 本文件 | `docs/PROJECT_STATUS.md` ← **狀態以這裡為準** |
 | 凍結鎖死的量測與候選政策否證 | `docs/FREEZE_LOCKIN_FINDINGS.md`（2026-08-17） |
@@ -1019,7 +1020,7 @@ R26 原本的目的是「檢查 POGO 能不能當基線」。G1 PASS 之後有�
 | **R24 三數字協定對既有輸出的重算** | `experiments/three_number_recheck_2026-08-18/`（2026-08-18，見 1.0） |
 | **告警選擇效應的代數下界＋前提稽核** | `experiments/alarm_selection_floor_2026-08-20/`（2026-08-20，見 1.00；量測併入 `FREEZE_LOCKIN_FINDINGS` 2.3a） |
 | **給 Drive 這側的入口說明** | Google Drive，`【必讀】GitHub 專案入口與雙軌分工 v1.0`（2026-08-17） |
-| 程式 | `scripts/`，34 支（實數；先前記的 26／30／32 已過期） |
+| 程式 | `scripts/`，38 支（實數；先前記的 26／30／32／34 已過期） |
 
 ### 8.0 為什麼 2026-08-17 補了一個 README（起因見下）
 
