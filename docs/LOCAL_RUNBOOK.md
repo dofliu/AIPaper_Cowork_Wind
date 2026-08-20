@@ -56,7 +56,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：十四支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **421 checks**。
+**預期**：十四支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **435 checks**。
 
 | 測試 | checks |
 |---|---|
@@ -69,7 +69,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_online_baselines.py` | 13 |
 | `selftest_signal_map_builder.py` | 48 |
 | `selftest_unit_consistency.py` | 29 |
-| `selftest_earliness_metric.py` | 28 |
+| `selftest_earliness_metric.py` | 42 |
 | `selftest_absorption_policies.py` | 26 |
 | `selftest_freeze_lockin_diagnostic.py` | 27 |
 | `selftest_alarm_selection_floor.py` | 28 |
@@ -81,6 +81,9 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 > （告警選擇效應的代數下界與 `frozen` 的雙向前提稽核），370→398。
 > 2026-08-20（同日稍晚）：新增 `selftest_pogo_bound_scale_check.py` 23 checks
 > （R26 G1 全文核對後，POGO Theorem 4.1 的公式轉錄驗證），398→421。
+> 2026-08-20（同日第三次）：`selftest_earliness_metric.py` 28→42，
+> 來自 R27 偵測門檻協定的釘樁（T7 協定常數與單一定義、T8 偵測數對 H 的單調性），
+> 421→435。
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。

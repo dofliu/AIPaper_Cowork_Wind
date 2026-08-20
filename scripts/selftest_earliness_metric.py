@@ -34,6 +34,14 @@ decoration.
       If the horizon logic were removed, T3 and T4 would agree -- and this
       test is what notices.
   T5  the summary always records which horizon was in force.
+  T7  the R27 horizon protocol (primary 14 d, sweep 7/10/14/21/unbounded) is
+      pinned, and the diagnostic imports that set instead of restating it --
+      while keeping its own sub-band horizons, which are the evidence for the
+      lower bound and would be lost if the two sets were merged.
+  T8  detections are monotone in H. This is the mechanical basis for R27's
+      "a generous H is the conservative choice": a wider horizon can only add
+      detections, and this method raises no pre-onset alarms, so the additions
+      accrue to the baselines. REVERSE-checked that H moves something at all.
 
     python3 scripts/selftest_earliness_metric.py
 
@@ -51,6 +59,9 @@ import tempfile
 from datetime import datetime, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import evaluate_experiment as E            # noqa: E402
+import diagnose_earliness_gap as D         # noqa: E402
 
 N_ROWS = 400
 INTERVAL_MIN = 10
@@ -351,6 +362,92 @@ def main():
                    != unbounded["comparison"]["timely"]["n_cases_with_lead"]),
                   "both %s -- the cut landed where nothing depended on it"
                   % trimmed["comparison"]["timely"]["n_cases_with_lead"])
+
+        # ---- T7 ------------------------------------------------------------
+        print("\nT7  the R27 horizon protocol is pinned, and single-sourced")
+        check("T7 the ratified primary is 14 days",
+              E.RATIFIED_DETECTION_HORIZON_DAYS == 14.0,
+              "got %r" % E.RATIFIED_DETECTION_HORIZON_DAYS)
+        check("T7 the declared sweep is (7, 10, 14, 21, unbounded)",
+              E.RATIFIED_HORIZON_SWEEP == (7.0, 10.0, 14.0, 21.0, None),
+              "got %r" % (E.RATIFIED_HORIZON_SWEEP,))
+        check("T7 the primary is IN the declared sweep",
+              E.RATIFIED_DETECTION_HORIZON_DAYS in E.RATIFIED_HORIZON_SWEEP)
+        # The unbounded setting must stay in the sweep. It is the most
+        # permissive case, and permissiveness is credited to the baselines --
+        # dropping it would quietly remove the hardest column to survive.
+        check("T7 the sweep still contains the unbounded case",
+              None in E.RATIFIED_HORIZON_SWEEP)
+        check("T7 the diagnostic imports the sweep rather than restating it",
+              set(h for h in D.horizon_sweep_order() if h is not None)
+              >= set(h for h in E.RATIFIED_HORIZON_SWEEP if h is not None),
+              "diagnostic sweep %r does not cover the ratified set"
+              % (D.horizon_sweep_order(),))
+        check("T7 and keeps the sub-band horizons that evidence the lower bound",
+              set(D.DIAGNOSTIC_ONLY_HORIZONS) <= set(D.horizon_sweep_order()))
+        # REVERSE: the two sets must not be the same object or the same values,
+        # or "single-sourced" would be trivially true and the diagnostic would
+        # have lost the truncation evidence.
+        check("T7 REVERSE: the diagnostic sweep is strictly wider",
+              set(D.horizon_sweep_order()) != set(E.RATIFIED_HORIZON_SWEEP),
+              "identical sets -- the H=3/H=5 truncation evidence is gone")
+
+        horizons = evaluate(root, scores_dir, care_root, manifest, method_dirs,
+                            E.RATIFIED_DETECTION_HORIZON_DAYS, "primary")
+        if horizons is None:
+            check("T7 the primary-horizon run completed", False)
+        else:
+            p = horizons.get("detection_horizon_protocol") or {}
+            check("T7 the run records the protocol version",
+                  p.get("version") == E.DETECTION_HORIZON_PROTOCOL,
+                  "got %r" % p.get("version"))
+            check("T7 a run at the primary is flagged as the primary",
+                  p.get("this_run_is_primary") is True)
+            check("T7 REVERSE: an unbounded run is NOT flagged as the primary",
+                  ((unbounded.get("detection_horizon_protocol") or {})
+                   .get("this_run_is_primary")) is False)
+
+        # ---- T8 ------------------------------------------------------------
+        # The whole argument for choosing H generously is that a wider horizon
+        # can only ADD detections, and this method contributes no pre-onset
+        # alarms, so the additions land on the baselines. If detections were
+        # not monotone in H, that argument would be wrong -- and nothing else
+        # in the suite would notice.
+        print("\nT8  detections are monotone in H (why a generous H is the safe one)")
+        # These horizons are NOT the ratified ones. T8 tests a mechanical
+        # property of the metric, and on this fixture the ratified values are
+        # all far wider than the gap between the eager alarm (rows 50-120) and
+        # event_start (row 300) -- 1.25 days -- so every one of them admits
+        # every alarm and nothing moves. The reverse check below is what caught
+        # that: with the ratified set the monotonicity assertions passed while
+        # testing nothing. The straddling values are chosen to bracket 1.25 d.
+        counts = {}
+        for h in (0.5, 1.0, 2.0, None):
+            tag = "mono_%s" % ("unb" if h is None else "%g" % h)
+            got = evaluate(root, scores_dir, care_root, manifest, method_dirs,
+                           h, tag)
+            if got is None:
+                check("T8 the H=%s run completed" % h, False)
+                counts = {}
+                break
+            counts[h] = {m: got["comparison"][m]["n_cases_with_lead"]
+                         for m in method_dirs}
+        if counts:
+            ordered = [0.5, 1.0, 2.0, None]        # None is the widest window
+            for m in sorted(method_dirs):
+                seq = [counts[h][m] for h in ordered]
+                check("T8 %-7s detections never fall as H widens: %s"
+                      % (m, seq), all(b >= a for a, b in zip(seq, seq[1:])))
+            # REVERSE: monotonicity must be a real constraint on this fixture,
+            # not a statement about a column that never moves.
+            moved = any(counts[ordered[0]][m] != counts[None][m]
+                        for m in method_dirs)
+            check("T8 REVERSE: some method's detections actually change with H",
+                  moved,
+                  "no method moved -- the fixture cannot show monotonicity")
+            # And the claim is about DETECTIONS only. median_lead_days is not
+            # monotone (widening H admits low-lead cases that pull it down),
+            # so the protocol must never be described as "more H is better".
 
     print("\n%d checks, %d failed" % (checks[0], len(failures)))
     if failures:

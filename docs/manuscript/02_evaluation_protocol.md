@@ -1,8 +1,10 @@
 # Evaluation protocol
 
-> **Draft — not approved, and not final.** One protocol parameter (the
-> detection horizon *H*, Section 4) is still awaiting a decision; the section
-> cannot be finalised before it is set. See `docs/manuscript/README.md`.
+> **Draft — not approved.** The detection horizon *H* was ratified on
+> 2026-08-20 (R27) and Section 4 now states the ratified protocol, so this
+> section no longer blocks on an open decision. The *values* in Section 5 are
+> still synthetic-fixture values; CARE numbers replace them once Phase 5 is
+> re-run. See `docs/manuscript/README.md`.
 
 ## 1. What is being compared, and on what ruler
 
@@ -121,7 +123,7 @@ actually delivers to an operator.
 **Non-inferiority** — median lead time may not fall more than **2 days** below
 the static reference. The margin was signed off in advance.
 
-## 4. The detection horizon, and why it has no default
+## 4. The detection horizon: a primary value and a declared sweep
 
 Lead time as defined above is unbounded below: it is `event_start` minus the
 first alarm, whenever that alarm falls. A method that alarms early and often
@@ -136,28 +138,69 @@ On CARE the physical onset is unknown, so nothing would have flagged it.
 
 `--detection-horizon-days H` makes an alarm count as a detection only if it
 falls within *H* days before `event_start`; anything earlier is a false alarm
-rather than early warning. **H is deliberately not defaulted.** Left unset, the
+rather than early warning.
+
+**Lead time is reported at a primary horizon together with a declared sweep**
+(protocol `detection-horizon-v1.0`, ratified 2026-08-20):
+
+| | value |
+|---|---|
+| primary *H* | **14 days** |
+| declared sweep | 7, 10, 14, 21 days, and unbounded |
+| always reported beside each figure | detection rate and its denominator |
+
+This mirrors the false-alarm protocol of Section 3: where a quantity's
+definition is itself arguable, a single number invites the reader to ask what a
+different choice would have shown, and here the answer — that every choice
+gives the same verdict — is worth stating rather than leaving implicit.
+
+**Why 14 days.** *H* is a maintenance **planning** horizon, not a statistic.
+Past it, an earlier warning does not change what an operator can do: parts
+procurement, crane or vessel scheduling, and waiting for a low-wind window all
+have lead times of their own. Fourteen days is the shortest horizon that is
+operationally meaningful for drivetrain intervention. It also sits above the
+proposed method's own median lead on the fixture (8.43 days), so it truncates
+nothing of the method's own result — a horizon that cut into it would read as
+self-handicapping, and one far above it as harvesting.
+
+**Why a generous horizon is the conservative choice.** Widening *H* can only
+*add* detections, never remove them. The proposed method contributes 0.00 days
+of pre-onset alarms, whereas on the same fixture the static reference
+contributes 6.11 and ACI 8.28. Every additional day of horizon is therefore
+credited to the **baselines**, not to the proposed method. That is why the
+declared sweep extends past the primary and ends at the unbounded case: the
+most permissive setting must remain on the table. The monotonicity this rests
+on is pinned by a behavioural test rather than asserted.
+
+**What the fixture's own ceiling does and does not tell us.** The fixture's
+10.42-day maximum is an artefact of how it was constructed (a 1500-step lag
+between ramp and label) and does **not** transfer to CARE, where the physical
+onset is unknown. It is precisely why the primary is justified on operational
+grounds instead: that reasoning survives the move to real data. On the fixture,
+H = 14 does readmit one pre-onset case for ACI (its detection count rises from
+1/6 to 2/6). We report that openly rather than choosing the horizon that hides
+it, because the cost falls on a baseline and therefore in the conservative
+direction.
+
+**Unset remains unbounded.** *H* is still not defaulted in code. Left unset the
 evaluator retains the unbounded behaviour and records
-`detection_horizon_days: null` together with an explicit caveat, so an unbounded
-run can never be mistaken for a bounded one.
-
-A sensitivity sweep on the synthetic fixture bounds the usable range from both
-sides: too small an *H* truncates genuine lead time (at H = 3 every method
-collapses to 3.00 days), while an *H* beyond the physical onset readmits the
-pre-fault false alarms (at H = 14 one baseline's detection count rises again).
-
-> **Open decision.** The value of *H*, and whether it enters the protocol at
-> all, is a decision for the PI. Supporting evidence is in the R22 adjudication
-> request; the code will not choose a value on its own.
+`detection_horizon_days: null` with an explicit caveat, so an unbounded run can
+never be mistaken for a bounded one; runs outside the declared sweep are
+recorded as such and are legitimate for diagnosis but are not the numbers this
+protocol reports.
 
 ## 5. What the synthetic fixture does and does not establish
 
 Under the corrected evaluator, the proposed method passes non-inferiority at
-every swept horizon on a 12-case synthetic fixture (unbounded −0.12; H = 3
-0.00; H = 5 0.00; H = 7 −0.40; H = 10 −0.95; H = 14 −0.64, where negative
-values indicate the proposed method detects *earlier*). Detection rates are
-6/6 for the proposed method and for static, and lower for the remaining
-baselines.
+**every** swept horizon on a 12-case synthetic fixture, including the most
+permissive one (unbounded −0.12; H = 3 0.00; H = 5 0.00; H = 7 −0.40;
+H = 10 −0.95; H = 14 −0.64; H = 21 −0.64, where negative values indicate the
+proposed method detects *earlier*). Detection rates are 6/6 for the proposed
+method and for static at every horizon, and lower for the remaining baselines.
+
+That the verdict does not depend on *H* is a stronger statement than a verdict
+at any single horizon, and it is the reason the sweep is reported rather than
+summarised away.
 
 **This establishes that the metric now measures what its name claims, and
 nothing about CARE.** The fixture exists to attribute a suspicious number to
