@@ -7,7 +7,7 @@
 
 分支：**`main`**。所有工作分支（#6–#9）皆已併入並清理。
 　　　**請從 `main` 取用，不要再從個別工作分支接手。**
-自我測試：**13 支、398 checks**、全過（`docs/LOCAL_RUNBOOK.md` Phase 0.3 有一鍵指令）
+自我測試：**14 支、421 checks**、全過（`docs/LOCAL_RUNBOOK.md` Phase 0.3 有一鍵指令）
 
 > 這個數字是各分支合併**後實跑**得到的，不是把各分支的數字相加。
 > 曾有兩個 session 同時在改 `evaluate_experiment.py` 與
@@ -356,6 +356,26 @@ sensor_146/147  "Rotor speed gearbox main shaft 1/2"   p50=80     彼此 r=0.207
 - W1-ACAS `--max-past` = 1440（對齊 W）
 - Farm C 用 `power_6`、`wind_speed_236`
 
+2026-08-20 裁決（R26 pre-run contract 與寫作界線；**不動任何模型參數**）：
+
+- **POGO 的 group 數：`k = 4` 與 `k = 5` 都跑。** 本研究已簽核的 `k = 4`
+  group 定義**不動**；`k = 5`（作者 script 在四個 subgroup 前加一個 all-ones
+  marginal group）記為 **POGO 那一側的執行參數**，即「照作者預設跑」。
+  **POGO 的頭號數字取兩者中較好的那一個。**
+  · 為什麼不是選擇性呈報：本方法**沒有任何可挑的自由設定**，
+    所以這個不對稱**只往對本方法不利的方向倒**。
+  · **這個裁決在看到任何結果之前做成，符合 G7。**
+  · 後補證據：全文確認 `k` 只以 `ln(k)` 進入 Theorem 4.1 的 `U_T(k)`，
+    在本專案尺度上 `k=4` 與 `k=5` 的界只差 **0.66%**——
+    **`k` 不是理論驅動的選擇，是經驗問題**，正好就是「兩個都跑」的理由。
+- **POGO 的 `binary_groups = True`。** 理由不是「作者預設如此」，而是
+  **本研究的 group 本來就是硬性互斥的 one-hot**；設 `False` 等於宣告
+  我們的 group 是軟的——那是假的。**符合資料實情的設定，不是調參。**
+- **claim firewall 新增第六條**：禁止任何形式的「我們發現／首次指出選擇效應
+  會使條件覆蓋率主張失真」。選擇後推論（POSI）、`selection-conditional
+  coverage` 與 FCR 控制是既有文獻。**這一條不改 R25 的定位**，只加一條禁止；
+  同時它帶來一項**引用義務**（見 6.9）。
+
 2026-08-17 追認（R24，評估協定，不動模型參數）：
 
 - **誤報率改為三數字呈報**（未凍結最差分箱偏差／凍結佔比／凍結點誤報率），
@@ -365,7 +385,7 @@ sensor_146/147  "Rotor speed gearbox main shaft 1/2"   p50=80     彼此 r=0.207
 
 ---
 
-## 4. 工具清單（32 支腳本）
+## 4. 工具清單（34 支腳本）
 
 ### 產生數字的
 
@@ -560,17 +580,15 @@ adaptive threshold 用於 **Wind Farm A 與 B**，作法是以神經網路回歸
   **✅ 已裁決 2026-08-18 21:52（改為 protocol-and-evidence，見 6.7）**
 - 【2026-08-19 新增】`docs/method/POGO_COMPATIBILITY_GATE.md` 的執行 owner
   尚未指派（6.8）。這不是裁決題，是排程題，但沒人認領就不會動。
-- **【2026-08-20 新增・擋住 R26 下一步】POGO 的兩項 pre-run contract**
-  （gate 3.5）。兩者都改變比較的意義，必須在建環境**之前**凍結：
-  · **group 數 `k = 4` 還是 `k = 5`**：作者 script 會在四個 subgroup 前加一個
-    all-ones 的 marginal group。本文件立場是 `k = 4`（已簽核的 group 定義）
-    不得為了對齊作者預設而改；要加 marginal group 應記為 **POGO 那一側**的
-    執行參數。兩者都跑可以，但**主要設定必須在看到結果之前指定**（G7）。
-  · **`binary_groups=True` 與 empirical closed-form weights**：作者的
-    synthetic／MIMIC script 採此設定，須在跑之前凍結並記錄理由。
-- **【2026-08-20 新增】claim firewall 第六條**（禁止主張「發現／首次指出選擇效應
-  會使條件覆蓋率主張失真」）。理由見 `LITERATURE_SCAN_2026-08-20.md` 第四節。
-  與 R25 不同，這一條**不需要改定位**，只需加一條禁止。
+- ~~【2026-08-20】POGO 的兩項 pre-run contract~~
+  **✅ 已裁決 2026-08-20（見第 3 節與 gate 3.5）**
+- ~~【2026-08-20】claim firewall 第六條~~
+  **✅ 已裁決 2026-08-20（見第 3 節與 `docs/manuscript/README.md` 界線四）**
+- **【2026-08-20 新增，取代上面兩項成為 R26 的下一個關卡】G3 狀態契約**
+  ——現在唯一還可能判 `NOT_COMPARABLE` 的一關，三項都必須在跑之前寫死：
+  wealth process 跨 case 攜帶與否、凍結期間是否跳過 `update`、warm-up 如何對齊。
+  **這不是裁決題也不是排程題，是規格題**：留給實作者臨場決定，
+  等於讓實作決定結論。詳見 6.8 與 gate 第 6 節。
 
 ### 6.5 【2026-08-17 已裁決並實作】誤報率改為三數字呈報（R24）
 
@@ -705,6 +723,27 @@ digital twin 用水預測研究使用 `regime-aware calibration` 一詞（詞彙
 calibration`），三筆獨立用法使這條規範從建議升級為禁止項，
 見 `docs/literature/LITERATURE_SCAN_2026-08-19.md` 第二節。
 
+### 6.9 【2026-08-20 已裁決】FCR／selection-conditional coverage 的引用義務
+
+`LITERATURE_SCAN_2026-08-20.md` F10：選擇後推論（POSI）、
+`selection-conditional coverage` 與 **FCR 控制**是既有文獻
+（JRSSB 87(4):1239 2025、CAP arXiv:2403.07728、arXiv:2503.16809 等）。
+
+**這不動 R25 的定位**——可守的是本運維機制的選擇幾何、其代數下界（1.00）
+與三數字呈報協定，不是選擇效應這個概念。已裁決新增 claim firewall 第六條。
+
+**但它同時是一項引用義務**：談「凍結期覆蓋率量不準」而不引 FCR，
+Q1 若送到保形推論那側的審稿人手上，第一輪就會被要求補。
+
+**另需寫一段答辯**（Discussion 或 Limitations，見 `docs/manuscript/README.md`）：
+FCR 控制是「在被選中的單位上把保證救回來」；本論文**刻意不救**——
+凍結期間暫停校準正是 Freeze-on-Alert 存在的目的（R21：關閉凍結後合成故障的
+工單覆蓋率 1.000 → 0.000）。要在凍結點恢復覆蓋率，等於要求校準器在凍結期間
+繼續適應，那會把凍結機制拆掉。三數字協定是**呈報側**的對應物，不是控制側的。
+
+**待全文核對後才能定稿**（arXiv 雲端封鎖，已列入本機下載清單第 7 節）。
+維持 `NOVELTY_UNRESOLVED`。
+
 ### 6.8 【2026-08-18 建立】R26 — POGO 相容性 gate（尚未執行）
 
 R25 裁決的第二半：在把 POGO 當成基線比較**之前**，先證明兩個方法的輸入語義、
@@ -712,40 +751,72 @@ group 定義、時間狀態、輸出介面與 O&M 決策語義是同義的。
 **規格正本在 Drive（R26 v1.0），版控版本與可執行部分在
 `docs/method/POGO_COMPATIBILITY_GATE.md`。**
 
-| Gate | 狀態（2026-08-20） |
+| Gate | 狀態（2026-08-20，當日兩次更新後） |
 |---|---|
-| G0 source/version receipt | **`SOURCE_RECEIPT_COMPLETE / ENVIRONMENT_BUILD_NOT_RUN`** — 2026-08-20 由協作者於別的環境完成，commit／license／lock／兩個 SHA-256 齊備。**明確不宣稱 G0 PASS**（環境未建置）。轉錄值見 gate 3.3 |
-| G1 輸入語義 | `PAPER_CODE_MAPPING_DRAFTED / SEMANTIC_RATIFICATION_PENDING` — **紅旗未解除**，見下 |
-| G2 group、G4 輸出介面 | 本研究這一欄已填；POGO 那一欄有草案，待以論文定義追認 |
-| G3 狀態／重置／時間 | 本研究側已述；待對照 |
+| G0 source/version receipt | **`SOURCE_RECEIPT_COMPLETE / ENVIRONMENT_BUILD_NOT_RUN`** — 協作者於別的環境完成。**論文 PDF 的 SHA-256 已由雲端 session 獨立複驗、逐字相符**；作者程式的兩個雜湊仍為轉錄。**不宣稱 G0 PASS**（環境未建置） |
+| G1 輸入語義 | **`PASS`（`SEMANTIC_EQUIVALENCE_ESTABLISHED`）** — 依**一手全文**核對定理與證明。**先前的相反預測是錯的**，見下 |
+| G2 group | 本研究側已填；`k` 的處置已裁決（見 6.4） |
+| G4 輸出介面 | 本研究側已填；adapter contract 草案可用 |
+| G3 狀態／重置／時間 | **`NOT_COMPARABLE` 的風險已由 G1 轉移到這裡**，見下 |
 | G5–G8 | NOT RUN |
 
 **雲端這側 2026-08-20 重新實測，封鎖狀態與 08-19 完全相同**（arXiv `000`、
 `github.com` 與 `api.github.com` `403`、`raw.githubusercontent.com` `200`）。
 G0 的解除**不是**雲端解封，是別的環境做的。
 
-**紅旗的狀態：沒有解除，但被縮小了。** 協作者回報
-「`POGO.update(S_t, c_t)` 直接接受 scalar，因此不需要捏造 `Y_t`」。
-**就介面而言正確，但它回答的不是那個紅旗**：
+### G1 判定：紅旗解除，且**先前的預測是錯的**
 
-- **實作障礙**（adapter 要不要合成 `Y_t`）→ **已解除**。
-- **語義紅旗**（POGO 的 `S_t` 與本研究的分數是否同義）→ **未解除**。
-  POGO 的 `S_t` 是 residual `|Y_t − f(X_t)|`，`radius` 是**預測區間半徑**，
-  超越事件的意義是 **miscoverage**。餵進 Mahalanobis 距離之後，
-  radius 不再是任何區間的半徑，超越也不再是 miscoverage。
-  **「函式接受一個 float」不等於「這個 float 是同一個東西」。**
+劉老師 2026-08-20 取得 arXiv:2606.00419v4 全文並提供給雲端 session
+（SHA-256 與協作者回報值相符）。核對結果與本文件先前的判斷**相反**：
 
-從「API 不需要 `Y_t`」到「不需要 `Y_t`」只差兩個字——這正是 8.1 在 2026-08-18
-記下的那條：**這一輪撞到的不是版號，是轉述時掉了限定詞。** 完整說明見 gate 3.4。
+先前（08-19 首次提出、08-20 上午重申）假設 POGO 的保證**需要**
+`S_t = |Y_t − f(X_t)|` 的 residual 結構。**全文顯示不需要。**
 
-**下一個可執行動作**：**先裁決 6.4 新增的兩項 pre-run contract**（`k=4`／`k=5`、
-`binary_groups`），再以**論文對 `S_t` 的定義**填 4.1 的 POGO 欄。
-**先填表再寫 adapter**：mapping 不成立的話 adapter 是白工，
-而且寫完之後人會捨不得丟。
+- **Theorem 4.1 的假設只有三條**：`α∈(0,1)`、`S_t ≤ D t^q`、`T_j > 0`。
+  沒有 `Y_t`、沒有預測器、沒有可交換性
+  （論文明言 "We make no assumptions on the data stream"）。
+- 被保證的量 `MisCov_T(j)` 只用到 `S_t`、`τ_t`、`c_t`。
+- 逐步核對證明後，`S_t` 的結構只在 **Lemma B.2** 進入，而該處對 `S_t` 的
+  全部要求是明寫的一句：**"since `S_t ≥ 0` because it's a non-conformity score"**。
+- **作者自己就是這樣用的**：第 5.1 節 "we **directly generate non-conformity
+  scores**"，式 (13)/(15)/(16) 完全沒有 `Y_t`、沒有預測器、沒有區間。
 
-**執行 owner：仍為 TBD**（R26 第 8 節，截至 2026-08-20 未指派）。
-G0 有人自願補位不等於 owner 已定——**下一步是裁決題，沒有 owner
-就沒有人會去要那個裁決。**
+本研究這一側的兩個條件**已實測**（`scores_MD_2022_run1`，95 檔、5,240,974 點）：
+`S_t ≥ 0` — min **0.4240**、負值 **0** 筆；`S_t ≤ D t^q` — max **23.8048**，
+取 `q = 0`、`D = 23.81`。**兩條實質滿足。**
+
+**錯在哪裡值得記住**：把論文「引入一個量的方式」讀成「定理對那個量的要求」。
+前者是說明，後者才是假設，而兩者常寫在不同的節裡。
+（08-20 上午那段「限定詞不能掉」的方法論意見**本身仍然成立**，
+只是它據以推論的事實前提是錯的。gate 3.4 保留原文並標註，未刪除。）
+
+**方向必須寫死**：POGO 的 `1{S_t > τ_t}`（miscover，目標比率 α）
+＝本研究的 `exceed = 1`；POGO 的 `MisCov_T(j)` ＝本研究的 per-bin `|FAR − α|`。
+另外論文的 adaptivity 指標「最長連續 `{S_t > τ_t}`」與 G5 規格已寫的
+「最長 miscoverage streak」**是同一個量**，不需為對照新增或修改任何指標。
+
+### 但風險只是轉移，不是消失
+
+`RELATED_WORK_ONLY` 的風險沒了，**`NOT_COMPARABLE` 的風險移到 G3**。
+POGO 的 wealth process `W_{t,j}` 是**乘法累積**的持久狀態；
+本研究的狀態是 `W = 1440` 滾動視窗 + 18 點 exceed history + `frozen` 旗標。
+兩者記憶形狀完全不同。**跨 case 攜帶與否、凍結期間是否跳過 `update`、
+warm-up 如何對齊——三項都必須在跑之前寫死**，否則等於讓實作決定結論。
+
+### 這件事對論文的意義比「多一個基線」大
+
+R26 原本的目的是「檢查 POGO 能不能當基線」。G1 PASS 之後有更好的用途：
+**POGO 是目前可得的、對 C2 最強的獨立檢驗。** 若一個演算法完全不同、
+且帶有已證明保證的方法，在同一套 6-of-18 + Freeze-on-Alert 下呈現**相同的
+凍結鎖死幾何**，那就直接證明該現象是**告警政策的性質，不是本方法的缺陷**。
+**因此 G6 才是有價值的那一關，不是 G5。**
+
+順帶：R25 之後**POGO 在 G5 上贏過本方法並不致命**——三項可守主張都不依賴
+「本方法的校準器最好」。但 firewall 那一條仍全額有效直到 G8 回報。
+
+**下一個可執行動作**：G3 狀態契約 → adapter contract → G5→G6→G7→G8。
+**執行 owner：仍為 TBD。** G0 與 G1 都已完成，但**兩者都是閱讀與核對工作**；
+從 G3 契約起需要的是**建環境與實作**，那才是真正需要指派的部分。
 
 ---
 
@@ -904,7 +975,7 @@ G0 有人自願補位不等於 owner 已定——**下一步是裁決題，沒�
 | **R24 三數字協定對既有輸出的重算** | `experiments/three_number_recheck_2026-08-18/`（2026-08-18，見 1.0） |
 | **告警選擇效應的代數下界＋前提稽核** | `experiments/alarm_selection_floor_2026-08-20/`（2026-08-20，見 1.00；量測併入 `FREEZE_LOCKIN_FINDINGS` 2.3a） |
 | **給 Drive 這側的入口說明** | Google Drive，`【必讀】GitHub 專案入口與雙軌分工 v1.0`（2026-08-17） |
-| 程式 | `scripts/`，32 支（實數；先前記的 26／30 已過期） |
+| 程式 | `scripts/`，34 支（實數；先前記的 26／30／32 已過期） |
 
 ### 8.0 為什麼 2026-08-17 補了一個 README（起因見下）
 
@@ -977,4 +1048,4 @@ v3.0 三份，v3.9 兩份。最嚴重的一次是 v4.0 已存在後又出現一�
 
 ---
 
-*最後更新：2026-08-20（Asia/Taipei）。狀態有變動時請更新本文件，不要只寫在對話裡。*
+*最後更新：2026-08-20（Asia/Taipei，當日第二次：G1 全文核對與兩項裁決）。狀態有變動時請更新本文件，不要只寫在對話裡。*
