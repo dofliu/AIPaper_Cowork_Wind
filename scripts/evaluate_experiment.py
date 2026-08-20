@@ -149,6 +149,37 @@ import regime_conditional_calibration as R  # noqa: E402
 EVAL_VERSION = "eval-v1.1"
 NON_INFERIORITY_MARGIN_DAYS = 2.0     # signed-off, parameter protocol v1.0
 
+# --- R27, ratified 2026-08-20 -------------------------------------------
+# Lead time is reported at a PRIMARY horizon plus a declared sweep, for the
+# same reason R24 made the false-alarm rate three numbers: when a quantity's
+# definition is itself arguable, a single number invites the reader to wonder
+# what a different choice would have shown -- and on the earliness fixture the
+# answer was that every choice gives the same verdict, which is worth stating
+# rather than hiding behind one column.
+#
+# H is a maintenance PLANNING horizon, not a statistic. Past it, an earlier
+# warning does not change what an operator can do: parts procurement, crane or
+# vessel scheduling, waiting for a low-wind window. 14 days is the shortest
+# horizon that is operationally meaningful for drivetrain intervention, and it
+# sits above this method's own observed median lead (8.43 d on the fixture), so
+# it truncates nothing of ours. An H that cut into our own result would look
+# like self-handicapping; one far above it would look like harvesting.
+#
+# Choosing H generously is the CONSERVATIVE direction here, and that is why the
+# sweep deliberately runs past the primary and ends at None. This method raises
+# 0.00 days of pre-onset alarms; on the same fixture `static` raises 6.11 of
+# its 16.53 reported days and `aci` 8.28 of 18.70. Every extra day of horizon
+# is therefore credited to the BASELINES, not to us. Keeping the unbounded
+# setting in the sweep means the most permissive case is always on the table.
+#
+# The fixture's own ceiling (LABEL_LAG_STEPS / STEPS_PER_DAY = 10.42 d) is an
+# artefact of how that fixture was built and does NOT transfer to CARE v6,
+# where the physical onset is unknown. It is why the primary is justified on
+# O&M grounds instead: that reasoning survives the move to real data.
+DETECTION_HORIZON_PROTOCOL = "detection-horizon-v1.0"
+RATIFIED_DETECTION_HORIZON_DAYS = 14.0
+RATIFIED_HORIZON_SWEEP = (7.0, 10.0, 14.0, 21.0, None)   # None = unbounded
+
 MISSING_METRICS = {
     "care_score": {"status": "NOT_IMPLEMENTED",
                    "reason": "definition is in the CARE To Compare paper, unread"},
@@ -670,6 +701,22 @@ def run(args):
                 ".false_alarm_report.pooled_reconstruction."),
         },
         "detection_horizon_days": args.detection_horizon_days,
+        "detection_horizon_protocol": {
+            "version": DETECTION_HORIZON_PROTOCOL,
+            "ratified": "R27, 2026-08-20",
+            "primary_days": RATIFIED_DETECTION_HORIZON_DAYS,
+            "declared_sweep_days": list(RATIFIED_HORIZON_SWEEP),
+            "this_run_is_primary":
+                args.detection_horizon_days == RATIFIED_DETECTION_HORIZON_DAYS,
+            "this_run_in_declared_sweep":
+                args.detection_horizon_days in RATIFIED_HORIZON_SWEEP,
+            "note": (
+                "Lead time is reported at the primary horizon PLUS the declared "
+                "sweep. A run outside the sweep is legitimate for diagnosis but "
+                "its lead-time numbers are not the ones the protocol reports. "
+                "Reporting a single horizon without the sweep beside it is what "
+                "this protocol exists to prevent, on the same reasoning as R24."),
+        },
         "detection_horizon_note": (
             "UNSET: lead time is unbounded and an alarm raised before the fault "
             "began still counts as early warning. Not a safe basis for a "
@@ -758,10 +805,22 @@ def run(args):
             "scripts/diagnose_earliness_gap.py for a fixture where this "
             "inflates a baseline by 6.11 of its 16.53 reported days.\n")
     else:
+        if args.detection_horizon_days == RATIFIED_DETECTION_HORIZON_DAYS:
+            standing = "the ratified primary (R27)"
+        elif args.detection_horizon_days in RATIFIED_HORIZON_SWEEP:
+            standing = "part of the ratified sweep (R27); not the primary"
+        else:
+            standing = ("**outside the ratified sweep** (R27 declares %s) -- "
+                        "legitimate for diagnosis, but these lead-time numbers "
+                        "are not the ones the protocol reports"
+                        % ", ".join("unbounded" if h is None else "%g" % h
+                                    for h in RATIFIED_HORIZON_SWEEP))
         horizon_note = (
-            "Detection horizon: %.2f days. An alarm earlier than that before "
-            "event_start is counted as a false alarm, not a detection.\n"
-            % args.detection_horizon_days)
+            "Detection horizon: %.2f days, %s. An alarm earlier than that "
+            "before event_start is counted as a false alarm, not a detection. "
+            "The protocol reports the primary alongside the declared sweep; a "
+            "horizon shown on its own is what R27 exists to prevent.\n"
+            % (args.detection_horizon_days, standing))
 
     with open(os.path.join(args.output_dir, "comparison.md"), "w", encoding="utf-8") as f:
         f.write("# Comparison (alpha = %s)\n\n%s\n\n"

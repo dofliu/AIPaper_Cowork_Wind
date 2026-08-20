@@ -11,287 +11,384 @@
     "steps_per_day": 144.0,
     "window": 500
   },
+  "horizon_protocol": {
+    "diagnostic_only_days": [
+      3.0,
+      5.0
+    ],
+    "ratified_primary_days": 14.0,
+    "ratified_sweep_days": [
+      7.0,
+      10.0,
+      14.0,
+      21.0,
+      null
+    ],
+    "version": "detection-horizon-v1.0"
+  },
   "horizon_sweep": {
     "h10": {
-      "aci": {
-        "detection_rate": 0.5,
-        "lead_days_lost_vs_reference": 6.5,
-        "median_lead_days": 0.4097222222222222,
-        "median_lead_days_missed_as_zero": 0.2048611111111111,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 1,
-        "non_inferior": false
-      },
-      "dtaci": {
-        "detection_rate": 0.0,
-        "lead_days_lost_vs_reference": null,
-        "median_lead_days": null,
-        "median_lead_days_missed_as_zero": 0.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 0,
-        "non_inferior": null
-      },
-      "ours": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": -1.5624999999999991,
-        "median_lead_days": 8.472222222222221,
-        "median_lead_days_missed_as_zero": 8.472222222222221,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "static": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": 0.0,
-        "median_lead_days": 6.909722222222222,
-        "median_lead_days_missed_as_zero": 6.909722222222222,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "w1acas": {
-        "detection_rate": 0.5,
-        "lead_days_lost_vs_reference": 2.770833333333333,
-        "median_lead_days": 4.138888888888889,
-        "median_lead_days_missed_as_zero": 2.0694444444444446,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 1,
-        "non_inferior": false
+      "_above_physical_max": false,
+      "_physical_max_lead_days": 10.416666666666666,
+      "_ratified": true,
+      "methods": {
+        "aci": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 6.5,
+          "median_lead_days": 0.4097222222222222,
+          "median_lead_days_missed_as_zero": 0.2048611111111111,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        },
+        "dtaci": {
+          "detection_rate": 0.0,
+          "lead_days_lost_vs_reference": null,
+          "median_lead_days": null,
+          "median_lead_days_missed_as_zero": 0.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 0,
+          "non_inferior": null
+        },
+        "ours": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": -1.5624999999999991,
+          "median_lead_days": 8.472222222222221,
+          "median_lead_days_missed_as_zero": 8.472222222222221,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "static": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": 0.0,
+          "median_lead_days": 6.909722222222222,
+          "median_lead_days_missed_as_zero": 6.909722222222222,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "w1acas": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 2.770833333333333,
+          "median_lead_days": 4.138888888888889,
+          "median_lead_days_missed_as_zero": 2.0694444444444446,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        }
       }
     },
     "h14": {
-      "aci": {
-        "detection_rate": 0.5,
-        "lead_days_lost_vs_reference": 6.5,
-        "median_lead_days": 0.4097222222222222,
-        "median_lead_days_missed_as_zero": 0.2048611111111111,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 1,
-        "non_inferior": false
-      },
-      "dtaci": {
-        "detection_rate": 0.0,
-        "lead_days_lost_vs_reference": null,
-        "median_lead_days": null,
-        "median_lead_days_missed_as_zero": 0.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 0,
-        "non_inferior": null
-      },
-      "ours": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": -1.5624999999999991,
-        "median_lead_days": 8.472222222222221,
-        "median_lead_days_missed_as_zero": 8.472222222222221,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "static": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": 0.0,
-        "median_lead_days": 6.909722222222222,
-        "median_lead_days_missed_as_zero": 6.909722222222222,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "w1acas": {
-        "detection_rate": 0.5,
-        "lead_days_lost_vs_reference": 2.770833333333333,
-        "median_lead_days": 4.138888888888889,
-        "median_lead_days_missed_as_zero": 2.0694444444444446,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 1,
-        "non_inferior": false
+      "_above_physical_max": true,
+      "_physical_max_lead_days": 10.416666666666666,
+      "_ratified": true,
+      "methods": {
+        "aci": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 6.5,
+          "median_lead_days": 0.4097222222222222,
+          "median_lead_days_missed_as_zero": 0.2048611111111111,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        },
+        "dtaci": {
+          "detection_rate": 0.0,
+          "lead_days_lost_vs_reference": null,
+          "median_lead_days": null,
+          "median_lead_days_missed_as_zero": 0.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 0,
+          "non_inferior": null
+        },
+        "ours": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": -1.5624999999999991,
+          "median_lead_days": 8.472222222222221,
+          "median_lead_days_missed_as_zero": 8.472222222222221,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "static": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": 0.0,
+          "median_lead_days": 6.909722222222222,
+          "median_lead_days_missed_as_zero": 6.909722222222222,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "w1acas": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 2.770833333333333,
+          "median_lead_days": 4.138888888888889,
+          "median_lead_days_missed_as_zero": 2.0694444444444446,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        }
+      }
+    },
+    "h21": {
+      "_above_physical_max": true,
+      "_physical_max_lead_days": 10.416666666666666,
+      "_ratified": true,
+      "methods": {
+        "aci": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 6.5,
+          "median_lead_days": 0.4097222222222222,
+          "median_lead_days_missed_as_zero": 0.2048611111111111,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        },
+        "dtaci": {
+          "detection_rate": 0.0,
+          "lead_days_lost_vs_reference": null,
+          "median_lead_days": null,
+          "median_lead_days_missed_as_zero": 0.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 0,
+          "non_inferior": null
+        },
+        "ours": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": -1.5624999999999991,
+          "median_lead_days": 8.472222222222221,
+          "median_lead_days_missed_as_zero": 8.472222222222221,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "static": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": 0.0,
+          "median_lead_days": 6.909722222222222,
+          "median_lead_days_missed_as_zero": 6.909722222222222,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "w1acas": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 2.770833333333333,
+          "median_lead_days": 4.138888888888889,
+          "median_lead_days_missed_as_zero": 2.0694444444444446,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        }
       }
     },
     "h3": {
-      "aci": {
-        "detection_rate": 0.5,
-        "lead_days_lost_vs_reference": 2.5902777777777777,
-        "median_lead_days": 0.4097222222222222,
-        "median_lead_days_missed_as_zero": 0.2048611111111111,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 1,
-        "non_inferior": false
-      },
-      "dtaci": {
-        "detection_rate": 0.0,
-        "lead_days_lost_vs_reference": null,
-        "median_lead_days": null,
-        "median_lead_days_missed_as_zero": 0.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 0,
-        "non_inferior": null
-      },
-      "ours": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": 0.0,
-        "median_lead_days": 3.0,
-        "median_lead_days_missed_as_zero": 3.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "static": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": 0.0,
-        "median_lead_days": 3.0,
-        "median_lead_days_missed_as_zero": 3.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "w1acas": {
-        "detection_rate": 0.0,
-        "lead_days_lost_vs_reference": null,
-        "median_lead_days": null,
-        "median_lead_days_missed_as_zero": 0.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 0,
-        "non_inferior": null
+      "_above_physical_max": false,
+      "_physical_max_lead_days": 10.416666666666666,
+      "_ratified": false,
+      "methods": {
+        "aci": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 2.5902777777777777,
+          "median_lead_days": 0.4097222222222222,
+          "median_lead_days_missed_as_zero": 0.2048611111111111,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        },
+        "dtaci": {
+          "detection_rate": 0.0,
+          "lead_days_lost_vs_reference": null,
+          "median_lead_days": null,
+          "median_lead_days_missed_as_zero": 0.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 0,
+          "non_inferior": null
+        },
+        "ours": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": 0.0,
+          "median_lead_days": 3.0,
+          "median_lead_days_missed_as_zero": 3.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "static": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": 0.0,
+          "median_lead_days": 3.0,
+          "median_lead_days_missed_as_zero": 3.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "w1acas": {
+          "detection_rate": 0.0,
+          "lead_days_lost_vs_reference": null,
+          "median_lead_days": null,
+          "median_lead_days_missed_as_zero": 0.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 0,
+          "non_inferior": null
+        }
       }
     },
     "h5": {
-      "aci": {
-        "detection_rate": 0.5,
-        "lead_days_lost_vs_reference": 4.583333333333333,
-        "median_lead_days": 0.4097222222222222,
-        "median_lead_days_missed_as_zero": 0.2048611111111111,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 1,
-        "non_inferior": false
-      },
-      "dtaci": {
-        "detection_rate": 0.0,
-        "lead_days_lost_vs_reference": null,
-        "median_lead_days": null,
-        "median_lead_days_missed_as_zero": 0.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 0,
-        "non_inferior": null
-      },
-      "ours": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": -0.006944444444444642,
-        "median_lead_days": 5.0,
-        "median_lead_days_missed_as_zero": 5.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "static": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": 0.0,
-        "median_lead_days": 4.993055555555555,
-        "median_lead_days_missed_as_zero": 4.993055555555555,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "w1acas": {
-        "detection_rate": 0.5,
-        "lead_days_lost_vs_reference": 0.8541666666666661,
-        "median_lead_days": 4.138888888888889,
-        "median_lead_days_missed_as_zero": 2.0694444444444446,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 1,
-        "non_inferior": true
+      "_above_physical_max": false,
+      "_physical_max_lead_days": 10.416666666666666,
+      "_ratified": false,
+      "methods": {
+        "aci": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 4.583333333333333,
+          "median_lead_days": 0.4097222222222222,
+          "median_lead_days_missed_as_zero": 0.2048611111111111,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        },
+        "dtaci": {
+          "detection_rate": 0.0,
+          "lead_days_lost_vs_reference": null,
+          "median_lead_days": null,
+          "median_lead_days_missed_as_zero": 0.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 0,
+          "non_inferior": null
+        },
+        "ours": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": -0.006944444444444642,
+          "median_lead_days": 5.0,
+          "median_lead_days_missed_as_zero": 5.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "static": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": 0.0,
+          "median_lead_days": 4.993055555555555,
+          "median_lead_days_missed_as_zero": 4.993055555555555,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "w1acas": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 0.8541666666666661,
+          "median_lead_days": 4.138888888888889,
+          "median_lead_days_missed_as_zero": 2.0694444444444446,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": true
+        }
       }
     },
     "h7": {
-      "aci": {
-        "detection_rate": 0.5,
-        "lead_days_lost_vs_reference": 6.5,
-        "median_lead_days": 0.4097222222222222,
-        "median_lead_days_missed_as_zero": 0.2048611111111111,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 1,
-        "non_inferior": false
-      },
-      "dtaci": {
-        "detection_rate": 0.0,
-        "lead_days_lost_vs_reference": null,
-        "median_lead_days": null,
-        "median_lead_days_missed_as_zero": 0.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 0,
-        "non_inferior": null
-      },
-      "ours": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": -0.09027777777777768,
-        "median_lead_days": 7.0,
-        "median_lead_days_missed_as_zero": 7.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "static": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": 0.0,
-        "median_lead_days": 6.909722222222222,
-        "median_lead_days_missed_as_zero": 6.909722222222222,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "w1acas": {
-        "detection_rate": 0.5,
-        "lead_days_lost_vs_reference": 2.770833333333333,
-        "median_lead_days": 4.138888888888889,
-        "median_lead_days_missed_as_zero": 2.0694444444444446,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 1,
-        "non_inferior": false
+      "_above_physical_max": false,
+      "_physical_max_lead_days": 10.416666666666666,
+      "_ratified": true,
+      "methods": {
+        "aci": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 6.5,
+          "median_lead_days": 0.4097222222222222,
+          "median_lead_days_missed_as_zero": 0.2048611111111111,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        },
+        "dtaci": {
+          "detection_rate": 0.0,
+          "lead_days_lost_vs_reference": null,
+          "median_lead_days": null,
+          "median_lead_days_missed_as_zero": 0.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 0,
+          "non_inferior": null
+        },
+        "ours": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": -0.09027777777777768,
+          "median_lead_days": 7.0,
+          "median_lead_days_missed_as_zero": 7.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "static": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": 0.0,
+          "median_lead_days": 6.909722222222222,
+          "median_lead_days_missed_as_zero": 6.909722222222222,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "w1acas": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 2.770833333333333,
+          "median_lead_days": 4.138888888888889,
+          "median_lead_days_missed_as_zero": 2.0694444444444446,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        }
       }
     },
     "unbounded": {
-      "aci": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": -2.166666666666668,
-        "median_lead_days": 18.697916666666668,
-        "median_lead_days_missed_as_zero": 18.697916666666668,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "dtaci": {
-        "detection_rate": 0.0,
-        "lead_days_lost_vs_reference": null,
-        "median_lead_days": null,
-        "median_lead_days_missed_as_zero": 0.0,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 0,
-        "non_inferior": null
-      },
-      "ours": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": 8.059027777777779,
-        "median_lead_days": 8.472222222222221,
-        "median_lead_days_missed_as_zero": 8.472222222222221,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": false
-      },
-      "static": {
-        "detection_rate": 1.0,
-        "lead_days_lost_vs_reference": 0.0,
-        "median_lead_days": 16.53125,
-        "median_lead_days_missed_as_zero": 16.53125,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 2,
-        "non_inferior": true
-      },
-      "w1acas": {
-        "detection_rate": 0.5,
-        "lead_days_lost_vs_reference": 12.39236111111111,
-        "median_lead_days": 4.138888888888889,
-        "median_lead_days_missed_as_zero": 2.0694444444444446,
-        "n_anomaly_cases_total": 2,
-        "n_cases_with_lead": 1,
-        "non_inferior": false
+      "_above_physical_max": false,
+      "_physical_max_lead_days": 10.416666666666666,
+      "_ratified": true,
+      "methods": {
+        "aci": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": -2.166666666666668,
+          "median_lead_days": 18.697916666666668,
+          "median_lead_days_missed_as_zero": 18.697916666666668,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "dtaci": {
+          "detection_rate": 0.0,
+          "lead_days_lost_vs_reference": null,
+          "median_lead_days": null,
+          "median_lead_days_missed_as_zero": 0.0,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 0,
+          "non_inferior": null
+        },
+        "ours": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": 8.059027777777779,
+          "median_lead_days": 8.472222222222221,
+          "median_lead_days_missed_as_zero": 8.472222222222221,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": false
+        },
+        "static": {
+          "detection_rate": 1.0,
+          "lead_days_lost_vs_reference": 0.0,
+          "median_lead_days": 16.53125,
+          "median_lead_days_missed_as_zero": 16.53125,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 2,
+          "non_inferior": true
+        },
+        "w1acas": {
+          "detection_rate": 0.5,
+          "lead_days_lost_vs_reference": 12.39236111111111,
+          "median_lead_days": 4.138888888888889,
+          "median_lead_days_missed_as_zero": 2.0694444444444446,
+          "n_anomaly_cases_total": 2,
+          "n_cases_with_lead": 1,
+          "non_inferior": false
+        }
       }
     }
   },

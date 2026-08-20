@@ -162,10 +162,15 @@ supports is the *relative* comparison under one identical rule; what it does
 not support is a claim about how many days of warning an operator would
 receive.
 
-> **[PENDING — H]** Once the detection horizon is decided, this table must be
-> regenerated with `--detection-horizon-days` set, and the absolute lead times
-> in the abstract and conclusion taken from that run. The numbers above are
-> the unbounded run and are labelled as such in every artefact.
+> **[PENDING — Phase 5 re-run]** The detection horizon is no longer open: R27
+> ratified a primary of **14 days** with a declared sweep of 7 / 10 / 14 / 21 /
+> unbounded (see `02_evaluation_protocol.md` Section 4). What remains is
+> mechanical — this table must be regenerated from the CARE score streams at
+> the primary, with the sweep reported beside it, and the absolute lead times
+> in the abstract and conclusion taken from that run. The numbers above are the
+> **unbounded** run and are labelled as such in every artefact. Note that the
+> unbounded column is itself part of the declared sweep, so it is not discarded
+> when the bounded runs arrive; it becomes the most permissive column.
 
 > **[PENDING — Base Scorer 2]** Every figure in this section rests on one
 > frozen detector. The evaluation contract requires the claim to hold on two

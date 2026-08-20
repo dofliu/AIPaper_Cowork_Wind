@@ -226,3 +226,54 @@ audited defect:
 
 Passing the self-test proves the **tool** behaves as specified. It says nothing about the
 CARE v6 data, the scorers, or D0 — those still require a local run.
+
+---
+
+## `diagnose_alarm_selection_floor.py` — 告警選擇效應的代數下界（`alarm-selection-floor-v1.0`）
+
+```bash
+python3 scripts/diagnose_alarm_selection_floor.py \
+  --ours-dir ./experiments/MD_2022_a01_ours \
+  --case-metadata ./manifest_out/g3_case_metadata.csv \
+  --alpha 0.01 --exclude-cases 32,56,72,87 \
+  --trim-case 93=2023-08-24T13:00:00 \
+  --output experiments/alarm_selection_floor_2026-08-20/a01.json
+```
+
+回答 `FREEZE_LOCKIN_FINDINGS` 2.2／2.3 之後審稿人一定會問的下一題：
+**6-of-18 這條規則本身強制出多高的超越率？** 答案是一個**代數下界**，
+不是量測——推導不用到分數串流的任何性質、不需要校準層是對的、
+也不限於 CARE v6。完整推導在模組 docstring，結果在
+`experiments/alarm_selection_floor_2026-08-20/README.md`。
+
+**讀既有逐案輸出，不重跑任何模型。**
+
+| 它報什麼 | 意義 |
+|---|---|
+| 前提稽核（雙向） | `frozen` 是否真的等於 `S_t >= 6`。**兩個方向都查**，一次違反就撤回下界 |
+| `floor_rate_on_neighbourhood` | `(k/w)·\|F\| / \|N(F)\|`，規則強制的下界 |
+| `observed.rate_on_neighbourhood` | 實測值。與下界的比值才是有意義的量 |
+| `far_frozen` / `far_unfrozen` / `far_pooled` | 順帶重現 R24 三數字，供交叉比對 |
+
+**三個容易誤讀的地方**（工具本身也拒絕這三種讀法）：
+
+1. 下界是 `N(F)` 的，**不是凍結集的**。凍結集沒有下界——連續 6 次超越後靜默，
+   18 個凍結點只含 1 次超越（`selftest` T3 就是這個反例）。
+2. 它**不是分解**。「實測減下界」不是「停滯的那一份」。
+3. 下界 ≤ α 時它什麼都沒證明，所以會標 `vacuous_at_this_alpha` 並撤回。
+
+退出碼：`0` 正常 · `1` 前提被違反（不報下界）· `2` 不等式被違反（工具有 bug，
+代數上不可能發生）。
+
+## `selftest_alarm_selection_floor.py`
+
+```bash
+python3 scripts/selftest_alarm_selection_floor.py    # 28 checks
+```
+
+T1 手算 fixture、T2 反向（差一格的膨脹會讓 T1 失敗）、T3 釘住「下界不在凍結集上」、
+T4／T5 前提稽核雙向都會觸發且會撤回下界、T6 vacuity、T7 排除與裁切真的丟掉列
+（含 `T` 對空白的時間戳陷阱）、T7b 暖機列不位移索引、T8 隨機串流下不等式恆成立
+但膨脹係數會被違反、T9 工具自己的 `N(F)` 等於逐點定義（多 run 重疊情形）。
+
+**已反向驗證**：把膨脹改成 `w-1`，T1 兩項與 T9 一項共 3 個 check 失敗。

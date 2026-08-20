@@ -68,6 +68,8 @@ from collections import deque
 from datetime import datetime, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import evaluate_experiment as E  # noqa: E402
 
 # Fixture shape. Deliberately identical in kind to selftest_end_to_end.py so
 # the numbers here explain the numbers there, with more cases so the medians
@@ -173,6 +175,29 @@ def first_index(seq, predicate):
         if predicate(v):
             return i
     return None
+
+
+# Horizons below the usable band. Not part of what the paper reports -- they
+# are here because they are the evidence FOR the lower bound: at H=3 every
+# method collapses to exactly 3.00, which is the table measuring H instead of
+# the methods.
+DIAGNOSTIC_ONLY_HORIZONS = (3.0, 5.0)
+
+
+def horizon_sweep_order():
+    """Ratified sweep plus the diagnostic-only horizons, unbounded first.
+
+    The ratified half is imported rather than restated so that R27's declared
+    set has one definition. Sorting is explicit because `None` does not compare
+    with floats.
+    """
+    finite = sorted(set(DIAGNOSTIC_ONLY_HORIZONS)
+                    | set(h for h in E.RATIFIED_HORIZON_SWEEP if h is not None))
+    return [None] + finite
+
+
+def horizon_is_ratified(horizon):
+    return horizon in E.RATIFIED_HORIZON_SWEEP
 
 
 # Two case sets. "selftest" is byte-for-byte the fixture that produced the
@@ -381,12 +406,18 @@ def main():
         print("    raised before the fault began.")
 
         # ---- horizon sweep -----------------------------------------------
-        # The detection horizon H is a new evaluation parameter and needs
-        # ratifying. Rather than propose a number, run the real evaluator
-        # across a range and show what each choice does to the table, so the
-        # decision is made against evidence. H is deliberately swept past
-        # the physical maximum lead so the point where the artefact
-        # reappears is visible rather than assumed.
+        # This sweep produced the evidence for R27 and now double-checks it.
+        # The horizons come from TWO places on purpose:
+        #
+        #   * the RATIFIED sweep, imported from evaluate_experiment so the set
+        #     the paper reports has exactly one definition (working rule 5);
+        #   * DIAGNOSTIC_ONLY_HORIZONS below the usable band, kept because they
+        #     are what SHOWS the truncation -- at H=3 every method collapses to
+        #     3.00 and the table is measuring H rather than the methods. Delete
+        #     them and the evidence for the lower bound disappears with them.
+        #
+        # H is still swept past the physical maximum lead so the point where
+        # the pre-onset artefact reappears stays visible rather than assumed.
         print("\nHORIZON SWEEP -- the same comparison under each candidate H,")
         print("    produced by evaluate_experiment.py itself.")
 
@@ -427,8 +458,14 @@ def main():
                                     "%Y-%m-%d %H:%M:%S")})
 
         physical_max = LABEL_LAG_STEPS / STEPS_PER_DAY
+        report["horizon_protocol"] = {
+            "version": E.DETECTION_HORIZON_PROTOCOL,
+            "ratified_primary_days": E.RATIFIED_DETECTION_HORIZON_DAYS,
+            "ratified_sweep_days": list(E.RATIFIED_HORIZON_SWEEP),
+            "diagnostic_only_days": list(DIAGNOSTIC_ONLY_HORIZONS),
+        }
         report["horizon_sweep"] = {}
-        for horizon in [None, 3.0, 5.0, 7.0, 10.0, 14.0]:
+        for horizon in horizon_sweep_order():
             tag = "unbounded" if horizon is None else ("h%g" % horizon)
             out_dir = os.path.join(root, "eval_" + tag)
             cmd = [py, os.path.join(HERE, "evaluate_experiment.py"),
@@ -475,12 +512,18 @@ def main():
                          "" if e.get("non_inferior") is None
                          else ("yes" if e["non_inferior"] else "NO")))
             report["horizon_sweep"][tag] = {
-                n: {k: e.get(k) for k in
-                    ("median_lead_days", "median_lead_days_missed_as_zero",
-                     "detection_rate", "n_cases_with_lead",
-                     "n_anomaly_cases_total", "lead_days_lost_vs_reference",
-                     "non_inferior")}
-                for n, e in comp.items()}
+                "_ratified": horizon_is_ratified(horizon),
+                "_physical_max_lead_days": physical_max,
+                "_above_physical_max": (horizon is not None
+                                        and horizon > physical_max),
+                "methods": {
+                    n: {k: e.get(k) for k in
+                        ("median_lead_days", "median_lead_days_missed_as_zero",
+                         "detection_rate", "n_cases_with_lead",
+                         "n_anomaly_cases_total", "lead_days_lost_vs_reference",
+                         "non_inferior")}
+                    for n, e in comp.items()},
+            }
 
         print("\n    the physical maximum lead this fixture allows is %.2f days."
               % physical_max)
