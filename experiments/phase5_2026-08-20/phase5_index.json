@@ -1,0 +1,167 @@
+{
+  "alphas": [
+    0.01,
+    0.05,
+    0.001
+  ],
+  "declared_sweep_days": [
+    7.0,
+    10.0,
+    14.0,
+    21.0,
+    null
+  ],
+  "event_info_root": "/workspace/scratch/36db45a822ee/care_event_info",
+  "excluded_cases": [
+    "32",
+    "56",
+    "72",
+    "87"
+  ],
+  "farms_with_event_info": [
+    "Wind Farm A",
+    "Wind Farm B",
+    "Wind Farm C"
+  ],
+  "horizon_protocol": "detection-horizon-v1.0",
+  "primary_horizon_days": 14.0,
+  "runs": [
+    {
+      "alpha": 0.01,
+      "alpha_tag": "a01",
+      "horizon_days": 7.0,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a01_h7",
+      "tag": "a01_h7"
+    },
+    {
+      "alpha": 0.01,
+      "alpha_tag": "a01",
+      "horizon_days": 10.0,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a01_h10",
+      "tag": "a01_h10"
+    },
+    {
+      "alpha": 0.01,
+      "alpha_tag": "a01",
+      "horizon_days": 14.0,
+      "is_primary": true,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a01_h14",
+      "tag": "a01_h14"
+    },
+    {
+      "alpha": 0.01,
+      "alpha_tag": "a01",
+      "horizon_days": 21.0,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a01_h21",
+      "tag": "a01_h21"
+    },
+    {
+      "alpha": 0.01,
+      "alpha_tag": "a01",
+      "horizon_days": null,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a01_unbounded",
+      "tag": "a01_unbounded"
+    },
+    {
+      "alpha": 0.05,
+      "alpha_tag": "a05",
+      "horizon_days": 7.0,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a05_h7",
+      "tag": "a05_h7"
+    },
+    {
+      "alpha": 0.05,
+      "alpha_tag": "a05",
+      "horizon_days": 10.0,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a05_h10",
+      "tag": "a05_h10"
+    },
+    {
+      "alpha": 0.05,
+      "alpha_tag": "a05",
+      "horizon_days": 14.0,
+      "is_primary": true,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a05_h14",
+      "tag": "a05_h14"
+    },
+    {
+      "alpha": 0.05,
+      "alpha_tag": "a05",
+      "horizon_days": 21.0,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a05_h21",
+      "tag": "a05_h21"
+    },
+    {
+      "alpha": 0.05,
+      "alpha_tag": "a05",
+      "horizon_days": null,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a05_unbounded",
+      "tag": "a05_unbounded"
+    },
+    {
+      "alpha": 0.001,
+      "alpha_tag": "a001",
+      "horizon_days": 7.0,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a001_h7",
+      "tag": "a001_h7"
+    },
+    {
+      "alpha": 0.001,
+      "alpha_tag": "a001",
+      "horizon_days": 10.0,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a001_h10",
+      "tag": "a001_h10"
+    },
+    {
+      "alpha": 0.001,
+      "alpha_tag": "a001",
+      "horizon_days": 14.0,
+      "is_primary": true,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a001_h14",
+      "tag": "a001_h14"
+    },
+    {
+      "alpha": 0.001,
+      "alpha_tag": "a001",
+      "horizon_days": 21.0,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a001_h21",
+      "tag": "a001_h21"
+    },
+    {
+      "alpha": 0.001,
+      "alpha_tag": "a001",
+      "horizon_days": null,
+      "is_primary": false,
+      "ok": true,
+      "output_dir": "./experiments/phase5_2026-08-20/a001_unbounded",
+      "tag": "a001_unbounded"
+    }
+  ],
+  "tool": "phase5-evaluation-v1.0",
+  "trim_case": "93=2023-08-24T13:00:00"
+}

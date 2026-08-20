@@ -1,0 +1,44 @@
+verifying /workspace/scratch/36db45a822ee/AIPaper_Cowork_Wind/experiments/phase5_2026-08-20
+
+1  the batch is complete
+  PASS  1 all 15 runs present
+
+2  lead time was computed (the whole point of this batch)
+  PASS  2 median_lead_days is not null
+  PASS  2 detection_rate is not null
+  PASS  2 at least one anomaly case is evaluable
+  PASS  2 median_lead_days_missed_as_zero is reported too
+
+3  D1/D6 applied to every run
+  PASS  3 every run excludes the four D1/D6 cases
+  PASS  3 every run drops exactly 18 rows from case 93
+
+4  denominators (working rule 7: a statistic without its n is not one)
+  PASS  4 every run evaluates 91 cases
+  PASS  4 every run computes FAR on 47 normal cases
+
+5  the three-number false-alarm protocol is in force
+  PASS  5 pooled is exactly reconstructible in every run
+  PASS  5 the protocol version is recorded
+  PASS  5 baselines report freeze state as absent, not as 0%
+  PASS  5 the proposed method DOES report freeze state
+
+6  the detection-horizon protocol is in force
+  PASS  6 exactly 3 runs are flagged primary (one per alpha)
+  PASS  6 the unbounded runs are present and unbounded
+
+7  the false-alarm figures did NOT move (only lead time is new)
+  PASS  7 far_frozen_points is still 0.6819
+  PASS  7 frozen_point_fraction is still 0.0494
+  PASS  7 mean_worst_bin_deviation_unfrozen is still 0.0036
+
+8  comparison.md carries the columns a reader needs
+  PASS  8 the table header has `frozen %`
+  PASS  8 the table header has `FAR frozen`
+  PASS  8 the horizon and its standing are stated
+
+21 checks, 0 failed
+
+Batch accepted. The 3 primary runs (H = 14 d) are the headline numbers;
+the rest are the declared sweep and must be reported beside them.
+

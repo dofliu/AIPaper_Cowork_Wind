@@ -97,8 +97,10 @@ group of turbines a unit belongs to.
   implemented. `[PENDING — Base Scorer 2]`
 - "C0–C6 passed." The gate definitions are not ratified
   (`gate_definitions_ratified: false`).
-- Any lead-time or earliness claim on real data before the detection horizon
-  *H* is ratified. `[PENDING — H]`
+- Any lead-time or earliness claim outside the ratified R27 protocol. Lead
+  time is reported at the primary *H* = 14 days together with the declared
+  sweep 7 / 10 / 14 / 21 days and unbounded, or not at all; a single-number
+  earliness claim without the sweep beside it is what R27 exists to prevent.
 - Offshore validity. CARE v6 is onshore.
 
 ---
@@ -117,23 +119,30 @@ group of turbines a unit belongs to.
 > false-alarm rate inside freezes — that is exactly reconcilable with it.
 > On 91 cases of the CARE v6 SCADA dataset, conditioning on physically defined
 > wind-speed operating regimes holds the worst-regime deviation at 0.0036 at a
-> nominal 0.01, against 0.1295 for static split conformal. We further
-> characterise the geometry of alarm-induced calibration lock-in and falsify
-> six candidate absorption policies, showing that a sustained benign shift and
-> a sustained degradation are indistinguishable within the score stream alone.
+> nominal 0.01, against 0.1295 for static split conformal. Under a
+> pre-registered earliness protocol that reports a primary planning horizon
+> (14 days) alongside a declared sweep, the proposed method detects every one
+> of the 44 anomaly cases at α = 0.01 and issues alarms **2.2 days earlier**
+> than static split conformal, and the non-inferiority verdict holds at every
+> horizon in the sweep. We further characterise the geometry of alarm-induced
+> calibration lock-in and falsify six candidate absorption policies, showing
+> that a sustained benign shift and a sustained degradation are
+> indistinguishable within the score stream alone.
 
 **For the end of the introduction (the "we contribute" list):**
 
 > Our contributions are (i) an evaluation protocol for calibration layers that
 > operate under alarm-suppression policies, in which the false-alarm figure is
-> reported as three reconcilable numbers rather than one; (ii) an empirical
-> characterisation, on real SCADA data, of the selection effect that makes the
-> pooled figure uninterpretable, including its invariance to the nominal level;
-> (iii) a falsification of six absorption policies together with the reason
-> they all fail; and (iv) a reproducible operating-regime-conditional
-> calibration protocol on CARE v6, with the per-case evidence and the
-> compatibility checks that a reviewer needs to re-derive every number.
-> We do not propose a new conformal algorithm and prove no coverage theorem.
+> reported as three reconcilable numbers rather than one and earliness is
+> reported at a maintenance planning horizon alongside a declared sweep;
+> (ii) an empirical characterisation, on real SCADA data, of the selection
+> effect that makes the pooled figure uninterpretable, including its invariance
+> to the nominal level; (iii) a falsification of six absorption policies
+> together with the reason they all fail; and (iv) a reproducible
+> operating-regime-conditional calibration protocol on CARE v6, with the
+> per-case evidence and the compatibility checks that a reviewer needs to
+> re-derive every number. We do not propose a new conformal algorithm and
+> prove no coverage theorem.
 
 **The last sentence is deliberate.** Stating the boundary explicitly is
 cheaper than having a reviewer discover it, and under R25 it is now the
@@ -143,13 +152,13 @@ accurate description of the work.
 
 ## 4. Open items blocking finalisation
 
-| Item | Blocks | Owner |
-|---|---|---|
-| Detection horizon *H* (R22) | every earliness sentence | 劉老師 |
-| Base Scorer 2 | any "both scorers" wording; D5 | 本機 |
-| Formal Phase 5 re-run with `--event-info-root` | the lead-time column of Results | 本機 |
-| C0–C6 ratification | the compatibility-check wording | 劉老師 |
-| Related work (R23 / 6.6, and POGO gate G8) | positioning against named prior work | 本機取全文後 |
+| Item | Blocks | Owner | Status |
+|---|---|---|---|
+| ~~Detection horizon *H* (R22)~~ | ~~every earliness sentence~~ | 劉老師 | **✅ R27 ratified 2026-08-20** |
+| ~~Formal Phase 5 re-run with `--event-info-root`~~ | ~~the lead-time column of Results~~ | 本機 | **✅ Completed 2026-08-20 (`experiments/phase5_2026-08-20/`)** |
+| Base Scorer 2 | any "both scorers" wording; D5 | 本機 | Open |
+| C0–C6 ratification | the compatibility-check wording | 劉老師 | Open |
+| Related work (R23 / 6.6, and POGO gate G8) | positioning against named prior work | 本機取全文後 | Open |
 
 None of these blocks Section 1 or Section 2 of this file: those state what we
 measured and what we are forbidden to say, and both are settled.
