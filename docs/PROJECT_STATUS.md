@@ -1,4 +1,4 @@
-# 專案現況與交接 — 2026-08-19
+# 專案現況與交接 — 2026-08-20
 
 **這份文件的用途**：讓任何協作者（含未來的我）不必讀對話紀錄就能接手。
 對話會變長、會被壓縮、會遺失；這份文件在版本控制裡。
@@ -7,7 +7,7 @@
 
 分支：**`main`**。所有工作分支（#6–#9）皆已併入並清理。
 　　　**請從 `main` 取用，不要再從個別工作分支接手。**
-自我測試：12 支、**370 checks**、全過（`docs/LOCAL_RUNBOOK.md` Phase 0.3 有一鍵指令）
+自我測試：**13 支、398 checks**、全過（`docs/LOCAL_RUNBOOK.md` Phase 0.3 有一鍵指令）
 
 > 這個數字是各分支合併**後實跑**得到的，不是把各分支的數字相加。
 > 曾有兩個 session 同時在改 `evaluate_experiment.py` 與
@@ -16,6 +16,41 @@
 ---
 
 ## 1. 現在卡在哪裡（一句話）
+
+### 1.00 【2026-08-20】選擇效應現在有代數下界；同日撈到一個引用缺口
+
+本輪有兩件事改變了論證的位置，方向相反。
+
+**一、C2 的核心論證從觀察升級成證明。** 先前「凍結期 0.6819 是選擇效應不是停滯」
+靠兩個實證（頭 18 步就 0.589、α 不變性）。現在有一個**與資料無關的代數下界**：
+在已校準點的索引空間裡凍結集就是 `F = {t : S_t ≥ 6}`（等號，非近似），
+於是凍結點連同它們事前看過的視窗 `N(F)` 上，超越數必然 ≥ `(6/18)·|F|`。
+
+| α | 下界（`N(F)` 上） | 下界／α | 實測 | 實測／下界 |
+|---|---|---|---|---|
+| 0.001 | 0.2554 | 255× | 0.6590 | 2.58 |
+| **0.01** | **0.2397** | **24×** | 0.5741 | 2.40 |
+| 0.05 | 0.2505 | 5.0× | 0.6060 | 2.42 |
+
+下界本身幾乎不隨 α 動，但它相對 α 的倍數動了 51 倍。
+**同輪順帶做了前提稽核**：`frozen` 是否真的等於 6-of-18，先前只是讀程式碼相信的，
+本輪對三個 α 共約 250 萬個可測試點**雙向重算，兩個方向都 0 違反**——
+這是「已簽核的 6-of-18 確實被執行了」的第一次獨立驗證。
+
+工具 `scripts/diagnose_alarm_selection_floor.py`（28 checks，含反向驗證），
+輸出與完整推導見 `experiments/alarm_selection_floor_2026-08-20/`，
+量測併入 `docs/FREEZE_LOCKIN_FINDINGS.md` 2.3a。
+**這個界不是凍結集本身的下界，也不是分解**——兩種誤讀都會比代數多主張東西，
+寫稿前務必讀該目錄 README 第二節。
+
+**二、同一個概念在保形推論文獻裡早就有名字，而我們沒引。**
+`selection-conditional coverage`／post-selection inference／**FCR 控制**
+是一整支既有文獻（JRSSB 2025、CAP、arXiv:2503.16809 等）。
+**這不動 R25 的定位**（我們的貢獻是這個運維機制的幾何與呈報協定，不是選擇效應這個概念），
+**但它是一個真實的引用缺口**：Q1 若送到保形推論那側的審稿人手上，
+一篇談「凍結期覆蓋率量不準」卻不引 FCR 的稿子第一輪就會被要求補。
+細節、初步差異表與建議新增的 firewall 第六條見
+`docs/literature/LITERATURE_SCAN_2026-08-20.md` 第二節。**維持 `NOVELTY_UNRESOLVED`**。
 
 ### 1.0 【2026-08-18】已提交的實驗表格還是舊協定的，頭號數字要換掉
 
@@ -330,7 +365,7 @@ sensor_146/147  "Rotor speed gearbox main shaft 1/2"   p50=80     彼此 r=0.207
 
 ---
 
-## 4. 工具清單（30 支腳本）
+## 4. 工具清單（32 支腳本）
 
 ### 產生數字的
 
@@ -363,7 +398,8 @@ sensor_146/147  "Rotor speed gearbox main shaft 1/2"   p50=80     彼此 r=0.207
 | `check_power_channel.py` | 分辨「實測功率」與「可能發電量」 |
 | `sensor_identification_profile.py` | 統計式感測器辨識（已次於字典） |
 | `diagnose_earliness_gap.py` | 提前量缺口三假說歸因＋偵測門檻 H 敏感度掃描（見 6.1） |
-| `diagnose_freeze_lockin.py` | **本輪新增**。凍結鎖死的幾何：run 長度、連帶凍結、停滯剖面、有界凍結上限。讀既有輸出，不重跑 |
+| `diagnose_freeze_lockin.py` | 凍結鎖死的幾何：run 長度、連帶凍結、停滯剖面、有界凍結上限。讀既有輸出，不重跑 |
+| `diagnose_alarm_selection_floor.py` | **2026-08-20 新增**。6-of-18 強制的超越率代數下界＋`frozen` 是否真的等於該規則的雙向前提稽核。讀既有輸出，不重跑 |
 
 ---
 
@@ -524,6 +560,17 @@ adaptive threshold 用於 **Wind Farm A 與 B**，作法是以神經網路回歸
   **✅ 已裁決 2026-08-18 21:52（改為 protocol-and-evidence，見 6.7）**
 - 【2026-08-19 新增】`docs/method/POGO_COMPATIBILITY_GATE.md` 的執行 owner
   尚未指派（6.8）。這不是裁決題，是排程題，但沒人認領就不會動。
+- **【2026-08-20 新增・擋住 R26 下一步】POGO 的兩項 pre-run contract**
+  （gate 3.5）。兩者都改變比較的意義，必須在建環境**之前**凍結：
+  · **group 數 `k = 4` 還是 `k = 5`**：作者 script 會在四個 subgroup 前加一個
+    all-ones 的 marginal group。本文件立場是 `k = 4`（已簽核的 group 定義）
+    不得為了對齊作者預設而改；要加 marginal group 應記為 **POGO 那一側**的
+    執行參數。兩者都跑可以，但**主要設定必須在看到結果之前指定**（G7）。
+  · **`binary_groups=True` 與 empirical closed-form weights**：作者的
+    synthetic／MIMIC script 採此設定，須在跑之前凍結並記錄理由。
+- **【2026-08-20 新增】claim firewall 第六條**（禁止主張「發現／首次指出選擇效應
+  會使條件覆蓋率主張失真」）。理由見 `LITERATURE_SCAN_2026-08-20.md` 第四節。
+  與 R25 不同，這一條**不需要改定位**，只需加一條禁止。
 
 ### 6.5 【2026-08-17 已裁決並實作】誤報率改為三數字呈報（R24）
 
@@ -665,23 +712,40 @@ group 定義、時間狀態、輸出介面與 O&M 決策語義是同義的。
 **規格正本在 Drive（R26 v1.0），版控版本與可執行部分在
 `docs/method/POGO_COMPATIBILITY_GATE.md`。**
 
-| Gate | 狀態（2026-08-19） |
+| Gate | 狀態（2026-08-20） |
 |---|---|
-| G0 source/version receipt | **`BLOCKED_IMPLEMENTATION`（雲端）** — 論文全文 arXiv `000`；作者程式端點可達但第三方 repo 不在本 session 授權範圍，未讀取 |
-| G1 輸入語義、G2 group、G4 輸出介面 | **本研究這一欄已填**（出自 `regime_conditional_calibration.py`）；POGO 那一欄 NOT RUN |
+| G0 source/version receipt | **`SOURCE_RECEIPT_COMPLETE / ENVIRONMENT_BUILD_NOT_RUN`** — 2026-08-20 由協作者於別的環境完成，commit／license／lock／兩個 SHA-256 齊備。**明確不宣稱 G0 PASS**（環境未建置）。轉錄值見 gate 3.3 |
+| G1 輸入語義 | `PAPER_CODE_MAPPING_DRAFTED / SEMANTIC_RATIFICATION_PENDING` — **紅旗未解除**，見下 |
+| G2 group、G4 輸出介面 | 本研究這一欄已填；POGO 那一欄有草案，待以論文定義追認 |
 | G3 狀態／重置／時間 | 本研究側已述；待對照 |
 | G5–G8 | NOT RUN |
 
-**已預告的紅旗（標記，不是結案）**：POGO 以 `Y_t` 與 prediction set 為中心，
-本研究**沒有 `Y_t`**（校準層不使用事件標籤）。若必須虛構 `Y_t` 才能讓 POGO
-產出同義的 alarm event，依 stop rule 應判 `NOT_COMPARABLE`。
-**判定要有全文與程式為據**，所以這裡只記「預期會撞到哪裡」。
+**雲端這側 2026-08-20 重新實測，封鎖狀態與 08-19 完全相同**（arXiv `000`、
+`github.com` 與 `api.github.com` `403`、`raw.githubusercontent.com` `200`）。
+G0 的解除**不是**雲端解封，是別的環境做的。
 
-**下一個可執行動作**：本機取得全文與作者程式完成 G0 → 填 POGO 那一欄 →
-mapping 成立才寫 adapter。**先填表再寫 adapter**：mapping 不成立的話
-adapter 是白工，而且寫完之後人會捨不得丟。
+**紅旗的狀態：沒有解除，但被縮小了。** 協作者回報
+「`POGO.update(S_t, c_t)` 直接接受 scalar，因此不需要捏造 `Y_t`」。
+**就介面而言正確，但它回答的不是那個紅旗**：
 
-**執行 owner：TBD**（R26 第 8 節，截至 2026-08-19 未指派）。
+- **實作障礙**（adapter 要不要合成 `Y_t`）→ **已解除**。
+- **語義紅旗**（POGO 的 `S_t` 與本研究的分數是否同義）→ **未解除**。
+  POGO 的 `S_t` 是 residual `|Y_t − f(X_t)|`，`radius` 是**預測區間半徑**，
+  超越事件的意義是 **miscoverage**。餵進 Mahalanobis 距離之後，
+  radius 不再是任何區間的半徑，超越也不再是 miscoverage。
+  **「函式接受一個 float」不等於「這個 float 是同一個東西」。**
+
+從「API 不需要 `Y_t`」到「不需要 `Y_t`」只差兩個字——這正是 8.1 在 2026-08-18
+記下的那條：**這一輪撞到的不是版號，是轉述時掉了限定詞。** 完整說明見 gate 3.4。
+
+**下一個可執行動作**：**先裁決 6.4 新增的兩項 pre-run contract**（`k=4`／`k=5`、
+`binary_groups`），再以**論文對 `S_t` 的定義**填 4.1 的 POGO 欄。
+**先填表再寫 adapter**：mapping 不成立的話 adapter 是白工，
+而且寫完之後人會捨不得丟。
+
+**執行 owner：仍為 TBD**（R26 第 8 節，截至 2026-08-20 未指派）。
+G0 有人自願補位不等於 owner 已定——**下一步是裁決題，沒有 owner
+就沒有人會去要那個裁決。**
 
 ---
 
@@ -739,11 +803,15 @@ adapter 是白工，而且寫完之後人會捨不得丟。
    · ~~arXiv 2606.00419（6.7 的紅旗，最優先）~~ **✅ 全文已於 2026-08-18
      由另一 session 取得並完成四欄核對；但 repo 內無副本，且
      R26 的 source lock 仍需要它，所以下載這件事沒有取消**
-   · **【新】POGO 作者程式 `github.com/beepulbharti/pogo`** — R26 G0 的
-     source receipt（commit SHA、license、dependency lock、SHA-256）。
+   · ~~**【新】POGO 作者程式 `github.com/beepulbharti/pogo`**~~
+     **✅ 2026-08-20 由協作者完成 source receipt**（見 6.8／gate 3.3）。
      **雲端不做這件事的原因是授權範圍，不是網路**，兩者不要混記。
    · arXiv 2606.20115（監看）
    · CARE 論文期刊版（6.3，步驟見 `CARE_PAPER_ACQUISITION.md` 第四節）
+   · **【2026-08-20 新增，優先序僅次於 CARE】F10 那一組**——
+     arXiv:2403.03868（JRSSB 2025 版更好）、2403.07728（CAP）、2503.16809。
+     這是**引用缺口**，不是監看項：見 1.00 第二點。
+     次要：2605.22004、2301.00584、1905.01059、2606.13780。
 
 9. **【2026-08-19 新增】CARE v6 的被引用清單掃描。**
    引用索引 API（crossref／openalex／semanticscholar）雲端全部不可達，
@@ -796,6 +864,14 @@ adapter 是白工，而且寫完之後人會捨不得丟。
   無新紅旗；`regime-*` 語彙撞車累積到三筆，該規範升級為禁止項（見 6.7 末）。
   **三個軸只做到兩個**——CARE v6 被引用清單需引用索引 API，雲端不可達，
   已移入本機清單。**因此稿件不得寫「first on CARE v6」之類的話。**
+  **✅ 2026-08-20 第三次執行**，`LITERATURE_SCAN_2026-08-20.md`：
+  **本輪有新發現，而且是三次裡最重要的一次**——F10（selection-conditional
+  coverage／FCR 控制是既有文獻，引用缺口，見 1.00 第二點）、
+  F11（look-elsewhere effect，先例參照）、F12（工單作為弱標籤，佐證 4.3）。
+  **被引用清單第三次做不到**（本輪重新實測五個端點全 `000`），
+  「first on CARE v6」的禁令繼續有效。
+  ⚠️ 本輪證據等級**低於前兩輪**：`arxiv.org` 不可達，連摘要原文都沒讀到，
+  只讀到搜尋引擎的轉述。處理上要更保守。
 
 - ~~abstract／introduction 的貢獻句凍結~~
   **✅ 2026-08-19 已解凍並交付初稿**（R25 裁決明文允許在 claim firewall
@@ -826,8 +902,9 @@ adapter 是白工，而且寫完之後人會捨不得丟。
 | **POGO 相容性 gate** | `docs/method/POGO_COMPATIBILITY_GATE.md`（2026-08-19 進版控；規格正本在 Drive R26） |
 | **文獻取得與新穎性監看** | `docs/literature/`（2026-08-16 新增；2026-08-18 起每次排程記錄一份掃描） |
 | **R24 三數字協定對既有輸出的重算** | `experiments/three_number_recheck_2026-08-18/`（2026-08-18，見 1.0） |
+| **告警選擇效應的代數下界＋前提稽核** | `experiments/alarm_selection_floor_2026-08-20/`（2026-08-20，見 1.00；量測併入 `FREEZE_LOCKIN_FINDINGS` 2.3a） |
 | **給 Drive 這側的入口說明** | Google Drive，`【必讀】GitHub 專案入口與雙軌分工 v1.0`（2026-08-17） |
-| 程式 | `scripts/`，30 支（實數；先前記的 26 已過期） |
+| 程式 | `scripts/`，32 支（實數；先前記的 26／30 已過期） |
 
 ### 8.0 為什麼 2026-08-17 補了一個 README（起因見下）
 
@@ -900,4 +977,4 @@ v3.0 三份，v3.9 兩份。最嚴重的一次是 v4.0 已存在後又出現一�
 
 ---
 
-*最後更新：2026-08-19（Asia/Taipei）。狀態有變動時請更新本文件，不要只寫在對話裡。*
+*最後更新：2026-08-20（Asia/Taipei）。狀態有變動時請更新本文件，不要只寫在對話裡。*

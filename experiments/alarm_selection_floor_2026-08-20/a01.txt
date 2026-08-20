@@ -1,0 +1,31 @@
+alarm-selection floor, alpha = 0.01
+
+  premise (6 of last 18, evaluated on calibrated points): OK
+    testable calibrated points   2489541
+    frozen but rule says no      0
+    rule says yes but not frozen 0
+
+  counts
+    calibrated points            2490340
+    frozen points |F|            123005 (0.0494 of calibrated)
+    frozen runs                  3025 (longest 1711)
+    neighbourhood |N(F)|         171071
+
+  the bound
+    forced exceedances >= (k/w)|F| = 41001.7
+    floor rate on N(F)           0.2397  (24.0 x nominal alpha)
+    observed rate on N(F)        0.5741  (2.40 x the floor)
+
+  for reference (three-number report, recomputed here)
+    FAR frozen                   0.6819
+    FAR unfrozen                 0.0113
+    FAR pooled                   0.0445
+
+  VERDICT: the 6-of-18 rule alone forces a rate of at least 0.2397 on the
+  points it selected -- 24 times nominal -- before any staleness,
+  any miscalibration, or any property of this dataset is invoked.
+
+  The floor is a lower bound on N(F), not on the frozen set, and not
+  a decomposition: the surplus over the floor is NOT labelled here.
+
+wrote experiments/alarm_selection_floor_2026-08-20/a01.json

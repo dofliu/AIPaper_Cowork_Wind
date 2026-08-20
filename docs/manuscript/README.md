@@ -59,6 +59,13 @@ framework` 皆已被既有文獻佔據（見《研究方向與方法論筆記 v4
 | 任何形式的 **group-conditional coverage guarantee**（有限樣本或漸近） | 同上；且本文不證明任何定理 |
 | `regime-aware`／`regime-weighted`／`regime-dependent` 作為本文主詞 | 2026 年已有三篇獨立使用 `regime-*` + conformal calibration，見 `docs/literature/LITERATURE_SCAN_2026-08-19.md` |
 | 「我們優於／相當於／不需要 POGO」 | 相容性 gate 尚未執行；**「POGO 不適用於本問題」同樣是未經檢查的結論** |
+| **【2026-08-20 提議，待追認】**「我們發現／首次指出選擇效應會使條件覆蓋率主張失真」 | 選擇後推論（POSI）、`selection-conditional coverage` 與 **FCR 控制**是既有文獻（JRSSB 2025、CAP、arXiv:2503.16809 等）。可守的是**這個特定運維機制**（6-of-18 + Freeze-on-Alert）的選擇幾何、其代數下界與三數字呈報協定，**不是選擇效應這個概念**。見 `docs/literature/LITERATURE_SCAN_2026-08-20.md` 第二、四節 |
+
+> **【2026-08-20】上表最後一列同時帶來一個引用義務，不只是禁止。**
+> 談「凍結期覆蓋率量不準」而不引 FCR／selection-conditional coverage，
+> 在保形推論那側的審稿人眼中是引用缺口。**這個缺口現在補得起來，投出去之後補很貴。**
+> 全文尚未取得（arXiv 雲端封鎖），所以**本輪不動任何主張句**，
+> 只把義務記在這裡。
 
 可以主張的三件事寫在 `00_contribution_statement.md` 第 1 節，
 每一條都有量測支撐。**貢獻句已解凍**（R25 裁決明文允許在此 claim firewall

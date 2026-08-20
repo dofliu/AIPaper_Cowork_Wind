@@ -1,6 +1,8 @@
 # POGO Compatibility Gate — 版控版本
 
-**狀態：`GATE_SPEC_RATIFIED` / `EXECUTION_NOT_STARTED`（G0 已嘗試，見第 3 節）**
+**狀態：`GATE_SPEC_RATIFIED` / `EXECUTION_NOT_STARTED`**
+**G0：`SOURCE_RECEIPT_COMPLETE / ENVIRONMENT_BUILD_NOT_RUN`（協作者回報，2026-08-20，見 3.3）**
+**G1：`PAPER_CODE_MAPPING_DRAFTED / SEMANTIC_RATIFICATION_PENDING`（紅旗未解除，見 3.4）**
 
 **規格來源**：Drive《[方法] 2026-08-18 R26 — POGO Compatibility Gate v1.0 —
 2026-08-18 2152 — 排程自動化研究助理》
@@ -85,8 +87,100 @@ R25 的全文核對已確認：generic group-conditional OCP 與其 coverage gua
 發現下載得到，然後合理推論前一輪的記錄不可信——**而其他被記為封鎖的項目
 其實是真的封鎖。** 一個錯誤的封鎖標籤會污染整份封鎖清單的可信度。
 
-**G0 狀態：`BLOCKED_IMPLEMENTATION`（cloud）。**
+**G0 狀態（雲端這側，2026-08-19）：`BLOCKED_IMPLEMENTATION`。**
 解除方式：由本機端、或由具第三方 repo 授權的 session 執行 2.1 的 source lock。
+**該封鎖已於 2026-08-20 由另一位協作者從別的環境解除，見 3.3。**
+
+### 3.3 【2026-08-20】協作者回報 G0 已完成 —— 轉錄，未經本 session 驗證
+
+**出處**：Drive《進度更新 2026-08-19 v4.5》文末 2026-08-20 追加段落，
+以及《風能運維論文協作開發日誌 v4.9 — 2026-08-20 0045 — Gemini Spark》。
+**本 session 沒有、也不可能複驗**：arXiv 與第三方 repo 在雲端這側仍封鎖
+（3.1 的實測 2026-08-20 重跑，結果相同）。以下是轉錄，不是本 repo 的驗證結果。
+
+| 項目 | 協作者回報值 |
+|---|---|
+| 論文 | arXiv:2606.00419**v4** \[stat.ML\]（Bharti, Pal, Teneggi, Sulam, 2026） |
+| 論文 PDF SHA-256 | `7ab6c1c619d2cfe929ced4e0dd26b42f4dad9a66300991cb299ce31653e440d3` |
+| 作者程式 | `github.com/beepulbharti/pogo` |
+| commit | `95a8487568460561acd63f07d3feaa8a4bfce999` |
+| license | MIT |
+| dependency lock | Python `>= 3.11`，`uv.lock` revision 3 |
+| exact-commit archive SHA-256 | `f608bdafe53dc3ac6acf727e4bcd0a9c54ee76952933bc07cf84dfa309941d58` |
+| 已靜態檢視 | README、pyproject.toml、uv.lock、pogo.py、synthetic/runner.py、mimic/run_experiment.py |
+| 已執行 | **無** |
+
+**回報的 G0 狀態：`SOURCE_RECEIPT_COMPLETE / ENVIRONMENT_BUILD_NOT_RUN`
+（明確不宣稱 G0 PASS）。** 這個克制是對的，第 2 節的 source lock 要求
+「取得時間」也要留痕，而環境未建置就還沒有可重現性證據。
+
+> **為什麼要把它寫進版控。** 到 2026-08-20 為止，`main` 上的這一節寫著
+> G0 `BLOCKED_IMPLEMENTATION`，而封鎖其實已經解除了。今天照版控讀狀態的人
+> 會去重做一次已經做完的 source receipt，或是繼續向劉老師呈報「還卡著」。
+> 這是 8.0a 那條規則的第四種形態：撞號、`main` 落後、裁決卡在 Drive，
+> 現在是**進度卡在 Drive**。四種形態的共同點都是沒有任何一邊會報錯。
+
+---
+
+## 3.4 【2026-08-20】G1 紅旗的狀態：**沒有解除，但被縮小了**
+
+協作者同輪回報 G1/G4 的靜態 mapping 草案：
+
+```
+frozen anomaly score        → POGO 的 S_t
+當期更新前的 self.radius     → threshold_t
+wind-speed group vector     → c_t
+alarm exceedance            → empirical exceedance indicator
+```
+
+並附一句結論：「`POGO.update(S_t, c_t)` 直接接受 scalar score 與 group vector，
+因此本研究 adapter **不需要捏造 `Y_t`**。」
+
+**這句話就介面而言是對的，但它回答的不是 4.1 提出的那個紅旗。**
+兩件事必須分開，混起來就會把一個未解的語義問題記成已解：
+
+| | 狀態 |
+|---|---|
+| **實作障礙**：adapter 是否必須合成一個 `Y_t` 才能呼叫 POGO | **已解除**（若回報屬實）。API 吃 scalar，不吃標籤。 |
+| **語義紅旗**：POGO 的 `S_t` 是否與本研究的分數同義 | **未解除。** |
+
+理由：POGO 的 `S_t` 在原文裡是 residual `|Y_t − f(X_t)|`，它的 `radius`
+是一個**預測區間半徑**，而 `S_t > radius` 這個事件的意義是**miscoverage**。
+本研究餵進去的是 Mahalanobis 距離，它不是任何預測的殘差，
+所以更新後的 `radius` **不再是任何區間的半徑**，超越事件也**不再是 miscoverage**。
+
+**「這個函式接受一個 float」不等於「這個 float 是同一個東西」。**
+函式簽章相容是語義相容的必要條件，不是充分條件。R26 第 7 節的 stop rule
+問的是後者。
+
+因此 G1 的判定維持 **`SEMANTIC_RATIFICATION_PENDING`**，
+必須由**論文對 `S_t` 的定義**（不是程式的型別註記）為據。
+若全文核對確認 POGO 的保證只在 residual 語義下成立，則依 fail-closed，
+正確結論是 `RELATED_WORK_ONLY` 或以 **empirical score-threshold baseline**
+的身分納入且明確聲明不移植其定理——**不是**「mapping 成立」。
+
+> 這一節的存在理由，就是 `PROJECT_STATUS.md` 8.1 在 2026-08-18 記下的那條：
+> **「這一輪撞到的不是版號，是轉述時掉了限定詞。」** 從「API 不需要 `Y_t`」
+> 到「不需要 `Y_t`」只差兩個字，但後者會讓下一個人以為 4.1 的紅旗已經結案。
+
+### 3.5 兩項在 DEVELOPMENT run 之前必須先凍結的契約（**待裁決**）
+
+協作者從作者程式讀到兩個 pre-run contract 缺口。兩者都不是實作細節，
+**都會改變比較的意義**，所以必須在建環境之前由團隊明確凍結：
+
+1. **`k = 4` 還是 `k = 5`。** 作者 script 會在 subgroup 之前加一個 all-ones
+   的 marginal group，形成 `k = 5`；本研究的 4.2 是四個**嚴格互斥**的 one-hot
+   風速箱，`k = 4`。協作者建議在 Phase A 同時測兩者，評估全域 group 是否
+   干擾局部風速分箱的自適應步長。
+   **本文件的立場（依 4.2 的 fail-closed 原則）**：`k = 4` 是本研究已簽核的
+   group 定義，**不得為了對齊作者 script 而改**。若要加 marginal group，
+   那是**給 POGO 那一側**的設定選擇（等同於「照作者的預設跑」），
+   必須記為 POGO 的執行參數，而不是本研究 group 定義的變更。
+   兩者都跑是合理的，但**必須在看到結果之前決定哪一個是主要設定**（G7）。
+2. **`binary_groups=True` 與 empirical closed-form weights。** 作者的
+   synthetic/MIMIC script 都用這個設定。同樣必須在跑之前凍結並記錄理由。
+
+**兩項都列入待劉老師裁決（見 `PROJECT_STATUS.md` 6.4）。**
 
 ---
 
@@ -190,17 +284,22 @@ R26 要求的共通 schema 另需 `case_id`、`validity`（是否 `UNCALIBRATED`
 
 ## 6. 下一個可執行的動作（依序）
 
-1. **本機**：下載 arXiv 2606.00419v4 全文與作者程式，完成第 2 節 source lock
-   → G0。（同趟建議一併下載 CARE 期刊版與 arXiv 2606.20115，見
-   `docs/literature/CARE_PAPER_ACQUISITION.md` 第四節。）
-2. **本機或雲端**：拿到全文後填 4.1／4.2／4.4 的 POGO 欄。
+~~1. **本機**：下載 arXiv 2606.00419v4 全文與作者程式，完成第 2 節 source lock → G0。~~
+**✅ 2026-08-20 由協作者於別的環境完成（回報值見 3.3；本 repo 內仍無論文副本）。**
+
+1. **先裁決 3.5 的兩項契約**（`k=4`／`k=5`、`binary_groups`）。
+   這一步在建環境之前，因為它們改變的是比較的意義，不是實作細節。
+2. **論文為據**填 4.1 的 POGO 欄，特別是 `S_t` 的定義域。
+   3.4 已說明為什麼「API 接受 scalar」不足以填這一格。
    **先填完再寫 adapter** ——mapping 不成立的話 adapter 是白工，
    而且寫了 adapter 之後人會捨不得丟。
 3. G1/G4 若判 `NOT_COMPARABLE` 或 `RELATED_WORK_ONLY`：到此為止，
    把結論寫進 Related Work，**不做 performance 比較**。
 4. 只有全部同義才進 G5 → G6 → G7 → G8。
 
-**執行 owner：TBD**（R26 第 8 節；截至 2026-08-19 未指派）。
+**執行 owner：TBD**（R26 第 8 節；截至 2026-08-20 仍未指派）。
+G0 已有人做完，但那是自願補位，不等於 owner 已定——**下一步 3.5 是裁決題，
+沒有 owner 就沒有人會去要那個裁決。**
 
 ---
 
