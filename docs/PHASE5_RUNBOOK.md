@@ -87,7 +87,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期：十六支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 480 checks，0 failed。**
+**預期：十七支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 498 checks，0 failed。**
 
 支數與 checks 數以 `docs/LOCAL_RUNBOOK.md` Phase 0.3 的表為準
 （那份會隨新增工具更新，本手冊可能落後）。

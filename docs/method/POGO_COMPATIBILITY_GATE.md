@@ -5,11 +5,16 @@
 已由本 session 獨立複驗（3.3）；作者程式的兩個雜湊仍為轉錄
 **G1：`PASS`（`SEMANTIC_EQUIVALENCE_ESTABLISHED`）** — 2026-08-20 依**一手全文**
 核對定理與證明，紅旗解除（3.4a）。**先前 3.4／4.1 的相反預測是錯的，已標註**
-**G3：`NOT_COMPARABLE` 的風險已由 G1 轉移到這裡**（wealth process 的持久狀態，3.4a 末）
+**G3：`CONTRACT_DRAFTED / RATIFICATION_PENDING`**（2026-08-21）——
+`NOT_COMPARABLE` 的風險由 G1 轉移到這裡（3.4a 末），
+三項狀態契約已寫成
+[`docs/method/POGO_G3_STATE_CONTRACT.md`](POGO_G3_STATE_CONTRACT.md)，
+待 **R28** 裁決其中唯一的取捨
 
-**規格來源**：Drive《[方法] 2026-08-18 R26 — POGO Compatibility Gate v1.0 —
-2026-08-18 2152 — 排程自動化研究助理》
-（`docs.google.com/document/d/1u97DL7mwqNoLs7Cb1QNH0tYh1mxElvOeu9ersjYJTLw`）
+**規格來源**：Drive《[方法] R26 — POGO Compatibility Gate **v2.0**（規格正本）—
+2026-08-21 1740 — 排程自動化研究助理》
+（`docs.google.com/document/d/1QnnRAfxvilLRJwzm7Rf5d8qMfiR3VV21DxA8unafHdQ`）
+v1.0（`…1u97DL7mwqNoLs7Cb1QNH0tYh1mxElvOeu9ersjYJTLw`）已標為取代，保留未刪。
 **裁決來源**：R25，劉老師 2026-08-18 21:52 批准改定位並指示建立本 gate。
 
 ---
@@ -28,17 +33,14 @@ R26 規格 2026-08-18 建立在 Drive 上，同一天 R25 也在 Drive 上被批
 
 規格若與本文件分歧，**以 Drive 的 R26 正本為準**，並請立刻回報分歧。
 
-> **⚠️【2026-08-20 起，這條規則暫時反轉】**
-> 2026-08-20 晚間 G1 判 `PASS`、劉老師裁決兩項 pre-run contract，
-> 這些都寫進了本文件，**但 Drive 的 R26 正本尚未更新**——
-> 正本現在寫的是「G1 未判、兩項契約待決」。
+> **【2026-08-21】暫時反轉已結束，上面那條規則恢復為唯一規則。**
+> 08-20 晚間 G1 判 `PASS`、劉老師裁決兩項 pre-run contract 之後，
+> Drive 正本一度落後（寫著「G1 未判、兩項契約待決」），
+> 所以當時刻意把「以正本為準」暫時反轉成「以版控為準」。
 >
-> 依上面那條規則，讀者應以正本為準；但正本是舊的。
-> **所以在正本更新之前，以本文件為準**，這是刻意的暫時反轉，不是疏漏。
->
-> **劉老師 2026-08-20 已授權：由後續排程輪代為更新 Drive 的 R26 正本。**
-> 更新完成後請刪除本方框，讓「以 Drive 正本為準」恢復為唯一規則——
-> **兩份文件哪一份權威，任何時候都只能有一個答案。**
+> 2026-08-21 已依劉老師授權發佈 **R26 正本 v2.0**，
+> G1 `PASS`、兩項裁決與 G3 契約都已進正本，反轉隨之取消。
+> v1.0 已改標題為【已被 v2.0 取代】，未刪除。
 
 ---
 
@@ -460,18 +462,23 @@ R26 要求的共通 schema 另需 `case_id`、`validity`（是否 `UNCALIBRATED`
 
 **由此，下一個動作的性質變了。原本是「檢查能不能比」，現在是「怎麼比」：**
 
-1. **寫 G3 的狀態契約** —— 現在唯一還可能判 `NOT_COMPARABLE` 的一關。
-   必須在跑之前、以文字寫死三件事：
-   - POGO 的 wealth process `W_{t,j}` **跨 case 攜帶還是每案重置**
-     （本研究每案重置，見 4.3）。POGO 的狀態是**乘法累積**的，
-     這個選擇會實質改變它的行為，不是形式問題。
-   - **凍結期間 POGO 做什麼。** 依 G6，所有方法套同一套 6-of-18 +
-     Freeze-on-Alert，對 POGO 而言就是「凍結時跳過 `update`」。
-   - **warm-up 如何對齊。** 本研究 `min_bin_samples = 500`；
-     POGO 沒有暖機概念，所以要決定它是從第一點就開始，
-     還是同樣跳過本研究判為 `UNCALIBRATED` 的那些點。
+~~1. **寫 G3 的狀態契約** —— 現在唯一還可能判 `NOT_COMPARABLE` 的一關。~~
+**✅ 2026-08-21 已寫成 [`POGO_G3_STATE_CONTRACT.md`](POGO_G3_STATE_CONTRACT.md)**
+（草案 v1.0，狀態 `RATIFICATION_PENDING`）。三項全部以文字寫死：
 
-   **這三項若留給實作者臨場決定，等於讓實作決定結論。**
+   | | 契約 |
+   |---|---|
+   | wealth 的 case 邊界 | 主要 `carry_across_cases = false`；宣告的次要 `carry_within_farm = true`；`carry_across_farms` **不是選項**。頭號數字取宣告設定中較好者 |
+   | 凍結期間 | G5 無凍結；G6 **完全不呼叫 `update()`**、門檻沿用凍結前的 `τ`、`exceed` 照常記錄並送進 6-of-18。**`frozen` 旗標必須由 POGO 自己的 exceed 產生，不得沿用本方法的 `frozen` 欄** |
+   | warm-up | 沿用作者預設 `burn_in = 500`；指標一律只算在共同評估視窗（＝本方法已校準的列） |
+
+   量測證據見 `experiments/pogo_g3_2026-08-21/`：逐案重置**不會**讓
+   Theorem 4.1 的 `T_j > 0` 失效（91 案 × 4 分箱，一格都沒空），
+   但會讓界鬆約 20 倍——那是「重置必須連同攜帶一起跑」的理由。
+   兩個 `burn_in = 500` 不會打架也是量過的（最早的首個已校準列在索引 641）。
+
+   **唯一需要裁決的是宣告設定要 2 組還是 4 組**，見 Drive《[裁決請求]
+   2026-08-21 R28》。**裁決之前不要建環境**——設定數決定 adapter 的執行矩陣。
 
 2. **最小 adapter contract**（協作者已提草案，可直接採用）：
    輸入 `score_t`、`wind_bin`、`sample_id`；
@@ -490,4 +497,6 @@ G0 與 G1 都已完成，但**兩者都是閱讀與核對工作**；
 *建立：2026-08-19，排程自動化研究助理。
 2026-08-20 更新：G0 論文雜湊獨立複驗、G1 依一手全文判 `PASS`（先前預測錯誤已標註）、
 3.5 兩項契約經劉老師裁決。
+2026-08-21 更新：G3 狀態契約寫成（`POGO_G3_STATE_CONTRACT.md`）、
+Drive 正本更新為 v2.0、第 0 節的暫時反轉結束。
 狀態變動請同步更新 `docs/PROJECT_STATUS.md` 6.8 與 Drive 的 R26 正本。*
