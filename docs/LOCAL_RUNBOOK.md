@@ -45,7 +45,7 @@ python --version
 
 ### 0.3 先跑自我測試（重要）
 
-在碰真實資料之前，先確認**整套**工具在你的環境行為正確。十六支測試一次跑完：
+在碰真實資料之前，先確認**整套**工具在你的環境行為正確。十七支測試一次跑完：
 
 ```bash
 for t in scripts/selftest_*.py; do echo "== $t"; python3 "$t" | tail -2; done
