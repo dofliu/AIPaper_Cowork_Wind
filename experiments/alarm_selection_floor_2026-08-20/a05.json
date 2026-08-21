@@ -6,6 +6,15 @@
     "inequality_holds": true,
     "premise_holds": true
   },
+  "claim_constraint": {
+    "citation_obligation": "Shewhart supplementary runs rules / conditional false alarm rate literature must be cited wherever 6-of-18 selection is discussed.",
+    "clause": "claim-firewall-7",
+    "forbidden": "any claim that this floor is new, first, previously unnoted, or a finding of this work. 6-of-18 is a run rule and exact run-length results for supplementary runs rules exist in the SPC literature (Markov chain); the exact conditional rate may already be published.",
+    "permitted": "reporting and deriving the floor, and using it to establish that the frozen-period exceedance rate is a selection effect rather than staleness. Method yes, contribution no.",
+    "ratified": "2026-08-21",
+    "review_when": "run rules full text obtained (LITERATURE_SCAN_2026-08-21 F13)",
+    "status": "ACTIVE_PENDING_FULL_TEXT"
+  },
   "floor": {
     "applies": true,
     "coefficient_k_over_w": 0.3333333333333333,

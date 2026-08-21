@@ -96,6 +96,42 @@ from datetime import datetime
 ALARM_OF = 6          # ratified 2026-08-11, parameter freeze protocol v1.0
 ALARM_WINDOW = 18
 
+# Claim firewall clause 7, ratified 2026-08-21. See docs/manuscript/README.md.
+# 6-of-18 IS a run rule, and the SPC literature computes exact run-length
+# properties for supplementary runs rules by Markov chain. The exact
+# conditional exceedance rate may therefore already be published, in which
+# case this floor is a loose special case of it. The full text has not been
+# obtained, so we know neither that it exists nor that it does not -- and
+# under that uncertainty the conservative side is to not claim.
+#
+# Note what is NOT forbidden: reporting the floor, deriving it, using it to
+# argue that the frozen-period rate is selection rather than staleness. Only
+# the novelty sentence is. Method, yes; contribution, no.
+#
+# This is the only TIME-LIMITED clause in the firewall. It is reviewed when
+# the run rules full text arrives, not silently dropped.
+CLAIM_CONSTRAINT = {
+    "clause": "claim-firewall-7",
+    "ratified": "2026-08-21",
+    "status": "ACTIVE_PENDING_FULL_TEXT",
+    "forbidden": (
+        "any claim that this floor is new, first, previously unnoted, or a "
+        "finding of this work. 6-of-18 is a run rule and exact run-length "
+        "results for supplementary runs rules exist in the SPC literature "
+        "(Markov chain); the exact conditional rate may already be published."
+    ),
+    "permitted": (
+        "reporting and deriving the floor, and using it to establish that the "
+        "frozen-period exceedance rate is a selection effect rather than "
+        "staleness. Method yes, contribution no."
+    ),
+    "citation_obligation": (
+        "Shewhart supplementary runs rules / conditional false alarm rate "
+        "literature must be cited wherever 6-of-18 selection is discussed."
+    ),
+    "review_when": "run rules full text obtained (LITERATURE_SCAN_2026-08-21 F13)",
+}
+
 
 def load_labels(path):
     labels = {}
@@ -361,6 +397,14 @@ def report(derived, total, alpha):
     out.append("")
     out.append("  The floor is a lower bound on N(F), not on the frozen set, and not")
     out.append("  a decomposition: the surplus over the floor is NOT labelled here.")
+    out.append("")
+    out.append("  CLAIM FIREWALL CLAUSE 7 (ratified 2026-08-21, time-limited):")
+    out.append("  6-of-18 is a run rule, and exact run-length results for")
+    out.append("  supplementary runs rules exist in the SPC literature. This floor")
+    out.append("  may already be a special case of a published exact result, so it")
+    out.append("  must NOT be written as new, first, or a finding of this work.")
+    out.append("  Reporting it, deriving it, and using it to argue selection over")
+    out.append("  staleness all remain permitted. Method yes, contribution no.")
     return "\n".join(out)
 
 
@@ -423,6 +467,11 @@ def main():
 
     payload = {
         "tool": "alarm-selection-floor-v1.0",
+        # Ratified 2026-08-21 as claim firewall clause 7. It rides in the
+        # OUTPUT, not only in the docs, because the person who writes the
+        # manuscript paragraph will be reading this JSON, not README.md --
+        # and the constraint is invisible in the numbers themselves.
+        "claim_constraint": CLAIM_CONSTRAINT,
         "generated_from": os.path.abspath(args.ours_dir),
         "alpha": args.alpha,
         "alarm_rule": "%d of last %d" % (args.alarm_of, args.alarm_window),

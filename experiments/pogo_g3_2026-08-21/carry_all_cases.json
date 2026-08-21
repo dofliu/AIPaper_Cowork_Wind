@@ -1,0 +1,27 @@
+{
+  "inputs": {
+    "D": 23.81,
+    "T": 4805983.0,
+    "Tj": 693966.0,
+    "alpha": 0.01,
+    "q": 0.0
+  },
+  "rows": [
+    {
+      "U_T": 28.196773186668775,
+      "k": 4,
+      "miscov_bound": 0.0009375709578151121,
+      "trivial_bound": 0.99,
+      "vacuous": false
+    },
+    {
+      "U_T": 28.419916737982984,
+      "k": 5,
+      "miscov_bound": 0.0009414346111939579,
+      "trivial_bound": 0.99,
+      "vacuous": false
+    }
+  ],
+  "source": "arXiv:2606.00419v4 Theorem 4.1",
+  "tool": "pogo-bound-scale-check-v1.0"
+}

@@ -1,0 +1,1891 @@
+{
+  "bins": [
+    "bin1_lt_4",
+    "bin2_4_8",
+    "bin3_8_12",
+    "bin4_ge_12"
+  ],
+  "carry_bound_at_min_Tj": 0.00031022187657017854,
+  "carry_calibrated": {
+    "bin1_lt_4": 985396,
+    "bin2_4_8": 1999284,
+    "bin3_8_12": 1143602,
+    "bin4_ge_12": 712707
+  },
+  "carry_min_Tj": 758293,
+  "carry_raw": {
+    "bin1_lt_4": 1030955,
+    "bin2_4_8": 2044847,
+    "bin3_8_12": 1189233,
+    "bin4_ge_12": 758293
+  },
+  "empty_calibrated_bins": [],
+  "empty_raw_bins": [],
+  "inputs": {
+    "D": 23.81,
+    "alpha": 0.001,
+    "excluded_cases": [
+      "32",
+      "56",
+      "72",
+      "87"
+    ],
+    "k": 4,
+    "ours_dir": "experiments/MD_2022_a001_ours",
+    "q": 0.0,
+    "trim_cases": {
+      "93": "2023-08-24T13:00:00"
+    }
+  },
+  "n_cases": 91,
+  "n_cases_with_empty_calibrated_bin": 0,
+  "n_cases_with_empty_raw_bin": 0,
+  "per_case": [
+    {
+      "calibrated": {
+        "bin1_lt_4": 17239,
+        "bin2_4_8": 19599,
+        "bin3_8_12": 10531,
+        "bin4_ge_12": 5617
+      },
+      "case_id": "0",
+      "min_raw_occupied": 6117,
+      "n_calibrated": 52986,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54986,
+      "raw": {
+        "bin1_lt_4": 17739,
+        "bin2_4_8": 20099,
+        "bin3_8_12": 11031,
+        "bin4_ge_12": 6117
+      },
+      "reset_bound_at_min_Tj": 0.0061648159252314
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9788,
+        "bin2_4_8": 23675,
+        "bin3_8_12": 10512,
+        "bin4_ge_12": 7591
+      },
+      "case_id": "1",
+      "min_raw_occupied": 8091,
+      "n_calibrated": 51566,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53569,
+      "raw": {
+        "bin1_lt_4": 10288,
+        "bin2_4_8": 24175,
+        "bin3_8_12": 11012,
+        "bin4_ge_12": 8091
+      },
+      "reset_bound_at_min_Tj": 0.004954518824247186
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8711,
+        "bin2_4_8": 18607,
+        "bin3_8_12": 15582,
+        "bin4_ge_12": 9874
+      },
+      "case_id": "2",
+      "min_raw_occupied": 9211,
+      "n_calibrated": 52774,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54774,
+      "raw": {
+        "bin1_lt_4": 9211,
+        "bin2_4_8": 19107,
+        "bin3_8_12": 16082,
+        "bin4_ge_12": 10374
+      },
+      "reset_bound_at_min_Tj": 0.004492804035606288
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18159,
+        "bin2_4_8": 19548,
+        "bin3_8_12": 11805,
+        "bin4_ge_12": 3975
+      },
+      "case_id": "3",
+      "min_raw_occupied": 4475,
+      "n_calibrated": 53487,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55487,
+      "raw": {
+        "bin1_lt_4": 18659,
+        "bin2_4_8": 20048,
+        "bin3_8_12": 12305,
+        "bin4_ge_12": 4475
+      },
+      "reset_bound_at_min_Tj": 0.007906780912720634
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7972,
+        "bin2_4_8": 24128,
+        "bin3_8_12": 13596,
+        "bin4_ge_12": 8753
+      },
+      "case_id": "4",
+      "min_raw_occupied": 8472,
+      "n_calibrated": 54449,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56449,
+      "raw": {
+        "bin1_lt_4": 8472,
+        "bin2_4_8": 24628,
+        "bin3_8_12": 14096,
+        "bin4_ge_12": 9253
+      },
+      "reset_bound_at_min_Tj": 0.004796259535453734
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9616,
+        "bin2_4_8": 22571,
+        "bin3_8_12": 10252,
+        "bin4_ge_12": 8353
+      },
+      "case_id": "5",
+      "min_raw_occupied": 8853,
+      "n_calibrated": 50792,
+      "n_empty_raw_bins": 0,
+      "n_rows": 52795,
+      "raw": {
+        "bin1_lt_4": 10116,
+        "bin2_4_8": 23071,
+        "bin3_8_12": 10752,
+        "bin4_ge_12": 8853
+      },
+      "reset_bound_at_min_Tj": 0.004621329424587694
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7506,
+        "bin2_4_8": 22648,
+        "bin3_8_12": 13909,
+        "bin4_ge_12": 8802
+      },
+      "case_id": "6",
+      "min_raw_occupied": 8006,
+      "n_calibrated": 52865,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54865,
+      "raw": {
+        "bin1_lt_4": 8006,
+        "bin2_4_8": 23148,
+        "bin3_8_12": 14409,
+        "bin4_ge_12": 9302
+      },
+      "reset_bound_at_min_Tj": 0.005001279531141577
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9517,
+        "bin2_4_8": 19737,
+        "bin3_8_12": 16322,
+        "bin4_ge_12": 10312
+      },
+      "case_id": "7",
+      "min_raw_occupied": 10017,
+      "n_calibrated": 55888,
+      "n_empty_raw_bins": 0,
+      "n_rows": 57888,
+      "raw": {
+        "bin1_lt_4": 10017,
+        "bin2_4_8": 20237,
+        "bin3_8_12": 16822,
+        "bin4_ge_12": 10812
+      },
+      "reset_bound_at_min_Tj": 0.004228618644859195
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 6722,
+        "bin2_4_8": 21945,
+        "bin3_8_12": 15039,
+        "bin4_ge_12": 9096
+      },
+      "case_id": "8",
+      "min_raw_occupied": 7222,
+      "n_calibrated": 52802,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54802,
+      "raw": {
+        "bin1_lt_4": 7222,
+        "bin2_4_8": 22445,
+        "bin3_8_12": 15539,
+        "bin4_ge_12": 9596
+      },
+      "reset_bound_at_min_Tj": 0.005414909410661374
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8329,
+        "bin2_4_8": 24969,
+        "bin3_8_12": 12637,
+        "bin4_ge_12": 8094
+      },
+      "case_id": "9",
+      "min_raw_occupied": 8594,
+      "n_calibrated": 54029,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56029,
+      "raw": {
+        "bin1_lt_4": 8829,
+        "bin2_4_8": 25469,
+        "bin3_8_12": 13137,
+        "bin4_ge_12": 8594
+      },
+      "reset_bound_at_min_Tj": 0.004742227096325851
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 17897,
+        "bin2_4_8": 19456,
+        "bin3_8_12": 11279,
+        "bin4_ge_12": 2960
+      },
+      "case_id": "10",
+      "min_raw_occupied": 3460,
+      "n_calibrated": 51592,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53592,
+      "raw": {
+        "bin1_lt_4": 18397,
+        "bin2_4_8": 19956,
+        "bin3_8_12": 11779,
+        "bin4_ge_12": 3460
+      },
+      "reset_bound_at_min_Tj": 0.009723136750442243
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9657,
+        "bin2_4_8": 24059,
+        "bin3_8_12": 12239,
+        "bin4_ge_12": 8480
+      },
+      "case_id": "11",
+      "min_raw_occupied": 8980,
+      "n_calibrated": 54435,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56437,
+      "raw": {
+        "bin1_lt_4": 10157,
+        "bin2_4_8": 24559,
+        "bin3_8_12": 12739,
+        "bin4_ge_12": 8980
+      },
+      "reset_bound_at_min_Tj": 0.004587704506492523
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7626,
+        "bin2_4_8": 23914,
+        "bin3_8_12": 13929,
+        "bin4_ge_12": 8628
+      },
+      "case_id": "12",
+      "min_raw_occupied": 8126,
+      "n_calibrated": 54097,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56107,
+      "raw": {
+        "bin1_lt_4": 8126,
+        "bin2_4_8": 24414,
+        "bin3_8_12": 14429,
+        "bin4_ge_12": 9128
+      },
+      "reset_bound_at_min_Tj": 0.004950388919345514
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18082,
+        "bin2_4_8": 19128,
+        "bin3_8_12": 9486,
+        "bin4_ge_12": 5314
+      },
+      "case_id": "13",
+      "min_raw_occupied": 5814,
+      "n_calibrated": 52010,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54010,
+      "raw": {
+        "bin1_lt_4": 18582,
+        "bin2_4_8": 19628,
+        "bin3_8_12": 9986,
+        "bin4_ge_12": 5814
+      },
+      "reset_bound_at_min_Tj": 0.0064098492314171454
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18024,
+        "bin2_4_8": 21398,
+        "bin3_8_12": 10566,
+        "bin4_ge_12": 2209
+      },
+      "case_id": "14",
+      "min_raw_occupied": 2709,
+      "n_calibrated": 52197,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54197,
+      "raw": {
+        "bin1_lt_4": 18524,
+        "bin2_4_8": 21898,
+        "bin3_8_12": 11066,
+        "bin4_ge_12": 2709
+      },
+      "reset_bound_at_min_Tj": 0.011908619972009793
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9554,
+        "bin2_4_8": 22033,
+        "bin3_8_12": 11117,
+        "bin4_ge_12": 9302
+      },
+      "case_id": "15",
+      "min_raw_occupied": 9802,
+      "n_calibrated": 52006,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54433,
+      "raw": {
+        "bin1_lt_4": 10054,
+        "bin2_4_8": 22533,
+        "bin3_8_12": 11617,
+        "bin4_ge_12": 9802
+      },
+      "reset_bound_at_min_Tj": 0.004284587054541994
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9389,
+        "bin2_4_8": 23483,
+        "bin3_8_12": 10014,
+        "bin4_ge_12": 8679
+      },
+      "case_id": "16",
+      "min_raw_occupied": 9179,
+      "n_calibrated": 51565,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53568,
+      "raw": {
+        "bin1_lt_4": 9889,
+        "bin2_4_8": 23983,
+        "bin3_8_12": 10514,
+        "bin4_ge_12": 9179
+      },
+      "reset_bound_at_min_Tj": 0.004499380664476796
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18541,
+        "bin2_4_8": 20037,
+        "bin3_8_12": 11763,
+        "bin4_ge_12": 2749
+      },
+      "case_id": "17",
+      "min_raw_occupied": 3249,
+      "n_calibrated": 53090,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55090,
+      "raw": {
+        "bin1_lt_4": 19041,
+        "bin2_4_8": 20537,
+        "bin3_8_12": 12263,
+        "bin4_ge_12": 3249
+      },
+      "reset_bound_at_min_Tj": 0.010254702521209231
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8682,
+        "bin2_4_8": 22148,
+        "bin3_8_12": 12166,
+        "bin4_ge_12": 7852
+      },
+      "case_id": "18",
+      "min_raw_occupied": 8352,
+      "n_calibrated": 50848,
+      "n_empty_raw_bins": 0,
+      "n_rows": 52848,
+      "raw": {
+        "bin1_lt_4": 9182,
+        "bin2_4_8": 22648,
+        "bin3_8_12": 12666,
+        "bin4_ge_12": 8352
+      },
+      "reset_bound_at_min_Tj": 0.0048318677587072196
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7608,
+        "bin2_4_8": 18347,
+        "bin3_8_12": 16591,
+        "bin4_ge_12": 11728
+      },
+      "case_id": "19",
+      "min_raw_occupied": 8108,
+      "n_calibrated": 54274,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56274,
+      "raw": {
+        "bin1_lt_4": 8108,
+        "bin2_4_8": 18847,
+        "bin3_8_12": 17091,
+        "bin4_ge_12": 12228
+      },
+      "reset_bound_at_min_Tj": 0.0049596118334341655
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 10564,
+        "bin2_4_8": 23457,
+        "bin3_8_12": 10624,
+        "bin4_ge_12": 7353
+      },
+      "case_id": "20",
+      "min_raw_occupied": 7853,
+      "n_calibrated": 51998,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54001,
+      "raw": {
+        "bin1_lt_4": 11064,
+        "bin2_4_8": 23957,
+        "bin3_8_12": 11124,
+        "bin4_ge_12": 7853
+      },
+      "reset_bound_at_min_Tj": 0.005071720023514409
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8407,
+        "bin2_4_8": 16922,
+        "bin3_8_12": 15149,
+        "bin4_ge_12": 11036
+      },
+      "case_id": "21",
+      "min_raw_occupied": 8907,
+      "n_calibrated": 51514,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53514,
+      "raw": {
+        "bin1_lt_4": 8907,
+        "bin2_4_8": 17422,
+        "bin3_8_12": 15649,
+        "bin4_ge_12": 11536
+      },
+      "reset_bound_at_min_Tj": 0.00460328510681842
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18537,
+        "bin2_4_8": 18243,
+        "bin3_8_12": 9181,
+        "bin4_ge_12": 5075
+      },
+      "case_id": "22",
+      "min_raw_occupied": 5575,
+      "n_calibrated": 51036,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53036,
+      "raw": {
+        "bin1_lt_4": 19037,
+        "bin2_4_8": 18743,
+        "bin3_8_12": 9681,
+        "bin4_ge_12": 5575
+      },
+      "reset_bound_at_min_Tj": 0.006619140106780089
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7339,
+        "bin2_4_8": 16891,
+        "bin3_8_12": 16878,
+        "bin4_ge_12": 11434
+      },
+      "case_id": "23",
+      "min_raw_occupied": 7839,
+      "n_calibrated": 52542,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54542,
+      "raw": {
+        "bin1_lt_4": 7839,
+        "bin2_4_8": 17391,
+        "bin3_8_12": 17378,
+        "bin4_ge_12": 11934
+      },
+      "reset_bound_at_min_Tj": 0.005081411520366229
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 16910,
+        "bin2_4_8": 20247,
+        "bin3_8_12": 10351,
+        "bin4_ge_12": 5495
+      },
+      "case_id": "24",
+      "min_raw_occupied": 5995,
+      "n_calibrated": 53003,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55003,
+      "raw": {
+        "bin1_lt_4": 17410,
+        "bin2_4_8": 20747,
+        "bin3_8_12": 10851,
+        "bin4_ge_12": 5995
+      },
+      "reset_bound_at_min_Tj": 0.006263277853152797
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18253,
+        "bin2_4_8": 19460,
+        "bin3_8_12": 9730,
+        "bin4_ge_12": 5269
+      },
+      "case_id": "25",
+      "min_raw_occupied": 5769,
+      "n_calibrated": 52712,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54712,
+      "raw": {
+        "bin1_lt_4": 18753,
+        "bin2_4_8": 19960,
+        "bin3_8_12": 10230,
+        "bin4_ge_12": 5769
+      },
+      "reset_bound_at_min_Tj": 0.0064538201356124205
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 16641,
+        "bin2_4_8": 20260,
+        "bin3_8_12": 10358,
+        "bin4_ge_12": 4443
+      },
+      "case_id": "26",
+      "min_raw_occupied": 4943,
+      "n_calibrated": 51702,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53702,
+      "raw": {
+        "bin1_lt_4": 17141,
+        "bin2_4_8": 20760,
+        "bin3_8_12": 10858,
+        "bin4_ge_12": 4943
+      },
+      "reset_bound_at_min_Tj": 0.007287956645416987
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9227,
+        "bin2_4_8": 20764,
+        "bin3_8_12": 18377,
+        "bin4_ge_12": 11900
+      },
+      "case_id": "27",
+      "min_raw_occupied": 9727,
+      "n_calibrated": 60268,
+      "n_empty_raw_bins": 0,
+      "n_rows": 62268,
+      "raw": {
+        "bin1_lt_4": 9727,
+        "bin2_4_8": 21264,
+        "bin3_8_12": 18877,
+        "bin4_ge_12": 12400
+      },
+      "reset_bound_at_min_Tj": 0.004340115787863092
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7481,
+        "bin2_4_8": 24067,
+        "bin3_8_12": 13798,
+        "bin4_ge_12": 8569
+      },
+      "case_id": "28",
+      "min_raw_occupied": 7981,
+      "n_calibrated": 53915,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55918,
+      "raw": {
+        "bin1_lt_4": 7981,
+        "bin2_4_8": 24567,
+        "bin3_8_12": 14298,
+        "bin4_ge_12": 9069
+      },
+      "reset_bound_at_min_Tj": 0.0050184262688292
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 10018,
+        "bin2_4_8": 23675,
+        "bin3_8_12": 11116,
+        "bin4_ge_12": 8054
+      },
+      "case_id": "29",
+      "min_raw_occupied": 8554,
+      "n_calibrated": 52863,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54865,
+      "raw": {
+        "bin1_lt_4": 10518,
+        "bin2_4_8": 24175,
+        "bin3_8_12": 11616,
+        "bin4_ge_12": 8554
+      },
+      "reset_bound_at_min_Tj": 0.004753843751057785
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9604,
+        "bin2_4_8": 23669,
+        "bin3_8_12": 11806,
+        "bin4_ge_12": 9032
+      },
+      "case_id": "30",
+      "min_raw_occupied": 9532,
+      "n_calibrated": 54111,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56111,
+      "raw": {
+        "bin1_lt_4": 10104,
+        "bin2_4_8": 24169,
+        "bin3_8_12": 12306,
+        "bin4_ge_12": 9532
+      },
+      "reset_bound_at_min_Tj": 0.0043831308701098816
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8941,
+        "bin2_4_8": 23306,
+        "bin3_8_12": 11291,
+        "bin4_ge_12": 9051
+      },
+      "case_id": "31",
+      "min_raw_occupied": 9441,
+      "n_calibrated": 52589,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54589,
+      "raw": {
+        "bin1_lt_4": 9441,
+        "bin2_4_8": 23806,
+        "bin3_8_12": 11791,
+        "bin4_ge_12": 9551
+      },
+      "reset_bound_at_min_Tj": 0.0044087014327392
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9294,
+        "bin2_4_8": 24607,
+        "bin3_8_12": 11969,
+        "bin4_ge_12": 8001
+      },
+      "case_id": "33",
+      "min_raw_occupied": 8501,
+      "n_calibrated": 53871,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55873,
+      "raw": {
+        "bin1_lt_4": 9794,
+        "bin2_4_8": 25107,
+        "bin3_8_12": 12469,
+        "bin4_ge_12": 8501
+      },
+      "reset_bound_at_min_Tj": 0.004781125445929265
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8344,
+        "bin2_4_8": 18784,
+        "bin3_8_12": 16936,
+        "bin4_ge_12": 10499
+      },
+      "case_id": "34",
+      "min_raw_occupied": 8844,
+      "n_calibrated": 54563,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56564,
+      "raw": {
+        "bin1_lt_4": 8844,
+        "bin2_4_8": 19284,
+        "bin3_8_12": 17436,
+        "bin4_ge_12": 10999
+      },
+      "reset_bound_at_min_Tj": 0.004641910389453096
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9877,
+        "bin2_4_8": 23171,
+        "bin3_8_12": 10129,
+        "bin4_ge_12": 7435
+      },
+      "case_id": "35",
+      "min_raw_occupied": 7935,
+      "n_calibrated": 50612,
+      "n_empty_raw_bins": 0,
+      "n_rows": 52615,
+      "raw": {
+        "bin1_lt_4": 10377,
+        "bin2_4_8": 23671,
+        "bin3_8_12": 10629,
+        "bin4_ge_12": 7935
+      },
+      "reset_bound_at_min_Tj": 0.005024327065840688
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7873,
+        "bin2_4_8": 23482,
+        "bin3_8_12": 13250,
+        "bin4_ge_12": 8545
+      },
+      "case_id": "36",
+      "min_raw_occupied": 8373,
+      "n_calibrated": 53150,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55448,
+      "raw": {
+        "bin1_lt_4": 8373,
+        "bin2_4_8": 23982,
+        "bin3_8_12": 13750,
+        "bin4_ge_12": 9045
+      },
+      "reset_bound_at_min_Tj": 0.004834987608964387
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9941,
+        "bin2_4_8": 23835,
+        "bin3_8_12": 10623,
+        "bin4_ge_12": 7313
+      },
+      "case_id": "37",
+      "min_raw_occupied": 7813,
+      "n_calibrated": 51712,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53713,
+      "raw": {
+        "bin1_lt_4": 10441,
+        "bin2_4_8": 24335,
+        "bin3_8_12": 11123,
+        "bin4_ge_12": 7813
+      },
+      "reset_bound_at_min_Tj": 0.005090230323528
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 16436,
+        "bin2_4_8": 20828,
+        "bin3_8_12": 12288,
+        "bin4_ge_12": 3283
+      },
+      "case_id": "38",
+      "min_raw_occupied": 3783,
+      "n_calibrated": 52835,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54835,
+      "raw": {
+        "bin1_lt_4": 16936,
+        "bin2_4_8": 21328,
+        "bin3_8_12": 12788,
+        "bin4_ge_12": 3783
+      },
+      "reset_bound_at_min_Tj": 0.009051680033540581
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8065,
+        "bin2_4_8": 22718,
+        "bin3_8_12": 12934,
+        "bin4_ge_12": 8010
+      },
+      "case_id": "39",
+      "min_raw_occupied": 8510,
+      "n_calibrated": 51727,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53727,
+      "raw": {
+        "bin1_lt_4": 8565,
+        "bin2_4_8": 23218,
+        "bin3_8_12": 13434,
+        "bin4_ge_12": 8510
+      },
+      "reset_bound_at_min_Tj": 0.004767284824528047
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 20513,
+        "bin2_4_8": 20223,
+        "bin3_8_12": 10590,
+        "bin4_ge_12": 2832
+      },
+      "case_id": "40",
+      "min_raw_occupied": 3332,
+      "n_calibrated": 54158,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56158,
+      "raw": {
+        "bin1_lt_4": 21013,
+        "bin2_4_8": 20723,
+        "bin3_8_12": 11090,
+        "bin4_ge_12": 3332
+      },
+      "reset_bound_at_min_Tj": 0.010055311557203264
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 10054,
+        "bin2_4_8": 22250,
+        "bin3_8_12": 11468,
+        "bin4_ge_12": 9892
+      },
+      "case_id": "41",
+      "min_raw_occupied": 10392,
+      "n_calibrated": 53664,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55666,
+      "raw": {
+        "bin1_lt_4": 10554,
+        "bin2_4_8": 22750,
+        "bin3_8_12": 11968,
+        "bin4_ge_12": 10392
+      },
+      "reset_bound_at_min_Tj": 0.004104691501781668
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18731,
+        "bin2_4_8": 19390,
+        "bin3_8_12": 10793,
+        "bin4_ge_12": 2972
+      },
+      "case_id": "42",
+      "min_raw_occupied": 3472,
+      "n_calibrated": 51886,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53886,
+      "raw": {
+        "bin1_lt_4": 19231,
+        "bin2_4_8": 19890,
+        "bin3_8_12": 11293,
+        "bin4_ge_12": 3472
+      },
+      "reset_bound_at_min_Tj": 0.009698645132972184
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8079,
+        "bin2_4_8": 23625,
+        "bin3_8_12": 12966,
+        "bin4_ge_12": 8480
+      },
+      "case_id": "43",
+      "min_raw_occupied": 8579,
+      "n_calibrated": 53150,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55153,
+      "raw": {
+        "bin1_lt_4": 8579,
+        "bin2_4_8": 24125,
+        "bin3_8_12": 13466,
+        "bin4_ge_12": 8980
+      },
+      "reset_bound_at_min_Tj": 0.004744577203977085
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 10267,
+        "bin2_4_8": 28346,
+        "bin3_8_12": 13553,
+        "bin4_ge_12": 8837
+      },
+      "case_id": "44",
+      "min_raw_occupied": 9337,
+      "n_calibrated": 61003,
+      "n_empty_raw_bins": 0,
+      "n_rows": 63003,
+      "raw": {
+        "bin1_lt_4": 10767,
+        "bin2_4_8": 28846,
+        "bin3_8_12": 14053,
+        "bin4_ge_12": 9337
+      },
+      "reset_bound_at_min_Tj": 0.004479628754603845
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 16473,
+        "bin2_4_8": 20755,
+        "bin3_8_12": 11513,
+        "bin4_ge_12": 2998
+      },
+      "case_id": "45",
+      "min_raw_occupied": 3498,
+      "n_calibrated": 51739,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53739,
+      "raw": {
+        "bin1_lt_4": 16973,
+        "bin2_4_8": 21255,
+        "bin3_8_12": 12013,
+        "bin4_ge_12": 3498
+      },
+      "reset_bound_at_min_Tj": 0.009638089990589826
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7090,
+        "bin2_4_8": 24610,
+        "bin3_8_12": 13592,
+        "bin4_ge_12": 7841
+      },
+      "case_id": "46",
+      "min_raw_occupied": 7590,
+      "n_calibrated": 53133,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55133,
+      "raw": {
+        "bin1_lt_4": 7590,
+        "bin2_4_8": 25110,
+        "bin3_8_12": 14092,
+        "bin4_ge_12": 8341
+      },
+      "reset_bound_at_min_Tj": 0.005212440852052094
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7530,
+        "bin2_4_8": 21835,
+        "bin3_8_12": 13445,
+        "bin4_ge_12": 9182
+      },
+      "case_id": "47",
+      "min_raw_occupied": 8030,
+      "n_calibrated": 51992,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53993,
+      "raw": {
+        "bin1_lt_4": 8030,
+        "bin2_4_8": 22335,
+        "bin3_8_12": 13945,
+        "bin4_ge_12": 9682
+      },
+      "reset_bound_at_min_Tj": 0.004985504705221626
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9516,
+        "bin2_4_8": 24159,
+        "bin3_8_12": 11750,
+        "bin4_ge_12": 7872
+      },
+      "case_id": "48",
+      "min_raw_occupied": 8372,
+      "n_calibrated": 53297,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55297,
+      "raw": {
+        "bin1_lt_4": 10016,
+        "bin2_4_8": 24659,
+        "bin3_8_12": 12250,
+        "bin4_ge_12": 8372
+      },
+      "reset_bound_at_min_Tj": 0.004834725803895389
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9840,
+        "bin2_4_8": 21531,
+        "bin3_8_12": 11404,
+        "bin4_ge_12": 8237
+      },
+      "case_id": "49",
+      "min_raw_occupied": 8737,
+      "n_calibrated": 51012,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53014,
+      "raw": {
+        "bin1_lt_4": 10340,
+        "bin2_4_8": 22031,
+        "bin3_8_12": 11904,
+        "bin4_ge_12": 8737
+      },
+      "reset_bound_at_min_Tj": 0.004669067064322185
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9673,
+        "bin2_4_8": 22603,
+        "bin3_8_12": 12074,
+        "bin4_ge_12": 8296
+      },
+      "case_id": "50",
+      "min_raw_occupied": 8796,
+      "n_calibrated": 52646,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55153,
+      "raw": {
+        "bin1_lt_4": 10173,
+        "bin2_4_8": 23103,
+        "bin3_8_12": 12574,
+        "bin4_ge_12": 8796
+      },
+      "reset_bound_at_min_Tj": 0.004654959762056249
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18456,
+        "bin2_4_8": 19724,
+        "bin3_8_12": 9853,
+        "bin4_ge_12": 4403
+      },
+      "case_id": "51",
+      "min_raw_occupied": 4903,
+      "n_calibrated": 52436,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54436,
+      "raw": {
+        "bin1_lt_4": 18956,
+        "bin2_4_8": 20224,
+        "bin3_8_12": 10353,
+        "bin4_ge_12": 4903
+      },
+      "reset_bound_at_min_Tj": 0.00734092978624409
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7958,
+        "bin2_4_8": 18202,
+        "bin3_8_12": 16665,
+        "bin4_ge_12": 10442
+      },
+      "case_id": "52",
+      "min_raw_occupied": 8458,
+      "n_calibrated": 53267,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55268,
+      "raw": {
+        "bin1_lt_4": 8458,
+        "bin2_4_8": 18702,
+        "bin3_8_12": 17165,
+        "bin4_ge_12": 10942
+      },
+      "reset_bound_at_min_Tj": 0.004796921476981799
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 6827,
+        "bin2_4_8": 17623,
+        "bin3_8_12": 18009,
+        "bin4_ge_12": 14148
+      },
+      "case_id": "53",
+      "min_raw_occupied": 7327,
+      "n_calibrated": 56607,
+      "n_empty_raw_bins": 0,
+      "n_rows": 58607,
+      "raw": {
+        "bin1_lt_4": 7327,
+        "bin2_4_8": 18123,
+        "bin3_8_12": 18509,
+        "bin4_ge_12": 14648
+      },
+      "reset_bound_at_min_Tj": 0.00537412690819122
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 6033,
+        "bin2_4_8": 23799,
+        "bin3_8_12": 14568,
+        "bin4_ge_12": 9182
+      },
+      "case_id": "54",
+      "min_raw_occupied": 6533,
+      "n_calibrated": 53582,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55585,
+      "raw": {
+        "bin1_lt_4": 6533,
+        "bin2_4_8": 24299,
+        "bin3_8_12": 15068,
+        "bin4_ge_12": 9682
+      },
+      "reset_bound_at_min_Tj": 0.0058587017285163445
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 6886,
+        "bin2_4_8": 21221,
+        "bin3_8_12": 16043,
+        "bin4_ge_12": 9603
+      },
+      "case_id": "55",
+      "min_raw_occupied": 7386,
+      "n_calibrated": 53753,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55753,
+      "raw": {
+        "bin1_lt_4": 7386,
+        "bin2_4_8": 21721,
+        "bin3_8_12": 16543,
+        "bin4_ge_12": 10103
+      },
+      "reset_bound_at_min_Tj": 0.005326538262380628
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9658,
+        "bin2_4_8": 24991,
+        "bin3_8_12": 11233,
+        "bin4_ge_12": 7127
+      },
+      "case_id": "57",
+      "min_raw_occupied": 7627,
+      "n_calibrated": 53009,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55009,
+      "raw": {
+        "bin1_lt_4": 10158,
+        "bin2_4_8": 25491,
+        "bin3_8_12": 11733,
+        "bin4_ge_12": 7627
+      },
+      "reset_bound_at_min_Tj": 0.005192289150065356
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 5862,
+        "bin2_4_8": 25115,
+        "bin3_8_12": 14050,
+        "bin4_ge_12": 7406
+      },
+      "case_id": "58",
+      "min_raw_occupied": 6362,
+      "n_calibrated": 52433,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54433,
+      "raw": {
+        "bin1_lt_4": 6362,
+        "bin2_4_8": 25615,
+        "bin3_8_12": 14550,
+        "bin4_ge_12": 7906
+      },
+      "reset_bound_at_min_Tj": 0.0059746348561038375
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 10616,
+        "bin2_4_8": 24034,
+        "bin3_8_12": 10379,
+        "bin4_ge_12": 7833
+      },
+      "case_id": "59",
+      "min_raw_occupied": 8333,
+      "n_calibrated": 52862,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54865,
+      "raw": {
+        "bin1_lt_4": 11116,
+        "bin2_4_8": 24534,
+        "bin3_8_12": 10879,
+        "bin4_ge_12": 8333
+      },
+      "reset_bound_at_min_Tj": 0.004850012344656975
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 11058,
+        "bin2_4_8": 21887,
+        "bin3_8_12": 11312,
+        "bin4_ge_12": 8175
+      },
+      "case_id": "60",
+      "min_raw_occupied": 8675,
+      "n_calibrated": 52432,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54433,
+      "raw": {
+        "bin1_lt_4": 11558,
+        "bin2_4_8": 22387,
+        "bin3_8_12": 11812,
+        "bin4_ge_12": 8675
+      },
+      "reset_bound_at_min_Tj": 0.004701128415908693
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7973,
+        "bin2_4_8": 25129,
+        "bin3_8_12": 12418,
+        "bin4_ge_12": 8058
+      },
+      "case_id": "61",
+      "min_raw_occupied": 8473,
+      "n_calibrated": 53578,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55585,
+      "raw": {
+        "bin1_lt_4": 8473,
+        "bin2_4_8": 25629,
+        "bin3_8_12": 12918,
+        "bin4_ge_12": 8563
+      },
+      "reset_bound_at_min_Tj": 0.004791885233979018
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7754,
+        "bin2_4_8": 21568,
+        "bin3_8_12": 13518,
+        "bin4_ge_12": 8607
+      },
+      "case_id": "62",
+      "min_raw_occupied": 8254,
+      "n_calibrated": 51447,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53448,
+      "raw": {
+        "bin1_lt_4": 8254,
+        "bin2_4_8": 22068,
+        "bin3_8_12": 14018,
+        "bin4_ge_12": 9107
+      },
+      "reset_bound_at_min_Tj": 0.004878703309884323
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8983,
+        "bin2_4_8": 24698,
+        "bin3_8_12": 11552,
+        "bin4_ge_12": 7579
+      },
+      "case_id": "63",
+      "min_raw_occupied": 8090,
+      "n_calibrated": 52812,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54865,
+      "raw": {
+        "bin1_lt_4": 9483,
+        "bin2_4_8": 25198,
+        "bin3_8_12": 12094,
+        "bin4_ge_12": 8090
+      },
+      "reset_bound_at_min_Tj": 0.004961343699308213
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9123,
+        "bin2_4_8": 23871,
+        "bin3_8_12": 11978,
+        "bin4_ge_12": 7460
+      },
+      "case_id": "64",
+      "min_raw_occupied": 7960,
+      "n_calibrated": 52432,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54433,
+      "raw": {
+        "bin1_lt_4": 9623,
+        "bin2_4_8": 24371,
+        "bin3_8_12": 12478,
+        "bin4_ge_12": 7960
+      },
+      "reset_bound_at_min_Tj": 0.005021348876971206
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9893,
+        "bin2_4_8": 23948,
+        "bin3_8_12": 11927,
+        "bin4_ge_12": 8149
+      },
+      "case_id": "65",
+      "min_raw_occupied": 8649,
+      "n_calibrated": 53917,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55918,
+      "raw": {
+        "bin1_lt_4": 10393,
+        "bin2_4_8": 24448,
+        "bin3_8_12": 12427,
+        "bin4_ge_12": 8649
+      },
+      "reset_bound_at_min_Tj": 0.004718674683515839
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8961,
+        "bin2_4_8": 21647,
+        "bin3_8_12": 11315,
+        "bin4_ge_12": 9145
+      },
+      "case_id": "66",
+      "min_raw_occupied": 9461,
+      "n_calibrated": 51068,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53503,
+      "raw": {
+        "bin1_lt_4": 9461,
+        "bin2_4_8": 22147,
+        "bin3_8_12": 11815,
+        "bin4_ge_12": 9645
+      },
+      "reset_bound_at_min_Tj": 0.0043969541488474055
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 10151,
+        "bin2_4_8": 25905,
+        "bin3_8_12": 12761,
+        "bin4_ge_12": 10672
+      },
+      "case_id": "67",
+      "min_raw_occupied": 10651,
+      "n_calibrated": 59489,
+      "n_empty_raw_bins": 0,
+      "n_rows": 61489,
+      "raw": {
+        "bin1_lt_4": 10651,
+        "bin2_4_8": 26405,
+        "bin3_8_12": 13261,
+        "bin4_ge_12": 11172
+      },
+      "reset_bound_at_min_Tj": 0.00405042174370203
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18626,
+        "bin2_4_8": 19100,
+        "bin3_8_12": 9624,
+        "bin4_ge_12": 5008
+      },
+      "case_id": "68",
+      "min_raw_occupied": 5508,
+      "n_calibrated": 52358,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54358,
+      "raw": {
+        "bin1_lt_4": 19126,
+        "bin2_4_8": 19600,
+        "bin3_8_12": 10124,
+        "bin4_ge_12": 5508
+      },
+      "reset_bound_at_min_Tj": 0.006691848993726132
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 19073,
+        "bin2_4_8": 20179,
+        "bin3_8_12": 9474,
+        "bin4_ge_12": 4087
+      },
+      "case_id": "69",
+      "min_raw_occupied": 4587,
+      "n_calibrated": 52813,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54813,
+      "raw": {
+        "bin1_lt_4": 19573,
+        "bin2_4_8": 20679,
+        "bin3_8_12": 9974,
+        "bin4_ge_12": 4587
+      },
+      "reset_bound_at_min_Tj": 0.007746024689217388
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8925,
+        "bin2_4_8": 24031,
+        "bin3_8_12": 13035,
+        "bin4_ge_12": 8047
+      },
+      "case_id": "70",
+      "min_raw_occupied": 8547,
+      "n_calibrated": 54038,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56038,
+      "raw": {
+        "bin1_lt_4": 9425,
+        "bin2_4_8": 24531,
+        "bin3_8_12": 13535,
+        "bin4_ge_12": 8547
+      },
+      "reset_bound_at_min_Tj": 0.00476218575745553
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18729,
+        "bin2_4_8": 20549,
+        "bin3_8_12": 9416,
+        "bin4_ge_12": 4050
+      },
+      "case_id": "71",
+      "min_raw_occupied": 4550,
+      "n_calibrated": 52744,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54744,
+      "raw": {
+        "bin1_lt_4": 19229,
+        "bin2_4_8": 21049,
+        "bin3_8_12": 9916,
+        "bin4_ge_12": 4550
+      },
+      "reset_bound_at_min_Tj": 0.007795997575598793
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 16536,
+        "bin2_4_8": 18989,
+        "bin3_8_12": 10485,
+        "bin4_ge_12": 6032
+      },
+      "case_id": "73",
+      "min_raw_occupied": 6532,
+      "n_calibrated": 52042,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54042,
+      "raw": {
+        "bin1_lt_4": 17036,
+        "bin2_4_8": 19489,
+        "bin3_8_12": 10985,
+        "bin4_ge_12": 6532
+      },
+      "reset_bound_at_min_Tj": 0.005850419021123922
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 6919,
+        "bin2_4_8": 17727,
+        "bin3_8_12": 16856,
+        "bin4_ge_12": 12054
+      },
+      "case_id": "74",
+      "min_raw_occupied": 7465,
+      "n_calibrated": 53556,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55602,
+      "raw": {
+        "bin1_lt_4": 7465,
+        "bin2_4_8": 18227,
+        "bin3_8_12": 17356,
+        "bin4_ge_12": 12554
+      },
+      "reset_bound_at_min_Tj": 0.0052821302876859344
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7869,
+        "bin2_4_8": 25648,
+        "bin3_8_12": 12637,
+        "bin4_ge_12": 8007
+      },
+      "case_id": "75",
+      "min_raw_occupied": 8369,
+      "n_calibrated": 54161,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56161,
+      "raw": {
+        "bin1_lt_4": 8369,
+        "bin2_4_8": 26148,
+        "bin3_8_12": 13137,
+        "bin4_ge_12": 8507
+      },
+      "reset_bound_at_min_Tj": 0.004840056244592084
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9255,
+        "bin2_4_8": 22916,
+        "bin3_8_12": 9673,
+        "bin4_ge_12": 8239
+      },
+      "case_id": "76",
+      "min_raw_occupied": 8739,
+      "n_calibrated": 50083,
+      "n_empty_raw_bins": 0,
+      "n_rows": 52086,
+      "raw": {
+        "bin1_lt_4": 9755,
+        "bin2_4_8": 23416,
+        "bin3_8_12": 10173,
+        "bin4_ge_12": 8739
+      },
+      "reset_bound_at_min_Tj": 0.004663852784234131
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8395,
+        "bin2_4_8": 20696,
+        "bin3_8_12": 18870,
+        "bin4_ge_12": 11815
+      },
+      "case_id": "77",
+      "min_raw_occupied": 8895,
+      "n_calibrated": 59776,
+      "n_empty_raw_bins": 0,
+      "n_rows": 61776,
+      "raw": {
+        "bin1_lt_4": 8895,
+        "bin2_4_8": 21196,
+        "bin3_8_12": 19370,
+        "bin4_ge_12": 12315
+      },
+      "reset_bound_at_min_Tj": 0.0046432143386792284
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7057,
+        "bin2_4_8": 22274,
+        "bin3_8_12": 13165,
+        "bin4_ge_12": 8648
+      },
+      "case_id": "78",
+      "min_raw_occupied": 7559,
+      "n_calibrated": 51144,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53146,
+      "raw": {
+        "bin1_lt_4": 7559,
+        "bin2_4_8": 22774,
+        "bin3_8_12": 13665,
+        "bin4_ge_12": 9148
+      },
+      "reset_bound_at_min_Tj": 0.00521859606726823
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7894,
+        "bin2_4_8": 22693,
+        "bin3_8_12": 12716,
+        "bin4_ge_12": 7978
+      },
+      "case_id": "79",
+      "min_raw_occupied": 8394,
+      "n_calibrated": 51281,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53281,
+      "raw": {
+        "bin1_lt_4": 8394,
+        "bin2_4_8": 23193,
+        "bin3_8_12": 13216,
+        "bin4_ge_12": 8478
+      },
+      "reset_bound_at_min_Tj": 0.0048154528358431824
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8884,
+        "bin2_4_8": 24486,
+        "bin3_8_12": 12011,
+        "bin4_ge_12": 7532
+      },
+      "case_id": "80",
+      "min_raw_occupied": 8032,
+      "n_calibrated": 52913,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54913,
+      "raw": {
+        "bin1_lt_4": 9384,
+        "bin2_4_8": 24986,
+        "bin3_8_12": 12511,
+        "bin4_ge_12": 8032
+      },
+      "reset_bound_at_min_Tj": 0.004989069784610189
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7390,
+        "bin2_4_8": 21826,
+        "bin3_8_12": 13495,
+        "bin4_ge_12": 9221
+      },
+      "case_id": "81",
+      "min_raw_occupied": 7890,
+      "n_calibrated": 51932,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53932,
+      "raw": {
+        "bin1_lt_4": 7890,
+        "bin2_4_8": 22326,
+        "bin3_8_12": 13995,
+        "bin4_ge_12": 9721
+      },
+      "reset_bound_at_min_Tj": 0.0050530631477600264
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8005,
+        "bin2_4_8": 18020,
+        "bin3_8_12": 15567,
+        "bin4_ge_12": 11171
+      },
+      "case_id": "82",
+      "min_raw_occupied": 8516,
+      "n_calibrated": 52763,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54992,
+      "raw": {
+        "bin1_lt_4": 8516,
+        "bin2_4_8": 18578,
+        "bin3_8_12": 16156,
+        "bin4_ge_12": 11741
+      },
+      "reset_bound_at_min_Tj": 0.0047706397327301475
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 11241,
+        "bin2_4_8": 22330,
+        "bin3_8_12": 17563,
+        "bin4_ge_12": 13020
+      },
+      "case_id": "83",
+      "min_raw_occupied": 11741,
+      "n_calibrated": 64154,
+      "n_empty_raw_bins": 0,
+      "n_rows": 66154,
+      "raw": {
+        "bin1_lt_4": 11741,
+        "bin2_4_8": 22830,
+        "bin3_8_12": 18063,
+        "bin4_ge_12": 13520
+      },
+      "reset_bound_at_min_Tj": 0.003779893763743452
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 16879,
+        "bin2_4_8": 21389,
+        "bin3_8_12": 11241,
+        "bin4_ge_12": 2263
+      },
+      "case_id": "84",
+      "min_raw_occupied": 2763,
+      "n_calibrated": 51772,
+      "n_empty_raw_bins": 0,
+      "n_rows": 53772,
+      "raw": {
+        "bin1_lt_4": 17379,
+        "bin2_4_8": 21889,
+        "bin3_8_12": 11741,
+        "bin4_ge_12": 2763
+      },
+      "reset_bound_at_min_Tj": 0.01170922234306249
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8494,
+        "bin2_4_8": 19328,
+        "bin3_8_12": 13331,
+        "bin4_ge_12": 9257
+      },
+      "case_id": "85",
+      "min_raw_occupied": 8994,
+      "n_calibrated": 50410,
+      "n_empty_raw_bins": 0,
+      "n_rows": 52417,
+      "raw": {
+        "bin1_lt_4": 8994,
+        "bin2_4_8": 19828,
+        "bin3_8_12": 13831,
+        "bin4_ge_12": 9757
+      },
+      "reset_bound_at_min_Tj": 0.004564307341324503
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 7902,
+        "bin2_4_8": 18003,
+        "bin3_8_12": 16327,
+        "bin4_ge_12": 11254
+      },
+      "case_id": "86",
+      "min_raw_occupied": 8402,
+      "n_calibrated": 53486,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55486,
+      "raw": {
+        "bin1_lt_4": 8402,
+        "bin2_4_8": 18503,
+        "bin3_8_12": 16827,
+        "bin4_ge_12": 11754
+      },
+      "reset_bound_at_min_Tj": 0.004822382419579076
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8355,
+        "bin2_4_8": 24546,
+        "bin3_8_12": 12607,
+        "bin4_ge_12": 7933
+      },
+      "case_id": "88",
+      "min_raw_occupied": 8433,
+      "n_calibrated": 53441,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55441,
+      "raw": {
+        "bin1_lt_4": 8855,
+        "bin2_4_8": 25046,
+        "bin3_8_12": 13107,
+        "bin4_ge_12": 8433
+      },
+      "reset_bound_at_min_Tj": 0.004808600489344175
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 10346,
+        "bin2_4_8": 24412,
+        "bin3_8_12": 10407,
+        "bin4_ge_12": 7405
+      },
+      "case_id": "89",
+      "min_raw_occupied": 7905,
+      "n_calibrated": 52570,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54577,
+      "raw": {
+        "bin1_lt_4": 10846,
+        "bin2_4_8": 24917,
+        "bin3_8_12": 10907,
+        "bin4_ge_12": 7905
+      },
+      "reset_bound_at_min_Tj": 0.00504890908815248
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9018,
+        "bin2_4_8": 24522,
+        "bin3_8_12": 11737,
+        "bin4_ge_12": 7603
+      },
+      "case_id": "90",
+      "min_raw_occupied": 8103,
+      "n_calibrated": 52880,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54880,
+      "raw": {
+        "bin1_lt_4": 9518,
+        "bin2_4_8": 25022,
+        "bin3_8_12": 12237,
+        "bin4_ge_12": 8103
+      },
+      "reset_bound_at_min_Tj": 0.004955304135443519
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9073,
+        "bin2_4_8": 24929,
+        "bin3_8_12": 12414,
+        "bin4_ge_12": 8192
+      },
+      "case_id": "91",
+      "min_raw_occupied": 8692,
+      "n_calibrated": 54608,
+      "n_empty_raw_bins": 0,
+      "n_rows": 56608,
+      "raw": {
+        "bin1_lt_4": 9573,
+        "bin2_4_8": 25429,
+        "bin3_8_12": 12914,
+        "bin4_ge_12": 8692
+      },
+      "reset_bound_at_min_Tj": 0.004703906661050111
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 18833,
+        "bin2_4_8": 19520,
+        "bin3_8_12": 9292,
+        "bin4_ge_12": 4422
+      },
+      "case_id": "92",
+      "min_raw_occupied": 4922,
+      "n_calibrated": 52067,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54067,
+      "raw": {
+        "bin1_lt_4": 19333,
+        "bin2_4_8": 20020,
+        "bin3_8_12": 9792,
+        "bin4_ge_12": 4922
+      },
+      "reset_bound_at_min_Tj": 0.007315523652477538
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 9165,
+        "bin2_4_8": 24804,
+        "bin3_8_12": 11812,
+        "bin4_ge_12": 8072
+      },
+      "case_id": "93",
+      "min_raw_occupied": 8572,
+      "n_calibrated": 53853,
+      "n_empty_raw_bins": 0,
+      "n_rows": 55855,
+      "raw": {
+        "bin1_lt_4": 9665,
+        "bin2_4_8": 25304,
+        "bin3_8_12": 12312,
+        "bin4_ge_12": 8572
+      },
+      "reset_bound_at_min_Tj": 0.004750738275774237
+    },
+    {
+      "calibrated": {
+        "bin1_lt_4": 8204,
+        "bin2_4_8": 23862,
+        "bin3_8_12": 12995,
+        "bin4_ge_12": 7804
+      },
+      "case_id": "94",
+      "min_raw_occupied": 8304,
+      "n_calibrated": 52865,
+      "n_empty_raw_bins": 0,
+      "n_rows": 54865,
+      "raw": {
+        "bin1_lt_4": 8704,
+        "bin2_4_8": 24362,
+        "bin3_8_12": 13495,
+        "bin4_ge_12": 8304
+      },
+      "reset_bound_at_min_Tj": 0.004862982276018097
+    }
+  ],
+  "tool": "group-occupancy-v1.0",
+  "total_calibrated": 4840989,
+  "total_rows": 5025067,
+  "trim_applied": {
+    "93": 18
+  },
+  "worst_case_under_reset": {
+    "calibrated": {
+      "bin1_lt_4": 18024,
+      "bin2_4_8": 21398,
+      "bin3_8_12": 10566,
+      "bin4_ge_12": 2209
+    },
+    "case_id": "14",
+    "min_raw_occupied": 2709,
+    "n_calibrated": 52197,
+    "n_empty_raw_bins": 0,
+    "n_rows": 54197,
+    "raw": {
+      "bin1_lt_4": 18524,
+      "bin2_4_8": 21898,
+      "bin3_8_12": 11066,
+      "bin4_ge_12": 2709
+    },
+    "reset_bound_at_min_Tj": 0.011908619972009793
+  }
+}

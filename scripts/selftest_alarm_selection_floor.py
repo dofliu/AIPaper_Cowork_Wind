@@ -42,6 +42,15 @@ behaviour it pins is removed, or it is decoration.
   T8  randomised: over many streams the inequality holds, and with a
       deliberately inflated coefficient it is violated. If the inequality
       could not fail, checking it would prove nothing.
+  T9  the tool's own N(F) equals the point-by-point definition on a stream
+      with many overlapping freezes, where double-counting would show.
+  T10 claim firewall clause 7 (ratified 2026-08-21) rides in the output --
+      both the JSON and the printed report. The clause is invisible in the
+      numbers (a floor that must not be called new looks exactly like one
+      that may), and whoever writes the manuscript paragraph reads this
+      output rather than README.md, so it has to travel with the result.
+      REVERSE: the constraint must also state what remains PERMITTED, or a
+      later reader over-reads it into deleting the measurement itself.
 
     python3 scripts/selftest_alarm_selection_floor.py
 
@@ -346,7 +355,7 @@ def main():
             write_case(os.path.join(d9, "%d.csv" % i), seq, fr)
             ids.append(str(i))
         write_metadata(meta, ids)
-        _, rep9 = run(d9, meta, os.path.join(root, "t9.json"))
+        proc9, rep9 = run(d9, meta, os.path.join(root, "t9.json"))
         n_runs = rep9["totals"]["n_frozen_runs"]
         check("T9 the fixture really has many runs (%d), not one" % n_runs,
               n_runs >= 10, "only %d runs -- overlap is untested" % n_runs)
@@ -356,6 +365,40 @@ def main():
         check("T9 REVERSE: |N(F)| is strictly larger than |F| here",
               rep9["totals"]["n_neighbourhood"] > rep9["totals"]["n_frozen"],
               "equal -- the dilation added nothing, so T9 would pass without it")
+
+        # ---- T10: claim firewall clause 7 rides in the output ------------
+        # Ratified 2026-08-21. A constraint that lives only in README.md is
+        # invisible to whoever writes the paragraph from this JSON, and it is
+        # invisible in the numbers too -- a floor that must not be called new
+        # looks exactly like one that may. So it travels with the result, and
+        # this test is what stops it being quietly dropped in a later edit.
+        raw_cc = rep9.get("claim_constraint")
+        check("T10 the emitted report carries a claim_constraint",
+              isinstance(raw_cc, dict), raw_cc)
+        # Keep going on a missing constraint rather than raising: the remaining
+        # checks then report which PARTS are gone, which is what a reader needs
+        # in order to fix it. A traceback here would say only "absent".
+        cc = raw_cc if isinstance(raw_cc, dict) else {}
+        check("T10 it names clause 7 and is still active",
+              cc.get("clause") == "claim-firewall-7"
+              and cc.get("status") == "ACTIVE_PENDING_FULL_TEXT", cc)
+        check("T10 it forbids the novelty sentence specifically",
+              all(w in (cc.get("forbidden") or "").lower()
+                  for w in ("new", "first", "finding")), cc.get("forbidden"))
+        check("T10 REVERSE: and it says what is still ALLOWED, so the clause "
+              "cannot be over-read into deleting the measurement",
+              all(w in (cc.get("permitted") or "").lower()
+                  for w in ("reporting", "deriving", "selection")),
+              cc.get("permitted"))
+        check("T10 it records the citation obligation that comes with it",
+              "run" in (cc.get("citation_obligation") or "").lower(),
+              cc.get("citation_obligation"))
+        check("T10 it records when the clause gets reviewed (it is the only "
+              "time-limited clause)",
+              bool((cc.get("review_when") or "").strip()), cc.get("review_when"))
+        check("T10 the human-readable report states the clause too, not just "
+              "the JSON",
+              "CLAIM FIREWALL CLAUSE 7" in proc9.stdout, proc9.stdout[-400:])
 
     print("\n%d checks, %d failed" % (checks[0], len(failures)))
     if failures:

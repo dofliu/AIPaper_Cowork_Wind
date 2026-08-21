@@ -268,12 +268,72 @@ python3 scripts/diagnose_alarm_selection_floor.py \
 ## `selftest_alarm_selection_floor.py`
 
 ```bash
-python3 scripts/selftest_alarm_selection_floor.py    # 28 checks
+python3 scripts/selftest_alarm_selection_floor.py    # 35 checks
 ```
 
 T1 手算 fixture、T2 反向（差一格的膨脹會讓 T1 失敗）、T3 釘住「下界不在凍結集上」、
 T4／T5 前提稽核雙向都會觸發且會撤回下界、T6 vacuity、T7 排除與裁切真的丟掉列
 （含 `T` 對空白的時間戳陷阱）、T7b 暖機列不位移索引、T8 隨機串流下不等式恆成立
-但膨脹係數會被違反、T9 工具自己的 `N(F)` 等於逐點定義（多 run 重疊情形）。
+但膨脹係數會被違反、T9 工具自己的 `N(F)` 等於逐點定義（多 run 重疊情形）、
+**T10 claim firewall 第七條隨輸出走**（2026-08-21 新增）。
 
-**已反向驗證**：把膨脹改成 `w-1`，T1 兩項與 T9 一項共 3 個 check 失敗。
+**已反向驗證**：把膨脹改成 `w-1`，T1 兩項與 T9 一項共 3 個 check 失敗；
+把 `claim_constraint` 從 payload 拿掉，T10 六項全數失敗；
+只把其中的 `permitted`（仍然可以寫什麼）清空，T10 的反向那一項失敗。
+
+> **為什麼第七條要進輸出，而不是只寫在 `docs/manuscript/README.md`。**
+> 這個限制**在數字裡看不出來**——一個不得稱為新的下界，長得跟可以稱為新的
+> 下界一模一樣；而寫稿的人讀的是這份 JSON，不是 README。
+> 同理，輸出裡**必須同時寫明什麼仍然可以寫**（呈報、推導、用來論證選擇效應），
+> 否則下一個讀到禁令的人會把整段量測一起刪掉，那是另一種錯。
+> **寫成方法的一部分可以，寫成貢獻不行。**
+
+## `diagnose_group_occupancy.py` — 逐案 × 逐分箱的占用率（`group-occupancy-v1.0`）
+
+```bash
+python3 scripts/diagnose_group_occupancy.py \
+  --ours-dir ./experiments/MD_2022_a01_ours \
+  --exclude-cases 32,56,72,87 \
+  --trim-case "93=2023-08-24T13:00:00" \
+  --alpha 0.01 --k 4 \
+  --output experiments/pogo_g3_2026-08-21/occupancy_a01.json
+```
+
+回答 R26 G3 的一個是非題：**逐案重置會不會讓 POGO 的 Theorem 4.1 失效？**
+該定理假設 `T_j > 0`，而重置把 `T_j` 從全案總數縮成逐案的數——
+某一案的機組若整段都沒進到 12 m/s，`bin4_ge_12` 就是 0，
+**定理對那一案的那個 group 什麼都沒說，而且不會報錯。**
+
+**讀既有逐案輸出，不重跑任何模型。**
+
+| 它報什麼 | 意義 |
+|---|---|
+| `raw` | 落在該分箱的列數，**POGO 看得到的 `T_j`**（它沒有分箱層級的暖機） |
+| `calibrated` | 其中有 p-value 的列數，**共同評估視窗**能用的母體 |
+| `empty_raw_bins` / `empty_calibrated_bins` | 逐案逐分箱列出空格，兩種占用率分開 |
+| `worst_case_under_reset` | 最稀疏那一案，連同 Theorem 4.1 在該尺度上的值 |
+| `carry_bound_at_min_Tj` | 同一個界在「全案攜帶」下的值，供對照 |
+
+**兩件容易弄錯的事**：
+
+1. `calibrated` **不是** `raw − min_bin_samples`。凍結期間緩衝停止吸收，
+   所以它是量出來的，不是算出來的（`selftest` T3 釘住）。
+2. `T_j = 0` 得到的是 `null`，**不是一個很小的界**。沒有界與界很鬆是兩回事。
+
+⚠️ 印出來的界是 **POGO 的最壞情況上界**，不得與本研究實測的 worst-bin 偏差
+並排（R25 claim firewall），也不是對它表現的預測。
+
+## `selftest_group_occupancy.py`
+
+```bash
+python3 scripts/selftest_group_occupancy.py    # 18 checks
+```
+
+T1 raw 與 calibrated 是不同的數（含反向）、T2 空 group 逐案逐分箱被指出（含反向）、
+T3 calibrated 是量的不是減出來的、T4 裁切比較 datetime 而非字串（含反向）、
+T5 界接到最稀疏的**已占用** group 且與 `pogo_bound_scale_check` 一致（含反向）、
+T6 `T_j = 0` 不給界（含反向）。
+
+**已反向驗證兩處**：拿掉 `p_value` 判斷讓 calibrated 計數每一列 → 4 checks 失敗；
+把裁切改回字串比較 → 3 checks 失敗且丟棄列數變成 0，
+正是本專案已吃過兩次的那個缺陷（空白的 ASCII 小於 `T`，裁切靜默什麼都沒做）。
