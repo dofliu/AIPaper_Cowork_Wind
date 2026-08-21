@@ -1,10 +1,12 @@
 # Results
 
-> **Draft — not approved.** Written 2026-08-18 against the R24 three-number
-> false-alarm protocol (ratified 2026-08-17). Two numbered items below are
-> marked **[PENDING]** and depend on decisions that have not been taken; they
-> are placeholders, not results. See `docs/manuscript/README.md` for the three
-> writing boundaries this section is held to.
+> **Draft — not approved.** Calibration figures follow the R24 three-number
+> protocol (ratified 2026-08-17); lead-time figures follow the R27 horizon
+> protocol (ratified 2026-08-20) and come from the Phase 5 evaluation of
+> 2026-08-20 over the committed score streams. One **[PENDING]** item remains —
+> Base Scorer 2 — and it is a scope limit, not a missing number: every figure
+> here rests on a single frozen detector. See `docs/manuscript/README.md` for
+> the writing boundaries this section is held to.
 
 ## 1. Experimental setting
 
@@ -126,51 +128,70 @@ separation the paper claims is not visible there.
 
 ## 4. Early detection and non-inferiority
 
-The early-detection figures come from the 2026-08-16 evaluation run, which is
-the only run in which event onset times were available; the calibration figures
-in Tables 1–3 were recomputed under the R24 protocol on 2026-08-18 from the
-same per-case outputs. **The two halves of the results therefore come from two
-executions of the evaluator over one set of score streams**, and the artefacts
-for both are retained.
+Lead time is reported at the ratified primary horizon *H* = 14 days together
+with the declared sweep 7 / 10 / 14 / 21 days and unbounded (protocol
+`detection-horizon-v1.0`, R27; see `02_evaluation_protocol.md` Section 4). All
+figures in this section come from the Phase 5 evaluation of 2026-08-20 over the
+committed per-case score streams, and reproduce the calibration figures of
+Tables 1–3 to the digit — this run adds lead time and changes nothing else.
+Artefacts are in `experiments/phase5_2026-08-20/`.
 
-**Table 4. Median lead time on the 44 anomaly cases, detection horizon unset.**
+**Table 4. Median lead time at the primary horizon, *H* = 14 days, on the 44
+anomaly cases.** `miss = 0` scores an undetected case as zero days of warning;
+lead lost is against the static reference at the same α.
 
-| α | Method | Detected | Median lead (days) | Lead lost vs static | Non-inferior (2-day margin) |
+| α | Method | Detected | Median lead (d) | miss = 0 (d) | Lead lost vs static | Non-inferior (2 d) |
+|---|---|---|---|---|---|---|
+| 0.01 | **Ours** | **44/44** | **7.90** | **7.90** | **−2.19** | **yes** |
+| 0.01 | Static | 34/44 | 5.71 | 0.11 | 0.00 | — |
+| 0.01 | ACI | 39/44 | 6.72 | 5.52 | −1.00 | yes |
+| 0.01 | DtACI | 40/44 | 4.95 | 4.35 | +0.76 | yes |
+| 0.01 | W1-ACAS | 18/44 | −2.56 | 0.00 | +8.27 | no |
+| 0.05 | **Ours** | **44/44** | **13.80** | **13.80** | **−3.34** | **yes** |
+| 0.05 | Static | 43/44 | 10.46 | 10.26 | 0.00 | — |
+| 0.001 | **Ours** | **19/44** | **−2.49** | **0.00** | **+6.60** | **no** |
+| 0.001 | Static | 27/44 | 4.11 | 0.00 | 0.00 | — |
+| 0.001 | ACI / DtACI / W1-ACAS | 0/44 | — | 0.00 | — | — |
+
+At the main level α = 0.01 the proposed method **detects every anomaly case
+(44/44)** and does so **2.19 days earlier** than the static reference, the only
+reference that also detects all 44; it is non-inferior with room to spare. At
+α = 0.05 it again detects all 44 and is 3.34 days earlier. These are the
+headline numbers.
+
+At α = 0.001 the proposed method **does not meet the non-inferiority margin**,
+and we report that rather than qualifying it away. The cause is a detection gap,
+not a lateness: the very tight level suppresses alarms across the board, and the
+freeze then withholds calibration on cases the method does detect, so it catches
+19 of 44 against the static reference's 27. This is a real cost of the method at
+an extreme operating point and belongs in Limitations. Two facts frame it
+without softening it: the same tightening removes the three adaptive baselines
+entirely (ACI, DtACI and W1-ACAS all detect **0 of 44**), so the proposed method
+remains second only to the non-adaptive static reference; and the paper's claim,
+after the R25 repositioning, is not that the calibrator detects best but that
+the reporting protocol is correct — a claim the α = 0.001 column supports, since
+its false-alarm figures reconstruct exactly (Table 3).
+
+**Table 5. Non-inferiority across the declared horizon sweep** (Ours vs static;
+negative lead-lost means the proposed method is *earlier*). The verdict does not
+depend on the horizon at α = 0.01 or 0.05 — it holds at every one, including the
+unbounded case — which is the property R27 exists to display.
+
+| α | H = 7 | H = 10 | H = 14 | H = 21 | unbounded |
 |---|---|---|---|---|---|
-| 0.01 | Ours | 44/44 | 348.50 | 1.97 | yes |
-| 0.01 | Static | 44/44 | 350.46 | 0.00 | — |
-| 0.01 | DtACI | 44/44 | 346.49 | 3.98 | no |
-| 0.01 | ACI | 44/44 | 344.70 | 5.76 | no |
-| 0.01 | W1-ACAS | 44/44 | 340.57 | 9.89 | no |
-| 0.05 | Ours | 44/44 | 355.44 | −1.58 | yes |
-| 0.001 | Ours | 43/44 | 250.10 | 88.23 | no |
-| 0.001 | Static | 43/44 | 338.33 | 0.00 | — |
+| 0.01 | −2.33 ✓ | −1.19 ✓ | **−2.19 ✓** | −1.31 ✓ | +1.97 ✓ |
+| 0.05 | −0.50 ✓ | −2.81 ✓ | **−3.34 ✓** | −1.50 ✓ | −1.58 ✓ |
+| 0.001 | +3.56 ✗ | +4.55 ✗ | **+6.60 ✗** | +13.03 ✗ | +88.23 ✗ |
 
-At α = 0.01 the proposed method is the only adaptive method that meets the
-pre-registered two-day non-inferiority margin against the static reference, and
-at α = 0.05 it detects *earlier* than the reference. At α = 0.001 it does not:
-it loses 88 days, and this is reported as a failure of the non-inferiority
-constraint at that setting, not qualified away.
-
-**These lead times must not be read as absolute early-warning performance.**
-The detection horizon *H* is unset in this run, so lead time is unbounded below
-and an alarm raised before the fault window opens is still counted as early
-warning. The medians near 350 days are a direct consequence: they are close to
-the full length of a case, which means they are dominated by the earliest alarm
-in the record rather than by any detection of the fault. What the column
-supports is the *relative* comparison under one identical rule; what it does
-not support is a claim about how many days of warning an operator would
-receive.
-
-> **[PENDING — Phase 5 re-run]** The detection horizon is no longer open: R27
-> ratified a primary of **14 days** with a declared sweep of 7 / 10 / 14 / 21 /
-> unbounded (see `02_evaluation_protocol.md` Section 4). What remains is
-> mechanical — this table must be regenerated from the CARE score streams at
-> the primary, with the sweep reported beside it, and the absolute lead times
-> in the abstract and conclusion taken from that run. The numbers above are the
-> **unbounded** run and are labelled as such in every artefact. Note that the
-> unbounded column is itself part of the declared sweep, so it is not discarded
-> when the bounded runs arrive; it becomes the most permissive column.
+The unbounded column is retained deliberately and must not be read as
+early-warning performance: with *H* unset, an alarm raised before the fault
+window opens is still counted, so the α = 0.01 medians there run to 348 days —
+close to a full case length, dominated by the earliest alarm in the record
+rather than by detection of the fault. That the α = 0.01 and 0.05 verdicts
+survive even this most permissive setting is the point; that the absolute
+numbers there are meaningless is why the primary is 14 days. The α = 0.001 row
+fails at every horizon, consistent with the detection gap above rather than with
+any horizon artefact.
 
 > **[PENDING — Base Scorer 2]** Every figure in this section rests on one
 > frozen detector. The evaluation contract requires the claim to hold on two

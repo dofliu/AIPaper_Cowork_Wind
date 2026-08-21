@@ -1,0 +1,884 @@
+Environment
+Python 3.12.13
+cb9529ddf5b810847a8b2a73fe1c6a1c520ab2c9
+
+== scripts/selftest_absorption_policies.py
+====================================================================
+Absorption policy self-test
+====================================================================
+
+T0  adding the ablations changed nothing about a default run
+    PASS T0 default equals the ratified policy, record for record
+    PASS T0 the old freeze_on_alert=False equals absorption='none'
+    PASS T0 the default records itself as the ratified policy
+    PASS T0 an unknown policy is refused, not silently defaulted
+
+T1  winsorising cap is the largest value that would not exceed
+    PASS T1 cap is the 11th largest element
+    PASS T1 a point AT the cap does not exceed
+    PASS T1 the next value up DOES exceed
+    PASS T1 an empty buffer returns None rather than inventing a cap
+    PASS T1 the cap tracks the buffer rather than being a constant
+
+A   progressive fault -- the alarm must survive it (self-masking guard)
+B   benign level shift on a healthy machine -- the alarm must clear
+
+    policy               A slow       A fast      B alarm   B exceed
+    freeze                1.000        1.000        1.000     0.7197
+    none                  0.000        0.000        0.000     0.0090
+    bin_local             1.000        1.000        1.000     0.7212
+    gated                 1.000        1.000        1.000     0.7285
+    winsor_alpha          1.000        1.000        1.000     0.7263
+    winsor_max            0.000        1.000        0.000     0.0090
+
+T_PAIR  the two fixtures disagree, which is what makes them evidence
+    PASS T_PAIR freeze holds the fault alarm
+    PASS T_PAIR freeze locks in on the benign shift (the measured defect)
+    PASS T_PAIR none recovers from the benign shift
+    PASS T_PAIR none loses the fault alarm to self-masking
+
+T_CAND  judged on both fixtures at once -- the finding is that
+        nothing here passes both, so none of these is the fix
+        freeze         A_slow=1.000 B=1.000  -> no
+        none           A_slow=0.000 B=0.000  -> no
+        bin_local      A_slow=1.000 B=1.000  -> no
+        gated          A_slow=1.000 B=1.000  -> no
+        winsor_alpha   A_slow=1.000 B=1.000  -> no
+        winsor_max     A_slow=0.000 B=0.000  -> no
+    PASS T_CAND no absorption rule separates a slow fault from a benign shift
+    PASS T_CAND bin_local locks in: the shift is not confined to one bin
+    PASS T_CAND gated locks in: the points it admits are the low ones
+    PASS T_CAND winsor_alpha locks in, as the fixed-point argument predicts
+    PASS T_CAND winsor_max clears the benign shift
+    PASS T_CAND but winsor_max self-masks on a SLOW fault: between alarms the raw ramp lifts the envelope it caps against
+    PASS T_CAND winsor_max does survive a FAST fault, which locates the boundary rather than just failing it
+
+T2  identical input -> identical output, for every policy
+    PASS T2 freeze is deterministic
+    PASS T2 none is deterministic
+    PASS T2 bin_local is deterministic
+    PASS T2 gated is deterministic
+    PASS T2 winsor_alpha is deterministic
+    PASS T2 winsor_max is deterministic
+
+26 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_alarm_selection_floor.py
+
+T1/T2  hand-computed fixture
+  PASS  T1 the fixture freezes exactly indices 17..29
+  PASS  T1 tool's |F| matches
+  PASS  T1 tool's |N(F)| matches the definition, dilated by w=18
+  PASS  T1 floor equals (k/w)|F|/|N(F)| computed by hand
+  PASS  T1 the inequality holds on the fixture
+  PASS  T2 REVERSE: dilating by w-1 gives a different |N(F)|
+
+T3  the bound is on N(F), not on F
+  PASS  T3 frozen-point rate is below k/w (so no floor exists there)
+  PASS  T3 but the N(F) rate clears the floor
+
+T4/T5  premise audit fires in both directions
+  PASS  T4 a frozen flag the rule does not justify is counted
+  PASS  T4 a rule hit the run did not freeze on is counted
+  PASS  T4 REVERSE: the honest fixture reports zero in both directions
+  PASS  T5 a violated premise withdraws the floor
+  PASS  T5 and exits non-zero
+  PASS  T5 REVERSE: the honest fixture exits zero and applies the floor
+
+T6  vacuity is flagged, not hidden
+  PASS  T6 a floor at or below alpha is marked vacuous
+  PASS  T6 and the floor is withdrawn
+  PASS  T6 REVERSE: at alpha=0.01 the same floor is not vacuous
+
+T7  exclusion and trim actually drop rows
+  PASS  T7 excluding a case reduces the case count
+  PASS  T7 the trim drops rows and reports how many
+  PASS  T7 REVERSE: the untrimmed run records no trim at all
+  PASS  T7 REVERSE: the trim changed the totals
+
+T7b  warm-up rows do not shift the alarm indexing
+  PASS  T7b premise still holds with 25 uncalibrated leading rows
+  PASS  T7b |N(F)| is unchanged by the warm-up rows
+
+T8  randomised: the inequality holds, and can fail
+  PASS  T8 the k/w bound is never violated over 200 streams
+  PASS  T8 REVERSE: an inflated coefficient IS violated
+
+T9  the tool's own N(F) equals the point-by-point definition
+  PASS  T9 the fixture really has many runs (123), not one
+  PASS  T9 tool |N(F)| equals the summed point-by-point dilation
+  PASS  T9 REVERSE: |N(F)| is strictly larger than |F| here
+
+28 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_c0_c6_gate.py
+
+T1  no evidence files -> UNVERIFIED, never PASS
+  PASS  T1 exit code is 2 (UNVERIFIED)
+  PASS  T1 gate_status UNVERIFIED
+  PASS  T1 C4 UNVERIFIED without g3
+  PASS  T1 gate_definitions_ratified is False
+  PASS  T1 no boolean 'gate_all_pass' style field
+
+T2  complete evidence, clean data -> PASS
+  PASS  T2 exit code is 0
+  PASS  T2 gate_status PASS
+  PASS  T2 C0_signal_availability_and_mapping PASS
+  PASS  T2 C1_missing_feature_policy PASS
+  PASS  T2 C2_artifact_reproducibility PASS
+  PASS  T2 C3_label_independence PASS
+  PASS  T2 C4_case_coverage PASS
+  PASS  T2 C5_determinism_and_freeze PASS
+  PASS  T2 C6_score_sanity PASS
+  PASS  T2 output receipt written
+  PASS  T2 evaluability masks written
+  PASS  T2 per-case input sha256 recorded
+
+T3  wrong case set of the RIGHT SIZE -> C4 FAIL  [P0-2]
+  PASS  T3 C4 FAIL despite equal counts
+  PASS  T3 counts really are equal (defect would hide here)
+  PASS  T3 missing_case_ids names case_003
+  PASS  T3 unexpected_case_ids names case_999
+  PASS  T3 exit code is 1 (FAIL)
+
+T4  >3h gap with absent scores -> C1 masks, C6 still PASS  [P0-5]
+  PASS  T4 C1 marks 25 rows non-evaluable
+  PASS  T4 C1 classifies the run as non_evaluable
+  PASS  T4 C1 stays PASS below the 5%% flag
+  PASS  T4 C6 PASS — absent scores fall inside the mask
+  PASS  T4 C6 reports non-evaluable coverage
+  PASS  T4 overall PASS
+  PASS  T4 mask CSV written
+  PASS  T4 mask marks exactly the gap rows
+
+T5  run2 differs from run1 -> C5 FAIL  [P0-4]
+  PASS  T5 C5 FAIL
+  PASS  T5 C5 names the divergent case
+  PASS  T5 single-run mode cannot PASS C5
+
+T5b single run (no run2) -> C5 UNVERIFIED, not PASS  [P0-4]
+  PASS  T5b C5 UNVERIFIED
+  PASS  T5b overall not PASS
+  PASS  T5b exit non-zero
+
+T6  clean header but no fit evidence -> C3 UNVERIFIED  [P0-3]
+  PASS  T6 C3 UNVERIFIED, not PASS
+  PASS  T6 header scan present but non-decisive
+  PASS  T6 overall not PASS
+
+T7  no --signal-map -> C0 UNVERIFIED with a suggestion  [P1]
+  PASS  T7 C0 UNVERIFIED
+  PASS  T7 suggestion emitted for operator review
+  PASS  T7 overall not PASS
+
+T9  a signal declared not_available with a ratified reason -> PASS
+  PASS  T9 C0 PASS with a ratified absence
+  PASS  T9 absence surfaced in the summary
+
+T9b an incomplete not_available declaration -> C0 FAIL
+  PASS  T9b C0 FAIL on an unratified absence
+
+T9c a silently missing signal -> C0 FAIL (absence is never inferred)
+  PASS  T9c C0 FAIL when a signal is simply absent from the map
+
+T8  --emit-templates writes the four evidence templates
+  PASS  T8 exit 0
+  PASS  T8 signal_map.json written
+  PASS  T8 artifact_manifest.json written
+  PASS  T8 fit_provenance.json written
+  PASS  T8 freeze_receipt.json written
+
+T10 --farm restricts the audited case set to one farm
+  PASS  T10 the run completes
+  PASS  T10 only farm A's two cases were audited
+  PASS  T10 C4 passes against the farm-restricted expectation
+  PASS  T10 C5 passes, so run2 was restricted the same way
+  PASS  T10 the restriction is on the record, not implied
+  PASS  T10 REVERSE: without --farm all four cases are audited
+  PASS  T10 REVERSE: the two runs genuinely differ
+  PASS  T10 an unmatched --farm does not PASS over zero cases
+
+59 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_earliness_metric.py
+
+T1  detection_rate is reported and equals detected/detectable
+  PASS  T1 detection_rate present for every method
+  PASS  T1 timely detected all 3 anomaly cases
+  PASS  T1 partial detected exactly 1 of 3
+  PASS  T1 partial detection_rate is 1/3
+  PASS  T1 the denominator counts cases with an event window, not all four cases
+
+T2  missing most faults shows up somewhere
+  PASS  T2 partial's median over DETECTED cases matches timely's
+  PASS  T2 with misses scored as zero, partial drops below timely
+  PASS  T2 partial's miss-as-zero median is 0 (it caught 1 of 3)
+  PASS  T2 the caveat is attached when detection rates differ
+
+T3  with a horizon, an alarm entirely before the window is
+    a false alarm, not early warning
+  PASS  T3 eager detects nothing inside a 1-day horizon
+  PASS  T3 eager's early alarms are recorded, not silently dropped
+  PASS  T3 timely is unaffected by the horizon
+  PASS  T3 no lead time exceeds the horizon
+
+T4  REVERSE -- unset horizon still credits that same alarm,
+    so T3 is testing the horizon and not something else
+  PASS  T4 unbounded credits eager on all 3 cases
+  PASS  T4 unbounded gives eager MORE lead time than timely
+  PASS  T4 that credit exceeds the horizon it would be denied under
+  PASS  T4 bounded and unbounded genuinely disagree on eager
+  PASS  T4 unbounded records no pre-horizon exclusions
+
+T5  the summary states which horizon was in force
+  PASS  T5 unbounded run records null
+  PASS  T5 unbounded run carries the caveat
+  PASS  T5 bounded run records the value
+  PASS  T5 eval version bumped past the version with the defects
+
+    what the two runs report for each method:
+      method    unbounded lead / detected      1-day horizon
+      eager     1.701    3 /3                   n/a 0/3
+      partial   0.104    1 /3                 0.104 1/3
+      timely    0.104    3 /3                 0.104 3/3
+
+T6  --trim-case drops rows at or after the cut
+  PASS  T6 the trim is recorded, not silently applied
+  PASS  T6 rows before the cut are kept
+  PASS  T6 rows at or after the cut are dropped
+  PASS  T6 only the named case is trimmed
+  PASS  T6 REVERSE: the untrimmed run records no trim
+  PASS  T6 REVERSE: trimming changed a1's detection outcome
+
+T7  the R27 horizon protocol is pinned, and single-sourced
+  PASS  T7 the ratified primary is 14 days
+  PASS  T7 the declared sweep is (7, 10, 14, 21, unbounded)
+  PASS  T7 the primary is IN the declared sweep
+  PASS  T7 the sweep still contains the unbounded case
+  PASS  T7 the diagnostic imports the sweep rather than restating it
+  PASS  T7 and keeps the sub-band horizons that evidence the lower bound
+  PASS  T7 REVERSE: the diagnostic sweep is strictly wider
+  PASS  T7 the run records the protocol version
+  PASS  T7 a run at the primary is flagged as the primary
+  PASS  T7 REVERSE: an unbounded run is NOT flagged as the primary
+
+T8  detections are monotone in H (why a generous H is the safe one)
+  PASS  T8 eager   detections never fall as H widens: [0, 0, 3, 3]
+  PASS  T8 partial detections never fall as H widens: [1, 1, 1, 1]
+  PASS  T8 timely  detections never fall as H widens: [3, 3, 3, 3]
+  PASS  T8 REVERSE: some method's detections actually change with H
+
+42 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_end_to_end.py
+
+building fixture: 4 cases x 9000 rows
+
+T1  run every method, then the evaluator
+  PASS  T1 our method ran
+  PASS  T1 W1-ACAS ran
+  PASS  T1 ACI/DtACI/static ran
+  PASS  T1 evaluator ran
+  PASS  T1 all five methods in the table
+  PASS  T1 comparison.md written
+
+T2  our method has the lowest worst-bin deviation
+      method   worst-bin   marginal   detected   median lead (d)
+      aci      0.1897      0.0002     2/2        18.70
+      dtaci    0.2112      0.0088     0/2        n/a
+      ours     0.0061      0.0004     2/2        8.47
+      static   0.2387      0.0141     2/2        16.53
+      w1acas   0.1611      0.0062     1/2        4.14
+  PASS  T2 our worst-bin deviation is defined
+  PASS  T2 at least three baselines produced a worst-bin deviation
+  PASS  T2 ours is the lowest worst-bin deviation
+
+T3  earliness measured against the event windows
+  PASS  T3 our method has a median lead time
+  PASS  T3 non-inferiority verdict reported for our method
+  PASS  T3 margin recorded as the signed-off 2 days
+  PASS  T3 every method reports the denominator behind its median
+  PASS  T3 our method detected every faulted case in the fixture
+  PASS  T3 the horizon in force is recorded, set or not
+
+T4  the work-order rule is applied to every method
+  PASS  T4 recorded in the summary
+  PASS  T4 rule is 6 of 18
+
+T5  excluded cases stay excluded
+  PASS  T5 exclusion recorded
+  PASS  T5 case 4 absent from every method
+  PASS  T5 missing CARE metrics still declared missing
+
+T6  false-alarm figures reported as three numbers
+      ours: unfrozen dev 0.0060975609756097615 | frozen 0.00024390243902439024 | frozen FAR 0.5 | pooled 0.04963414634146342
+  PASS  T6 protocol recorded in the summary
+  PASS  T6 every method carries a false-alarm report block
+  PASS  T6 the three numbers are present together for our method
+  PASS  T6 our freeze state was read from our own output
+  PASS  T6 our frozen fraction is measured, not assumed
+  PASS  T6 the pooled rate rebuilds from the three, for every method
+  PASS  T6 baselines declare no freeze mechanism rather than 0% frozen
+  PASS  T6 and say why in words, so the reader is not left to infer it
+  PASS  T6 a baseline's unfrozen figure equals its pooled figure
+  PASS  T6 the rendered table names the unfrozen column
+  PASS  T6 and prints the frozen fraction next to it, not elsewhere
+  PASS  T6 and explains the protocol under the table
+  PASS  T6 a method with no freeze mechanism renders as em dash, not 0%
+
+33 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_freeze_lockin_diagnostic.py
+Wrote /tmp/freeze_diag_selftest_blkdodtf/report.json
+====================================================================
+Freeze lock-in diagnostic self-test
+====================================================================
+
+D1  constructed freeze runs come back with the lengths they were built with
+    PASS D1 three runs found
+    PASS D1 lengths are 3, 1, 5 including the run still open at EOF
+    PASS D1 frozen rows total 9
+
+D2  the false-alarm decomposition adds up and splits on the flag
+    PASS D2 warm-up rows are calibrated by nobody
+    PASS D2 unfrozen split is 20 points / 2 exceedances
+    PASS D2 frozen split is 10 points / 6 exceedances
+
+D3  an anomaly case contributes geometry, never a false-alarm rate
+    PASS D3 the diagnostic exits 0
+    PASS D3 one normal case, one anomaly case
+    PASS D3 the normal-case rate is the normal case's own, uncontaminated
+    PASS D3 the anomaly case is reported as geometry only
+
+D5  an excluded case is dropped, and says so
+    PASS D5 the excluded case is listed as skipped
+    PASS D5 and is absent from per_case
+    and a trim cuts at the timestamp rather than being accepted and ignored
+    PASS D5 untrimmed keeps all 20 rows
+    PASS D5 trimmed keeps only the 10 before the cut
+    PASS D5 and reports how many rows the trim dropped, so a trim that does nothing is visible
+    PASS D5 the 'T' and the space spelling of the cut agree
+
+D4  collateral attribution has to fail in both directions
+    PASS D4 frozen points in an uninvolved bin count as collateral
+    PASS D4 and none of them count as attributed
+    PASS D4 reversed: the same points in the triggering bin are attributed
+    PASS D4 reversed: and collateral drops to zero
+
+D6  a point lands in the bucket for the step it is actually at
+    PASS D6 the first 18 frozen steps land in 0-18
+    PASS D6 the next 18 land in 18-36
+    PASS D6 the remaining 4 land in 36-144
+    PASS D6 nothing is lost between buckets
+
+D7  the bounded-freeze counterfactual counts rows past the horizon
+    PASS D7 a 40-step run leaves 4 rows past step 36
+    PASS D7 and none past step 144
+    PASS D7 the run counts as longer than 36 but not than 144
+
+27 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_md2022.py
+
+T1/T2  fault in a used signal rises; a clean case stays flat
+  PASS  T1 scorer ran
+      faulted case: 2.257 -> 61.152
+      clean case:   2.318 -> 2.237
+  PASS  T1 score rises at least 3x on the faulted case
+  PASS  T2 clean case stays within 30%%
+
+T3  a fault in a not_available signal is invisible, by construction
+  PASS  T3 scorer ran without the unavailable signal
+      bearing-fault case, bearing excluded: 2.059 -> 2.069
+  PASS  T3 the bearing fault does not move the score
+  PASS  T3 the exclusion is recorded in the summary
+  PASS  T3 and the signal is absent from the feature set
+
+T4  C0-C6 evidence written at fit time
+  PASS  T4 fit_partition names the normal reference
+  PASS  T4 every fit file carries a sha256
+  PASS  T4 artifact manifest has the C2 fields
+  PASS  T4 artifact manifest states the scope limit
+  PASS  T4 freeze receipt has the C5 fields
+
+T5  the fit never reads a label column
+  PASS  T5 label columns declared excluded
+  PASS  T5 a wild label column did not enter the covariance
+
+T7  the score CSV has no duplicate column names
+  PASS  T7 no column name appears twice
+  PASS  T7 the canonical trio leads the header
+  PASS  T7 feature columns are namespaced
+
+T7  wind speed survives a row the scorer could not score
+  PASS  T7 the dropout rows really were unscorable
+  PASS  T7 and every one of them still carries its wind speed
+
+T8  the C0 map names columns that exist in the score CSV
+  PASS  T8 every named column is really in the score CSV
+  PASS  T8 units are carried through from the builder's map
+  PASS  T8 a not_available declaration is carried through verbatim
+
+T9  an out-of-range fault code is rejected per channel
+  PASS  T9 both runs completed
+      bearing max: filtered 52.85, unfiltered 850.00
+  PASS  T9 the fault code reaches the feature vector when unfiltered
+  PASS  T9 and is gone when filtered
+  PASS  T9 the rejections are counted per channel, not just dropped
+  PASS  T9 the filter records that it was enabled
+  PASS  T9 and the ranges applied are recorded, not implied
+
+T6  identical input -> identical output (C5 requirement)
+  PASS  T6 two runs produce identical score files
+
+T10 a second farm must not overwrite the first farm's evidence
+  PASS  T10 both farms' evidence survives in one directory
+  PASS  T10 signal_map exists for both farms
+  PASS  T10 fit_provenance exists for both farms
+  PASS  T10 artifact_manifest exists for both farms
+  PASS  T10 freeze_receipt exists for both farms
+  PASS  T10 Farm A's map still declares the signal available
+  PASS  T10 Farm B's not_available declaration survived the second run
+  PASS  T10 REVERSE: under one fixed name these two would collide
+
+T11 the canonical wind column gets the same filter as the features
+  PASS  T11 the fixture actually produced rows to check
+  PASS  T11 no canonical wind value is outside the physical range
+  PASS  T11 REVERSE: the fixture does contain rejected wind rows, so T11 is not passing vacuously
+
+40 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_online_baselines.py
+
+T1  stationary null -> realised alarm rate near alpha
+      static  realised 0.0338 (target 0.05)
+  PASS  T1 static within 0.02 of alpha
+      ACI     realised 0.0505 (target 0.05)
+  PASS  T1 ACI within 0.02 of alpha
+      DtACI   realised 0.0545 (target 0.05)
+  PASS  T1 DtACI within 0.02 of alpha
+
+T2  scale jumps mid-stream -> adaptive recovers, static does not
+      post-shift rates: static 0.3510 | ACI 0.0510 | DtACI 0.0580 (target 0.05)
+  PASS  T2 static is badly off after the shift
+  PASS  T2 ACI recovers
+  PASS  T2 DtACI recovers
+  PASS  T2 both adaptive methods beat static
+
+T3  a badly chosen step size -> DtACI beats a single ACI holding it
+      ACI(gamma=0.50) 0.1216 | DtACI holding it 0.0890 (target 0.05)
+  PASS  T3 DtACI is closer to target than the bad single ACI
+
+T4  identical input -> identical output (C5 requirement)
+  PASS  T4 ACI deterministic
+  PASS  T4 DtACI deterministic
+
+T5  CARE's adaptive threshold refuses to be approximated
+  PASS  T5 raises NotImplementedError
+  PASS  T5 the reason names the missing definition
+  PASS  T5 recorded in machine-readable form
+
+13 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_phase5_evaluation.py
+
+T1  the plan is alphas x the ratified sweep
+  PASS  T1 plan size is 3 x 5 = 15
+  PASS  T1 the horizons are exactly the ratified sweep
+  PASS  T1 the alphas are the three signed-off levels
+  PASS  T1 REVERSE: the runner does not restate the horizon numbers
+
+T2/T3/T4  every command carries what the dataset requires
+  PASS  T2 every run excludes 32,56,72,87
+  PASS  T2 every run trims case 93
+  PASS  T2 every run passes --event-info-root
+  PASS  T2 REVERSE: removing them changes the command
+  PASS  T3 the ours directory tracks the alpha
+  PASS  T3 the baselines directory tracks the alpha
+  PASS  T3 w1acas is alpha-independent in BOTH runs
+  PASS  T3 REVERSE: the two alphas produce different commands
+  PASS  T4 H=7 passes --detection-horizon-days 7
+  PASS  T4 H=10 passes --detection-horizon-days 10
+  PASS  T4 H=14 passes --detection-horizon-days 14
+  PASS  T4 H=21 passes --detection-horizon-days 21
+  PASS  T4 the unbounded run omits --detection-horizon-days
+
+T5  a tree without event_info is refused
+  PASS  T5 refused, non-zero exit
+  PASS  T5 and says why
+  PASS  T5 a missing directory is refused too
+  PASS  T5 REVERSE: a nested layout is accepted, not rearranged
+
+T6  --dry-run plans without writing
+  PASS  T6 REVERSE: a tree WITH event_info is accepted
+  PASS  T6 the plan announces 15 runs
+  PASS  T6 no index file is written on a dry run
+  PASS  T6 the primary horizon is named in the output
+
+25 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_pogo_bound_scale_check.py
+
+T1/T2  formula matches an independent transcription
+  PASS  T1 U_T  T=52813 Tj=7626 k=4 a=0.01 D=23.81 q=0
+  PASS  T2 bound T=52813 Tj=7626 k=4 a=0.01 D=23.81 q=0
+  PASS  T1 U_T  T=52813 Tj=2206 k=5 a=0.01 D=23.81 q=0
+  PASS  T2 bound T=52813 Tj=2206 k=5 a=0.01 D=23.81 q=0
+  PASS  T1 U_T  T=50000 Tj=2500 k=50 a=0.05 D=1 q=0
+  PASS  T2 bound T=50000 Tj=2500 k=50 a=0.05 D=1 q=0
+  PASS  T1 U_T  T=1000 Tj=100 k=2 a=0.1 D=5 q=2
+  PASS  T2 bound T=1000 Tj=100 k=2 a=0.1 D=5 q=2
+
+T3  k enters U_T only as ln(k)
+  PASS  T3 U_T(5) - U_T(4) == ln(5/4)  (T=52813)
+  PASS  T3 U_T(5) - U_T(4) == ln(5/4)  (T=52813)
+  PASS  T3 U_T(5) - U_T(4) == ln(5/4)  (T=50000)
+  PASS  T3 U_T(5) - U_T(4) == ln(5/4)  (T=1000)
+  PASS  T3 REVERSE: the bound is NOT additive in ln(k)
+
+T4  monotonicity the theorem requires
+  PASS  T4 bound falls as T_j grows
+  PASS  T4 bound rises as D grows
+  PASS  T4 bound rises as k grows
+
+T5  vacuity flagged in both directions
+  PASS  T5 a 2-sample group gives a vacuous bound
+  PASS  T5 REVERSE: this project's real T_j does not
+
+T6  the CLI refuses inputs the theorem does not admit
+  PASS  T6 rejects alpha >= 1
+  PASS  T6 rejects Tj > T
+  PASS  T6 rejects D = 0
+  PASS  T6 REVERSE: valid inputs exit 0
+  PASS  T6 REVERSE: and print both k rows
+
+23 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_regime_conditional.py
+
+T1  regime-dependent scores -> conditional holds per bin, pooled does not
+      bin            conditional   pooled     (target 0.05)
+      bin1_lt_4      0.0501        0.0000
+      bin2_4_8       0.0492        0.0037
+      bin3_8_12      0.0488        0.0559
+      bin4_ge_12     0.0512        0.2451
+      worst-bin deviation: conditional 0.0012 | pooled 0.1951
+      marginal deviation:  conditional 0.0005
+  PASS  T1 all four bins evaluable
+  PASS  T1 conditional worst-bin deviation under 0.02
+  PASS  T1 pooled worst-bin deviation is materially worse
+  PASS  T1 pooled looks acceptable MARGINALLY while failing per bin
+
+T2  regime-independent scores -> conditioning buys nothing
+      worst-bin deviation: conditional 0.0011 | pooled 0.0053
+  PASS  T2 conditional still holds
+  PASS  T2 pooled is comparable when regimes do not differ
+
+T3  progressive fault -> freezing keeps the alarm, not freezing loses it
+      late-fault alarm coverage: frozen 1.000 | not frozen 0.000
+  PASS  T3 freezing holds the alarm through the fault
+  PASS  T3 without freezing the alarm is largely lost to self-masking
+  PASS  T3 freezing actually engaged
+
+T4  a single exceedance is not an alarm; 6 of 18 is
+      point exceedances 1149 | work-order alarm points 1
+  PASS  T4 exceedances occur at roughly alpha
+  PASS  T4 work-order alarms are far rarer than raw exceedances
+  PASS  T4 rule recorded as 6 of 18
+
+T5  a bin below the minimum sample count reports nothing
+  PASS  T5 the starved bin reports far None, not 0
+  PASS  T5 and says why
+  PASS  T5 starved points are excluded from rates, not counted clean
+
+T6  identical input -> identical output (C5 requirement)
+  PASS  T6 deterministic
+
+T7  false-alarm figures split by freeze state (R24)
+      unfrozen 0.0500 | frozen 9.1% | frozen FAR 0.7000 | pooled 0.1091
+  PASS  T7 the three numbers travel in one block
+  PASS  T7 unfrozen rate is the constructed 0.0500
+  PASS  T7 frozen fraction is the constructed 100/1100
+  PASS  T7 frozen rate is the constructed 0.7000
+  PASS  T7 unfrozen worst-bin deviation is zero, pooled is not
+  PASS  T7 the pooled rate rebuilds from the three numbers
+  PASS  T7 freeze state is declared available
+  PASS  T7 a method with no freeze column says so
+  PASS  T7 and its unfrozen rate equals its pooled rate
+  PASS  T7 with no frozen rate to report
+  PASS  T7 and 'structural' stated, so zero is not read as measured
+  PASS  T7 Freeze-on-Alert produces a measurable frozen fraction
+  PASS  T7 and the identity still holds on a real run
+
+29 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_sensor_identification.py
+  PASS  profiler exits 0
+  PASS  summary is CANDIDATE_UNRATIFIED
+  PASS  power anchor found
+  PASS  wind anchor found
+  PASS  rotor_speed -> sensor_11_avg
+  PASS  ambient_temperature -> sensor_23_avg
+  PASS  main_bearing_temperature -> sensor_31_avg
+  PASS  pitch_angle -> sensor_44_avg
+  PASS  anchors excluded from candidates
+  PASS  power-derived decoy does not win rotor_speed
+  PASS  noise channel wins nothing
+  PASS  winning candidates carry evidence
+
+  [hostile dialect: ';' + comma decimals + sentinels + deep path]
+  PASS  hostile run exits 0
+  PASS  farm keyed by the dir containing datasets, not the top level
+  PASS  hostile rotor_speed -> sensor_11_avg
+  PASS  hostile ambient_temperature -> sensor_23_avg
+  PASS  hostile main_bearing_temperature -> sensor_31_avg
+  PASS  hostile pitch_angle -> sensor_44_avg
+  PASS  draft is marked unratified
+  PASS  draft units are placeholders, not invented
+  PASS  draft is not directly usable as a C0 signal map
+
+21 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_signal_map_builder.py
+
+T1  'active power' is a substring of 'reactive power'
+  PASS  T1 only the real active power channel matches
+
+T2  an energy counter in Wh is not instantaneous power
+  PASS  T2 Wh channels are rejected despite is_counter being unset
+
+T3  a gearbox bearing is a substitute, not a main bearing
+  PASS  T3 nothing is resolved
+  PASS  T3 the problem says substitute and names the components
+  PASS  T3 two real rotor bearings DO average
+
+T5  averaging refuses to cross units
+  PASS  T5 mixed units are not averaged
+  PASS  T5 and the reason names the unit clash
+  PASS  T5 an explicit pick resolves the same tie
+
+T4  an operator override prints without a dictionary description
+  PASS  T4 the builder exits cleanly
+  PASS  T4 the overridden signal is printed, not crashed on
+  PASS  T4 the override lands in the signal map
+  PASS  T4 and is marked as operator-supplied, not dictionary-derived
+  PASS  T4 the degree sign survived the cp1252 file
+
+T6  three farms, the shape the real archive actually has
+  PASS  T6 the builder survives a farm whose channels average
+  PASS  T6 both farms reach the summary
+  PASS  T6 an averaged signal is labelled, not crashed on
+  PASS  T6 and it really is an average of the two rotor bearings
+  PASS  T6 --not-available emits the ratified block C0 requires
+  PASS  T6 the summary shows it as declared, not missing
+  PASS  T6 a corrupted unit is flagged, not silently recorded
+  PASS  T6 --unit-override repairs the one the operator declared
+  PASS  T6 no signal map anywhere still carries mojibake
+
+T7  a [FARM:] prefix selects exactly one farm
+  PASS  T7 'A' selects only Farm A
+  PASS  T7 'B' and 'C' likewise
+  PASS  T7 the full farm name works too
+  PASS  T7 a bare word from the name selects nothing
+  PASS  T7 no prefix means every farm
+  PASS  T7 the builder runs on three farms
+  PASS  T7 Farm A got the override
+  PASS  T7 Farm B did NOT inherit Farm A's column
+  PASS  T7 Farm C did NOT inherit Farm A's column
+  PASS  T7 an unresolved wind speed reports the real header columns
+
+T8  a modelled capability loses to a measured channel
+  PASS  T8 both power candidates are seen
+  PASS  T8 'Possible ...' is flagged as a capability
+  PASS  T8 'Grid power' is not
+  PASS  T8 the MEASURED channel wins
+  PASS  T8 a capability-only signal does not resolve silently
+  PASS  T8 and the reason explains why it cannot express the anomaly
+  PASS  T8 Farm B still resolves to power_62
+  PASS  T8 Farm C still resolves to power_6
+
+T9  the unit hint respects the signal's dimension
+  PASS  T9 pitch angle is suggested in degrees
+  PASS  T9 temperatures are suggested in degC
+  PASS  T9 no angle is ever suggested a temperature unit
+
+T10  --exclude-sensor drops members and lets the rest average
+  PASS  T10 the builder runs
+  PASS  T10 the survivors average, rather than one being picked
+  PASS  T10 the exclusion is recorded with descriptions
+  PASS  T10 and survives the report assignment that once wiped it
+  PASS  T10 without the flag all four are averaged
+
+48 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_unit_consistency.py
+
+T1/T2  interval scales are not compared by ratio
+  PASS  T1 ambient temperature 15.5 K apart is NOT a mismatch
+  PASS  T2 pitch angle straddling zero is NOT a mismatch
+  PASS  T1/T2 degC and Celsius are accepted as the same unit
+  PASS  T1/T2 the whole clean set passes
+
+T3  ratio scales still catch a real error
+  PASS  T3 a rad/s vs rpm swap is caught
+  PASS  T3 and wind speed is not dragged in with it
+  PASS  T3 exit code reports the problem
+
+T4  a kW channel living in [0,1] is per-unit, not kW
+  PASS  T4 normalisation is reported
+  PASS  T4 on every farm, not just one
+  PASS  T4 and it says the values are still usable
+  PASS  T4 exit code reports it
+  PASS  T4 real kW values are not called normalised
+  PASS  T4 and differing rated power is not called a mismatch
+
+T4b  a per-unit label must also be falsifiable
+  PASS  T4b a correct per-unit label passes
+  PASS  T4b and is confirmed against the values, not just accepted
+  PASS  T4b a kW channel mislabelled per-unit is caught
+  PASS  T4b exit code reports it
+
+T5  the plausibility envelope catches agreeing-but-impossible values
+  PASS  T5 medians agree, so the median test passes them
+  PASS  T5 but 363 C is still caught as implausible
+  PASS  T5 and the message names a sentinel as a cause
+
+T7  a summary from a scorer with no range filter is called stale
+  PASS  T7 the stale artifact is named
+  PASS  T7 it says what is still wrong with the numbers
+  PASS  T7 it tells the operator to pull and re-run
+  PASS  T7 and the exit code refuses to pass
+
+T6  exit codes
+  PASS  T6 one farm alone cannot be compared -> 2
+
+T8  the two tools share one definition of possible
+  PASS  T8 the checker's envelopes ARE the shared table
+  PASS  T8 the scorer imports them rather than keeping a copy
+  PASS  T8 rotor speed admits the stopped-rotor offset CARE v6 carries
+  PASS  T8 while still rejecting a gearbox-shaft channel at 80
+
+29 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_verify_phase5_output.py
+
+T1  a clean batch passes
+  PASS  T1 clean batch accepted
+  PASS  T1 and says so
+
+T2  null lead time
+  PASS  T2 rejected
+  PASS  T2 names the problem
+
+T3  the trim did nothing
+  PASS  T3 rejected
+  PASS  T3 names the problem
+
+T4  wrong denominator
+  PASS  T4 rejected
+  PASS  T4 names the problem
+
+T5  pooled not reconstructible
+  PASS  T5 rejected
+  PASS  T5 names the problem
+
+T6  freeze state, both directions
+  PASS  T6a rejected
+  PASS  T6a names the problem
+  PASS  T6b rejected
+  PASS  T6b names the problem
+
+T7  a false-alarm figure moved
+  PASS  T7 rejected
+  PASS  T7 names the problem
+
+T8  a run is missing
+  PASS  T8 rejected
+  PASS  T8 reports how many were found
+
+T9  comparison.md is missing the frozen columns
+  PASS  T9 rejected
+  PASS  T9 names the missing column
+
+20 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+
+== scripts/selftest_w1_acas.py
+
+T1  stationary null -> p-values near uniform
+  PASS  T1 produced p-values
+  PASS  T1 calibration error below 0.05
+  PASS  T1 P(beta<=0.01) within 0.05 of 0.01
+  PASS  T1 P(beta<=0.05) within 0.05 of 0.05
+  PASS  T1 P(beta<=0.10) within 0.05 of 0.10
+  PASS  T1 P(beta<=0.25) within 0.05 of 0.25
+  PASS  T1 P(beta<=0.50) within 0.05 of 0.50
+
+T2  score scale jumps mid-stream -> adapts where static does not
+      post-shift calibration error: W1-ACAS 0.0051 | static 0.1731
+  PASS  T2 both calibrators produced post-shift p-values
+  PASS  T2 W1-ACAS beats static split conformal after the shift
+  PASS  T2 W1-ACAS post-shift error still below 0.10
+
+T3  identical input -> identical output (C5 requirement)
+  PASS  T3 two runs bit-identical
+
+T4  resolution floor and honest warm-up
+  PASS  T4 warm-up reports nothing rather than guessing
+  PASS  T4 weight mass never drops below n_c
+  PASS  T4 no p-value below the buffer's absolute floor
+  PASS  T4 finer-than-alpha_c resolution came from extra mass, not a bug
+  PASS  T4 p-values stay within [0,1]
+
+T5  rank selector == strict comparison, ties included
+  PASS  T5 equivalent over 5000 trials with ties
+
+17 checks, 0 failed
+ALL SELF-TESTS PASSED
+
+exit_code=0
+

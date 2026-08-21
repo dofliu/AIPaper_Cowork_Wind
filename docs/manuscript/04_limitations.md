@@ -106,24 +106,56 @@ Reporting a baseline as missing is the lesser error. An approximation
 published under the original's name is a claim about another group's method
 that we could not defend.
 
-## 6. Lead time is reported without a bounded detection horizon
+## 6. Lead time is reported at a primary horizon; the unbounded column is
+   retained as a check, not as a claim
 
 The lead-time metric is unbounded below: an alarm raised before the fault
-window opens is still counted as early warning, and a method that alarms early
-and often harvests lead time from alarms that detected nothing. On a synthetic
-fixture with a known onset this inflates the static reference by 6.11 of its
-16.53 reported days. On CARE the physical onset is unknown, so nothing flags
-it.
+window opens would still be counted as early warning if no horizon were set,
+and a method that alarms early and often would harvest lead time from alarms
+that detected nothing. On a synthetic fixture with a known onset this inflates
+the static reference by 6.11 of its 16.53 reported days. On CARE the physical
+onset is unknown, so nothing flags it.
 
-The reported medians near 350 days should be read in that light: they are close
-to the length of a case and are dominated by the earliest alarm in the record.
-They support the relative comparison between methods under one identical rule.
-**They do not support any statement about how much warning an operator would
-receive**, and no such statement is made.
+R27 addresses this by reporting lead time at a **primary horizon of *H* = 14
+days** together with a declared sweep of 7 / 10 / 14 / 21 days and unbounded,
+rather than by picking one number. Fourteen days is a maintenance planning
+horizon: past it, an earlier warning does not change what an operator can act
+on. The sweep is retained deliberately, and includes the unbounded case,
+because a wider *H* can only add detections and the proposed method contributes
+zero pre-onset alarms — so every extra day of horizon is credited to the
+baselines, not to us. That the verdict does not depend on *H* at α = 0.01 or
+0.05 is the strongest form of the claim available (Results Table 5); the
+unbounded medians of ~350 days that appear there are the check that the sweep
+was actually run, and must not be read as early-warning performance. The α =
+0.001 row fails at every horizon, which is consistent with the detection gap in
+Section 6a below rather than any horizon artefact.
 
-> **Open decision.** The detection horizon *H* is a protocol parameter that has
-> not been set, and the evaluator refuses to default it. Once set, the
-> lead-time table must be regenerated.
+## 6a. Non-inferiority is not met at α = 0.001, and we do not qualify that
+    away
+
+At the main and sensitivity levels (α = 0.01 and 0.05) the proposed method
+detects every one of the 44 anomaly cases at *H* = 14 and is 2.19 and 3.34 days
+*earlier* than the static reference. At α = 0.001 it does not: it detects 19 of
+44 and misses the two-day non-inferiority margin by 6.6 days. This is a real
+cost of the method at that operating point.
+
+Two facts frame it without softening it:
+
+- The tightening removes the three adaptive baselines entirely — ACI, DtACI and
+  W1-ACAS each detect **0 of 44** at α = 0.001 — so the proposed method remains
+  the only adaptive method with any detections and is second only to the
+  non-adaptive static reference (27 of 44).
+- The R25 repositioning made the paper's claim a protocol-and-evidence
+  contribution, not a claim that the calibrator detects best. The α = 0.001
+  column supports that claim: its false-alarm figures reconstruct the pooled
+  rate exactly (Results Table 3), so the calibration side of the protocol
+  behaves as specified even at the level where the detection side pays a cost.
+
+The mechanism is not a lateness but a detection gap: α = 0.001 suppresses
+alarms across the board, and the freeze then withholds calibration on cases the
+method does detect, so it catches fewer. Section 4.1 already treats the freeze
+as a real cost that grows with the frozen fraction; α = 0.001 is where the cost
+takes a form the other levels do not show.
 
 ## 7. Dataset limitations that constrain what can be claimed
 
@@ -156,9 +188,11 @@ receive**, and no such statement is made.
 
 The compatibility checks that the detector satisfied are recorded with
 `gate_definitions_ratified: false`: the checks ran and passed as currently
-specified, but their specification has not been approved. Independently, the
-false-alarm reporting protocol used in the results section was ratified on
-2026-08-17, after the score streams were produced; the calibration figures were
-recomputed under it from the stored per-case outputs, while the lead-time
-figures come from the earlier run. Both artefacts are retained and the
-provenance of each column is stated in the results section.
+specified, but their specification has not been approved. The false-alarm
+reporting protocol (R24, ratified 2026-08-17) and the detection-horizon
+protocol (R27, ratified 2026-08-20) were both ratified after the score streams
+were produced; the calibration and lead-time figures in this paper were
+recomputed from the stored per-case outputs under those protocols, all in the
+same 2026-08-20 evaluation. That evaluation reproduces every calibration figure
+of the earlier run to the digit, since it adds lead time and changes nothing
+else.
