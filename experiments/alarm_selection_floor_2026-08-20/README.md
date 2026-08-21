@@ -3,7 +3,7 @@
 **執行者：排程自動化研究助理　　性質：重讀既有逐案輸出，未重跑任何模型**
 
 工具：`scripts/diagnose_alarm_selection_floor.py`（`alarm-selection-floor-v1.0`）
-測試：`scripts/selftest_alarm_selection_floor.py`（28 checks）
+測試：`scripts/selftest_alarm_selection_floor.py`（**35 checks**，2026-08-21 加入 T10）
 
 ---
 

@@ -28,4 +28,12 @@ alarm-selection floor, alpha = 0.001
   The floor is a lower bound on N(F), not on the frozen set, and not
   a decomposition: the surplus over the floor is NOT labelled here.
 
+  CLAIM FIREWALL CLAUSE 7 (ratified 2026-08-21, time-limited):
+  6-of-18 is a run rule, and exact run-length results for
+  supplementary runs rules exist in the SPC literature. This floor
+  may already be a special case of a published exact result, so it
+  must NOT be written as new, first, or a finding of this work.
+  Reporting it, deriving it, and using it to argue selection over
+  staleness all remain permitted. Method yes, contribution no.
+
 wrote experiments/alarm_selection_floor_2026-08-20/a001.json

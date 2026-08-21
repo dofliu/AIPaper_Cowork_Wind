@@ -56,7 +56,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：十七支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **498 checks**。
+**預期**：十七支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **505 checks**。
 
 | 測試 | checks |
 |---|---|
@@ -72,7 +72,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_earliness_metric.py` | 42 |
 | `selftest_absorption_policies.py` | 26 |
 | `selftest_freeze_lockin_diagnostic.py` | 27 |
-| `selftest_alarm_selection_floor.py` | 28 |
+| `selftest_alarm_selection_floor.py` | 35 |
 | `selftest_pogo_bound_scale_check.py` | 23 |
 | `selftest_phase5_evaluation.py` | 25 |
 | `selftest_verify_phase5_output.py` | 20 |
@@ -92,6 +92,9 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 > 435→480。
 > 2026-08-21：新增 `selftest_group_occupancy.py` 18 checks
 > （R26 G3 的逐案 × 逐分箱占用率，含裁切時間戳陷阱的反向驗證），480→498。
+> 2026-08-21（同日稍晚）：`selftest_alarm_selection_floor.py` 28→35，
+> 來自 claim firewall 第七條的釘樁（T10 把限制釘在工具**輸出**裡，
+> 含「必須同時說明什麼仍然可以寫」的反向驗證），498→505。
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。

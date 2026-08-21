@@ -268,15 +268,25 @@ python3 scripts/diagnose_alarm_selection_floor.py \
 ## `selftest_alarm_selection_floor.py`
 
 ```bash
-python3 scripts/selftest_alarm_selection_floor.py    # 28 checks
+python3 scripts/selftest_alarm_selection_floor.py    # 35 checks
 ```
 
 T1 手算 fixture、T2 反向（差一格的膨脹會讓 T1 失敗）、T3 釘住「下界不在凍結集上」、
 T4／T5 前提稽核雙向都會觸發且會撤回下界、T6 vacuity、T7 排除與裁切真的丟掉列
 （含 `T` 對空白的時間戳陷阱）、T7b 暖機列不位移索引、T8 隨機串流下不等式恆成立
-但膨脹係數會被違反、T9 工具自己的 `N(F)` 等於逐點定義（多 run 重疊情形）。
+但膨脹係數會被違反、T9 工具自己的 `N(F)` 等於逐點定義（多 run 重疊情形）、
+**T10 claim firewall 第七條隨輸出走**（2026-08-21 新增）。
 
-**已反向驗證**：把膨脹改成 `w-1`，T1 兩項與 T9 一項共 3 個 check 失敗。
+**已反向驗證**：把膨脹改成 `w-1`，T1 兩項與 T9 一項共 3 個 check 失敗；
+把 `claim_constraint` 從 payload 拿掉，T10 六項全數失敗；
+只把其中的 `permitted`（仍然可以寫什麼）清空，T10 的反向那一項失敗。
+
+> **為什麼第七條要進輸出，而不是只寫在 `docs/manuscript/README.md`。**
+> 這個限制**在數字裡看不出來**——一個不得稱為新的下界，長得跟可以稱為新的
+> 下界一模一樣；而寫稿的人讀的是這份 JSON，不是 README。
+> 同理，輸出裡**必須同時寫明什麼仍然可以寫**（呈報、推導、用來論證選擇效應），
+> 否則下一個讀到禁令的人會把整段量測一起刪掉，那是另一種錯。
+> **寫成方法的一部分可以，寫成貢獻不行。**
 
 ## `diagnose_group_occupancy.py` — 逐案 × 逐分箱的占用率（`group-occupancy-v1.0`）
 
