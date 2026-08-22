@@ -337,3 +337,53 @@ T6 `T_j = 0` 不給界（含反向）。
 **已反向驗證兩處**：拿掉 `p_value` 判斷讓 calibrated 計數每一列 → 4 checks 失敗；
 把裁切改回字串比較 → 3 checks 失敗且丟棄列數變成 0，
 正是本專案已吃過兩次的那個缺陷（空白的 ASCII 小於 `T`，裁切靜默什麼都沒做）。
+
+---
+
+## `check_pogo_receipt.py` — R26 契約的機器檢查（`check_pogo_receipt`）
+
+```bash
+# 空白 receipt：欄位用抄的，不要用記的
+python3 scripts/check_pogo_receipt.py --emit-template > receipt_k4_none.json
+
+# 四組跑完後一次檢查（--ours-window 直接吃既有的 occupancy 報告）
+python3 scripts/check_pogo_receipt.py \
+  --receipt receipt_k4_none.json  --receipt receipt_k4_within.json \
+  --receipt receipt_k5_none.json  --receipt receipt_k5_within.json \
+  --require-matrix \
+  --ours-window experiments/pogo_g3_2026-08-21/occupancy_a01.json \
+  --json-out g3_acceptance_a01.json
+```
+
+G3 契約（`docs/method/POGO_G3_STATE_CONTRACT.md`，2026-08-21 `CONTRACT_RATIFIED`）
+第 6 節要求每次 POGO 執行留一份 receipt。**一份沒有人檢查的 receipt 只是文書工作**，
+這支工具是另外那一半：把契約每一條做成 **fail-closed** 的檢查——
+**欄位缺失是 FAIL，不是套用預設值**。
+
+擋的四件事，共同點是**違反了也不會報錯，數字照樣漂亮**：
+
+| 檢查 | 沒有它會怎樣 |
+|---|---|
+| `frozen_flag_source` 恆為 `pogo_own_exceedances`；`--ours-frozen` 逐案比對，**全案完全相同即 FAIL** | POGO 的 `frozen` 若沿用本方法的欄，兩邊鎖死幾何當然一致，看起來像漂亮的獨立重現，G6 卻已是循環論證 |
+| `burn_in` 必須是作者預設 | 動了它，之後任何難看的數字都無法歸因：是方法差，還是我們動了暖機 |
+| `--require-matrix`：R28 四組到齊才 `headline_eligible` | 一個 max over 2 與 max over 4 長得一模一樣 |
+| 共同評估視窗**逐案**相等 | 兩個不同的逐案切法可以有同一個總數 |
+
+`--ours-window` 接受兩種格式：明寫的視窗檔，或直接吃
+`diagnose_group_occupancy.py` 的報告（讀 `n_calibrated`，**不是** `n_rows`）。
+**少一個手動換算，就少一個「加總到一個大一點、完全合理的數字」的機會。**
+
+輸出隨附 `CLAIM_CONSTRAINT`（R28 呈報義務 + R25 firewall），理由與
+`diagnose_alarm_selection_floor.py` 同一條：**寫稿的人讀的是那份 JSON，不是 README**，
+而一個「必須揭露為 4 組最大值」的數字，長得跟不必揭露的一模一樣。
+它同時寫明**什麼仍然可以寫**——過度保守地把整段量測刪掉是另一種錯。
+
+行為測試 `scripts/selftest_check_pogo_receipt.py`（**78 checks**），
+每一條規則都做兩個方向。其中 T5 是關鍵的反向驗證：
+**兩份逐案切法不同、總數相同的視窗必須 FAIL**——
+那正是驗收條件寫成「逐案相等」而不是「總數相等」的理由。
+T10 另以版控裡的 `occupancy_a01.json` 實跑：重算得 91 案、4,836,007 列，
+與 G3 契約第 4 節記載的數字逐位相符。
+
+**這支工具檢查的是「可不可以比」，不是「比得怎樣」。**
+全數通過只代表那批結果**有資格**被比較。
