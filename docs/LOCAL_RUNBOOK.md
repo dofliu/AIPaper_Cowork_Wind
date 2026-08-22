@@ -45,7 +45,7 @@ python --version
 
 ### 0.3 先跑自我測試（重要）
 
-在碰真實資料之前，先確認**整套**工具在你的環境行為正確。十七支測試一次跑完：
+在碰真實資料之前，先確認**整套**工具在你的環境行為正確。十八支測試一次跑完：
 
 ```bash
 for t in scripts/selftest_*.py; do echo "== $t"; python3 "$t" | tail -2; done
@@ -56,7 +56,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
   Write-Host "== $($_.Name)"; python $_.FullName | Select-Object -Last 2 }
 ```
 
-**預期**：十七支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **505 checks**。
+**預期**：十八支全部以 `ALL SELF-TESTS PASSED` 結尾，合計 **583 checks**。
 
 | 測試 | checks |
 |---|---|
@@ -77,6 +77,7 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 | `selftest_phase5_evaluation.py` | 25 |
 | `selftest_verify_phase5_output.py` | 20 |
 | `selftest_group_occupancy.py` | 18 |
+| `selftest_check_pogo_receipt.py` | 78 |
 
 > 2026-08-17：`selftest_end_to_end.py` 20→33、`selftest_regime_conditional.py`
 > 16→29，共 +26，來自 R24 三數字誤報率呈報的釘樁（各 T6／T7）。
@@ -95,6 +96,10 @@ Get-ChildItem scripts\selftest_*.py | ForEach-Object {
 > 2026-08-21（同日稍晚）：`selftest_alarm_selection_floor.py` 28→35，
 > 來自 claim firewall 第七條的釘樁（T10 把限制釘在工具**輸出**裡，
 > 含「必須同時說明什麼仍然可以寫」的反向驗證），498→505。
+> 2026-08-22：新增 `selftest_check_pogo_receipt.py` 78 checks
+> （R26 G3 契約的機器檢查——固定常數、R28 四組矩陣、共同視窗**逐案**相等、
+> 以及「POGO 的 `frozen` 是不是從本方法抄來的」循環紅旗；每一條都做兩個方向），
+> 505→583。
 
 任何一支不是 0 failed，**先停下來**把完整輸出回傳，不要繼續。這代表工具在
 你的環境行為與雲端不同，之後所有結果都不可信。
