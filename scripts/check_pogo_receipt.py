@@ -47,6 +47,14 @@ Circularity red flag (--ours-frozen): if POGO's per-case frozen row counts are
 identical to ours in every single case, that is not agreement, that is a copy.
 At this scale coincidence is not a serious competing explanation.
 
+This last check is a cheap screen on COUNTS. Since R29 (2026-08-22) a G6 run
+must additionally hand back its per-row output, audited by
+scripts/audit_pogo_frozen_rows.py -- which compares the flags row by row and,
+more importantly, re-derives 6-of-18 from POGO's own exceed column. That turns
+`frozen_flag_source` from a field someone typed into a measured fact. G6
+acceptance needs that audit; this tool only checks that the receipt says where
+the rows were kept.
+
 WHAT IT IS NOT
 --------------
 It does not run POGO, does not evaluate any metric, and says nothing about
@@ -178,6 +186,7 @@ def _template():
         "n_rows_total": 0,
         "per_case_rows_in_window": {"<case_id>": 0},
         "per_case_frozen_rows": {"<case_id>": 0},
+        "per_row_output_dir": "<G6 逐列輸出目錄, R29 起必填>",
         "run_started_utc": "",
         "run_finished_utc": "",
         "notes": "",
@@ -269,6 +278,18 @@ def check_receipt(receipt, name="receipt"):
         elif _is_int(n_win) and sum(per_case.values()) != n_win:
             bad("per_case_rows_in_window sums to %d but n_rows_in_window is %d"
                 % (sum(per_case.values()), n_win))
+
+    # R29 (2026-08-22): a G6 run must hand back its per-row output so the
+    # frozen flag can be compared row by row (scripts/audit_pogo_frozen_rows.py).
+    # The receipt has to say where that output is, because a G6 receipt whose
+    # rows nobody kept cannot be audited later and its `frozen_flag_source`
+    # field reverts to being a declaration.
+    if layer == "g6_same_policy":
+        rows_at = receipt.get("per_row_output_dir")
+        if not isinstance(rows_at, str) or not rows_at.strip():
+            bad("freeze_layer is g6_same_policy but per_row_output_dir is "
+                "missing or empty; R29 requires the per-row output to be "
+                "handed back for the row-level frozen audit")
 
     # G5 disables Freeze-on-Alert for every method (gate 4.5). A G5 receipt
     # reporting frozen rows means the policy layer ran where it must not have,
@@ -555,6 +576,11 @@ def main():
         },
         "extra_required_fields_beyond_contract_minimum":
             EXTRA_KEYS_BEYOND_CONTRACT_MINIMUM,
+        "g6_row_audit_note":
+            "R29 (2026-08-22): G6 acceptance additionally requires the "
+            "row-level frozen audit (scripts/audit_pogo_frozen_rows.py) over "
+            "the per-row output named by per_row_output_dir. A PASS here does "
+            "not stand in for that audit.",
         "claim_constraint": CLAIM_CONSTRAINT,
     }
 

@@ -78,6 +78,7 @@ def good_receipt(k=4, carry="none", alpha=0.01, layer="g6_same_policy"):
         "n_rows_total": 120,
         "per_case_rows_in_window": {"case_01": 60, "case_02": 40},
         "per_case_frozen_rows": {"case_01": 7, "case_02": 3},
+        "per_row_output_dir": "experiments/pogo_r26_rows/a01_k4_none",
     }
 
 
@@ -213,6 +214,27 @@ def main():
     check("T7 REVERSE: G5 with zero frozen rows passes", not fails, "; ".join(fails))
     fails, _ = check_receipt(good_receipt(layer="g6_same_policy"))
     check("T7 REVERSE: G6 with frozen rows passes", not fails, "; ".join(fails))
+
+    # R29: a G6 run must hand back its per-row output, and the receipt must
+    # say where. Without it the row-level frozen audit cannot run later, and
+    # frozen_flag_source goes back to being a field someone typed.
+    for value, why in [(None, "absent"), ("", "empty"), ("   ", "blank"), (0, "not a path")]:
+        r = good_receipt(layer="g6_same_policy")
+        if value is None:
+            del r["per_row_output_dir"]
+        else:
+            r["per_row_output_dir"] = value
+        fails, _ = check_receipt(r)
+        check("T7 G6 without per_row_output_dir (%s) fails" % why,
+              any("per_row_output_dir" in f or "missing required field" in f
+                  for f in fails), "; ".join(fails))
+
+    r = good_receipt(layer="g5_disabled")
+    r["per_case_frozen_rows"] = {"case_01": 0, "case_02": 0}
+    del r["per_row_output_dir"]
+    fails, _ = check_receipt(r)
+    check("T7 REVERSE: G5 does not need it (no policy layer to audit)",
+          not fails, "; ".join(fails))
 
     print("\nT8  internal arithmetic")
     r = good_receipt()

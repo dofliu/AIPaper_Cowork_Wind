@@ -387,3 +387,54 @@ T10 另以版控裡的 `occupancy_a01.json` 實跑：重算得 91 案、4,836,00
 
 **這支工具檢查的是「可不可以比」，不是「比得怎樣」。**
 全數通過只代表那批結果**有資格**被比較。
+
+**【R29・2026-08-22】** `freeze_layer = g6_same_policy` 的 receipt 另須含
+`per_row_output_dir`，且 **G6 驗收還要跑 `audit_pogo_frozen_rows.py`**（見下一節）。
+本工具的逐案凍結列數比對只是快篩，**不能代替逐列稽核**。
+
+---
+
+## `audit_pogo_frozen_rows.py` — G6 的逐列 `frozen` 稽核（`pogo-frozen-row-audit-v1.0`）
+
+```bash
+python3 scripts/audit_pogo_frozen_rows.py \
+  --ours-dir experiments/MD_2022_a01_ours \
+  --pogo-dir <POGO 逐列輸出目錄> \
+  --exclude-cases 32,56,72,87 \
+  --trim-case "93=2023-08-24T13:00:00" \
+  --alpha 0.01 \
+  --output experiments/pogo_r26_<日期>/frozen_row_audit_a01.json
+```
+
+**【R29・劉老師 2026-08-22 裁決】** G6 的執行 owner 必須交出 POGO 的逐列輸出，
+`frozen` 逐列比對。在此之前，G3 契約第 3 節那條紅線
+（**POGO 的 `frozen` 必須由它自己的 exceed 產生，不得沿用本方法那一欄**）
+唯一的守門員是 receipt 上的 `frozen_flag_source` 欄——**那是實作者打上去的字串**。
+一個寫著正確答案的欄位，不是「正確的事發生了」的證據。
+
+這支工具把兩件事從宣告變成量測：
+
+| | 查什麼 | 判準 |
+|---|---|---|
+| **來源** | 用 POGO 自己的 `exceed` 欄重算 6-of-18，與它寫出的 `frozen` **雙向**比對 | 兩個方向都必須 **0 違反** |
+| **獨立性** | 與本方法的 `frozen` 向量逐列比對 | **每一個非平凡案例都完全相同 → 判定為抄的** |
+
+**來源那一欄沿用 `diagnose_alarm_selection_floor.audit_premise()`**——
+就是本專案 2026-08-20 對自己的 `frozen` 欄做過的同一個稽核
+（約 250 萬點、雙向 0 違反）。**同一個問題不寫兩份實作**，
+否則遲早有一份是錯的而沒人知道。
+
+**判成抄襲的是「同一」，不是「相似」。**
+高度一致正是 G6 想找的結果（若演算法完全不同的方法在同一套告警政策下
+呈現相同的鎖死幾何，那就證明該現象是政策的性質）。工具**呈報**一致率與 Jaccard
+而不懲罰它；只有「連一處都不差」才是複製。**兩側都從未凍結的案例不列入判定**
+——那種一致是算術，不是來源。同理，若沒有任何非平凡案例，
+輸出的 `independence_established` 為 `false`：**沒有可能不同的東西，就沒有查到什麼。**
+
+行為測試 `scripts/selftest_audit_pogo_frozen_rows.py`（**38 checks**），每條規則兩個方向，
+其中 **T10 是對照組**：本方法自己的 `frozen` 欄在真實資料上雙向 0 違反——
+**一個到處都回報 0 的稽核也會放行偽造**，所以對照組不是裝飾。
+另 T1 釘住新讀取器與既有 `read_calibrated_stream` 在同一份檔案上逐欄一致。
+
+**G6 驗收是兩件事**：`check_pogo_receipt.py` 通過**且**本工具通過。
+**前者不能代替後者。**

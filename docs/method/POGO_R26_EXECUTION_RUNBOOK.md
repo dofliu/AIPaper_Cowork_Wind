@@ -59,7 +59,7 @@ G0／G1／G3 都已完成，但**三者都是閱讀、核對與規格工作**。
 | **G0b** | 建隔離環境、鎖 lockfile、跑作者自己的範例一次 | 雜湊逐項相符，且作者範例在你的環境跑得出來 |
 | **A** | 寫最小 adapter | 兩側欄位對得上，且 `frozen` 旗標由 POGO 自己產生 |
 | **G5** | calibration-only 層，關閉 Freeze-on-Alert | 四組宣告設定各一份 receipt，checker 全 PASS |
-| **G6** | O&M-policy 層，兩方法套同一套告警政策 | 同上，且循環檢查通過 |
+| **G6** | O&M-policy 層，兩方法套同一套告警政策 | 同上，**且交出逐列輸出、逐列稽核通過**（R29） |
 | **G7** | DEVELOPMENT 上重跑一次，確認可重複 | 兩次逐位相符 |
 | **G8** | eligibility 判定 | 呈報給劉老師，**是否納入正式基線仍須另行裁決** |
 
@@ -101,6 +101,12 @@ source lock 的四項（commit、license、dependency lock、取得時間）已�
    **絕對不可以沿用本方法算出來的 `frozen` 欄。**
    沿用等於把本方法的鎖死幾何餵給 POGO，再宣稱獨立重現了它——
    G6 會從獨立檢驗變成循環論證，**而且跑起來一切正常、數字漂亮**。
+
+   **【R29・2026-08-22 裁決】G6 必須把逐列輸出交出來**：每案一份 CSV，
+   至少含 `timestamp`、`exceed`、`frozen`，時間戳與本方法的共同評估視窗**逐列對齊**。
+   工具會用 POGO 自己的 `exceed` 欄**重算 6-of-18** 再與 POGO 寫出的 `frozen`
+   雙向比對——**這一條從此是量出來的，不是你在 receipt 上宣告的**。
+   詳見 G3 契約第 6a 節。
 2. **不得為了讓兩邊對得上而修改本研究側的任何定義。**
    本研究側的 mapping 已經釘死（gate 第 4 節），且那些參數是 2026-08-11 簽核的。
    任何「請你改一下這邊的定義好讓兩邊對上」的提議，方向就是錯的——
@@ -134,9 +140,17 @@ python3 scripts/check_pogo_receipt.py \
   --ours-window experiments/pogo_g3_2026-08-21/occupancy_a01.json \
   --json-out experiments/pogo_r26_<日期>/g3_acceptance_a01.json
 
-# 3. G6 那一層額外做循環檢查
+# 3. G6 那一層額外做循環檢查（逐案凍結列數的快篩）
 python3 scripts/check_pogo_receipt.py ... \
   --ours-frozen <本方法逐案凍結列數的 JSON>
+
+# 4. 【R29】G6 的正式驗收：逐列稽核。快篩不能代替這一步
+python3 scripts/audit_pogo_frozen_rows.py \
+  --ours-dir experiments/MD_2022_a01_ours \
+  --pogo-dir <你交出的 POGO 逐列輸出目錄> \
+  --exclude-cases 32,56,72,87 --trim-case "93=2023-08-24T13:00:00" \
+  --alpha 0.01 \
+  --output experiments/pogo_r26_<日期>/frozen_row_audit_a01.json
 ```
 
 **exit code 0 才算通過**，且要看 JSON 裡這三個欄位：
@@ -150,6 +164,11 @@ python3 scripts/check_pogo_receipt.py ... \
 **這個工具檢查的是「可不可以比」，不是「比得怎樣」。**
 receipt 全數通過只代表這批結果**有資格**被比較；比較的內容是 G5／G6 的事。
 
+**G6 的驗收是兩件事**：receipt 檢查通過**且**逐列稽核通過。
+逐列稽核判 FAIL 的只有兩種情況——POGO 的 `frozen` 不等於它自己 exceed 的
+6-of-18（來源不對），或**在每一個非平凡案例上都與本方法完全相同**（是抄的）。
+**一致率高不會被判 FAIL**，那正是 G6 想找的結果；被判 FAIL 的是「連一處都不差」。
+
 ---
 
 ## 6. 四個會安靜出錯的地方
@@ -159,7 +178,7 @@ receipt 全數通過只代表這批結果**有資格**被比較；比較的內�
 
 | # | 出錯的樣子 | 為什麼看不出來 | 擋它的東西 |
 |---|---|---|---|
-| 1 | POGO 的 `frozen` 沿用本方法的欄 | 兩邊鎖死幾何當然一致，看起來像漂亮的獨立重現 | receipt 的 `frozen_flag_source` + `--ours-frozen` 逐案比對 |
+| 1 | POGO 的 `frozen` 沿用本方法的欄 | 兩邊鎖死幾何當然一致，看起來像漂亮的獨立重現 | **【R29】`audit_pogo_frozen_rows.py` 逐列稽核**：用 POGO 自己的 exceed 重算 6-of-18（雙向 0 違反）＋逐列比對。receipt 欄位與逐案快篩只是前置 |
 | 2 | 暖機被「對齊」 | 數字照樣產生，只是不再可歸因 | receipt 的 `burn_in` 必須是作者預設 |
 | 3 | 只跑兩組，報最大值 | 一個 max over 2 與 max over 4 長得一模一樣 | `--require-matrix` |
 | 4 | 共同視窗只對總數 | 兩個不同的逐案切法可以有同一個總數 | 驗收條件寫的是**逐案**相等，工具照此檢查 |
@@ -173,6 +192,11 @@ mapping 或 tolerance**（G7）。用了不會報錯，也不會留下痕跡。
 
 1. **輸出進版控**：`experiments/pogo_r26_<日期>/`，附 README 三節——
    做了什麼、怎麼重現（完整指令）、**有什麼是這批數字不能拿來宣稱的**。
+   **【R29】G6 的逐列輸出要一起交**（每案一份 CSV），
+   並在 receipt 的 `per_row_output_dir` 指出位置。
+   體積若大到不宜進 repo，請與劉老師確認存放方式，
+   **但不可以不交**——沒有逐列輸出的 G6 事後無法稽核，
+   那條紅線就退回成一個宣告。
 2. **狀態同步三處**（缺一處就會出現本專案已經吃過四次的那種分歧）：
    - `docs/PROJECT_STATUS.md` 6.8 的 gate 狀態表
    - `POGO_COMPATIBILITY_GATE.md` 第 6 節
